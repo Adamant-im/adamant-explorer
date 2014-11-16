@@ -1,0 +1,52 @@
+<section data-ng-controller="AddressController" data-ng-init="findOne()">
+  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="address.address">
+    <div class="container" data-ng-hide="!address.balance">
+      <div class="col-md-8 text-left">
+          <h3>Address</h3> {{address.address}}
+          <span class="btn-copy" clip-copy="address.address"></span>
+      </div>
+      <div class="col-md-4">
+        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{ address.balance / 100000000 + ' XCR' }}</span>
+      </div>
+    </div>
+    <div class="hide_snavbar">
+      <a href="#" data-ng-click="hideSNavbar=!hideSNavbar">
+        <span data-ng-show="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
+        <span data-ng-show="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
+      </a>
+    </div>
+  </div>
+  <h1>Address <small data-ng-show="address.address">{{address.balance / 100000000 + ' XCR'}}</small></h1>
+  <div class="text-muted" data-ng-if="!address.address">
+    <span>Loading Address Information <span class="loader-gif"></span>
+  </div>
+  <div data-ng-if="address.address">
+    <div class="well well-sm ellipsis">
+      <strong>Address</strong> 
+      <span class="text-muted">{{address.address}}</span>
+      <span class="btn-copy" clip-copy="address.address"></span>
+    </div>
+    <h2>Summary <small>confirmed</small></h2>
+    <div class="row" data-ng-hide="!address.address">
+      <div class="col-md-12">
+        <table class="table">
+          <tbody>
+          <tr>
+            <td><strong>Total balance</strong></td>
+            <td class="ellipsis text-right">{{address.balance / 100000000 + ' XCR'}}</td>
+          </tr>
+          <tr>
+              <td><strong>USD equivalent</strong></td>
+              <td class="ellipsis text-right">{{(address.usd / 100000000).toFixed(2)}} USD</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
+    <h2>Transactions</h2>
+    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
+  </div>
+</section>
+
