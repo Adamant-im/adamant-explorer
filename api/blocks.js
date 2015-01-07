@@ -96,30 +96,30 @@ module.exports = function (app) {
         }
 
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var actualHeight = body.height;
                     request.get({
-                        url : req.crypti + "/api/getBlock?blockId=" + blockId,
+                        url : req.crypti + "/api/blocks/get?id=" + blockId,
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true && body.blocks.length > 0) {
-                                var block = body.blocks[0];
+                            if (body.success == true) {
+                                var block = body.block;
                                 block.confirmations = actualHeight - block.height + 1;
                                 block.payloadHash = new Buffer(block.payloadHash).toString('hex');
                                 block.totalAmount /= req.fixedPoint;
                                 block.totalFee /= req.fixedPoint;
                                 block.usd = req.convertXCR(block.totalAmount + block.totalFee);
 
-                                req.json = { success : true, block : body.blocks[0] };
+                                req.json = { success : true, block : body.block };
                                 return next();
                             } else {
                                 return res.json({ success : false });
