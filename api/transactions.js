@@ -48,22 +48,22 @@ module.exports = function (app) {
 
     app.get("/api/getLastTransactions", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/getLastTransactions?orderDesc=true",
+            url : req.crypti + "/api/transactions?orderBy=timestamp:asc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var transactions = body.transactions;
                     request.get({
-                        url : req.crypti + "/api/getUnconfirmedTransactions",
+                        url : req.crypti + "/api/transactions/unconfirmed",
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true) {
+                            if (body.success == true) {
                                 transactions = transactions.concat(body.transactions);
                                 transactions.sort(function (a, b) {
                                     if (a.timestamp > b.timestamp)
