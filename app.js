@@ -231,15 +231,11 @@ async.parallel([
         });
     }
 ], function (err) {
-    if (err) {
-        console.log("Error on start: " + err);
-    } else {
-        app.listen(app.get("port"), app.get("host"), function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log("Crypti started at " + app.get("host") + ":" + app.get("port"));
-            }
-        });
-    }
+    app.listen(app.get("port"), app.get("host"), function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Crypti started at " + app.get("host") + ":" + app.get("port"));
+        }
+    });
 });
