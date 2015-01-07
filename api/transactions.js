@@ -120,13 +120,13 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getAddressTransactions?address=" + address + "&descOrder=true",
+            url : req.crypti + "/api/transactions?recipientId=" + address + "&orderBy=timestamp:desc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var withoffset = body.transactions;
                     req.json = { success : true, transactions : body.transactions };
                     return next();
