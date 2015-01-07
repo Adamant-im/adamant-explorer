@@ -7,13 +7,13 @@ module.exports = function (app) {
 
     app.get("/api/getFee", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/getFee",
+            url : req.crypti + "/api/blocks/getFee",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     req.json = { success : true, feePercent : body.fee.toFixed(4) };
                     return next();
                 } else {
