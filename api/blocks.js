@@ -4,13 +4,13 @@ var request = require('request'),
 module.exports = function (app) {
     app.get("/api/getBlocksCount", function (req, res, next) {
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     req.json = { success : true, count : body.height };
                     return next();
                 } else {
