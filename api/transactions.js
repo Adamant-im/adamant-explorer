@@ -10,14 +10,14 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getTransaction?transactionId=" + transactionId,
+            url : req.crypti + "/api/transactions/get?id=" + transactionId,
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
-                    var transaction  = body.transaction;
+                if (body.success == true) {
+                    var transaction = body.transaction;
                     transaction.usd = req.convertXCR(transaction.amount + transaction.fee);
                     req.json = { success : true, transaction : body.transaction };
                     return next();
