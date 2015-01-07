@@ -33,26 +33,26 @@ module.exports = function (app) {
         }
 
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var height = body.height;
 
                     request.get({
-                        url : req.crypti + "/api/getLastBlocks?orderDesc=true&limit=20&offset=" + n,
+                        url : req.crypti + "/api/blocks?orderBy=height:desc&limit=20&offset=" + n,
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             console.log(err);
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true) {
+                            if (body.success == true) {
                                 var blocks = _.map(body.blocks, function (b) {
-                                    return { id: b.id, timestamp: b.timestamp, generator: b.generator, totalAmount: b.totalAmount / req.fixedPoint, totalFee: b.totalFee / req.fixedPoint, transactionsCount: Object.keys(b.transactions).length, height : b.height };
+                                    return { id: b.id, timestamp: b.timestamp, generator: b.generatorId, totalAmount: b.totalAmount / req.fixedPoint, totalFee: b.totalFee / req.fixedPoint, transactionsCount: b.numberOfTransactions, height : b.height };
                                 });
 
                                 var totalPages = parseInt(height / 20);
