@@ -212,7 +212,7 @@ async.parallel([
                 cb(err);
             } else {
                 app.bterBtc = result;
-                console.log("BTC/USD Loaded");
+                console.log("BTC/USD loaded...");
                 cb();
             }
         });
