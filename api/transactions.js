@@ -136,4 +136,28 @@ module.exports = function (app) {
             }
         });
     });
+
+    app.get("/api/getTransactionsByBlock", function (req, res, next) {
+        var blockId = req.query.blockId;
+
+        if (!blockId) {
+            return res.json({ success : false });
+        }
+
+        request.get({
+            url : req.crypti + "/api/transactions?blockId=" + blockId + "&orderBy=timestamp:desc",
+            json : true
+        }, function (err, response, body) {
+            if (err || response.statusCode != 200) {
+                return res.json({ success : false });
+            } else {
+                if (body.success == true) {
+                    req.json = { success : true, transactions : body.transactions };
+                    return next();
+                } else {
+                    return res.json({ success : false });
+                }
+            }
+        });
+    });
 }
