@@ -39,32 +39,32 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getBlock?blockId=" + id,
+            url : req.crypti + "/api/blocks/get?id=" + id,
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
-            } else if (body.status == "OK" && body.success == true && body.blocks.length > 0) {
-                req.json = { success : true, type : "block", id : body.blocks[0].id };
+            } else if (body.success == true) {
+                req.json = { success : true, type : "block", id : body.block.id };
                 return next();
             } else {
                 request.get({
-                    url : req.crypti + "/api/getTransaction?transactionId=" + id,
+                    url : req.crypti + "/api/transactions/get?id=" + id,
                     json : true
                 }, function (err, response, body) {
                     if (err || response.statusCode != 200) {
                         return res.json({ success : false });
-                    } else if (body.status == "OK" && body.success == true && body.transaction) {
+                    } else if (body.success == true && body.transaction) {
                         req.json = { success : true, type : "tx", id : body.transaction.id };
                         return next();
                     } else {
                         request.get({
-                            url : req.crypti + "/api/getBalance?address=" + id,
+                            url : req.crypti + "/api/accounts/getBalance?address=" + id,
                             json : true
                         }, function (err, response, body) {
                             if (err || response.statusCode != 200) {
                                 return res.json({ success : false });
-                            } else if (body.status == "OK" && body.success == true && body.balance) {
+                            } else if (body.success == true && body.balance) {
                                 req.json = { success : true, type : "address", id : id };
                                 return next();
                             } else {
