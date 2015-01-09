@@ -2,7 +2,7 @@ Crypti Blockchain Explorer
 =====================
 
 Crypti blockchain explorer version 0.1. Works with Crypti wallet API.
-Uses Redis for cache data.
+Uses Redis for caching data.
 
 # Required components
 
@@ -60,7 +60,7 @@ Example:
 
 # Build
 
-Frontend must be builded with grunt:
+Frontend must be built with grunt:
 
 ```
 grunt compile
@@ -72,7 +72,7 @@ If you want to work with frontend and see updates in realtime run:
 grunt
 ```
 
-It will update css/js files after changes.
+It will update css/js files as changes are made.
 
 # Launch
 
@@ -84,7 +84,7 @@ node app.js
 
 Open: [http://localhost:8080](http://localhost:8080)
 
-Production: 
+Production:
 
 ```
 NODE_ENV=production node app.js
@@ -94,6 +94,6 @@ Open: [http://localhost](http://localhost)
 
 Ports for both mode can be found in `config.json`
 
-# Top Accounts Functional
+# Top Accounts
 
-Supports only with special version of Crypti with modified source code.
+Top Acccounts functionality is only supported when using a special version of Crypti which has modified source code.

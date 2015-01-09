@@ -3,7 +3,7 @@
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-6 col-lg-7 text-left">
           <h3>Transaction</h3>
-          <div class="ellipsis"> 
+          <div class="ellipsis">
             <small>{{tx.id}}</small>
             <span class="btn-copy" clip-copy="tx.id"></span>
           </div>
@@ -31,13 +31,21 @@
     </div>
     <div data-ng-if="tx.id">
       <div class="well well-sm ellipsis">
-        <strong>Transaction</strong> 
+        <strong>Transaction</strong>
         <span class="txid text-muted">{{tx.id}}</span>
         <span class="btn-copy" clip-copy="tx.id"></span>
       </div>
       <h2>Summary</h2>
       <table class="table" style="table-layout: fixed">
         <tbody>
+        <tr>
+            <td><strong>Sender</strong></td>
+            <td class="text-muted text-right"><a href="/address/{{tx.senderId}}">{{tx.senderId}}</a></td>
+        </tr>
+        <tr>
+            <td><strong>Recipient</strong></td>
+            <td class="text-muted text-right"><a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a></td>
+        </tr>
         <tr>
           <td><strong>Amount</strong></td>
             <td class="text-muted text-right">{{tx.amount / 100000000 + " XCR"}}</td>
@@ -56,7 +64,7 @@
         </tr>
         <tr>
           <td><strong>Block </strong></td>
-          <td data-ng-show="tx.blockId" class="text-muted text-right"> <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
+          <td data-ng-show="tx.blockId" class="text-muted text-right"> <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a></td>
           <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
         </tr>
         </tbody>
@@ -68,4 +76,3 @@
     </div>
   </div>
 </section>
-

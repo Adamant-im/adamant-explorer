@@ -10,7 +10,7 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getBalance?address=" + address,
+            url : req.crypti + "/api/accounts/getBalance?address=" + address,
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {

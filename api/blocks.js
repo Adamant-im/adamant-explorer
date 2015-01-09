@@ -4,13 +4,13 @@ var request = require('request'),
 module.exports = function (app) {
     app.get("/api/getBlocksCount", function (req, res, next) {
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     req.json = { success : true, count : body.height };
                     return next();
                 } else {
@@ -33,26 +33,26 @@ module.exports = function (app) {
         }
 
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var height = body.height;
 
                     request.get({
-                        url : req.crypti + "/api/getLastBlocks?orderDesc=true&limit=20&offset=" + n,
+                        url : req.crypti + "/api/blocks?orderBy=height:desc&limit=20&offset=" + n,
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             console.log(err);
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true) {
+                            if (body.success == true) {
                                 var blocks = _.map(body.blocks, function (b) {
-                                    return { id: b.id, timestamp: b.timestamp, generator: b.generator, totalAmount: b.totalAmount / req.fixedPoint, totalFee: b.totalFee / req.fixedPoint, transactionsCount: Object.keys(b.transactions).length, height : b.height };
+                                    return { id: b.id, timestamp: b.timestamp, generator: b.generatorId, totalAmount: b.totalAmount / req.fixedPoint, totalFee: b.totalFee / req.fixedPoint, transactionsCount: b.numberOfTransactions, height : b.height };
                                 });
 
                                 var totalPages = parseInt(height / 20);
@@ -96,30 +96,30 @@ module.exports = function (app) {
         }
 
         request.get({
-            url: req.crypti + "/api/getHeight",
+            url: req.crypti + "/api/blocks/getHeight",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var actualHeight = body.height;
                     request.get({
-                        url : req.crypti + "/api/getBlock?blockId=" + blockId,
+                        url : req.crypti + "/api/blocks/get?id=" + blockId,
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true && body.blocks.length > 0) {
-                                var block = body.blocks[0];
+                            if (body.success == true) {
+                                var block = body.block;
                                 block.confirmations = actualHeight - block.height + 1;
                                 block.payloadHash = new Buffer(block.payloadHash).toString('hex');
                                 block.totalAmount /= req.fixedPoint;
                                 block.totalFee /= req.fixedPoint;
                                 block.usd = req.convertXCR(block.totalAmount + block.totalFee);
 
-                                req.json = { success : true, block : body.blocks[0] };
+                                req.json = { success : true, block : body.block };
                                 return next();
                             } else {
                                 return res.json({ success : false });

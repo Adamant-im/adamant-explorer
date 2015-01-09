@@ -10,14 +10,14 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getTransaction?transactionId=" + transactionId,
+            url : req.crypti + "/api/transactions/get?id=" + transactionId,
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
-                    var transaction  = body.transaction;
+                if (body.success == true) {
+                    var transaction = body.transaction;
                     transaction.usd = req.convertXCR(transaction.amount + transaction.fee);
                     req.json = { success : true, transaction : body.transaction };
                     return next();
@@ -48,22 +48,22 @@ module.exports = function (app) {
 
     app.get("/api/getLastTransactions", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/getLastTransactions?orderDesc=true",
+            url : req.crypti + "/api/transactions?orderBy=timestamp:asc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var transactions = body.transactions;
                     request.get({
-                        url : req.crypti + "/api/getUnconfirmedTransactions",
+                        url : req.crypti + "/api/transactions/unconfirmed",
                         json : true
                     }, function (err, response, body) {
                         if (err || response.statusCode != 200) {
                             return res.json({ success : false });
                         } else {
-                            if (body.status == "OK" && body.success == true) {
+                            if (body.success == true) {
                                 transactions = transactions.concat(body.transactions);
                                 transactions.sort(function (a, b) {
                                     if (a.timestamp > b.timestamp)
@@ -120,14 +120,38 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/getAddressTransactions?address=" + address + "&descOrder=true",
+            url : req.crypti + "/api/transactions?recipientId=" + address + "&orderBy=timestamp:desc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     var withoffset = body.transactions;
+                    req.json = { success : true, transactions : body.transactions };
+                    return next();
+                } else {
+                    return res.json({ success : false });
+                }
+            }
+        });
+    });
+
+    app.get("/api/getTransactionsByBlock", function (req, res, next) {
+        var blockId = req.query.blockId;
+
+        if (!blockId) {
+            return res.json({ success : false });
+        }
+
+        request.get({
+            url : req.crypti + "/api/transactions?blockId=" + blockId + "&orderBy=timestamp:desc",
+            json : true
+        }, function (err, response, body) {
+            if (err || response.statusCode != 200) {
+                return res.json({ success : false });
+            } else {
+                if (body.success == true) {
                     req.json = { success : true, transactions : body.transactions };
                     return next();
                 } else {

@@ -5,7 +5,8 @@
   </div>
   <div data-ng-if="block.height">
     <div class="well well-sm ellipsis">
-      <strong>Pyaload Hash</strong>
+      <strong>Payload Hash</strong>
+      <br>
       <span class="txid text-muted">{{block.payloadHash}}</span>
       <span class="btn-copy" clip-copy="block.payloadHash"></span>
     </div>
@@ -15,13 +16,8 @@
         <table class="table" style="table-layout: fixed">
           <tbody>
           <tr>
-            <td><strong>Number Of Transactions</strong></td>
-            <td class="text-right text-muted">{{block.transactions.length}}</td>
-          </tr>
-
-          <tr>
-              <td><strong>Number of Companies Confirmations</strong></td>
-              <td class="text-right text-muted">{{block.numberOfConfirmations}}</td>
+            <td><strong>Transactions</strong></td>
+            <td class="text-right text-muted">{{block.numberOfTransactions}}</td>
           </tr>
           <tr>
             <td><strong>Height</strong></td>
@@ -60,7 +56,7 @@
           <tr>
             <td><strong>Generator</strong></td>
             <td class="text-right text-muted">
-              <a href="/address/{{block.generator}}" target="_blank" title="{{block.poolInfo.poolName}}">{{block.generator}}</a>
+              <a href="/address/{{block.generatorId}}">{{block.generatorId}}</a>
             </td>
           </tr>
           </tbody>
@@ -71,6 +67,4 @@
     <h3>Transactions</h3>
     <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
   </div>
-
 </section>
-

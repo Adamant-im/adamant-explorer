@@ -29,10 +29,24 @@ angular.module('insight.blocks').controller('BlocksController',
           }).then(function (resp) {
               if (resp.data.success) {
                   $scope.block = resp.data.block;
-                  $scope.txs = $scope.block.transactions;
+                  return $http.get("/api/getTransactionsByBlock", {
+                      params : {
+                          blockId : blockId
+                      }
+                  });
               } else {
-                  $location.path("/");
+                  throw 'Block was not found!'
               }
+          }).then(function (resp) {
+              if (resp.data.success) {
+                  $scope.block.transactions = resp.data.transactions;
+              } else {
+                  throw 'Block transactions were not found!'
+              }
+              $scope.txs = $scope.block.transactions;
+          }).catch(function (error) {
+              console.log(error);
+              $location.path("/");
           });
       }
 
