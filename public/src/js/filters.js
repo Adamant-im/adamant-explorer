@@ -14,8 +14,10 @@ angular.module('insight')
     }
   }).filter('timestamp', function () {
         return function (timestamp) {
-            var epoch_date = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
-            var timestamp  = parseInt((epoch_date.getTime() / 1000) + timestamp);
+            var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
+            var epochTime = parseInt(epochDate.getTime() / 1000);
+
+            timestamp = epochTime + timestamp;
 
             var d = new Date(timestamp * 1000);
             var month = d.getMonth() + 1;
