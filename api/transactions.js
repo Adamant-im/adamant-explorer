@@ -52,7 +52,7 @@ module.exports = function (app) {
             if (err || response.statusCode != 200) {
                 return res.json({ success : false });
             } else {
-                if (body.status == "OK" && body.success == true) {
+                if (body.success == true) {
                     req.json = { success : true, transactions : body.transactions };
                     return next();
                 } else {
