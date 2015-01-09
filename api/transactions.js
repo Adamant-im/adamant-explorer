@@ -22,7 +22,23 @@ module.exports = function (app) {
                     req.json = { success : true, transaction : body.transaction };
                     return next();
                 } else {
-                    return res.json({ success : false });
+					request.get({
+						url : req.crypti + "/api/transactions/unconfirmed/get?id=" + transactionId,
+						json: true
+					}, function (err, response, body) {
+						if (err || response.statusCode != 200) {
+							return res.json({ success : false });
+						}
+
+						if (body.success) {
+							var transaction = body.transaction;
+							transaction.usd = req.convertXCR(transaction.amount + transaction.fee);
+							req.json = { success : true, transaction : body.transaction };
+							return next();
+						} else {
+							return res.json({ success: false });
+						}
+					});
                 }
             }
         });
@@ -30,7 +46,7 @@ module.exports = function (app) {
 
     app.get("/api/getUnconfirmedTransactions", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/getUnconfirmedTransactions",
+            url : req.crypti + "/api/transactions/unconfirmed",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
@@ -48,7 +64,7 @@ module.exports = function (app) {
 
     app.get("/api/getLastTransactions", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/transactions?orderBy=timestamp:asc",
+            url : req.crypti + "/api/transactions?orderBy=timestamp:desc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
