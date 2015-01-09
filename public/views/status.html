@@ -23,7 +23,7 @@
           </tr>
           <tr>
             <td>Current Sync Status</td>
-            <td class="text-right"> 
+            <td class="text-right">
             <span  data-ng-show="!sync.error">{{sync.status}}</span>
             <span class="text-danger" data-ng-show="sync.error">
               <span  class="glyphicon glyphicon-warning-sign"></span>
@@ -75,10 +75,10 @@
 
       <h2>Transaction Output Set Information</h2>
       <div  data-ng-controller="StatusController">
-        <button data-ng-click="txoutLoading=1;getStatus('TxOutSetInfo')" class="btn btn-default"  data-ng-show="!txoutsetinfo.height"> 
+        <button data-ng-click="txoutLoading=1;getStatus('TxOutSetInfo')" class="btn btn-default"  data-ng-show="!txoutsetinfo.height">
           Show Transaction Output data
           <span data-ng-show="txoutLoading" class="glyphicon glyphicon-refresh icon-rotate"></span>
-        </button > 
+        </button >
 
         <table class="table" data-ng-show="txoutsetinfo.height" style="table-layout: fixed" >
           <thead  data-ng-include src="'/views/includes/infoStatus.html'"></thead>
@@ -160,6 +160,6 @@
         </tbody>
       </table>
     </div> <!-- END OF COL-GRAY -->
+
   </div>
 </section>
-
