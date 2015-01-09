@@ -97,10 +97,24 @@ angular.module('insight.blocks').controller('BlocksController',
           }).then(function (resp) {
               if (resp.data.success) {
                   $scope.block = resp.data.block;
-                  $scope.txs = $scope.block.transactions;
+                  return $http.get("/api/getTransactionsByBlock", {
+                      params : {
+                          blockId : blockId
+                      }
+                  });
               } else {
-                  $location.path("/");
+                  throw 'Block was not found!'
               }
+          }).then(function (resp) {
+              if (resp.data.success) {
+                  $scope.block.transactions = resp.data.transactions;
+              } else {
+                  throw 'Block transactions were not found!'
+              }
+              $scope.txs = $scope.block.transactions;
+          }).catch(function (error) {
+              console.log(error);
+              $location.path("/");
           });
       }
 
@@ -622,6 +636,9 @@ angular.module('insight')
     }
   }).filter('timestamp', function () {
         return function (timestamp) {
+            var epoch_date = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
+            var timestamp  = parseInt((epoch_date.getTime() / 1000) + timestamp);
+
             var d = new Date(timestamp * 1000);
             var month = d.getMonth() + 1;
 
