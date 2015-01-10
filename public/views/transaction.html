@@ -47,6 +47,10 @@
             <td class="text-muted text-right"><a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a></td>
         </tr>
         <tr>
+            <td><strong>Confirmations</strong></td>
+            <td class="text-muted text-right">{{tx.confirmations}}</td>
+        </tr>
+        <tr>
           <td><strong>Amount</strong></td>
             <td class="text-muted text-right">{{tx.amount / 100000000 + " XCR"}}</td>
         </tr>
