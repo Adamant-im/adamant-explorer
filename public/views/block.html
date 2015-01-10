@@ -20,6 +20,10 @@
             <td class="text-right text-muted">{{block.numberOfTransactions}}</td>
           </tr>
           <tr>
+              <td><strong>Confirmations</strong></td>
+              <td class="text-right text-muted">{{block.confirmations}}</td>
+          </tr>
+          <tr>
             <td><strong>Height</strong></td>
             <td class="text-right text-muted">{{block.height}}
               <span data-ng-show="block.isMainChain" class="text-success">(Mainchain)</span>
