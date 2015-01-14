@@ -31,6 +31,10 @@ angular.module('insight').config(function($routeProvider) {
       templateUrl: '/views/address.html',
       title: 'Address'
     })
+      .when("/activityGraph", {
+        templateUrl : "/views/activityGraph.html",
+        title: "Activity Graph"
+      })
       .when("/topAccounts", {
           templateUrl : "/views/topAccounts.html",
           title: "Top Accounts"
