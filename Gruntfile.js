@@ -37,6 +37,10 @@ module.exports = function(grunt) {
         src: ['public/src/js/app.js', 'public/src/js/controllers/*.js', 'public/src/js/services/*.js', 'public/src/js/directives.js', 'public/src/js/filters.js', 'public/src/js/config.js', 'public/src/js/init.js', 'public/src/js/translations.js'],
         dest: 'public/js/main.js'
       },
+      sigma: {
+        src: ['bower_components/sigma/sigma.min.js', 'bower_components/sigma/plugins/*.min.js'],
+        dest: 'public/js/sigma.js'
+      },
       css: {
         src: ['bower_components/bootstrap/dist/css/bootstrap.min.css', 'public/src/css/**/*.css'],
         dest: 'public/css/main.css'
@@ -58,6 +62,10 @@ module.exports = function(grunt) {
       main: {
         src: 'public/js/main.js',
         dest: 'public/js/main.min.js'
+      },
+      sigma: {
+        src: 'public/js/sigma.js',
+        dest: 'public/js/sigma.min.js'
       }
     },
     cssmin: {
