@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         }
       },
       vendors: {
-        src: ['public/src/js/ios-imagefile-megapixel/megapix-image.js', 'bower_components/qrcode-generator/js/qrcode.js', 'bower_components/jsqrcode/src/*.js', 'bower_components/momentjs/min/moment.min.js', 'bower_components/zeroclipboard/ZeroClipboard.min.js'],
+        src: ['bower_components/qrcode-generator/js/qrcode.js', 'bower_components/jsqrcode/src/*.js', 'bower_components/momentjs/min/moment.min.js', 'bower_components/zeroclipboard/ZeroClipboard.min.js'],
         dest: 'public/js/vendors.js'
       },
       angular: {
