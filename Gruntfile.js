@@ -122,5 +122,6 @@ module.exports = function(grunt) {
   //Compile task (concat + minify)
   grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin']);
 
-
+  // Copy ZeroClipboard.swf to public/swf.
+  grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
 };
