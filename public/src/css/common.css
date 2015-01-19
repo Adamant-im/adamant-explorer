@@ -135,6 +135,11 @@ margin-left: 0;
   background-color: #fff;
 }
 
+.navbar-default .navbar-nav>li>a:focus {
+  background-color: #2B2F31;
+  color: #fff;
+}
+
 .navbar-form .form-group {
   display: block;
 }
