@@ -38,8 +38,8 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th style="text-align: center;">Height</th>
-              <th style="text-align: center;">Timestamp</th>
+              <th class="text-center">Height</th>
+              <th class="text-center">Timestamp</th>
               <th class="text-right"><span class="ellipsis">Transactions</span></th>
               <th class="text-right"><span class="ellipsis">Generator</span></th>
               <th class="text-right">Amount (XCR)</th>
@@ -52,9 +52,8 @@
               <td>
                 <a href="/block/{{b.id}}">{{b.id}}</a>
               </td>
-              <td><span class="ellipsis" style="text-align: center;">{{b.height}}</span></td>
-
-              <td style="text-align: center;"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
+              <td class="text-center"><span class="ellipsis">{{b.height}}</span></td>
+              <td class="text-center"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right">{{b.transactionsCount}}</td>
               <td class="text-right"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
               <td class="text-right">{{b.totalAmount}}</td>
