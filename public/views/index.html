@@ -35,8 +35,8 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th class="text-center">Height</th>
-              <th class="text-center">Timestamp</th>
+              <th class="text-right">Height</th>
+              <th class="text-right">Timestamp</th>
               <th class="text-right"><span class="ellipsis">Transactions</span></th>
               <th class="text-right"><span class="ellipsis">Generator</span></th>
               <th class="text-right">Amount (XCR)</th>
@@ -47,8 +47,8 @@
             <tr data-ng-show="!blocks.length"><td colspan="7">Waiting for blocks...</td></tr>
             <tr class="fader" data-ng-repeat='b in blocks'>
               <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
-              <td class="text-center"><span class="ellipsis">{{b.height}}</span></td>
-              <td class="text-center"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
+              <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
+              <td class="text-right"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right">{{b.transactionsCount}}</td>
               <td class="text-right"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
               <td class="text-right">{{b.totalAmount}}</td>
