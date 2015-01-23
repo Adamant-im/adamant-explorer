@@ -5,7 +5,6 @@
   <div class="container">
     <div id="home" class="row">
       <div class="col-xs-12 col-md-12">
-
         <div data-ng-include src="'/views/includes/search.html'"></div>
 
         <h2>Latest Transactions</h2>
@@ -22,12 +21,10 @@
           <tbody>
           <tr data-ng-show="!txs.length"><td colspan="4">Waiting for transactions...</td></tr>
           <tr class="fader" data-ng-repeat='tx in txs'>
-            <td>
-              <a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a>
-            </td>
-              <td class="text-right">{{ tx.timestamp | timestamp }}</td>
+            <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
+            <td class="text-right">{{ tx.timestamp | timestamp }}</td>
             <td class="text-right"><span class="ellipsis">{{tx.amount / 100000000}}</span></td>
-              <td class="text-right"><span class="ellipsis">{{tx.fee / 100000000}}</span></td>
+            <td class="text-right"><span class="ellipsis">{{tx.fee / 100000000}}</span></td>
           </tr>
           </tbody>
         </table>
@@ -49,9 +46,7 @@
           <tbody>
             <tr data-ng-show="!blocks.length"><td colspan="7">Waiting for blocks...</td></tr>
             <tr class="fader" data-ng-repeat='b in blocks'>
-              <td>
-                <a href="/block/{{b.id}}">{{b.id}}</a>
-              </td>
+              <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
               <td class="text-center"><span class="ellipsis">{{b.height}}</span></td>
               <td class="text-center"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right">{{b.transactionsCount}}</td>
@@ -64,7 +59,6 @@
         <div class="btn-more">
           <a href="/blocks" class="btn btn-default">See all blocks</a>
         </div>
-
       </div>
     </div>
   </div>
