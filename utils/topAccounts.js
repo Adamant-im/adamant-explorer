@@ -2,7 +2,7 @@ var request = require('request');
 
 module.exports = function (crypti, cb) {
     request.get({
-        url : crypti + "/api/getTopAccounts",
+        url : crypti + "/api/accounts/top",
         json: true
     }, function (err, response, body) {
         if (err || response.statusCode != 200) {
