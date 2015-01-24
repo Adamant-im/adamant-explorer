@@ -136,7 +136,7 @@ module.exports = function (app) {
         }
 
         request.get({
-            url : req.crypti + "/api/transactions?recipientId=" + address + "&orderBy=timestamp:desc",
+            url : req.crypti + "/api/transactions?recipientId=" + address + "&senderId=" + address + "&orderBy=timestamp:desc",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
