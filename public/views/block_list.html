@@ -7,42 +7,38 @@
           <small>by date. {{detail}} {{before}}</small>
         </h1>
       </div>
-      <table class="table table-hover table-striped">
+      <table class="table table-hover table-striped" style="table-layout: fixed;">
         <thead>
           <tr>
-              <th>Id</th>
-              <th style="text-align: center;">Height</th>
-              <th style="text-align: center;">Timestamp</th>
-              <th class="text-right"><span class="ellipsis">Transactions</span></th>
-              <th class="text-right"><span class="ellipsis">Generator</span></th>
-              <th class="text-right">Amount (XCR)</th>
-              <th class="text-right">Fee (XCR)</th>
+            <th>Id</th>
+            <th class="text-right">Height</th>
+            <th class="text-right hidden-xs">Timestamp</th>
+            <th class="text-right hidden-xs"><span class="ellipsis">Transactions</span></th>
+            <th class="text-right hidden-xs hidden-sm"><span class="ellipsis">Generator</span></th>
+            <th class="text-right hidden-xs hidden-sm">Amount (XCR)</th>
+            <th class="text-right hidden-xs hidden-sm">Fee (XCR)</th>
           </tr>
         </thead>
         <tbody>
-        <tr data-ng-show="loading">
-          <td colspan="5">Waiting for blocks <span class="loader-gif"></span></td>
-        </tr>
-        <tr class="fader" data-ng-repeat='b in blocks'>
-            <td>
-                <a href="/block/{{b.id}}">{{b.id}}</a>
-            </td>
-            <td><span class="ellipsis" style="text-align: center;">{{b.height}}</span></td>
-
-            <td style="text-align: center;"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
-            <td class="text-right">{{b.transactionsCount}}</td>
-            <td class="text-right">{{b.generator}}</td>
-            <td class="text-right">{{b.totalAmount}}</td>
-            <td class="text-right">{{b.totalFee}}</td>
-        </tr>
+          <tr data-ng-show="loading">
+            <td colspan="5">Waiting for blocks <span class="loader-gif"></span></td>
+          </tr>
+          <tr class="fader" data-ng-repeat='b in blocks'>
+            <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
+            <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
+            <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
+            <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
+            <td class="text-right hidden-xs hidden-sm">{{b.generator}}</td>
+            <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
+            <td class="text-right hidden-xs hidden-sm">{{b.totalFee}}</td>
+          </tr>
         </tbody>
       </table>
       <div data-ng-if="pagination.more || pagination.before">
         <a class="btn btn-primary" href="/blocks-date/{{pagination.previousPage}}" data-ng-show="pagination.before">Previous page</a>
-          <a class="btn btn-primary" href="/blocks-date/{{pagination.nextPage}}" data-ng-show="pagination.more && pagination.nextPage != 0">Next page</a>
+        <a class="btn btn-primary" href="/blocks-date/{{pagination.nextPage}}" data-ng-show="pagination.more && pagination.nextPage != 0">Next page</a>
       </div>
     </div>
   </div>
   <h2 class="text-center text-muted" data-ng-show="!blocks.length && !loading">No blocks yet.</h2>
 </section>
-

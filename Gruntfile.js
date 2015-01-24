@@ -26,19 +26,23 @@ module.exports = function(grunt) {
         }
       },
       vendors: {
-        src: ['public/src/js/ios-imagefile-megapixel/megapix-image.js', 'public/lib/qrcode-generator/js/qrcode.js', 'public/src/js/jsqrcode/grid.js', 'public/src/js/jsqrcode/version.js', 'public/src/js/jsqrcode/detector.js', 'public/src/js/jsqrcode/formatinf.js', 'public/src/js/jsqrcode/errorlevel.js', 'public/src/js/jsqrcode/bitmat.js', 'public/src/js/jsqrcode/datablock.js', 'public/src/js/jsqrcode/bmparser.js', 'public/src/js/jsqrcode/datamask.js', 'public/src/js/jsqrcode/rsdecoder.js', 'public/src/js/jsqrcode/gf256poly.js', 'public/src/js/jsqrcode/gf256.js', 'public/src/js/jsqrcode/decoder.js', 'public/src/js/jsqrcode/qrcode.js', 'public/src/js/jsqrcode/findpat.js', 'public/src/js/jsqrcode/alignpat.js', 'public/src/js/jsqrcode/databr.js', 'public/lib/momentjs/min/moment.min.js', 'public/lib/zeroclipboard/ZeroClipboard.min.js'],
+        src: ['bower_components/qrcode-generator/js/qrcode.js', 'bower_components/jsqrcode/src/*.js', 'bower_components/momentjs/min/moment.min.js', 'bower_components/underscore/underscore-min.js', 'bower_components/zeroclipboard/ZeroClipboard.min.js'],
         dest: 'public/js/vendors.js'
       },
       angular: {
-        src: ['public/lib/angular/angular.min.js', 'public/lib/angular-resource/angular-resource.min.js', 'public/lib/angular-route/angular-route.min.js', 'public/lib/angular-qrcode/qrcode.js', 'public/lib/angular-animate/angular-animate.min.js', 'public/lib/angular-bootstrap/ui-bootstrap.js', 'public/lib/angular-bootstrap/ui-bootstrap-tpls.js', 'public/lib/angular-ui-utils/ui-utils.min.js', 'public/lib/ngprogress/build/ngProgress.min.js', 'public/lib/angular-gettext/dist/angular-gettext.min.js'],
+        src: ['bower_components/angular/angular.min.js', 'bower_components/angular-resource/angular-resource.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/angular-qrcode/qrcode.js', 'bower_components/angular-animate/angular-animate.min.js', 'bower_components/angular-bootstrap/ui-bootstrap.js', 'bower_components/angular-bootstrap/ui-bootstrap-tpls.js', 'bower_components/angular-ui-utils/ui-utils.min.js', 'bower_components/ngprogress/build/ngProgress.min.js', 'bower_components/angular-gettext/dist/angular-gettext.min.js'],
         dest: 'public/js/angularjs-all.js'
       },
       main: {
         src: ['public/src/js/app.js', 'public/src/js/controllers/*.js', 'public/src/js/services/*.js', 'public/src/js/directives.js', 'public/src/js/filters.js', 'public/src/js/config.js', 'public/src/js/init.js', 'public/src/js/translations.js'],
         dest: 'public/js/main.js'
       },
+      sigma: {
+        src: ['bower_components/sigma/sigma.min.js', 'bower_components/sigma/plugins/*.min.js'],
+        dest: 'public/js/sigma.js'
+      },
       css: {
-        src: ['public/lib/bootstrap/dist/css/bootstrap.min.css', 'public/src/css/**/*.css'],
+        src: ['bower_components/bootstrap/dist/css/bootstrap.min.css', 'public/src/css/**/*.css'],
         dest: 'public/css/main.css'
       }
     },
@@ -58,6 +62,10 @@ module.exports = function(grunt) {
       main: {
         src: 'public/js/main.js',
         dest: 'public/js/main.min.js'
+      },
+      sigma: {
+        src: 'public/js/sigma.js',
+        dest: 'public/js/sigma.min.js'
       }
     },
     cssmin: {
@@ -122,5 +130,6 @@ module.exports = function(grunt) {
   //Compile task (concat + minify)
   grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin']);
 
-
+  // Copy ZeroClipboard.swf to public/swf.
+  grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
 };

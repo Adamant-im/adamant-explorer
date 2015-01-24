@@ -3,3 +3,6 @@ node_modules
 bower_components
 npm-debug.log
 .DS_Store
+public/css/*.css
+public/js/*.js
+po/*.pot

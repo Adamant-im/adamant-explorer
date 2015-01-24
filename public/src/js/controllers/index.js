@@ -29,8 +29,8 @@ angular.module('insight.system').controller('IndexController',
           $http.get("/api/getLastTransactions").then(function (resp) {
               if (resp.data.success) {
                   if ($scope.txs && $scope.txs.length > 0) {
-                      if ($scope.txs[0] != resp.data.txs[0]) {
-                          $scope.txs = resp.data.txs;
+                      if ($scope.txs[0] != resp.data.transactions[0]) {
+                          $scope.txs = resp.data.transactions;
                       }
                   } else {
                       $scope.txs = resp.data.transactions;

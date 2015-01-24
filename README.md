@@ -1,7 +1,7 @@
 Crypti Blockchain Explorer
-=====================
+==========================
 
-Crypti blockchain explorer version 0.1. Works with Crypti wallet API.
+Crypti blockchain explorer version 0.2. Works with Crypti wallet API.
 Uses Redis for caching data.
 
 # Required components

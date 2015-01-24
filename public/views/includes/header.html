@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="insight navbar-brand" href="/">
-          <img src="/img/logo.png" alt="Crypti">
+        <img src="/img/logo.png" alt="Crypti">
       </a>
     </div>
     <div class="navbar-collapse collapse" collapse="$root.isCollapsed">
@@ -25,30 +25,33 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li>
-      <div class="status" data-ng-controller="StatusController">
-        <div data-ng-init="getSync()" class="pull-left">
-          <span class="t text-danger"  data-ng-show="sync.error" tooltip="{{sync.error}}" tooltip-placement="bottom"> 
-              <span  class="glyphicon glyphicon-warning-sign"></span>
-              ERROR 
-          </span>
-          <span class="t" tooltip="{{sync.syncedBlocks}} / {{sync.blockChainHeight}} synced. {{sync.skippedBlocks || 0}} skipped" tooltip-placement="bottom" data-ng-show="sync.status==='syncing'"> 
-            <span  class="glyphicon glyphicon-refresh icon-rotate"></span>
-            {{sync.syncPercentage}}%
-          </span>
-          <span class="glyphicon glyphicon-ok" tooltip="Historic sync finished" tooltip-placement="bottom" data-ng-show="sync.status==='finished'"> </span>
-        </div>
-        <strong>Height: </strong> {{totalBlocks}}
-          &middot;
-          <strong>Fee percent: </strong> {{fee}}%
-          &middot;
-          <strong>XCR/BTC: </strong> {{xcr}}
-          &middot;
-          <strong>XCR/USD: </strong> {{usd}}
-      </div>
-      </li>
-      <li>
+          <div class="status" data-ng-controller="StatusController">
+            <div data-ng-init="getSync()" class="pull-left">
+              <span class="t text-danger"  data-ng-show="sync.error" tooltip="{{sync.error}}" tooltip-placement="bottom">
+                <span  class="glyphicon glyphicon-warning-sign"></span>
+                ERROR
+              </span>
+              <span class="t" tooltip="{{sync.syncedBlocks}} / {{sync.blockChainHeight}} synced. {{sync.skippedBlocks || 0}} skipped" tooltip-placement="bottom" data-ng-show="sync.status==='syncing'">
+                <span  class="glyphicon glyphicon-refresh icon-rotate"></span>
+                {{sync.syncPercentage}}%
+              </span>
+              <span class="glyphicon glyphicon-ok" tooltip="Historic sync finished" tooltip-placement="bottom" data-ng-show="sync.status==='finished'"> </span>
+            </div>
+            <strong>Height: </strong> {{totalBlocks}}
+            &middot;
+            <strong>Fee percent: </strong> {{fee}}%
+            &middot;
+            <strong>XCR/BTC: </strong> {{xcr}}
+            &middot;
+            <strong>XCR/USD: </strong> {{usd}}
+          </div>
+        </li>
+        <li>
+          <a href="/activityGraph">Activity graph</a>
+        </li>
+        <li>
           <a href="/topAccounts">Top accounts</a>
-      </li>
+        </li>
       </ul>
     </div>
   </div>

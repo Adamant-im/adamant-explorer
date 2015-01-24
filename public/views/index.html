@@ -5,7 +5,6 @@
   <div class="container">
     <div id="home" class="row">
       <div class="col-xs-12 col-md-12">
-
         <div data-ng-include src="'/views/includes/search.html'"></div>
 
         <h2>Latest Transactions</h2>
@@ -14,20 +13,18 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th class="text-right">Timestamp</th>
+              <th class="text-right hidden-xs">Timestamp</th>
               <th class="text-right">Amount (XCR)</th>
-              <th class="text-right">Fee (XCR)</th>
+              <th class="text-right hidden-xs">Fee (XCR)</th>
             </tr>
           </thead>
           <tbody>
           <tr data-ng-show="!txs.length"><td colspan="4">Waiting for transactions...</td></tr>
           <tr class="fader" data-ng-repeat='tx in txs'>
-            <td>
-              <a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a>
-            </td>
-              <td class="text-right">{{ tx.timestamp | timestamp }}</td>
+            <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
+            <td class="text-right hidden-xs">{{ tx.timestamp | timestamp }}</td>
             <td class="text-right"><span class="ellipsis">{{tx.amount / 100000000}}</span></td>
-              <td class="text-right"><span class="ellipsis">{{tx.fee / 100000000}}</span></td>
+            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee / 100000000}}</span></td>
           </tr>
           </tbody>
         </table>
@@ -38,34 +35,30 @@
           <thead>
             <tr>
               <th>Id</th>
-              <th style="text-align: center;">Height</th>
-              <th style="text-align: center;">Timestamp</th>
-              <th class="text-right"><span class="ellipsis">Transactions</span></th>
-              <th class="text-right"><span class="ellipsis">Generator</span></th>
-              <th class="text-right">Amount (XCR)</th>
-              <th class="text-right">Fee (XCR)</th>
+              <th class="text-right">Height</th>
+              <th class="text-right hidden-xs">Timestamp</th>
+              <th class="text-right hidden-xs"><span class="ellipsis">Transactions</span></th>
+              <th class="text-right hidden-xs hidden-sm"><span class="ellipsis">Generator</span></th>
+              <th class="text-right hidden-xs hidden-sm">Amount (XCR)</th>
+              <th class="text-right hidden-xs hidden-sm">Fee (XCR)</th>
             </tr>
           </thead>
           <tbody>
             <tr data-ng-show="!blocks.length"><td colspan="7">Waiting for blocks...</td></tr>
             <tr class="fader" data-ng-repeat='b in blocks'>
-              <td>
-                <a href="/block/{{b.id}}">{{b.id}}</a>
-              </td>
-              <td><span class="ellipsis" style="text-align: center;">{{b.height}}</span></td>
-
-              <td style="text-align: center;"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
-              <td class="text-right">{{b.transactionsCount}}</td>
-              <td class="text-right"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
-              <td class="text-right">{{b.totalAmount}}</td>
-              <td class="text-right">{{b.totalFee}}</td>
+              <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
+              <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
+              <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
+              <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
+              <td class="text-right hidden-xs hidden-sm"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
+              <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
+              <td class="text-right hidden-xs hidden-sm">{{b.totalFee}}</td>
             </tr>
           </tbody>
         </table>
         <div class="btn-more">
           <a href="/blocks" class="btn btn-default">See all blocks</a>
         </div>
-
       </div>
     </div>
   </div>
