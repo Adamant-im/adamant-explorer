@@ -1,37 +1,37 @@
 <section data-ng-controller="TopAccounts" data-ng-init="findOne()">
-    <h1>Top Accounts</h1>
-    <div class="text-muted" data-ng-if="!topAccounts">
+  <h1>Top Accounts</h1>
+  <div class="text-muted" data-ng-if="!topAccounts">
     <span>Loading Top Accounts <span class="loader-gif"></span>
+  </div>
+  <div data-ng-if="topAccounts">
+    <div class="row" data-ng-hide="!topAccounts">
+      <div class="col-md-12">
+        <table class="table table-hover table-striped" style="table-layout: fixed;">
+          <thead>
+            <tr>
+              <th width="5%">Rank</th>
+              <th class="text-right hidden-xs">Balance</th>
+              <th class="text-right hidden-xs">USD equivalent</th>
+              <th class="text-right">Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-repeat="address in topAccounts">
+              <td>{{$index + 1}}</td>
+              <td class="text-right hidden-xs">{{address.balance / 100000000 + ' XCR'}}</td>
+              <td class="text-right hidden-xs">{{(address.usd / 100000000).toFixed(2) + ' USD'}}</td>
+              <td class="text-right"><a href="/address/{{ address.address }}">{{address.address}}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-2 text-center">
+        <qrcode size="160" data="{{address.addrStr}}"></qrcode>
+      </div>
     </div>
-    <div data-ng-if="topAccounts">
-        <div class="row" data-ng-hide="!topAccounts">
-            <div class="col-md-12">
-                <table class="table table-hover table-striped" style="table-layout: fixed;">
-                    <thead>
-                    <tr>
-                        <th width="5%">Rank</th>
-                        <th class="text-right hidden-xs">Balance</th>
-                        <th class="text-right hidden-xs">USD equivalent</th>
-                        <th class="text-right">Address</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr data-ng-repeat="address in topAccounts">
-                        <td>{{$index + 1}}</td>
-                        <td class="text-right hidden-xs">{{address.balance / 100000000 + ' XCR'}}</td>
-                        <td class="text-right hidden-xs">{{(address.usd / 100000000).toFixed(2) + ' USD'}}</td>
-                        <td class="text-right"><a href="/address/{{ address.address }}">{{address.address}}</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-2 text-center">
-                <qrcode size="160" data="{{address.addrStr}}"></qrcode>
-            </div>
-        </div>
-    </div>
-    <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
-        <h2>Transactions</h2>
-        <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
-    </div>
+  </div>
+  <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
+    <h2>Transactions</h2>
+    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
+  </div>
 </section>
