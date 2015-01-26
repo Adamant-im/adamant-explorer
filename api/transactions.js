@@ -64,7 +64,7 @@ module.exports = function (app) {
 
     app.get("/api/getLastTransactions", function (req, res, next) {
         request.get({
-            url : req.crypti + "/api/transactions?orderBy=timestamp:desc",
+            url : req.crypti + "/api/transactions?orderBy=timestamp:desc&limit=100",
             json : true
         }, function (err, response, body) {
             if (err || response.statusCode != 200) {
