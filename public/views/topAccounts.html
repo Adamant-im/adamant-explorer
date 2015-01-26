@@ -10,7 +10,7 @@
                     <thead>
                     <tr>
                         <th>Rank</th>
-                        <th>Balance</th>
+                        <th class="text-right">Balance</th>
                         <th class="text-right">USD equivalent</th>
                         <th class="text-right">Address</th>
                     </tr>
@@ -18,7 +18,7 @@
                     <tbody>
                     <tr data-ng-repeat="address in topAccounts">
                         <td>{{$index + 1}}</td>
-                        <td>{{address.balance / 100000000 + ' XCR'}}</td>
+                        <td class="text-right">{{address.balance / 100000000 + ' XCR'}}</td>
                         <td class="text-right">{{(address.usd / 100000000).toFixed(2) + ' USD'}}</td>
                         <td class="text-right"><a href="/address/{{ address.address }}">{{address.address}}</a></td>
                     </tr>
