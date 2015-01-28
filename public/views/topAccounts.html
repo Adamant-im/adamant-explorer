@@ -19,7 +19,7 @@
             <tr data-ng-repeat="address in topAccounts">
               <td>{{$index + 1}}</td>
               <td class="text-right hidden-xs">{{address.balance | xcr}} XCR</td>
-              <td class="text-right hidden-xs">{{(address.usd / 100000000).toFixed(2) + ' USD'}}</td>
+              <td class="text-right hidden-xs">{{address.usd | fiat}} USD</td>
               <td class="text-right"><a href="/address/{{ address.address }}">{{address.address}}</a></td>
             </tr>
           </tbody>

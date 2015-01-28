@@ -52,6 +52,11 @@ angular.module('insight')
       return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
     }
   })
+  .filter('fiat', function() {
+    return function(amount) {
+      return (parseInt(amount) / 100000000).toFixed(2);
+    }
+  })
   .filter('xcr', function() {
     return function(amount) {
       return (parseInt(amount) / 100000000);
