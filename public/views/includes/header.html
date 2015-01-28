@@ -19,7 +19,7 @@
       </ul>
       <form id="search-form" data-ng-controller="SearchController" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="search()">
         <div class="form-group" data-ng-class="{'has-error': badQuery}">
-          <input id="search" type="text" class="form-control" data-ng-model="q" data-ng-class="{'loading': loading}"  placeholder="Search for block, transaction or address" data-ng-submit="search()">
+          <input id="search" type="text" class="form-control" data-ng-model="q" data-ng-class="{'loading': loading}" placeholder="Search for block, transaction or address" data-ng-submit="search()">
         </div>
         <div class="no_matching text-danger" data-ng-show="badQuery">No matching records found!</div>
       </form>
@@ -27,15 +27,15 @@
         <li>
           <div class="status" data-ng-controller="StatusController">
             <div data-ng-init="getSync()" class="pull-left">
-              <span class="t text-danger"  data-ng-show="sync.error" tooltip="{{sync.error}}" tooltip-placement="bottom">
-                <span  class="glyphicon glyphicon-warning-sign"></span>
+              <span class="t text-danger" data-ng-show="sync.error" tooltip="{{sync.error}}" tooltip-placement="bottom">
+                <span class="glyphicon glyphicon-warning-sign"></span>
                 ERROR
               </span>
               <span class="t" tooltip="{{sync.syncedBlocks}} / {{sync.blockChainHeight}} synced. {{sync.skippedBlocks || 0}} skipped" tooltip-placement="bottom" data-ng-show="sync.status==='syncing'">
-                <span  class="glyphicon glyphicon-refresh icon-rotate"></span>
+                <span class="glyphicon glyphicon-refresh icon-rotate"></span>
                 {{sync.syncPercentage}}%
               </span>
-              <span class="glyphicon glyphicon-ok" tooltip="Historic sync finished" tooltip-placement="bottom" data-ng-show="sync.status==='finished'"> </span>
+              <span class="glyphicon glyphicon-ok" tooltip="Historic sync finished" tooltip-placement="bottom" data-ng-show="sync.status==='finished'"></span>
             </div>
             <strong>Height: </strong> {{totalBlocks}}
             &middot;
