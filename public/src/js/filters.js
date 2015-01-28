@@ -3,7 +3,7 @@
 angular.module('insight')
   .filter('startFrom', function() {
     return function(input, start) {
-      start = +start; //parse to int
+      start = +start;
       return input.slice(start);
     }
   })
@@ -12,42 +12,43 @@ angular.module('insight')
       var delimiter = delimiter || ',';
       return input.split(delimiter);
     }
-  }).filter('timestamp', function () {
-        return function (timestamp) {
-            var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
-            var epochTime = parseInt(epochDate.getTime() / 1000);
+  })
+  .filter('timestamp', function() {
+    return function (timestamp) {
+      var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
+      var epochTime = parseInt(epochDate.getTime() / 1000);
 
-            timestamp = epochTime + timestamp;
+      timestamp = epochTime + timestamp;
 
-            var d = new Date(timestamp * 1000);
-            var month = d.getMonth() + 1;
+      var d = new Date(timestamp * 1000);
+      var month = d.getMonth() + 1;
 
-            if (month < 10) {
-                month = "0" + month;
-            }
+      if (month < 10) {
+        month = "0" + month;
+      }
 
-            var day = d.getDate();
+      var day = d.getDate();
 
-            if (day < 10) {
-                day = "0" + day;
-            }
+      if (day < 10) {
+        day = "0" + day;
+      }
 
-            var h = d.getHours();
-            var m = d.getMinutes();
-            var s = d.getSeconds();
+      var h = d.getHours();
+      var m = d.getMinutes();
+      var s = d.getSeconds();
 
-            if (h < 10) {
-                h = "0" + h;
-            }
+      if (h < 10) {
+        h = "0" + h;
+      }
 
-            if (m < 10) {
-                m = "0" + m;
-            }
+      if (m < 10) {
+        m = "0" + m;
+      }
 
-            if (s < 10) {
-                s = "0" + s;
-            }
+      if (s < 10) {
+        s = "0" + s;
+      }
 
-            return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
-        }
-    });
+      return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
+    }
+  });
