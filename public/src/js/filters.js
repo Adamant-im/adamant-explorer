@@ -51,4 +51,9 @@ angular.module('insight')
 
       return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
     }
+  })
+  .filter('xcr', function() {
+    return function(amount) {
+      return (parseInt(amount) / 100000000);
+    }
   });

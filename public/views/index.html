@@ -23,8 +23,8 @@
           <tr class="fader" data-ng-repeat='tx in txs'>
             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
             <td class="text-right hidden-xs">{{ tx.timestamp | timestamp }}</td>
-            <td class="text-right"><span class="ellipsis">{{tx.amount / 100000000}}</span></td>
-            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee / 100000000}}</span></td>
+            <td class="text-right"><span class="ellipsis">{{tx.amount | xcr}}</span></td>
+            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee | xcr}}</span></td>
           </tr>
           </tbody>
         </table>
