@@ -203,6 +203,8 @@ margin-left: 0;
 
 #search-form { color: #9b9d9e; }
 
+#search-form #search { width: 268px; }
+
 #search { font-family: 'Ubuntu', sans-serif; }
 
 #search.loading {
@@ -759,6 +761,8 @@ a.v_highlight_more {
 #search-form-mobile {
   margin-top: 15px;
 }
+
+#search-form-mobile #search { width: 100%; }
 
 @media (min-width: 768px) {
   #search { color: #9b9d9e; }
