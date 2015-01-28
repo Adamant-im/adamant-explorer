@@ -35,13 +35,10 @@
               </span>
               <span class="glyphicon glyphicon-ok" tooltip="Historic sync finished" tooltip-placement="bottom" data-ng-show="sync.status==='finished'"></span>
             </div>
-            <strong>Height: </strong> {{totalBlocks}}
-            &middot;
-            <strong>Fee percent: </strong> {{fee}}%
-            &middot;
-            <strong>XCR/BTC: </strong> {{xcr}}
-            &middot;
-            <strong>XCR/USD: </strong> {{usd}}
+            <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
+            <span class="fee">&middot; <strong>Fee percent: </strong> {{fee}}%</span>
+            <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcr}}</span>
+            <span class="xcr-usd">&middot; <strong>XCR/USD: </strong> {{usd}}</span>
           </div>
         </li>
         <li>
