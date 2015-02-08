@@ -6,7 +6,7 @@
           <span class="btn-copy" clip-copy="address.address"></span>
       </div>
       <div class="col-md-4">
-        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{ address.balance / 100000000 + ' XCR' }}</span>
+        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | xcr}} XCR</span>
       </div>
     </div>
     <div class="hide_snavbar">
@@ -16,13 +16,13 @@
       </a>
     </div>
   </div>
-  <h1>Address <small data-ng-show="address.address">{{address.balance / 100000000 + ' XCR'}}</small></h1>
+  <h1>Address <small data-ng-show="address.address">{{address.balance | xcr}} XCR</small></h1>
   <div class="text-muted" data-ng-if="!address.address">
     <span>Loading Address Information <span class="loader-gif"></span>
   </div>
   <div data-ng-if="address.address">
     <div class="well well-sm ellipsis">
-      <strong>Address</strong> 
+      <strong>Address</strong>
       <span class="text-muted">{{address.address}}</span>
       <span class="btn-copy" clip-copy="address.address"></span>
     </div>
@@ -33,11 +33,11 @@
           <tbody>
           <tr>
             <td><strong>Total balance</strong></td>
-            <td class="ellipsis text-right">{{address.balance / 100000000 + ' XCR'}}</td>
+            <td class="ellipsis text-right">{{address.balance | xcr}} XCR</td>
           </tr>
           <tr>
               <td><strong>USD equivalent</strong></td>
-              <td class="ellipsis text-right">{{(address.usd / 100000000).toFixed(2)}} USD</td>
+              <td class="ellipsis text-right">{{address.usd | fiat}} USD</td>
           </tr>
           </tbody>
         </table>
@@ -49,4 +49,3 @@
     <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
   </div>
 </section>
-
