@@ -34,7 +34,7 @@ module.exports = function (app) {
 					return res.json({success: false});
 				}
 
-				return res.json({success: true, peersCount: peers.length});
+				return res.json({success: true, count: peers.length});
 			}
 		)
 	});
@@ -90,20 +90,63 @@ module.exports = function (app) {
 					return res.json({success: false});
 				}
 
-				return res.json({success: true, bestBlock: bestBlock.id});
+				return res.json({success: true, id: bestBlock.id});
 			}
 		)
 	});
 
 	app.get('/api/statistics/getLastBlockTime', function (req, res) {
-		// return last block time
+		request.get(req.crypti + "/api/blocks?&orderBy=height:desc&limit=1", function (err, resp, body) {
+			if (err || resp.statusCode != 200) {
+				return next(err || "Status code is not equal 200");
+			}
+
+			if (body.blocks.length != 0) {
+				return res.json({success: true, timestamp: body.blocks[0].timestamp});
+			} else {
+				return res.json({success: false});
+			}
+		});
 	});
 
 	app.get('/api/statistics/getCountOfTransactions', function (req, res) {
-		// return count of transactions
+
 	});
 
 	app.get('/api/statistics/getPeers', function (req, res) {
-		// return peers by page, limit is 100
+		var offset = 0,
+			peers = [],
+			found = false;
+
+		async.doUntil(
+			function (next) {
+				request.get(req.crypti + "/api/peers?orderBy=ip:asc&limit=100&offset=" + offset, function (err, resp, body) {
+					if (err || resp.statusCode != 200) {
+						return next(err || "Status code is not equal 200");
+					}
+
+					if (body.peers.length != 0) {
+						peers = peers.concat(body.peers);
+						found = true;
+					} else {
+						found = false;
+					}
+
+					return next();
+				});
+			},
+			function () {
+				offset += 100;
+				return found;
+			},
+			function (err) {
+				if (err) {
+					console.log("Error in active peers: " + err);
+					return res.json({success: false});
+				}
+
+				return res.json({success: true, peers: peers});
+			}
+		)
 	});
 }
