@@ -2,7 +2,7 @@
 
 module.exports = function(grunt) {
 
-  //Load NPM tasks
+  // Load NPM Tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -113,13 +113,13 @@ module.exports = function(grunt) {
     }
   });
 
-  //Making grunt default to force in order not to break the project.
+  // Making grunt default to force in order not to break the project.
   grunt.option('force', true);
 
-  //Default task(s).
+  // Default task(s).
   grunt.registerTask('default', ['watch']);
 
-  //Compile task (concat + minify)
+  // Compile task (concat + minify).
   grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin']);
 
   // Copy ZeroClipboard.swf to public/swf.
