@@ -26,15 +26,37 @@ module.exports = function(grunt) {
         }
       },
       vendors: {
-        src: ['bower_components/qrcode-generator/js/qrcode.js', 'bower_components/jsqrcode/src/*.js', 'bower_components/momentjs/min/moment.min.js', 'bower_components/underscore/underscore-min.js', 'bower_components/zeroclipboard/ZeroClipboard.min.js', 'bower_components/sigma/sigma.min.js', 'bower_components/sigma/plugins/*.min.js'],
+        src: ['bower_components/qrcode-generator/js/qrcode.js',
+              'bower_components/jsqrcode/src/*.js',
+              'bower_components/momentjs/min/moment.min.js',
+              'bower_components/underscore/underscore-min.js',
+              'bower_components/zeroclipboard/ZeroClipboard.min.js',
+              'bower_components/sigma/sigma.min.js',
+              'bower_components/sigma/plugins/*.min.js'],
         dest: 'public/js/vendors.js'
       },
       angular: {
-        src: ['bower_components/angular/angular.min.js', 'bower_components/angular-resource/angular-resource.min.js', 'bower_components/angular-route/angular-route.min.js', 'bower_components/angular-qrcode/qrcode.js', 'bower_components/angular-animate/angular-animate.min.js', 'bower_components/angular-bootstrap/ui-bootstrap.js', 'bower_components/angular-bootstrap/ui-bootstrap-tpls.js', 'bower_components/angular-ui-utils/ui-utils.min.js', 'bower_components/ngprogress/build/ngProgress.min.js', 'bower_components/angular-gettext/dist/angular-gettext.min.js'],
+        src: ['bower_components/angular/angular.min.js',
+              'bower_components/angular-resource/angular-resource.min.js',
+              'bower_components/angular-route/angular-route.min.js',
+              'bower_components/angular-qrcode/qrcode.js',
+              'bower_components/angular-animate/angular-animate.min.js',
+              'bower_components/angular-bootstrap/ui-bootstrap.js',
+              'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+              'bower_components/angular-ui-utils/ui-utils.min.js',
+              'bower_components/ngprogress/build/ngProgress.min.js',
+              'bower_components/angular-gettext/dist/angular-gettext.min.js'],
         dest: 'public/js/angularjs-all.js'
       },
       main: {
-        src: ['public/src/js/app.js', 'public/src/js/controllers/*.js', 'public/src/js/services/*.js', 'public/src/js/directives.js', 'public/src/js/filters.js', 'public/src/js/config.js', 'public/src/js/init.js', 'public/src/js/translations.js'],
+        src: ['public/src/js/app.js',
+              'public/src/js/controllers/*.js',
+              'public/src/js/services/*.js',
+              'public/src/js/directives.js',
+              'public/src/js/filters.js',
+              'public/src/js/config.js',
+              'public/src/js/init.js',
+              'public/src/js/translations.js'],
         dest: 'public/js/main.js'
       },
       css: {
