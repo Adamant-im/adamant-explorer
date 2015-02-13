@@ -49,7 +49,10 @@ module.exports = function (app) {
 
         async.doUntil(
             function (next) {
-                request.get(req.crypti + "/api/blocks?&orderBy=height:desc&limit=100&offset=" + offset, function (err, resp, body) {
+                request.get({
+                    url: req.crypti + "/api/blocks?&orderBy=height:desc&limit=100&offset=" + offset,
+                    json : true
+                }, function (err, resp, body) {
                     if (err || resp.statusCode != 200) {
                         return next(err || "Status code is not equal 200");
                     }
@@ -60,7 +63,7 @@ module.exports = function (app) {
 
 
                             if (bestBlock) {
-                                var bestAmount = bestAmount.totalAmount + bestBlock.totalFee,
+                                var bestAmount = bestBlock.totalAmount + bestBlock.totalFee,
                                     newAmount = block.totalAmount + block.totalFee;
 
                                 if (bestAmount < newAmount) {
