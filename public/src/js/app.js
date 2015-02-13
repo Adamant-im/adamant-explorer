@@ -14,7 +14,8 @@ angular.module('insight',[
     'insight.transactions',
     'insight.address',
     'insight.search',
-    'insight.activity'
+    'insight.activity',
+    'insight.network'
 ]);
 
 angular.module('insight.system', []);
@@ -24,3 +25,4 @@ angular.module('insight.transactions', []);
 angular.module('insight.address', []);
 angular.module('insight.search', []);
 angular.module('insight.activity', []);
+angular.module('insight.network', []);
