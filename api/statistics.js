@@ -129,16 +129,19 @@ module.exports = function (app) {
 
         async.doUntil(
             function (next) {
-                request.get(req.crypti + "/api/peers?orderBy=ip:asc&limit=100&offset=" + offset, function (err, resp, body) {
+                request.get({
+                    url: req.crypti + "/api/peers?orderBy=ip:asc&limit=100&offset=" + offset,
+                    json : true
+                }, function (err, resp, body) {
                     if (err || resp.statusCode != 200) {
                         return next(err || "Status code is not equal 200");
                     }
 
                     if (body.peers.length != 0) {
                         peers = peers.concat(body.peers);
-                        found = true;
-                    } else {
                         found = false;
+                    } else {
+                        found = true;
                     }
 
                     return next();
