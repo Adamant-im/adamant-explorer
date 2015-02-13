@@ -27,6 +27,7 @@ module.exports = function(grunt) {
             },
             vendors: {
                 src: ['bower_components/momentjs/min/moment.min.js',
+                      'bower_components/leaflet/dist/leaflet.js',
                       'bower_components/underscore/underscore-min.js',
                       'bower_components/zeroclipboard/ZeroClipboard.min.js',
                       'bower_components/sigma/sigma.min.js',
@@ -58,6 +59,7 @@ module.exports = function(grunt) {
             },
             css: {
                 src: ['bower_components/bootstrap/dist/css/bootstrap.min.css',
+                      'bower_components/leaflet/dist/leaflet.css',
                       'public/src/css/**/*.css'],
                 dest: 'public/css/main.css'
             }
@@ -144,4 +146,11 @@ module.exports = function(grunt) {
 
     // Copy ZeroClipboard.swf to public/swf.
     grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
+
+    // Copy Leaflet images to public/img/leaflet.
+    grunt.file.copy('bower_components/leaflet/dist/images/layers.png', 'public/img/leaflet/layers.png');
+    grunt.file.copy('bower_components/leaflet/dist/images/layers-2x.png', 'public/img/leaflet/layers-2x.png');
+    grunt.file.copy('bower_components/leaflet/dist/images/marker-icon.png', 'public/img/leaflet/marker-icon.png');
+    grunt.file.copy('bower_components/leaflet/dist/images/marker-icon-2x.png', 'public/img/leaflet/marker-icon-2x.png');
+    grunt.file.copy('bower_components/leaflet/dist/images/marker-shadow.png', 'public/img/leaflet/marker-shadow.png');
 };
