@@ -102,7 +102,10 @@ module.exports = function (app) {
     });
 
     app.get('/api/statistics/getLastBlockTime', function (req, res) {
-        request.get(req.crypti + "/api/blocks?&orderBy=height:desc&limit=1", function (err, resp, body) {
+        request.get({
+            url: req.crypti + "/api/blocks?&orderBy=height:desc&limit=1",
+            json : true
+        }, function (err, resp, body) {
             if (err || resp.statusCode != 200) {
                 return next(err || "Status code is not equal 200");
             }
