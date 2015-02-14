@@ -7,7 +7,6 @@ angular.module('insight',[
   'ngProgress',
   'ui.bootstrap',
   'ui.route',
-  'monospaced.qrcode',
   'gettext',
   'insight.system',
   'insight.socket',

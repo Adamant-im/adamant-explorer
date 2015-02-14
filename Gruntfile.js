@@ -26,9 +26,7 @@ module.exports = function(grunt) {
         }
       },
       vendors: {
-        src: ['bower_components/qrcode-generator/js/qrcode.js',
-              'bower_components/jsqrcode/src/*.js',
-              'bower_components/momentjs/min/moment.min.js',
+        src: ['bower_components/momentjs/min/moment.min.js',
               'bower_components/underscore/underscore-min.js',
               'bower_components/zeroclipboard/ZeroClipboard.min.js',
               'bower_components/sigma/sigma.min.js',
@@ -39,7 +37,6 @@ module.exports = function(grunt) {
         src: ['bower_components/angular/angular.min.js',
               'bower_components/angular-resource/angular-resource.min.js',
               'bower_components/angular-route/angular-route.min.js',
-              'bower_components/angular-qrcode/qrcode.js',
               'bower_components/angular-animate/angular-animate.min.js',
               'bower_components/angular-bootstrap/ui-bootstrap.js',
               'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
