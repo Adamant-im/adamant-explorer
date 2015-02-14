@@ -2,7 +2,7 @@ var request = require('request');
 
 module.exports = function (app) {
     app.get("/api/version", function (req, res) {
-        return res.json({ version : 0.1 });
+        return res.json({ version : 0.2 });
     });
 
     app.get("/api/getFee", function (req, res, next) {
