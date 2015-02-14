@@ -1,6 +1,6 @@
 'use strict';
 
-//Setting up route
+// Setting up routes
 angular.module('insight').config(function($routeProvider) {
   $routeProvider.
     when('/block/:blockId', {
@@ -45,7 +45,7 @@ angular.module('insight').config(function($routeProvider) {
     });
 });
 
-//Setting HTML5 Location Mode
+// Setting HTML5 location mode
 angular.module('insight')
   .config(function($locationProvider) {
     $locationProvider.html5Mode(true);
@@ -60,7 +60,7 @@ angular.module('insight')
     $rootScope.$on('$routeChangeSuccess', function() {
       ngProgress.complete();
 
-      //Change page title, based on Route information
+      // Change page title, based on route information
       $rootScope.titleDetail = '';
       $rootScope.title = $route.current.title;
       $rootScope.isCollapsed = true;
