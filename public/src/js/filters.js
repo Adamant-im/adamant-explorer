@@ -58,7 +58,12 @@ angular.module('insight')
       }
   })
   .filter('xcr', function() {
-      return function(amount) {
-          return (parseInt(amount) / 100000000);
-      }
+    return function(amount) {
+		console.log(amount);
+		if (isNaN(amount)) {
+			return amount;
+		} else {
+			return (parseInt(amount) / 100000000);
+		}
+    }
   });

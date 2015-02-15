@@ -25,6 +25,8 @@ if (config.redis.password) {
 }
 
 var app = express();
+app.bterXcr = "~";
+
 
 app.configure(function () {
     app.set('strict routing', true);
@@ -54,7 +56,8 @@ app.configure(function () {
 
     app.use(function (req, res, next) {
         req.convertXCR = function (amount) {
-            return bter.convertXCRTOUSD(amount, app.bterXcr, app.bterBtc).toFixed(3);
+            return "~";
+            //return bter.convertXCRTOUSD(amount, app.bterXcr, app.bterBtc).toFixed(3);
         }
 
         return next();
@@ -70,7 +73,7 @@ app.configure(function () {
         });
     }, config.updateTopAccountsInterval);
 
-    setInterval(function () {
+    /*setInterval(function () {
         bter.getXCRBTC(function (err, result) {
             if (err) {
                 console.log("Loading BTC/XCR failed...");
@@ -90,7 +93,7 @@ app.configure(function () {
                 }
             });
         });
-    }, config.updateBterInterval);
+    }, config.updateBterInterval);*/
 
 
     app.use(express.logger());
@@ -204,7 +207,7 @@ async.parallel([
             }
         });
     },
-    function (cb) {
+    /*function (cb) {
         console.log("Loading BTC/USD curs from bter...");
         bter.getBTCUSD(function (err, result) {
             if (err) {
@@ -229,7 +232,7 @@ async.parallel([
                 cb();
             }
         });
-    }
+    }*/
 ], function (err) {
     app.listen(app.get("port"), app.get("host"), function (err) {
         if (err) {

@@ -24,6 +24,7 @@ module.exports = function (app) {
     });
 
     app.get("/api/getXCRCourse", function (req, res, next) {
+
         if (app.bterXcr) {
             return res.json({ success : true, xcr : app.bterXcr, usd : req.convertXCR(1) });
         } else {
