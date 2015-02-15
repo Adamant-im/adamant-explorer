@@ -59,7 +59,6 @@ angular.module('insight')
   })
   .filter('xcr', function() {
     return function(amount) {
-		console.log(amount);
 		if (isNaN(amount)) {
 			return amount;
 		} else {
