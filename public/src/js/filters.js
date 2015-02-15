@@ -58,11 +58,11 @@ angular.module('insight')
       }
   })
   .filter('xcr', function() {
-    return function(amount) {
-		if (isNaN(amount)) {
-			return amount;
-		} else {
-			return (parseInt(amount) / 100000000);
-		}
-    }
+      return function(amount) {
+          if (isNaN(amount)) {
+              return amount;
+          } else {
+              return (parseInt(amount) / 100000000);
+          }
+      }
   });
