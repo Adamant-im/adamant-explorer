@@ -110,7 +110,7 @@ module.exports = function (app) {
 	});
 
 	app.get('/api/statistics/getCountOfTransactions', function (req, res) {
-
+		// count of transaction for last 24 hours
 	});
 
 	app.get('/api/statistics/getPeers', function (req, res) {
