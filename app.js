@@ -25,6 +25,8 @@ if (config.redis.password) {
 }
 
 var app = express();
+app.bterXcr = "~";
+
 
 app.configure(function () {
     app.set('strict routing', true);
