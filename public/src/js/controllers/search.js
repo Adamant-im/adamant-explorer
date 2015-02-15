@@ -38,4 +38,4 @@ angular.module('insight.search').controller('SearchController',
               }
           });
       }
-});
+  });

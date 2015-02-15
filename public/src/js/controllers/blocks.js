@@ -63,4 +63,4 @@ angular.module('insight.blocks').controller('BlocksController',
               $scope.getLastBlocks();
           }
       }
-});
+  });
