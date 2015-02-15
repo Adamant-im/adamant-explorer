@@ -1,6 +1,5 @@
 var bter = require('./bter-api');
 
-
 module.exports = {
     getBTCUSD : function (cb) {
         bter.getTicker({ CURR_A: 'btc', CURR_B: 'usd' }, function(err, result) {

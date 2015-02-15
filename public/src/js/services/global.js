@@ -2,11 +2,8 @@
 
 //Global service for global variables
 angular.module('insight.system')
-  .factory('Global',[
-    function() {
-    }
-  ])
+  .factory('Global', [ function() {} ])
   .factory('Version',
     function($resource) {
-      return $resource('/api/version');
-  });
+        return $resource('/api/version');
+    });

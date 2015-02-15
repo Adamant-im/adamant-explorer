@@ -2,5 +2,5 @@
 
 angular.module('insight.activity').controller('ActivityGraph',
   function(activityGraph, $scope) {
-    activityGraph($scope);
+      activityGraph($scope);
   });
