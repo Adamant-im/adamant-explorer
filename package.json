@@ -1,35 +1,35 @@
 {
-  "name": "cryptiblockchain",
-  "version": "0.2.1",
-  "description": "Crypti Blockchain Explorer",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Boris Povod",
-  "license": "ISC",
-  "dependencies": {
-    "async": "^0.9.0",
-    "express": "^3.17.1",
-    "hiredis": "^0.1.17",
-    "hyperquest": "^1.0.1",
-    "moment": "^2.8.3",
-    "nonce": "^1.0.3",
-    "redis": "^0.12.1",
-    "request": "^2.42.0",
-    "underscore": "^1.7.0"
-  },
-  "devDependencies": {
-    "bower": "~1.2.8",
-    "grunt": "~0.4.2",
-    "grunt-cli": "~0.1.11",
-    "grunt-contrib-jshint": "~0.8.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.3.2",
-    "grunt-contrib-watch": "*",
-    "grunt-macreload": "*",
-    "grunt-css": "~0.5.4",
-    "grunt-markdown": "~0.5.0",
-    "grunt-angular-gettext": "^0.2.15"
-  }
+    "name": "cryptiblockchain",
+    "version": "0.2.1",
+    "description": "Crypti Blockchain Explorer",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Boris Povod",
+    "license": "ISC",
+    "dependencies": {
+        "async": "^0.9.0",
+        "express": "^3.17.1",
+        "hiredis": "^0.1.17",
+        "hyperquest": "^1.0.1",
+        "moment": "^2.8.3",
+        "nonce": "^1.0.3",
+        "redis": "^0.12.1",
+        "request": "^2.42.0",
+        "underscore": "^1.7.0"
+    },
+    "devDependencies": {
+        "bower": "~1.2.8",
+        "grunt": "~0.4.2",
+        "grunt-cli": "~0.1.11",
+        "grunt-contrib-jshint": "~0.8.0",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-contrib-uglify": "~0.3.2",
+        "grunt-contrib-watch": "*",
+        "grunt-macreload": "*",
+        "grunt-css": "~0.5.4",
+        "grunt-markdown": "~0.5.0",
+        "grunt-angular-gettext": "^0.2.15"
+    }
 }
