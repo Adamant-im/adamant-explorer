@@ -2,71 +2,71 @@
 
 // Setting up routes
 angular.module('insight').config(function($routeProvider) {
-  $routeProvider.
+    $routeProvider.
     when('/block/:blockId', {
-      templateUrl: '/views/block.html',
-      title: 'Block '
+        templateUrl: '/views/block.html',
+        title: 'Block '
     }).
     when('/block-index/:blockHeight', {
-      controller: 'BlocksController',
-      templateUrl: '/views/redirect.html'
+        controller: 'BlocksController',
+        templateUrl: '/views/redirect.html'
     }).
     when('/tx/:txId/:v_type?/:v_index?', {
-      templateUrl: '/views/transaction.html',
-      title: 'Transaction '
+        templateUrl: '/views/transaction.html',
+        title: 'Transaction '
     }).
     when('/', {
-      templateUrl: '/views/index.html',
-      title: 'Home'
+        templateUrl: '/views/index.html',
+        title: 'Home'
     }).
     when('/blocks', {
-      templateUrl: '/views/block_list.html',
-      title: 'Blocks List'
+        templateUrl: '/views/block_list.html',
+        title: 'Blocks List'
     }).
     when('/blocks-date/:blockDate?', {
-      templateUrl: '/views/block_list.html',
-      title: 'Blocks List'
+        templateUrl: '/views/block_list.html',
+        title: 'Blocks List'
     }).
     when('/address/:address', {
-      templateUrl: '/views/address.html',
-      title: 'Address'
+        templateUrl: '/views/address.html',
+        title: 'Address'
     })
-      .when("/activityGraph", {
+    .when("/activityGraph", {
         templateUrl : "/views/activityGraph.html",
         title: "Activity Graph"
-      })
-      .when("/topAccounts", {
-          templateUrl : "/views/topAccounts.html",
-          title: "Top Accounts"
-      })
+    })
+    .when("/topAccounts", {
+        templateUrl : "/views/topAccounts.html",
+        title: "Top Accounts"
+    })
     .otherwise({
-      templateUrl: '/views/404.html',
-      title: 'Error'
+        templateUrl: '/views/404.html',
+        title: 'Error'
     });
 });
 
 // Setting HTML5 location mode
 angular.module('insight')
   .config(function($locationProvider) {
-    $locationProvider.html5Mode(true);
-    $locationProvider.hashPrefix('!');
+      $locationProvider.html5Mode(true);
+      $locationProvider.hashPrefix('!');
   })
   .run(function($rootScope, $route, $location, $routeParams, $anchorScroll, ngProgress, gettextCatalog) {
-    gettextCatalog.currentLanguage = 'en';
-    $rootScope.$on('$routeChangeStart', function() {
-      ngProgress.start();
-    });
+      gettextCatalog.currentLanguage = 'en';
+      $rootScope.$on('$routeChangeStart', function() {
+          ngProgress.start();
+      });
 
-    $rootScope.$on('$routeChangeSuccess', function() {
-      ngProgress.complete();
+      $rootScope.$on('$routeChangeSuccess', function() {
+          ngProgress.complete();
 
-      // Change page title, based on route information
-      $rootScope.titleDetail = '';
-      $rootScope.title = $route.current.title;
-      $rootScope.isCollapsed = true;
-      $rootScope.currentAddr = null;
+          // Change page title, based on route information
+          $rootScope.titleDetail = '';
+          $rootScope.title = $route.current.title;
+          $rootScope.isCollapsed = true;
+          $rootScope.currentAddr = null;
 
-      $location.hash($routeParams.scrollTo);
-      $anchorScroll();
-    });
+          $location.hash($routeParams.scrollTo);
+          $anchorScroll();
+      });
   });
