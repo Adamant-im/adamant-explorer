@@ -29,6 +29,8 @@ var app = express();
 app.exchange = new utils.exchange(config),
 
 app.configure(function () {
+    app.set('version', '0.2');
+
     app.set('strict routing', true);
 
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
