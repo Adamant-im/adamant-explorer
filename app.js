@@ -181,11 +181,14 @@ async.parallel([
     function (cb) { app.exchange.getBTCUSD(cb) },
     function (cb) { app.exchange.getXCRBTC(cb) }
 ], function (err) {
-    app.listen(app.get("port"), app.get("host"), function (err) {
+    var server = app.listen(app.get("port"), app.get("host"), function (err) {
         if (err) {
             console.log(err);
         } else {
             console.log("Crypti started at " + app.get("host") + ":" + app.get("port"));
+
+            var io = require("socket.io").listen(server);
+            require("./sockets")(app, io);
         }
     });
 });
