@@ -2,6 +2,8 @@ var request = require('request'),
     _ = require('underscore');
 
 module.exports = function (app) {
+    var exchange = app.exchange;
+
     app.get("/api/getBlocksCount", function (req, res, next) {
         request.get({
             url: req.crypti + "/api/blocks/getHeight",
@@ -117,7 +119,7 @@ module.exports = function (app) {
                                 block.payloadHash = new Buffer(block.payloadHash).toString('hex');
                                 block.totalAmount /= req.fixedPoint;
                                 block.totalFee /= req.fixedPoint;
-                                block.usd = req.convertXCR(block.totalAmount + block.totalFee);
+                                block.usd = exchange.convertXCRTOUSD(block.totalAmount + block.totalFee);
 
                                 req.json = { success : true, block : body.block };
                                 return next();

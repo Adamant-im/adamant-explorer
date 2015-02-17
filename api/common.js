@@ -1,6 +1,8 @@
 var request = require('request');
 
 module.exports = function (app) {
+    var exchange = app.exchange;
+
     app.get("/api/version", function (req, res) {
         return res.json({ version : 0.2 });
     });
@@ -25,8 +27,8 @@ module.exports = function (app) {
 
     app.get("/api/getXCRCourse", function (req, res, next) {
 
-        if (app.bterXcr) {
-            return res.json({ success : true, xcr : app.bterXcr, usd : req.convertXCR(1) });
+        if (exchange.XCRBTC) {
+            return res.json({ success : true, xcr : exchange.XCRBTC , usd : exchange.convertXCRTOUSD(1) });
         } else {
             return res.json({ success : false });
         }

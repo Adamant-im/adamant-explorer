@@ -2,6 +2,8 @@ var request = require('request'),
     _ = require('underscore');
 
 module.exports = function (app) {
+    var exchange = app.exchange;
+
     app.get("/api/getTransaction", function (req, res, next) {
         var transactionId = req.query.transactionId;
 
@@ -18,7 +20,7 @@ module.exports = function (app) {
             } else {
                 if (body.success == true) {
                     var transaction = body.transaction;
-                    transaction.usd = req.convertXCR(transaction.amount + transaction.fee);
+                    transaction.usd = exchange.convertXCRTOUSD(transaction.amount + transaction.fee);
                     req.json = { success : true, transaction : body.transaction };
                     return next();
                 } else {
@@ -32,7 +34,7 @@ module.exports = function (app) {
 
                         if (body.success) {
                             var transaction = body.transaction;
-                            transaction.usd = req.convertXCR(transaction.amount + transaction.fee);
+                            transaction.usd = exchange.convertXCRTOUSD(transaction.amount + transaction.fee);
                             req.json = { success : true, transaction : body.transaction };
                             return next();
                         } else {

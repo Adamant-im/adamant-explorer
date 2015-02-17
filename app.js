@@ -4,15 +4,12 @@ var express = require('express'),
     production = config.production,
     routes = require("./api"),
     path = require('path'),
-    topAccounts = require('./utils').topAccounts,
-    time = require('./utils').time,
     redis = require("redis"),
     client = redis.createClient(
         config.redis.port,
         config.redis.host
     ),
-    cache = require('./cache.js'),
-    bter = require('./utils').bter,
+    cache = require('./cache.js')
     async = require('async');
 
 if (config.redis.password) {
@@ -24,9 +21,12 @@ if (config.redis.password) {
     });
 }
 
-var app = express();
-app.bterXcr = "~";
+var utils = require('./utils'),
+    time = utils.time,
+    topAccounts = utils.topAccounts;
 
+var app = express();
+app.exchange = new utils.exchange(config),
 
 app.configure(function () {
     app.set('strict routing', true);
@@ -54,15 +54,6 @@ app.configure(function () {
         return next();
     });
 
-    app.use(function (req, res, next) {
-        req.convertXCR = function (amount) {
-            return "~";
-            //return bter.convertXCRTOUSD(amount, app.bterXcr, app.bterBtc).toFixed(3);
-        }
-
-        return next();
-    });
-
     setInterval(function () {
         topAccounts(app.get("crypti address"), function (err, accounts) {
             if (err) {
@@ -73,28 +64,12 @@ app.configure(function () {
         });
     }, config.updateTopAccountsInterval);
 
-    /*setInterval(function () {
-        bter.getXCRBTC(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/XCR failed...");
-                console.log(err);
-            } else {
-                app.bterXcr = result;
-            }
-        });
-
-        bter.getBTCUSD(function (err, result) {
-            bter.getBTCUSD(function (err, result) {
-                if (err) {
-                    console.log("Loading BTC/USD failed...");
-                    console.log(err);
-                } else {
-                    app.bterBtc = result;
-                }
-            });
-        });
-    }, config.updateBterInterval);*/
-
+    if (app.exchange.enabled) {
+        setInterval(function () {
+            app.exchange.loadBTCUSD();
+            app.exchange.loadXCRBTC();
+        }, config.updateExchangeInterval);
+    }
 
     app.use(express.logger());
     app.use(express.static(path.join(__dirname, "public")));
@@ -207,32 +182,8 @@ async.parallel([
             }
         });
     },
-    /*function (cb) {
-        console.log("Loading BTC/USD curs from bter...");
-        bter.getBTCUSD(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/USD failed...");
-                cb(err);
-            } else {
-                app.bterBtc = result;
-                console.log("BTC/USD loaded...");
-                cb();
-            }
-        });
-    },
-    function (cb) {
-        console.log("Loading XCR/BTC curs from bter...");
-        bter.getXCRBTC(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/XCR failed...");
-                cb(err);
-            } else {
-                app.bterXcr = result;
-                console.log("BTC/XCR loaded...");
-                cb();
-            }
-        });
-    }*/
+    function (cb) { app.exchange.getBTCUSD(cb) },
+    function (cb) { app.exchange.getXCRBTC(cb) }
 ], function (err) {
     app.listen(app.get("port"), app.get("host"), function (err) {
         if (err) {

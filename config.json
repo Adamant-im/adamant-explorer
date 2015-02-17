@@ -20,6 +20,7 @@
         "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
-        "updateBterInterval" : 900000
+        "enableExchange" : false,
+        "updateExchangeInterval" : 900000
     }
 }

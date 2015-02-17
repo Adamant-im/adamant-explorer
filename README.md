@@ -48,7 +48,8 @@ Example:
         "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
-        "updateBterInterval" : 900000
+        "enableExchange" : true,
+        "updateExchangeInterval" : 900000
     }
 }
 ```
@@ -56,7 +57,8 @@ Example:
    * `updateTopAccountsInterval` - time to update top accounts in interval.
    * `cacheTTL` - time to live cache in redis.
    * `fixedPoint` - fixed point number of Crypti (10^8).
-   * `updateBterInterval` - time to update bter currency courses.
+   * `enableExchange` - enable or disable exchange currency courses.
+   * `updateExchangeInterval` - time to update exchange currency courses.
 
 # Build
 
