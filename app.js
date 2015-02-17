@@ -31,13 +31,11 @@ app.exchange = new utils.exchange(config),
 app.configure(function () {
     app.set('strict routing', true);
 
-
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
     app.use(function (req, res, next) {
         req.crypti = app.get("crypti address");
         return next();
     });
-
 
     app.use(function (req, res, next) {
         req.time = time;
@@ -126,7 +124,6 @@ console.log("Loading routes...");
 routes(app);
 
 console.log("Routes loaded");
-
 
 app.use(function (req, res, next) {
     console.log(req.originalUrl.split('/')[1]);
