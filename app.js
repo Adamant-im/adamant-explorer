@@ -42,10 +42,7 @@ app.configure(function () {
         return next();
     });
 
-    app.use(function (req, res, next) {
-        req.fixedPoint = config.fixedPoint;
-        next();
-    });
+    app.set("fixed point", config.fixedPoint);
 
     app.use(function (req, res, next) {
         req.redis = client;

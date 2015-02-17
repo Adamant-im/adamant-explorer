@@ -2,7 +2,8 @@ var request = require('request'),
     _ = require('underscore');
 
 module.exports = function (app) {
-    var exchange = app.exchange;
+    var exchange = app.exchange,
+        fixedPoint = app.get("fixed point");
 
     app.get("/api/getBlocksCount", function (req, res, next) {
         request.get({
@@ -54,7 +55,7 @@ module.exports = function (app) {
                         } else {
                             if (body.success == true) {
                                 var blocks = _.map(body.blocks, function (b) {
-                                    return { id: b.id, timestamp: b.timestamp, generator: b.generatorId, totalAmount: b.totalAmount / req.fixedPoint, totalFee: b.totalFee / req.fixedPoint, transactionsCount: b.numberOfTransactions, height : b.height };
+                                    return { id: b.id, timestamp: b.timestamp, generator: b.generatorId, totalAmount: b.totalAmount / fixedPoint, totalFee: b.totalFee / fixedPoint, transactionsCount: b.numberOfTransactions, height : b.height };
                                 });
 
                                 var totalPages = parseInt(height / 20);
@@ -117,8 +118,8 @@ module.exports = function (app) {
                                 var block = body.block;
                                 block.confirmations = actualHeight - block.height + 1;
                                 block.payloadHash = new Buffer(block.payloadHash).toString('hex');
-                                block.totalAmount /= req.fixedPoint;
-                                block.totalFee /= req.fixedPoint;
+                                block.totalAmount /= fixedPoint;
+                                block.totalFee /= fixedPoint;
                                 block.usd = exchange.convertXCRTOUSD(block.totalAmount + block.totalFee);
 
                                 req.json = { success : true, block : body.block };
