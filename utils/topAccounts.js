@@ -7,12 +7,10 @@ module.exports = function (crypti, cb) {
     }, function (err, response, body) {
         if (err || response.statusCode != 200) {
             return cb("Can't get top accounts, something invalid");
+        } else if (body.accounts) {
+            return cb(null, body.accounts);
         } else {
-            if (body.accounts) {
-                return cb(null, body.accounts);
-            } else {
-                return cb("Can't get top accounts, it's empty");
-            }
+            return cb("Can't get top accounts, it's empty");
         }
     });
 }
