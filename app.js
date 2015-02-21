@@ -34,6 +34,8 @@ app.configure(function () {
     app.set('strict routing', true);
 
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
+    app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
+
     app.use(function (req, res, next) {
         req.crypti = app.get("crypti address");
         return next();

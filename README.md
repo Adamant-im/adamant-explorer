@@ -2,11 +2,12 @@ Crypti Blockchain Explorer
 ==========================
 
 Crypti blockchain explorer version 0.2. Works with Crypti wallet API.
-Uses Redis for caching data.
+Uses Redis for caching data and Freegeoip for IP geolocation.
 
 # Required components
 
  * Redis
+ * Freegeoip (https://github.com/fiorix/freegeoip)
  * Bower
  * Grunt.js
 
@@ -39,6 +40,10 @@ Example:
         "crypti" : {
             "host" : "127.0.0.1",
             "port" : 6040
+        },
+        "freegeoip" : {
+            "host" : "127.0.0.1",
+            "port" : 8080
         },
         "redis" : {
             "host" : "127.0.0.1",
