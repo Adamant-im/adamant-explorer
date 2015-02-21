@@ -21,6 +21,11 @@ angular.module('insight')
           return new Date((epochTime + d) * 1000);
       }
   })
+  .filter('timeAgo', function (epochStampFilter) {
+      return function (timestamp) {
+          return moment(epochStampFilter(timestamp)).fromNow();
+      }
+  })
   .filter('timestamp', function (epochStampFilter) {
       return function (timestamp) {
           var d     = epochStampFilter(timestamp);
