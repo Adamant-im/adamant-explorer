@@ -13,14 +13,17 @@ angular.module('insight')
           return input.split(delimiter);
       }
   })
-  .filter('timestamp', function() {
-      return function (timestamp) {
+  .filter('epochStamp', function () {
+      return function (d) {
           var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
           var epochTime = parseInt(epochDate.getTime() / 1000);
 
-          timestamp = epochTime + timestamp;
-
-          var d = new Date(timestamp * 1000);
+          return new Date((epochTime + d) * 1000);
+      }
+  })
+  .filter('timestamp', function(epochStampFilter) {
+      return function (timestamp) {
+          var d     = epochStampFilter(timestamp);
           var month = d.getMonth() + 1;
 
           if (month < 10) {
