@@ -26,6 +26,13 @@ angular.module('insight')
           return moment(epochStampFilter(timestamp)).fromNow();
       }
   })
+  .filter('timeDistance', function (epochStampFilter) {
+      return function (a, b) {
+          return moment.duration(
+              epochStampFilter(a) + epochStampFilter(b)
+          ).humanize();
+      }
+  })
   .filter('timestamp', function (epochStampFilter) {
       return function (timestamp) {
           var d     = epochStampFilter(timestamp);
