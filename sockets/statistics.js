@@ -24,6 +24,7 @@ module.exports = function (app, socket) {
 
                 socket.emit('data', data);
                 intervalOn(this);
+                getLocations();
             }
         }.bind(this));
     }
@@ -53,6 +54,14 @@ module.exports = function (app, socket) {
         statistics.getPeers(
             function (res) { cb('Peers') },
             function (res) { cb(null, res) }
+        );
+    }
+
+    var getLocations = function (cb) {
+        statistics.getLocations(
+            data.peers.list.connected,
+            function (res) { return false; },
+            function (res) { socket.emit('locations', res); }
         );
     }
 
