@@ -11,6 +11,7 @@
         "angular-ui-utils": "~0.1.1",
         "bootstrap": "~3.1.1",
         "leaflet": "~0.7.3",
+        "leaflet.markercluster": "~0.4.0",
         "momentjs": "~2.5.1",
         "ngprogress": "~1.0.5",
         "sigma": "https://github.com/karmacoma/sigma-bower.git",

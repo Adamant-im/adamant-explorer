@@ -28,6 +28,7 @@ module.exports = function(grunt) {
             vendors: {
                 src: ['bower_components/momentjs/min/moment.min.js',
                       'bower_components/leaflet/dist/leaflet.js',
+                      'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
                       'bower_components/underscore/underscore-min.js',
                       'bower_components/zeroclipboard/ZeroClipboard.min.js',
                       'bower_components/sigma/sigma.min.js',
@@ -60,6 +61,7 @@ module.exports = function(grunt) {
             css: {
                 src: ['bower_components/bootstrap/dist/css/bootstrap.min.css',
                       'bower_components/leaflet/dist/leaflet.css',
+                      'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
                       'public/src/css/**/*.css'],
                 dest: 'public/css/main.css'
             }
