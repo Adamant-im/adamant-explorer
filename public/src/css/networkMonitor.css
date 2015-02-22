@@ -25,3 +25,7 @@
   position: relative;
   border: 1px solid #373D42;
 }
+
+table.peers td {
+    overflow: hidden;
+}
