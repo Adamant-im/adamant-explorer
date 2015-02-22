@@ -6,10 +6,9 @@ var NetworkMonitor = function ($socket, $scope) {
 
     this.counter = function (peers) {
         return {
-            banned: peers.banned.length,
             connected: peers.connected.length,
             disconnected: peers.disconnected.length,
-            total: peers.banned.length + peers.connected.length + peers.disconnected.length
+            total: peers.connected.length + peers.disconnected.length
         }
     }
 
