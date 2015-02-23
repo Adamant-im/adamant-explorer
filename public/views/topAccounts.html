@@ -30,8 +30,4 @@
       </div>
     </div>
   </div>
-  <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
-    <h2>Transactions</h2>
-    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
-  </div>
 </section>
