@@ -3,8 +3,27 @@ var api = require('../lib/api'),
 
 module.exports = function (app, socket) {
     var statistics = new api.statistics(app),
-        interval   = 0,
+        clients    = 0,
+        interval   = null,
         data       = {};
+
+    this.wait = function () {
+        clients = 0;
+        socket.on('connection', function (socket) {
+            if (clients <= 0) {
+                clients = 0;
+                this.emit();
+            }
+            clients++;
+            socket.on('disconnect', function () {
+                clients--;
+                if (clients <= 0) {
+                    clients = 0;
+                    this.halt();
+                }
+            }.bind(this));
+        }.bind(this));
+    }
 
     this.emit = function () {
         async.parallel([
@@ -27,6 +46,11 @@ module.exports = function (app, socket) {
                 getLocations();
             }
         }.bind(this));
+    }
+
+    this.halt = function () {
+        clearInterval(interval);
+        interval = null;
     }
 
     var getBestBlock = function (cb) {
@@ -66,11 +90,10 @@ module.exports = function (app, socket) {
     }
 
     var intervalOn = function (self) {
-        if (interval == 0) {
-            interval = 5000;
-            setInterval(function () {
+        if (interval == null) {
+            interval = setInterval(function () {
                 self.emit();
-            }, interval);
+            }, 5000);
         }
     }
 }
