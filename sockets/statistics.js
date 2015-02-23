@@ -93,7 +93,7 @@ module.exports = function (app, socket) {
         if (interval == null) {
             interval = setInterval(function () {
                 self.emit();
-            }, 5000);
+            }, 30000);
         }
     }
 }
