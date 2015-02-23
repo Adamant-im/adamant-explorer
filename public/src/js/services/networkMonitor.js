@@ -35,7 +35,7 @@ var NetworkMonitor = function ($socket, $scope) {
 }
 
 var NetworkMap = function () {
-    this.markers = [];
+    this.markers = {};
     this.options = { center: [0, 0], zoom: 1, minZoom: 1, maxZoom: 10 };
     this.map     = L.map('map', this.options);
     this.cluster = L.markerClusterGroup({ maxClusterRadius: 80 });
@@ -46,20 +46,36 @@ var NetworkMap = function () {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    this.addLocation = function (l) {
-        if (this.markers.indexOf(l.ip) == -1) {
-            this.cluster.addLayer(
-                L.marker([l.latitude, l.longitude], { title: l.ip }).addTo(this.map)
-            );
-            this.markers.push(l.ip);
+    this.addLocations = function (locations) {
+        var connected = [];
+
+        for (var i = 0; i < locations.length; i++) {
+            var l = locations[i];
+
+            if (!_.has(this.markers, l.ip)) {
+                this.cluster.addLayer(
+                    this.markers[l.ip] = L.marker(
+                        [l.latitude, l.longitude], { title: l.ip }
+                    ).addTo(this.map)
+                );
+            }
+            connected.push(l.ip);
         }
+
+        this.removeDisconnected(connected);
+        this.map.addLayer(this.cluster);
     }
 
-    this.addLocations = function (locations) {
-        for (var i = 0; i < locations.length; i++) {
-            this.addLocation(locations[i]);
+    this.removeDisconnected = function (connected) {
+        for (var ip in this.markers) {
+            if (!_.contains(connected, ip)) {
+                var m = this.markers[ip];
+
+                this.map.removeLayer(m);
+                this.cluster.removeLayer(m);
+                delete this.markers[ip];
+            }
         }
-        this.map.addLayer(this.cluster);
     }
 }
 
