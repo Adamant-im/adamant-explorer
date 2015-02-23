@@ -42,8 +42,13 @@ module.exports = function (app, socket) {
                 data.peers     = res[3];
 
                 socket.emit('data', data);
-                intervalOn(this);
                 getLocations();
+
+                if (interval == null) {
+                    interval = setInterval(function () {
+                        this.emit();
+                    }.bind(this), 30000);
+                }
             }
         }.bind(this));
     }
@@ -87,13 +92,5 @@ module.exports = function (app, socket) {
             function (res) { return false; },
             function (res) { socket.emit('locations', res); }
         );
-    }
-
-    var intervalOn = function (self) {
-        if (interval == null) {
-            interval = setInterval(function () {
-                self.emit();
-            }, 30000);
-        }
     }
 }
