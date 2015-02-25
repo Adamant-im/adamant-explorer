@@ -1,6 +1,6 @@
 'use strict';
 
-var ActivityGraph = function($http) {
+var ActivityGraph = function ($http) {
     this.$http      = $http;
     this.loading    = true;
     this.blocks     = 0;
@@ -36,7 +36,7 @@ var ActivityGraph = function($http) {
         this.sigma = sigma;
         this.color = "#5bc0de";
 
-        this.add = function(event) {
+        this.add = function (event) {
             this.remove(event);
             this.node       = event.data.node;
             this.prev_color = this.node.color;
@@ -44,7 +44,7 @@ var ActivityGraph = function($http) {
             this.sigma.refresh();
         }
 
-        this.remove = function(event) {
+        this.remove = function (event) {
             if (this.node) {
                 this.node.color = this.prev_color;
                 this.prev_color = undefined;
@@ -53,11 +53,11 @@ var ActivityGraph = function($http) {
             this.sigma.refresh();
         }
 
-        this.selected = function() {
+        this.selected = function () {
             return this.node !== undefined;
         }
 
-        this.type = function() {
+        this.type = function () {
             if (this.selected()) {
                 return this.node.type;
             } else {
@@ -65,8 +65,8 @@ var ActivityGraph = function($http) {
             }
         }
 
-        this.href = function() {
-            switch(this.type()) {
+        this.href = function () {
+            switch (this.type()) {
                 case 0:
                 return "/tx/" + this.node.id;
                 case 1:
@@ -84,7 +84,7 @@ var ActivityGraph = function($http) {
     function CameraMenu(camera) {
         this.camera = camera;
 
-        this.reset = function() {
+        this.reset = function () {
             if (this.camera) {
                 this.camera.goTo({ x: 0, y: 0, angle: 0, ratio: 1 });
             }
@@ -97,7 +97,7 @@ var ActivityGraph = function($http) {
         this.graph  = graph;
         this.volume = this.txs = this.blocks = this.accounts = 0;
 
-        this.refresh = function() {
+        this.refresh = function () {
             var txs       = this.graph.nodes_by_type(0);
             var blocks    = this.graph.nodes_by_type(1);
             var accounts  = this.graph.nodes_by_type(2);
@@ -108,35 +108,35 @@ var ActivityGraph = function($http) {
             this.accounts = accounts.size().value();
         }
 
-        var txs_volume = function(chain) {
-            return chain.reduce(function(vol, tx) {
+        var txs_volume = function (chain) {
+            return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
             }, 0).value() / Math.pow(10, 8);
         }
 
-        var epoch_time = function() {
+        var epoch_time = function () {
             return parseInt(
                 new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0)
             ).getTime() / 1000);
         }
 
-        var min_time = function(chain) {
-            return chain.min(function(block) {
+        var min_time = function (chain) {
+            return chain.min(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
                 }
             }).value().timestamp;
         }
 
-        var max_time = function(chain) {
-            return chain.max(function(block) {
+        var max_time = function (chain) {
+            return chain.max(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
                 }
             }).value().timestamp;
         }
 
-        var blocks_timespan = function(chain) {
+        var blocks_timespan = function (chain) {
             var max = epoch_time() + max_time(chain) * 1000;
             var min = epoch_time() + min_time(chain) * 1000;
             return moment.duration((max - min)).humanize();
@@ -146,17 +146,17 @@ var ActivityGraph = function($http) {
     this.statistics = new Statistics(this);
 }
 
-ActivityGraph.prototype.last_block = function(callback) {
+ActivityGraph.prototype.last_block = function (callback) {
     this.$http.get("/api/statistics/getLastBlock").success(_.bind(callback, this));
 }
 
-ActivityGraph.prototype.block_transactions = function(id, callback) {
+ActivityGraph.prototype.block_transactions = function (id, callback) {
     this.$http.get("/api/getTransactionsByBlock" + "?blockId=" + id).success(_.bind(callback, this));
 }
 
-ActivityGraph.prototype.refresh = function() {
+ActivityGraph.prototype.refresh = function () {
     this.loading = true;
-    this.last_block(function(res) {
+    this.last_block(function (res) {
         if (!res.success) { return; }
         this.add_block(res.block, true);
 
@@ -170,7 +170,7 @@ ActivityGraph.prototype.refresh = function() {
     });
 }
 
-ActivityGraph.prototype.clear = function() {
+ActivityGraph.prototype.clear = function () {
     this.blocks  = 0;
     this.indexes = [];
     if (this.sigma) {
@@ -178,20 +178,20 @@ ActivityGraph.prototype.clear = function() {
     }
 }
 
-ActivityGraph.prototype.size_nodes = function() {
-    _.each(this.sigma.graph.nodes(), function(node) {
+ActivityGraph.prototype.size_nodes = function () {
+    _.each(this.sigma.graph.nodes(), function (node) {
         var deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
 }
 
-ActivityGraph.prototype.nodes_by_type = function(type) {
-    return _.chain(this.sigma.graph.nodes()).filter(function(node) {
+ActivityGraph.prototype.nodes_by_type = function (type) {
+    return _.chain(this.sigma.graph.nodes()).filter(function (node) {
         return node.type == type;
     });
 }
 
-ActivityGraph.prototype.position_nodes = function() {
+ActivityGraph.prototype.position_nodes = function () {
     for (type = 0; type < 3; type++) {
         var nodes = this.nodes_by_type(type).value();
         var i, len = nodes.length, slice = 2 * Math.PI / len;
@@ -205,7 +205,7 @@ ActivityGraph.prototype.position_nodes = function() {
     }
 }
 
-ActivityGraph.prototype.add_node = function(node) {
+ActivityGraph.prototype.add_node = function (node) {
     if (!_.contains(this.indexes, node.id)) {
         node.x = Math.random();
         node.y = Math.random();
@@ -214,14 +214,14 @@ ActivityGraph.prototype.add_node = function(node) {
     }
 }
 
-ActivityGraph.prototype.add_edge = function(edge) {
+ActivityGraph.prototype.add_edge = function (edge) {
     if (!_.contains(this.indexes, edge.id)) {
         this.indexes.push(edge.id);
         this.sigma.graph.addEdge(edge);
     }
 }
 
-ActivityGraph.prototype.add_tx = function(tx) {
+ActivityGraph.prototype.add_tx = function (tx) {
     if (_.contains(this.indexes, tx.id)) { return; }
     this.add_node({
         id: tx.id,
@@ -236,7 +236,7 @@ ActivityGraph.prototype.add_tx = function(tx) {
     this.add_tx_recipient(tx);
 }
 
-ActivityGraph.prototype.add_account = function(id) {
+ActivityGraph.prototype.add_account = function (id) {
     this.add_node({
         id: id,
         type: 2,
@@ -246,11 +246,11 @@ ActivityGraph.prototype.add_account = function(id) {
     });
 }
 
-ActivityGraph.prototype.amount = function(tx, sign) {
+ActivityGraph.prototype.amount = function (tx, sign) {
     return (sign + tx.amount / Math.pow(10, 8)) + " XCR";
 }
 
-ActivityGraph.prototype.add_tx_sender = function(tx) {
+ActivityGraph.prototype.add_tx_sender = function (tx) {
     this.add_account(tx.senderId);
     this.add_edge({
         id: tx.id + tx.senderId + Math.random(),
@@ -262,7 +262,7 @@ ActivityGraph.prototype.add_tx_sender = function(tx) {
     });
 }
 
-ActivityGraph.prototype.add_tx_recipient = function(tx) {
+ActivityGraph.prototype.add_tx_recipient = function (tx) {
     this.add_account(tx.recipientId);
     this.add_edge({
         id: tx.id + tx.recipientId + Math.random(),
@@ -274,7 +274,7 @@ ActivityGraph.prototype.add_tx_recipient = function(tx) {
     });
 }
 
-ActivityGraph.prototype.add_block = function(block, add_txs) {
+ActivityGraph.prototype.add_block = function (block, add_txs) {
     if (_.contains(this.indexes, block.id)) { return; }
     if ((this.blocks + 1) > this.max_blocks) { this.clear(); }
     this.add_node({
@@ -291,7 +291,7 @@ ActivityGraph.prototype.add_block = function(block, add_txs) {
     if (add_txs) this.add_block_txs(block);
 }
 
-ActivityGraph.prototype.generator_id = function(block) {
+ActivityGraph.prototype.generator_id = function (block) {
     if (block.generator !== undefined) {
         return block.generator;
     } else {
@@ -299,7 +299,7 @@ ActivityGraph.prototype.generator_id = function(block) {
     }
 }
 
-ActivityGraph.prototype.add_block_generator = function(block) {
+ActivityGraph.prototype.add_block_generator = function (block) {
     var generator_id = this.generator_id(block);
     this.add_account(generator_id);
     this.add_edge({
@@ -312,11 +312,11 @@ ActivityGraph.prototype.add_block_generator = function(block) {
     })
 }
 
-ActivityGraph.prototype.add_block_txs = function(block) {
+ActivityGraph.prototype.add_block_txs = function (block) {
     if (block.transactionsCount <= 0) { return; }
-    this.block_transactions(block.id, function(res) {
+    this.block_transactions(block.id, function (res) {
         if (!res.success) { return; }
-        _.each(block.transactions, function(tx) {
+        _.each(block.transactions, function (tx) {
             this.add_tx(tx);
             this.add_edge({
                 id: block.id + tx.id,
@@ -330,12 +330,12 @@ ActivityGraph.prototype.add_block_txs = function(block) {
 }
 
 angular.module('insight.activity').factory('activityGraph',
-  function($http, $interval) {
-      return function(scope) {
+  function ($http, $interval) {
+      return function (scope) {
           var activityGraph = new ActivityGraph($http);
           activityGraph.refresh();
 
-          $interval(function() {
+          $interval(function () {
               activityGraph.refresh();
           }, 30000);
 
@@ -344,14 +344,14 @@ angular.module('insight.activity').factory('activityGraph',
           scope.cameraMenu = activityGraph.cameraMenu;
           scope.statistics = activityGraph.statistics;
 
-          activityGraph.sigma.bind('clickNode', function(event) {
-              scope.$apply(function() {
+          activityGraph.sigma.bind('clickNode', function (event) {
+              scope.$apply(function () {
                   activityGraph.nodeSelect.add(event);
               });
           });
 
-          activityGraph.sigma.bind('clickStage doubleClickStage', function(event) {
-              scope.$apply(function() {
+          activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
+              scope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
               });
           });
