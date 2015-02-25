@@ -22,6 +22,7 @@ var ActivityGraph = function ($http) {
 
     this.settings = {
         sideMargin: 1,
+        singleHover: true,
         minNodeSize: 0.5,
         maxNodeSize: 32,
         drawLabels: false,
