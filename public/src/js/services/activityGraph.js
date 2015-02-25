@@ -1,11 +1,11 @@
 'use strict';
 
 var ActivityGraph = function ($http) {
-    this.$http      = $http;
-    this.loading    = true;
-    this.blocks     = 0;
-    this.max_blocks = 20;
-    this.indexes    = [];
+    this.$http     = $http;
+    this.loading   = true;
+    this.blocks    = 0;
+    this.maxBlocks = 20;
+    this.indexes   = [];
 
     this.colors = {
         account: "#3465a4", // Steel Blue
@@ -39,15 +39,15 @@ var ActivityGraph = function ($http) {
         this.add = function (event) {
             this.remove(event);
             this.node       = event.data.node;
-            this.prev_color = this.node.color;
+            this.prevColor  = this.node.color;
             this.node.color = this.color;
             this.sigma.refresh();
         }
 
         this.remove = function (event) {
             if (this.node) {
-                this.node.color = this.prev_color;
-                this.prev_color = undefined;
+                this.node.color = this.prevColor;
+                this.prevColor  = undefined;
                 this.node       = undefined;
             }
             this.sigma.refresh();
@@ -98,29 +98,29 @@ var ActivityGraph = function ($http) {
         this.volume = this.txs = this.blocks = this.accounts = 0;
 
         this.refresh = function () {
-            var txs       = this.graph.nodes_by_type(0);
-            var blocks    = this.graph.nodes_by_type(1);
-            var accounts  = this.graph.nodes_by_type(2);
+            var txs       = this.graph.nodesByType(0);
+            var blocks    = this.graph.nodesByType(1);
+            var accounts  = this.graph.nodesByType(2);
             this.txs      = txs.size().value();
-            this.volume   = txs_volume(txs);
+            this.volume   = txsVolume(txs);
             this.blocks   = blocks.size().value();
-            this.timespan = blocks_timespan(blocks);
+            this.timespan = blocksTimespan(blocks);
             this.accounts = accounts.size().value();
         }
 
-        var txs_volume = function (chain) {
+        var txsVolume = function (chain) {
             return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
             }, 0).value() / Math.pow(10, 8);
         }
 
-        var epoch_time = function () {
+        var epochTime = function () {
             return parseInt(
                 new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0)
             ).getTime() / 1000);
         }
 
-        var min_time = function (chain) {
+        var minTime = function (chain) {
             return chain.min(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
@@ -128,7 +128,7 @@ var ActivityGraph = function ($http) {
             }).value().timestamp;
         }
 
-        var max_time = function (chain) {
+        var maxTime = function (chain) {
             return chain.max(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
@@ -136,9 +136,9 @@ var ActivityGraph = function ($http) {
             }).value().timestamp;
         }
 
-        var blocks_timespan = function (chain) {
-            var max = epoch_time() + max_time(chain) * 1000;
-            var min = epoch_time() + min_time(chain) * 1000;
+        var blocksTimespan = function (chain) {
+            var max = epochTime() + maxTime(chain) * 1000;
+            var min = epochTime() + minTime(chain) * 1000;
             return moment.duration((max - min)).humanize();
         }
     }
@@ -146,23 +146,23 @@ var ActivityGraph = function ($http) {
     this.statistics = new Statistics(this);
 }
 
-ActivityGraph.prototype.last_block = function (callback) {
+ActivityGraph.prototype.lastBlock = function (callback) {
     this.$http.get("/api/statistics/getLastBlock").success(_.bind(callback, this));
 }
 
-ActivityGraph.prototype.block_transactions = function (id, callback) {
+ActivityGraph.prototype.blockTransactions = function (id, callback) {
     this.$http.get("/api/getTransactionsByBlock" + "?blockId=" + id).success(_.bind(callback, this));
 }
 
 ActivityGraph.prototype.refresh = function () {
     this.loading = true;
-    this.last_block(function (res) {
+    this.lastBlock(function (res) {
         if (!res.success) { return; }
-        this.add_block(res.block, true);
+        this.addBlock(res.block, true);
 
         if (this.sigma) {
-            this.size_nodes();
-            this.position_nodes();
+            this.sizeNodes();
+            this.positionNodes();
             this.statistics.refresh();
             this.loading = false;
             this.sigma.refresh();
@@ -178,22 +178,22 @@ ActivityGraph.prototype.clear = function () {
     }
 }
 
-ActivityGraph.prototype.size_nodes = function () {
+ActivityGraph.prototype.sizeNodes = function () {
     _.each(this.sigma.graph.nodes(), function (node) {
         var deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
 }
 
-ActivityGraph.prototype.nodes_by_type = function (type) {
+ActivityGraph.prototype.nodesByType = function (type) {
     return _.chain(this.sigma.graph.nodes()).filter(function (node) {
         return node.type == type;
     });
 }
 
-ActivityGraph.prototype.position_nodes = function () {
+ActivityGraph.prototype.positionNodes = function () {
     for (type = 0; type < 3; type++) {
-        var nodes = this.nodes_by_type(type).value();
+        var nodes = this.nodesByType(type).value();
         var i, len = nodes.length, slice = 2 * Math.PI / len;
 
         for (i = 0; i < len; i++) {
@@ -205,7 +205,7 @@ ActivityGraph.prototype.position_nodes = function () {
     }
 }
 
-ActivityGraph.prototype.add_node = function (node) {
+ActivityGraph.prototype.addNode = function (node) {
     if (!_.contains(this.indexes, node.id)) {
         node.x = Math.random();
         node.y = Math.random();
@@ -214,16 +214,16 @@ ActivityGraph.prototype.add_node = function (node) {
     }
 }
 
-ActivityGraph.prototype.add_edge = function (edge) {
+ActivityGraph.prototype.addEdge = function (edge) {
     if (!_.contains(this.indexes, edge.id)) {
         this.indexes.push(edge.id);
         this.sigma.graph.addEdge(edge);
     }
 }
 
-ActivityGraph.prototype.add_tx = function (tx) {
+ActivityGraph.prototype.addTx = function (tx) {
     if (_.contains(this.indexes, tx.id)) { return; }
-    this.add_node({
+    this.addNode({
         id: tx.id,
         label: tx.id,
         type: 0,
@@ -232,12 +232,12 @@ ActivityGraph.prototype.add_tx = function (tx) {
         size: 1
     });
     this.indexes.push(tx.id);
-    this.add_tx_sender(tx);
-    this.add_tx_recipient(tx);
+    this.addTxSender(tx);
+    this.addTxRecipient(tx);
 }
 
-ActivityGraph.prototype.add_account = function (id) {
-    this.add_node({
+ActivityGraph.prototype.addAccount = function (id) {
+    this.addNode({
         id: id,
         type: 2,
         label: id,
@@ -250,9 +250,9 @@ ActivityGraph.prototype.amount = function (tx, sign) {
     return (sign + tx.amount / Math.pow(10, 8)) + " XCR";
 }
 
-ActivityGraph.prototype.add_tx_sender = function (tx) {
-    this.add_account(tx.senderId);
-    this.add_edge({
+ActivityGraph.prototype.addTxSender = function (tx) {
+    this.addAccount(tx.senderId);
+    this.addEdge({
         id: tx.id + tx.senderId + Math.random(),
         label: this.amount(tx, '-'),
         source: tx.senderId,
@@ -262,9 +262,9 @@ ActivityGraph.prototype.add_tx_sender = function (tx) {
     });
 }
 
-ActivityGraph.prototype.add_tx_recipient = function (tx) {
-    this.add_account(tx.recipientId);
-    this.add_edge({
+ActivityGraph.prototype.addTxRecipient = function (tx) {
+    this.addAccount(tx.recipientId);
+    this.addEdge({
         id: tx.id + tx.recipientId + Math.random(),
         label: this.amount(tx, '+'),
         source: tx.id,
@@ -274,10 +274,10 @@ ActivityGraph.prototype.add_tx_recipient = function (tx) {
     });
 }
 
-ActivityGraph.prototype.add_block = function (block, add_txs) {
+ActivityGraph.prototype.addBlock = function (block, addTxs) {
     if (_.contains(this.indexes, block.id)) { return; }
-    if ((this.blocks + 1) > this.max_blocks) { this.clear(); }
-    this.add_node({
+    if ((this.blocks + 1) > this.maxBlocks) { this.clear(); }
+    this.addNode({
         id: block.id,
         label: block.id,
         timestamp: block.timestamp,
@@ -287,11 +287,11 @@ ActivityGraph.prototype.add_block = function (block, add_txs) {
     });
     this.blocks++;
     this.indexes.push(block.id);
-    this.add_block_generator(block);
-    if (add_txs) this.add_block_txs(block);
+    this.addBlockGenerator(block);
+    if (addTxs) this.addBlockTxs(block);
 }
 
-ActivityGraph.prototype.generator_id = function (block) {
+ActivityGraph.prototype.generatorID = function (block) {
     if (block.generator !== undefined) {
         return block.generator;
     } else {
@@ -299,26 +299,26 @@ ActivityGraph.prototype.generator_id = function (block) {
     }
 }
 
-ActivityGraph.prototype.add_block_generator = function (block) {
-    var generator_id = this.generator_id(block);
-    this.add_account(generator_id);
-    this.add_edge({
-        id: block.id + generator_id,
+ActivityGraph.prototype.addBlockGenerator = function (block) {
+    var generatorID = this.generatorID(block);
+    this.addAccount(generatorID);
+    this.addEdge({
+        id: block.id + generatorID,
         label: block.height.toString(),
-        source: generator_id,
+        source: generatorID,
         target: block.id,
         color: this.colors.account,
         size: 1
     })
 }
 
-ActivityGraph.prototype.add_block_txs = function (block) {
+ActivityGraph.prototype.addBlockTxs = function (block) {
     if (block.transactionsCount <= 0) { return; }
-    this.block_transactions(block.id, function (res) {
+    this.blockTransactions(block.id, function (res) {
         if (!res.success) { return; }
         _.each(block.transactions, function (tx) {
-            this.add_tx(tx);
-            this.add_edge({
+            this.addTx(tx);
+            this.addEdge({
                 id: block.id + tx.id,
                 source: block.id,
                 target: tx.id,
