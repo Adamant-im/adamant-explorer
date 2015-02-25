@@ -1,9 +1,11 @@
 'use strict';
 
 var ActivityGraph = function($http) {
-    this.$http   = $http;
-    this.loading = true;
-    this.indexes = [];
+    this.$http      = $http;
+    this.loading    = true;
+    this.blocks     = 0;
+    this.max_blocks = 20;
+    this.indexes    = [];
 
     this.colors = {
         account: "#3465a4", // Steel Blue
@@ -144,43 +146,36 @@ var ActivityGraph = function($http) {
     this.statistics = new Statistics(this);
 }
 
-ActivityGraph.prototype.last_transactions = function(callback) {
-    this.$http.get("/api/getLastTransactions").success(_.bind(callback, this));
-}
-
-ActivityGraph.prototype.last_blocks = function(callback) {
-    this.$http.get("/api/lastBlocks").success(_.bind(callback, this));
+ActivityGraph.prototype.last_block = function(callback) {
+    this.$http.get("/api/statistics/getLastBlock").success(_.bind(callback, this));
 }
 
 ActivityGraph.prototype.block_transactions = function(id, callback) {
     this.$http.get("/api/getTransactionsByBlock" + "?blockId=" + id).success(_.bind(callback, this));
 }
 
-ActivityGraph.prototype.get_block = function(id, callback) {
-    this.$http.get("/api/getBlock" + "?blockId=" + id).success(_.bind(callback, this));
-}
-
 ActivityGraph.prototype.refresh = function() {
     this.loading = true;
-    this.last_transactions(function(res) {
+    this.last_block(function(res) {
         if (!res.success) { return; }
-        _.each(res.transactions, function(tx) {
-            this.add_tx(tx);
-        }, this);
-        this.last_blocks(function(res) {
-            if (!res.success) { return; }
-            _.each(res.blocks, function(block) {
-                this.add_block(block, true);
-            }, this);
-            if (this.sigma) {
-                this.size_nodes();
-                this.position_nodes();
-                this.statistics.refresh();
-                this.loading = false;
-                this.sigma.refresh();
-            }
-        });
+        this.add_block(res.block, true);
+
+        if (this.sigma) {
+            this.size_nodes();
+            this.position_nodes();
+            this.statistics.refresh();
+            this.loading = false;
+            this.sigma.refresh();
+        }
     });
+}
+
+ActivityGraph.prototype.clear = function() {
+    this.blocks  = 0;
+    this.indexes = [];
+    if (this.sigma) {
+        this.sigma.graph.clear();
+    }
 }
 
 ActivityGraph.prototype.size_nodes = function() {
@@ -237,7 +232,6 @@ ActivityGraph.prototype.add_tx = function(tx) {
         size: 1
     });
     this.indexes.push(tx.id);
-    this.add_tx_block(tx);
     this.add_tx_sender(tx);
     this.add_tx_recipient(tx);
 }
@@ -280,23 +274,9 @@ ActivityGraph.prototype.add_tx_recipient = function(tx) {
     });
 }
 
-ActivityGraph.prototype.add_tx_block = function(tx) {
-    this.get_block(tx.blockId, function(res) {
-        if (!res.success) { return; }
-        this.add_block(res.block, false);
-        this.add_edge({
-            id: tx.id + tx.blockId,
-            label: res.block.height.toString(),
-            source: tx.blockId,
-            target: tx.id,
-            color: this.colors.block,
-            size: 1
-        })
-    });
-}
-
 ActivityGraph.prototype.add_block = function(block, add_txs) {
     if (_.contains(this.indexes, block.id)) { return; }
+    if ((this.blocks + 1) > this.max_blocks) { this.clear(); }
     this.add_node({
         id: block.id,
         label: block.id,
@@ -305,6 +285,7 @@ ActivityGraph.prototype.add_block = function(block, add_txs) {
         color: this.colors.block,
         size: 1
     });
+    this.blocks++;
     this.indexes.push(block.id);
     this.add_block_generator(block);
     if (add_txs) this.add_block_txs(block);
