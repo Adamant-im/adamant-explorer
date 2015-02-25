@@ -72,4 +72,11 @@ angular.module('insight')
               });
           }
       };
+  })
+  .directive('osIcon', function() {
+      return {
+          restric: 'A',
+          replace: true,
+          template: '<img class="os-icon" src="/img/os/{{p.osBrand}}.png" alt="{{p.os}}" title="{{p.os}}">'
+      };
   });
