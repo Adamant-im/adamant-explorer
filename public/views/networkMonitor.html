@@ -163,7 +163,7 @@
         <tbody data-ng-repeat='(key, value) in peers'>
           <tr class="fader" data-ng-repeat='p in value track by p.ip'>
             <td>{{p.dottedQuad}}</td>
-            <td>{{p.humanState}}</td>
+            <td><span class="peer-state state-{{p.state}}"></span></td>
             <td>{{p.version}}</td>
             <td>
               <img os-icon os="{{p.os}}" brand="{{p.osBrand}}">
