@@ -28,9 +28,10 @@ angular.module('insight')
   })
   .filter('timeDistance', function (epochStampFilter) {
       return function (a, b) {
-          return moment.duration(
-              epochStampFilter(a) + epochStampFilter(b)
-          ).humanize();
+          var a = epochStampFilter(a);
+          var d = (a < b) ? (b - a) : (b + a);
+
+          return moment.duration(d).humanize();
       }
   })
   .filter('timestamp', function (epochStampFilter) {
