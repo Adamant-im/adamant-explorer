@@ -80,7 +80,7 @@ div.versions span.version-num {
 }
 
 table.peers td {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 table.peers td .os-icon {
