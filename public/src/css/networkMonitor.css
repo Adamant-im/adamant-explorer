@@ -67,6 +67,12 @@ div.versions span.version-num {
   background-color: #35393B;
 }
 
+div.versions span.counter {
+  padding: 3px;
+  border-radius: 10px;
+  background-color: #E8E8E9;
+}
+
 @media (max-width: 1200px) {
   div.versions div.version {
     padding-left: 15px;
@@ -76,6 +82,10 @@ div.versions span.version-num {
   div.platforms span.counter,
   div.versions span.counter {
     display: block;
+  }
+
+  div.versions span.version-num {
+    margin-bottom: 5px;
   }
 }
 
