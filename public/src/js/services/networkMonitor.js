@@ -4,11 +4,82 @@ var NetworkMonitor = function ($socket, $scope) {
     this.$socket = $socket('/networkMonitor');
     this.$scope  = $scope;
 
+    function Platforms () {
+        this.counter   = [0,0,0,0];
+        this.platforms = ['Mac', 'Linux', 'Windows', null];
+
+        this.detect = function (platform) {
+            if (angular.isNumber(platform)) {
+                this.counter[parseInt(platform)]++;
+            }
+        }
+
+        this.detected = function () {
+            return {
+                one:     { name: this.platforms[0], counter: this.counter[0] },
+                two:     { name: this.platforms[1], counter: this.counter[1] },
+                three:   { name: this.platforms[2], counter: this.counter[2] },
+                unknown: { name: null,              counter: this.counter[3] }
+            }
+        }
+    }
+
+    function Versions (peers) {
+        var inspect = function () {
+            if (angular.isArray(peers)) {
+                return _.uniq(_.map(peers, function(p) { return p.version; })
+                        .sort(), true).reverse().slice(0, 2);
+            } else {
+                return [];
+            }
+        }
+
+        this.counter  = [0,0,0,0];
+        this.versions = inspect();
+
+        this.detect = function (version) {
+            var detected = null;
+
+            if (angular.isString(version)) {
+                for (var i = 0; i < this.versions.length; i++) {
+                    if (version === this.versions[i]) {
+                        detected = version;
+                        this.counter[i]++;
+                        break;
+                    }
+                }
+            }
+            if (detected == null) {
+                this.counter[3]++;
+            }
+        }
+
+        this.detected = function (version) {
+            return {
+                one:     { num: this.versions[0], counter: this.counter[0] },
+                two:     { num: this.versions[1], counter: this.counter[1] },
+                three:   { num: this.versions[2], counter: this.counter[2] },
+                unknown: { num: null,             counter: this.counter[3] }
+            }
+        }
+    }
+
     this.counter = function (peers) {
+        var platforms = new Platforms(),
+            versions  = new Versions(peers.connected);
+
+        for (var i = 0; i < peers.connected.length; i++) {
+            var p = peers.connected[i];
+
+            platforms.detect(p.osBrand);
+            versions.detect(p.version);
+        }
+
         return {
             connected: peers.connected.length,
             disconnected: peers.disconnected.length,
-            total: peers.connected.length + peers.disconnected.length
+            total: peers.connected.length + peers.disconnected.length,
+            platforms: platforms.detected(), versions: versions.detected()
         }
     }
 

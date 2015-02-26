@@ -74,9 +74,77 @@
       <div id="map">&nbsp;</div>
     </div>
   </div>
+  <div class="row" data-ng-if="peers" ng-cloak>
+    <div class="col-xs-12 col-sm-6 big-info">
+      <p class="small-title">Platforms</p>
+
+      <div class="row platforms">
+        <div class="col-xs-4">
+          <div class="platform">
+            <p class="big-details">
+              <img os-icon os="Mac" brand="0">
+              <span class="counter mac-counter">{{counter.platforms.one.counter || 0}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="platform">
+            <p class="big-details">
+              <img os-icon os="Linux" brand="1">
+              <span class="counter linux-counter">{{counter.platforms.two.counter || 0}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="platform">
+            <p class="big-details">
+              <img os-icon os="Windows" brand="2">
+              <span class="counter windows-counter">{{counter.platforms.three.counter || 0}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="text-muted text-center">{{counter.platforms.unknown.counter || 0}} connected peers running on unknown platforms.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 big-info">
+      <p class="small-title">Versions</p>
+
+      <div class="row versions">
+        <div class="col-xs-12">
+          <div class="version" data-ng-if="counter.versions.one.num">
+            <p class="big-details">
+              <span class="version-num">{{counter.versions.one.num || '~'}}</span>
+              <span class="counter version-counter">{{counter.versions.one.counter || 0}}</span>
+            </p>
+          </div>
+          <div class="version" data-ng-if="counter.versions.two.num">
+            <p class="big-details">
+              <span class="version-num">{{counter.versions.two.num || '~'}}</span>
+              <span class="counter version-counter">{{counter.versions.two.counter || 0}}</span>
+            </p>
+          </div>
+          <div class="version" data-ng-if="counter.versions.three.num">
+            <p class="big-details">
+              <span class="version-num">{{counter.versions.three.num || '~'}}</span>
+              <span class="counter version-counter">{{counter.versions.three.counter || 0}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="text-muted text-center">{{counter.versions.unknown.counter || 0}} connected peers running with other versions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="row">
-    <div class="col-xs-12">
-      <h2>Peers</h2>
+    <div class="col-xs-12 big-info">
+      <p class="small-title">Peers</p>
 
       <table class="table table-hover table-striped peers" style="table-layout: fixed;">
         <thead>
@@ -98,7 +166,7 @@
             <td>{{p.humanState}}</td>
             <td>{{p.version}}</td>
             <td>
-              <img os-icon>
+              <img os-icon os="{{p.os}}" brand="{{p.osBrand}}">
             </td>
           </tr>
         </tbody>

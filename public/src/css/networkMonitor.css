@@ -26,6 +26,59 @@
   border: 1px solid #373D42;
 }
 
+div.platforms {
+  text-align: center;
+}
+
+div.platforms img.os-icon {
+  width: 48px;
+  height: 48px;
+}
+
+div.platforms span.windows-counter {
+  color: #00adf3;
+}
+
+div.platforms span.mac-counter {
+  color: #000000;
+}
+
+div.platforms span.linux-counter {
+  color: #EC2100;
+}
+
+div.versions {
+  text-align: center;
+}
+
+div.versions div.version {
+  display: inline-block;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+div.versions span.version-num {
+  height: 48px;
+  line-height: 48px;
+  display: inline-block;
+  padding: 0px 3px 0px 3px;
+  border-radius: 10px;
+  color: white;
+  background-color: #35393B;
+}
+
+@media (max-width: 1200px) {
+  div.versions div.version {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  div.platforms span.counter,
+  div.versions span.counter {
+    display: block;
+  }
+}
+
 table.peers td {
     overflow: hidden;
 }

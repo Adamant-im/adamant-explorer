@@ -77,6 +77,10 @@ angular.module('insight')
       return {
           restric: 'A',
           replace: true,
-          template: '<img class="os-icon" src="/img/os/{{p.osBrand}}.png" alt="{{p.os}}" title="{{p.os}}">'
+          template: '<img class="os-icon">',
+          link: function(scope, elm, attr) {
+              elm[0].alt = elm[0].title = attr.os;
+              elm[0].src = '/img/os/'.concat(attr.brand, '.png');
+          }
       };
   });
