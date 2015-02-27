@@ -19,6 +19,10 @@
   line-height: 32px;
 }
 
+p.big-details span.connected-peers {
+  font-weight: 700;
+}
+
 #map {
   width: 100%;
   height: 368px;
