@@ -28,7 +28,7 @@ var NetworkMonitor = function ($socket, $scope) {
         var inspect = function () {
             if (angular.isArray(peers)) {
                 return _.uniq(_.map(peers, function(p) { return p.version; })
-                        .sort(), true).reverse().slice(0, 2);
+                        .sort(), true).reverse().slice(0, 3);
             } else {
                 return [];
             }
