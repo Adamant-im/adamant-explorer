@@ -54,7 +54,9 @@ Example:
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
         "enableExchange" : true,
-        "updateExchangeInterval" : 900000
+        "updateExchangeInterval" : 900000,
+        "btcusdExchange" : "bitfinex",
+        "xcrbtcExchange" : "poloniex"
     }
 }
 ```
@@ -64,6 +66,8 @@ Example:
    * `fixedPoint` - fixed point number of Crypti (10^8).
    * `enableExchange` - enable or disable exchange currency courses.
    * `updateExchangeInterval` - time to update exchange currency courses.
+   * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
+   * `xcrbtcExchange` - default is poloniex, alternatives are: cryptsy.
 
 # Build
 
