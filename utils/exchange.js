@@ -55,7 +55,7 @@ module.exports = function(config) {
     }
 
     this.convertXCRTOUSD = function (xcr) {
-        if (this.enabled) {
+        if (!isNaN(xcr)) {
             return (xcr * this.XCRBTC * this.BTCUSD).toFixed(3);
         } else {
             return "~";
