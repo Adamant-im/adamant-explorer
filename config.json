@@ -25,6 +25,8 @@
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
         "enableExchange" : false,
-        "updateExchangeInterval" : 900000
+        "updateExchangeInterval" : 900000,
+        "btcusdExchange" : "bitfinex",
+        "xcrbtcExchange" : "poloniex"
     }
 }

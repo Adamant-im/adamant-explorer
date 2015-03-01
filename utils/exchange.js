@@ -6,8 +6,8 @@ module.exports = function(config) {
 
     this.getBTCUSD = function (cb) {
         if (this.enabled) {
-            api.getTicker({ CURR_A: 'btc', CURR_B: 'usd' }, function (err, result) {
-                return cb(err, result.avg);
+            api.getTicker('BTCUSD', function (err, result) {
+                return cb(err, result);
             });
         } else {
             console.log("Loading BTC/USD disabled...");
@@ -17,8 +17,8 @@ module.exports = function(config) {
 
     this.getXCRBTC = function (cb) {
         if (this.enabled) {
-            api.getTicker({ CURR_A: 'xcr', CURR_B: 'btc' }, function (err, result) {
-                return cb(err, result.avg);
+            api.getTicker('XCRBTC', function (err, result) {
+                return cb(err, result);
             });
         } else {
             console.log("Loading XCR/BTC disabled...");
