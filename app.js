@@ -173,8 +173,8 @@ async.parallel([
             }
         });
     },
-    function (cb) { app.exchange.getBTCUSD(cb) },
-    function (cb) { app.exchange.getXCRBTC(cb) }
+    function (cb) { app.exchange.loadBTCUSD(cb) },
+    function (cb) { app.exchange.loadXCRBTC(cb) }
 ], function (err) {
     var server = app.listen(app.get("port"), app.get("host"), function (err) {
         if (err) {
