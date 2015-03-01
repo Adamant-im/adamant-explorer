@@ -64,5 +64,5 @@ module.exports = function(config) {
 
     // Private
 
-    var api = require('./exchange-api');
+    var api = require('./exchange-api')(config);
 }
