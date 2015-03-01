@@ -4,6 +4,13 @@ var request = require('request'),
 module.exports = function (config) {
     var exchanges = {
         BTCUSD : {
+            bitstamp  : [
+                "Bitstamp",
+                "https://www.bitstamp.net/api/ticker/",
+                function (res, cb) {
+                    return cb(null, res.last);
+                }
+            ],
             bitfinex  : [
                 "Bitfinex",
                 "https://api.bitfinex.com/v1/pubticker/BTCUSD",
