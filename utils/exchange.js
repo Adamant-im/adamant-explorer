@@ -4,6 +4,13 @@ module.exports = function(config) {
     this.enabled = config.enableExchange;
     this.BTCUSD  = this.XCRBTC = "~";
 
+    if (this.enabled) {
+        setInterval(function () {
+            this.loadBTCUSD();
+            this.loadXCRBTC();
+        }.bind(this), config.updateExchangeInterval);
+    }
+
     this.getBTCUSD = function (cb) {
         if (this.enabled) {
             api.getTicker('BTCUSD', function (err, result) {

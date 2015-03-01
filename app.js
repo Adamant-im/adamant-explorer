@@ -63,13 +63,6 @@ app.configure(function () {
         });
     }, config.updateTopAccountsInterval);
 
-    if (app.exchange.enabled) {
-        setInterval(function () {
-            app.exchange.loadBTCUSD();
-            app.exchange.loadXCRBTC();
-        }, config.updateExchangeInterval);
-    }
-
     app.use(express.logger());
     app.use(express.static(path.join(__dirname, "public")));
     app.use(express.compress());
