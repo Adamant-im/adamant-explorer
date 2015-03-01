@@ -37,6 +37,7 @@ module.exports = function(config) {
         this.getBTCUSD(function (err, result) {
             if (err) {
                 console.log("Loading BTC/USD failed...");
+                console.log("Error:", err);
                 return cb(err);
             } else if (result != '~') {
                 this.BTCUSD = result;
@@ -51,6 +52,7 @@ module.exports = function(config) {
         this.getXCRBTC(function (err, result) {
             if (err) {
                 console.log("Loading BTC/XCR failed...");
+                console.log("Error:", err);
                 return cb(err);
             } else if (result != '~') {
                 this.XCRBTC = result;
