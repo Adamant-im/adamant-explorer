@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(config) {
-    this.enabled = config.exchangeEnabled;
+    this.enabled = config.enableExchange;
     this.BTCUSD  = this.XCRBTC = "~";
 
     this.getBTCUSD = function (cb) {
