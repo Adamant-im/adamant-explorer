@@ -20,6 +20,18 @@ npm install
 bower install
 ```
 
+# Freegeoip
+
+Freegeoip is used by the Network Monitor for IP address geo-location.
+
+Installation is very simple. Download and unpack the latest release from: https://github.com/fiorix/freegeoip/releases
+
+Then start the server in the background, using the following command:
+
+```
+./freegeoip > /dev/null 2>&1 &
+```
+
 # Configuration
 
 `config.json` file contains configuation settings.
