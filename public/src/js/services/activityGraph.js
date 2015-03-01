@@ -315,10 +315,10 @@ ActivityGraph.prototype.addBlockGenerator = function (block) {
 }
 
 ActivityGraph.prototype.addBlockTxs = function (block) {
-    if (block.transactionsCount <= 0) { return; }
+    if (block.numberOfTransactions <= 0) { return; }
     this.blockTransactions(block.id, function (res) {
         if (!res.success) { return; }
-        _.each(block.transactions, function (tx) {
+        _.each(res.transactions, function (tx) {
             this.addTx(tx);
             this.addEdge({
                 id: block.id + tx.id,
