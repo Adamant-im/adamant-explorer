@@ -1,10 +1,9 @@
 'use strict';
 
 module.exports = function(config) {
-    this.enabled = config.enableExchange;
-    this.BTCUSD  = this.XCRBTC = "~";
+    this.BTCUSD = this.XCRBTC = "~";
 
-    if (this.enabled) {
+    if (config.enableExchange) {
         setInterval(function () {
             this.loadBTCUSD();
             this.loadXCRBTC();
@@ -12,7 +11,7 @@ module.exports = function(config) {
     }
 
     this.getBTCUSD = function (cb) {
-        if (this.enabled) {
+        if (config.enableExchange) {
             api.getTicker('BTCUSD', function (err, result) {
                 return cb(err, result);
             });
@@ -23,7 +22,7 @@ module.exports = function(config) {
     }
 
     this.getXCRBTC = function (cb) {
-        if (this.enabled) {
+        if (config.enableExchange) {
             api.getTicker('XCRBTC', function (err, result) {
                 return cb(err, result);
             });
