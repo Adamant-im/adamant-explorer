@@ -38,7 +38,7 @@ module.exports = function(config) {
             if (err) {
                 console.log("Loading BTC/USD failed...");
                 return cb(err);
-            } else {
+            } else if (result != '~') {
                 this.BTCUSD = result;
                 console.log("BTC/USD loaded...");
                 return cb();
@@ -52,7 +52,7 @@ module.exports = function(config) {
             if (err) {
                 console.log("Loading BTC/XCR failed...");
                 return cb(err);
-            } else {
+            } else if (result != '~') {
                 this.XCRBTC = result;
                 console.log("BTC/XCR loaded...");
                 return cb();
