@@ -107,4 +107,8 @@ Ports for both mode can be found in `config.json`
 
 # Top Accounts
 
-Top Acccounts functionality is only supported when using a special version of Crypti which has modified source code.
+To enable Top Accounts functionality, start your crypti node _(not the explorer)_ using the following command:
+
+```
+TOP=true node app.js
+```
