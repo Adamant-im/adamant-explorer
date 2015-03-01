@@ -21,6 +21,17 @@ module.exports = function (config) {
                         return cb(null, res.last_price);
                     }
                 }
+            ],
+            btce  : [
+                "Btc-e",
+                "https://btc-e.com/api/3/ticker/btc_usd",
+                function (res, cb) {
+                  if (res.error) {
+                      return cb(res.error);
+                  } else {
+                      return cb(null, res.btc_usd.last);
+                  }
+                }
             ]
         },
         XCRBTC : {
