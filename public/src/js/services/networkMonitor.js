@@ -117,6 +117,19 @@ var NetworkMap = function () {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
+    var PlatformIcon = L.Icon.extend({
+        options: {
+            iconSize:   [32, 41],
+            iconAnchor: [16, 41]
+        }
+    });
+
+    var platformIcons = [
+        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-mac.png' }),
+        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
+        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-windows.png' })
+    ]
+
     this.addLocations = function (locations) {
         var connected = [];
 
@@ -126,7 +139,7 @@ var NetworkMap = function () {
             if (!_.has(this.markers, l.ip)) {
                 this.cluster.addLayer(
                     this.markers[l.ip] = L.marker(
-                        [l.latitude, l.longitude], { title: l.ip }
+                        [l.latitude, l.longitude], { title: l.ip, icon: platformIcons[l.osBrand] }
                     ).addTo(this.map)
                 );
             }
