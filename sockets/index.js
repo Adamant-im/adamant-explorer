@@ -7,6 +7,8 @@ module.exports = function (app, io) {
         socket.on('connection', function (socket) {
             if (clients <= 0) {
                 clients = 0;
+                object.onInit();
+            } else {
                 object.onConnect();
             }
             clients++;

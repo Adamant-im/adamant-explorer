@@ -7,7 +7,7 @@ module.exports = function (app, connectionHandler, socket) {
         intervals  = [],
         data       = {};
 
-    this.onConnect = function () {
+    this.onInit = function () {
         async.parallel([
             getBestBlock,
             getLastBlock,
@@ -31,6 +31,10 @@ module.exports = function (app, connectionHandler, socket) {
                 newInterval(2, 60000, emitData3);
             }
         }.bind(this));
+    }
+
+    this.onConnect = function () {
+        socket.emit('data', data);
     }
 
     this.onDisconnect = function () {
