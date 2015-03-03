@@ -1,31 +1,13 @@
 var api = require('../lib/api'),
     async = require('async');
 
-module.exports = function (app, socket) {
+module.exports = function (app, connectionHandler, socket) {
     var statistics = new api.statistics(app),
-        clients    = 0,
+        connection = new connectionHandler(socket, this),
         interval   = null,
         data       = {};
 
-    this.wait = function () {
-        clients = 0;
-        socket.on('connection', function (socket) {
-            if (clients <= 0) {
-                clients = 0;
-                this.emit();
-            }
-            clients++;
-            socket.on('disconnect', function () {
-                clients--;
-                if (clients <= 0) {
-                    clients = 0;
-                    this.halt();
-                }
-            }.bind(this));
-        }.bind(this));
-    }
-
-    this.emit = function () {
+    this.onConnect = function () {
         async.parallel([
             getBestBlock,
             getLastBlock,
@@ -46,14 +28,14 @@ module.exports = function (app, socket) {
 
                 if (interval == null) {
                     interval = setInterval(function () {
-                        this.emit();
+                        this.onConnect();
                     }.bind(this), 30000);
                 }
             }
         }.bind(this));
     }
 
-    this.halt = function () {
+    this.onDisconnect = function () {
         clearInterval(interval);
         interval = null;
     }
