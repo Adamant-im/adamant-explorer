@@ -165,7 +165,8 @@ var NetworkMap = function () {
             if (!_.has(this.markers, p.dottedQuad)) {
                 this.cluster.addLayer(
                     this.markers[p.dottedQuad] = L.marker(
-                        [p.location.latitude, p.location.longitude], { title: p.dottedQuad, icon: platformIcons[p.osBrand] }
+                        [p.location.latitude, p.location.longitude],
+                        { title: p.dottedQuad, icon: platformIcons[p.osBrand] }
                     ).addTo(this.map)
                 );
             }
