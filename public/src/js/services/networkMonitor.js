@@ -88,7 +88,7 @@ var NetworkMonitor = function ($socket, $scope) {
     this.updatePeers = function (peers) {
         this.$scope.peers   = peers.list;
         this.$scope.counter = this.counter(peers.list);
-        this.map.addLocations(peers.list);
+        this.map.addConnected(peers.list);
     }
 
     this.updateLastBlock = function (lastBlock) {
@@ -156,7 +156,7 @@ var NetworkMap = function () {
         new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-windows.png' })
     ]
 
-    this.addLocations = function (peers) {
+    this.addConnected = function (peers) {
         var connected = [];
 
         for (var i = 0; i < peers.connected.length; i++) {
