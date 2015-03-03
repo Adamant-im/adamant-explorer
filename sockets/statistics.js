@@ -4,7 +4,7 @@ var api = require('../lib/api'),
 module.exports = function (app, connectionHandler, socket) {
     var statistics = new api.statistics(app),
         connection = new connectionHandler(socket, this),
-        interval   = null,
+        intervals  = [],
         data       = {};
 
     this.onConnect = function () {
@@ -26,18 +26,27 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data', data);
                 getLocations();
 
-                if (interval == null) {
-                    interval = setInterval(function () {
-                        this.onConnect();
-                    }.bind(this), 30000);
-                }
+                newInterval(0, 10000, emitData1);
+                newInterval(1, 30000, emitData2);
+                newInterval(2, 60000, emitData3);
             }
         }.bind(this));
     }
 
     this.onDisconnect = function () {
-        clearInterval(interval);
-        interval = null;
+        for (var i = 0; i < intervals.length; i++) {
+            clearInterval(intervals[i]);
+        }
+        intervals = [];
+        data      = {};
+    }
+
+    var newInterval = function (i, delay, cb) {
+        if (intervals[i] !== undefined) {
+            return null;
+        } else {
+            return intervals[i] = setInterval(cb, delay);
+        }
     }
 
     var getBestBlock = function (cb) {
@@ -74,5 +83,56 @@ module.exports = function (app, connectionHandler, socket) {
             function (res) { return false; },
             function (res) { socket.emit('locations', res); }
         );
+    }
+
+    var emitData1 = function () {
+        var thisData = {};
+
+        async.parallel([
+            getLastBlock
+        ],
+        function (err, res) {
+            if (err) {
+                console.log('Error in retrieving statistics for: ' + err);
+            } else {
+                thisData.lastBlock = data.lastBlock = res[0];
+                socket.emit('data1', thisData);
+            }
+        }.bind(this));
+    }
+
+    var emitData2 = function () {
+        var thisData = {};
+
+        async.parallel([
+            getBestBlock,
+            getVolume
+        ],
+        function (err, res) {
+            if (err) {
+                console.log('Error in retrieving statistics for: ' + err);
+            } else {
+                thisData.bestBlock = data.bestBlock = res[0];
+                thisData.volume    = data.volume    = res[1];
+                socket.emit('data2', thisData);
+            }
+        }.bind(this));
+    }
+
+    var emitData3 = function () {
+        var thisData = {};
+
+        async.parallel([
+            getPeers
+        ],
+        function (err, res) {
+            if (err) {
+                console.log('Error in retrieving statistics for: ' + err);
+            } else {
+                thisData.peers = data.peers = res[0];
+                socket.emit('data3', thisData);
+                getLocations();
+            }
+        }.bind(this));
     }
 }

@@ -85,15 +85,44 @@ var NetworkMonitor = function ($socket, $scope) {
 
     this.map = new NetworkMap();
 
+    this.updatePeers = function (peers) {
+        this.$scope.peers   = peers.list;
+        this.$scope.counter = this.counter(peers.list);
+    }
+
+    this.updateLastBlock = function (lastBlock) {
+        this.$scope.lastBlock = lastBlock.block;
+    }
+
+    this.updateBestBlock = function (bestBlock) {
+        this.$scope.bestBlock = bestBlock.block;
+    }
+
+    this.updateVolume = function (volume) {
+        this.$scope.volAmount    = volume.amount;
+        this.$scope.volBeginning = volume.beginning;
+        this.$scope.volEnd       = volume.end;
+        this.$scope.volNow       = moment();
+    }
+
     this.$socket.on('data', function (res) {
-        this.$scope.peers          = res.peers.list;
-        this.$scope.counter        = this.counter(res.peers.list);
-        this.$scope.lastBlock      = res.lastBlock.block;
-        this.$scope.bestBlock      = res.bestBlock.block;
-        this.$scope.volAmount      = res.volume.amount;
-        this.$scope.volBeginning   = res.volume.beginning;
-        this.$scope.volEnd         = res.volume.end;
-        this.$scope.volNow         = moment();
+        this.updatePeers(res.peers);
+        this.updateLastBlock(res.lastBlock);
+        this.updateBestBlock(res.bestBlock);
+        this.updateVolume(res.volume);
+    }.bind(this));
+
+    this.$socket.on('data1', function (res) {
+        this.updateLastBlock(res.lastBlock);
+    }.bind(this));
+
+    this.$socket.on('data2', function (res) {
+        this.updateBestBlock(res.bestBlock);
+        this.updateVolume(res.volume);
+    }.bind(this));
+
+    this.$socket.on('data3', function (res) {
+        this.updatePeers(res.peers);
     }.bind(this));
 
     this.$socket.on('locations', function (res) {
