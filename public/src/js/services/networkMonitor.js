@@ -88,6 +88,7 @@ var NetworkMonitor = function ($socket, $scope) {
     this.updatePeers = function (peers) {
         this.$scope.peers   = peers.list;
         this.$scope.counter = this.counter(peers.list);
+        this.map.addLocations(peers.list);
     }
 
     this.updateLastBlock = function (lastBlock) {
@@ -125,10 +126,6 @@ var NetworkMonitor = function ($socket, $scope) {
         this.updatePeers(res.peers);
     }.bind(this));
 
-    this.$socket.on('locations', function (res) {
-        this.map.addLocations(res.locations);
-    }.bind(this));
-
     this.$scope.$on('$destroy', function (event) {
         $socket.removeAllListeners();
     });
@@ -159,20 +156,20 @@ var NetworkMap = function () {
         new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-windows.png' })
     ]
 
-    this.addLocations = function (locations) {
+    this.addLocations = function (peers) {
         var connected = [];
 
-        for (var i = 0; i < locations.length; i++) {
-            var l = locations[i];
+        for (var i = 0; i < peers.connected.length; i++) {
+            var p = peers.connected[i];
 
-            if (!_.has(this.markers, l.ip)) {
+            if (!_.has(this.markers, p.dottedQuad)) {
                 this.cluster.addLayer(
-                    this.markers[l.ip] = L.marker(
-                        [l.latitude, l.longitude], { title: l.ip, icon: platformIcons[l.osBrand] }
+                    this.markers[p.dottedQuad] = L.marker(
+                        [p.location.latitude, p.location.longitude], { title: p.dottedQuad, icon: platformIcons[p.osBrand] }
                     ).addTo(this.map)
                 );
             }
-            connected.push(l.ip);
+            connected.push(p.dottedQuad);
         }
 
         this.removeDisconnected(connected);

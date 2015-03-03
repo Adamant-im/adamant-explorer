@@ -24,7 +24,6 @@ module.exports = function (app, connectionHandler, socket) {
                 data.peers     = res[3];
 
                 socket.emit('data', data);
-                getLocations();
 
                 newInterval(0, 10000, emitData1);
                 newInterval(1, 30000, emitData2);
@@ -81,14 +80,6 @@ module.exports = function (app, connectionHandler, socket) {
         );
     }
 
-    var getLocations = function (cb) {
-        statistics.getLocations(
-            data.peers.list.connected,
-            function (res) { return false; },
-            function (res) { socket.emit('locations', res); }
-        );
-    }
-
     var emitData1 = function () {
         var thisData = {};
 
@@ -135,7 +126,6 @@ module.exports = function (app, connectionHandler, socket) {
             } else {
                 thisData.peers = data.peers = res[0];
                 socket.emit('data3', thisData);
-                getLocations();
             }
         }.bind(this));
     }
