@@ -411,15 +411,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
-
 .btn-primary.active, .open .dropdown-toggle.btn-primary,
-
 .btn-success:hover, .btn-success:focus, .btn-success:active,
-
 .btn-success.active, .open .dropdown-toggle.btn-success,
-
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active,
-
 .btn-danger.active, .open .dropdown-toggle.btn-danger {
   background-color: #fff;
   border: 2px solid #ccc;
