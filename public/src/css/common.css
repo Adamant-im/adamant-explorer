@@ -438,16 +438,6 @@ a, a:hover, a:visited, a:focus {
   background-color: #E7E7E7;
 }
 
-.btn-success {
-  background-color: #2FA4D7;
-  border: 2px solid #237FA7;
-}
-
-.btn-danger {
-  background-color: #AC0015;
-  border: 2px solid #6C0000;
-}
-
 .txvalues {
   display: inline-block;
   padding: .7em 2em;
