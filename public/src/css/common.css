@@ -181,18 +181,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   cursor: pointer;
 }
 
-.insight {
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 34px;
-  font-style: italic;
-  font-weight: 700;
-  overflow: hidden;
-}
-
-.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-  color: #fffffe;
-}
-
 .navbar-default .navbar-brand {
   color: #FFFFFF;
   padding: 20px 15px;
