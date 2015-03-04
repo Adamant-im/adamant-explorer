@@ -29,7 +29,7 @@ var app = express();
 app.exchange = new utils.exchange(config),
 
 app.configure(function () {
-    app.set('version', '0.2');
+    app.set('version', '0.3');
 
     app.set('strict routing', true);
 

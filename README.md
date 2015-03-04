@@ -1,7 +1,7 @@
 Crypti Blockchain Explorer
 ==========================
 
-Crypti blockchain explorer version 0.2. Works with Crypti wallet API. Uses Redis for caching data and Freegeoip for IP geolocation.
+Crypti blockchain explorer version 0.3. Works with Crypti wallet API. Uses Redis for caching data and Freegeoip for IP geolocation.
 
 # Required Components
 
