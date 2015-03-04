@@ -494,18 +494,22 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 /* Set the fixed height of the footer here */
 #footer {
   background-color: #343844;
-  color: #fff;
+  color: #b7bec2;
   height: 51px;
   overflow: hidden;
 }
 
 #footer a, #footer a:focus, #footer a:active {
-  color: #fff;
+  color: #b7bec2;
   margin-top: 17px;
   margin-right: 20px;
   display: block;
   float: left;
   font-size: 14px;
+}
+
+#footer a:hover {
+  color: #fff;
 }
 
 #footer a.insight {
