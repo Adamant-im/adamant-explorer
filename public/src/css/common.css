@@ -2,16 +2,34 @@
 -------------------------------------------------- */
 @charset "UTF-8";
 
+@font-face {
+    font-family: Roboto;
+    src: url(/fonts/Roboto-Regular.ttf)
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url(/fonts/Roboto-Bold.ttf);
+    font-weight: 700
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url(/fonts/Roboto-BoldItalic.ttf);
+    font-weight: 700;
+    font-style: italic
+}
+
 html, body {
   color: #343844;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', 'Ubuntu', sans-serif;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   color: #373D42;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', 'Ubuntu', sans-serif;
 }
 
 a, a:hover, a:visited, a:focus {
@@ -144,7 +162,7 @@ a, a:hover, a:visited, a:focus {
 
 .navbar-default .navbar-nav>li>a {
   color: #fff;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', 'Ubuntu', sans-serif;
   margin-left: 1px;
   padding-left: 25px;
   padding-right: 25px;
@@ -263,7 +281,7 @@ a, a:hover, a:visited, a:focus {
 
 #search-form #search { width: 268px; }
 
-#search { font-family: 'Ubuntu', sans-serif; }
+#search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
 #search.loading {
   background-image: url('/img/loading.gif');
@@ -282,7 +300,7 @@ a, a:hover, a:visited, a:focus {
 
 #search::-webkit-input-placeholder {
   color: #9b9d9e;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', 'Ubuntu', sans-serif;
   font-size: 14px;
   font-style: italic;
   font-weight: 100;
@@ -290,7 +308,7 @@ a, a:hover, a:visited, a:focus {
 
 #search::-moz-placeholder {
   color: #9b9d9e;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', 'Ubuntu', sans-serif;
   font-size: 14px;
   font-weight: 100;
 }
