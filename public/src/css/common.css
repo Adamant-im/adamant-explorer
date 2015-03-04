@@ -192,6 +192,11 @@ a, a:hover, a:visited, a:focus {
   color: #fff;
 }
 
+.navbar-nav li.open>a>.caret {
+  border-top-width: 0;
+  border-bottom: 4px solid #fff;
+}
+
 @media (max-width: 767px) {
   .navbar-default .navbar-nav>li>a {
     margin-left: 0px;
