@@ -406,8 +406,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .btn-primary {
-  background-color: #35393b;
-  border: 2px solid #76AF0F;
+  background-color: #343844;
+  border: 2px solid #343844;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
@@ -416,9 +416,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .btn-success.active, .open .dropdown-toggle.btn-success,
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active,
 .btn-danger.active, .open .dropdown-toggle.btn-danger {
-  background-color: #fff;
-  border: 2px solid #ccc;
-  color: #373D42;
+  background-color: #454954;
+  border: 2px solid #454954;
+  color: #fff;
 }
 
 .btn-default:hover,
