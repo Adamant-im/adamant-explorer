@@ -464,7 +464,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .txvalues-primary {
-  background-color: #35393b;
+  background-color: #1F9BDD;
 }
 
 .txvalues-default {
@@ -473,7 +473,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .txvalues-success {
-  background-color: #2FA4D7;
+  background-color: #39B54A;
 }
 
 .txvalues-danger {
