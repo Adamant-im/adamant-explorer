@@ -129,7 +129,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #373D42;}
 
 .navbar-default {
-  background-color: #35393b;
+  background-color: #343844;
   margin: 0;
   border: 0;
 }
@@ -469,7 +469,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Set the fixed height of the footer here */
 #footer {
-  background-color: #373D42;
+  background-color: #343844;
   color: #fff;
   height: 51px;
   overflow: hidden;
