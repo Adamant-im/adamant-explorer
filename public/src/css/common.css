@@ -506,18 +506,6 @@ a, a:hover, a:visited, a:focus {
   color: #fff;
 }
 
-#footer a.insight {
-  font-size: 20px;
-  text-decoration: none;
-  color: #fff;
-}
-
-#footer a.insight:hover {
-  color: #fffffe;
-}
-
-#footer a.insight small { font-size: 11px; }
-
 .line-footer { border-top: 2px dashed #ccc; }
 
 .line-bot {
