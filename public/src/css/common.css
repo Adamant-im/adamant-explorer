@@ -500,11 +500,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 #footer a, #footer a:focus, #footer a:active {
-  color : #fff;
+  color: #fff;
   margin-top: 17px;
   margin-right: 20px;
   display: block;
-  float:left;
+  float: left;
   font-size: 14px;
 }
 
