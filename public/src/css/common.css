@@ -266,6 +266,15 @@ a, a:hover, a:visited, a:focus {
   width: 125px;
 }
 
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+       only screen and (-moz-min-device-pixel-ratio: 1.5),
+       only screen and (-o-min-device-pixel-ratio: 3/2),
+       only screen and (min-device-pixel-ratio: 1.5) {
+  .navbar-brand .logo {
+    background-image: url(/img/logo2x.png);
+  }
+}
+
 .navbar-form .form-control {
   background-color: #ebeced;
   border-radius: 3px;
