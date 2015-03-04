@@ -409,9 +409,10 @@ a, a:hover, a:visited, a:focus {
   border-radius: 2px;
 }
 
-.btn-primary {
+.btn-primary, a.btn-primary {
   background-color: #343844;
   border: 2px solid #343844;
+  color: #fff;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
