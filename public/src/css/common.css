@@ -660,6 +660,15 @@ a, a:hover, a:visited, a:focus {
   opacity: 0;
 }
 
+.tooltip .tooltip-inner {
+  color: #fff;
+  background-color: #39B54A;
+}
+
+.tooltip.right .tooltip-arrow {
+  border-right-color: #39B54A;
+}
+
 .btn-copy.zeroclipboard-is-hover { color: #2a6496; }
 
 .btn-copy.zeroclipboard-is-active .tooltip { opacity: 1; }
