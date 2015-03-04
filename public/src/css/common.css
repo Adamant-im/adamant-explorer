@@ -20,9 +20,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Styling for the ngProgress itself */
 #ngProgress {
-  background-color: #6C9032 !important;
+  background-color: #38AF49 !important;
   box-shadow: none !important;
-  color: #373D42 !important;
+  color: #38AF49 !important;
   height: 3px !important;
   margin: 0;
   opacity: 0;
@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   position: fixed;
   margin: 0;
   padding: 0;
-  top: 63px;
+  top: 80px;
   left: 0;
   right: 0;
   z-index: 99999;
