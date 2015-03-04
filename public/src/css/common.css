@@ -137,6 +137,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .navbar-default .navbar-nav>li>a {
   color: #fff;
   font-family: 'Ubuntu', sans-serif;
+  margin-left: 1px;
   padding-left: 25px;
   padding-right: 25px;
   padding-top: 30px;
@@ -166,6 +167,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 @media (max-width: 767px) {
+  .navbar-default .navbar-nav>li>a {
+    margin-left: 0px;
+    margin-bottom: 1px;
+  }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
     background-color: #454954;
     color: #fff;
