@@ -21,15 +21,13 @@
         </div>
         <div class="no_matching text-danger" data-ng-show="badQuery">No matching records found!</div>
       </form>
+      <div class="status">
+        <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
+        <span class="fee">&middot; <strong>Fee: </strong> {{fee}}%</span>
+        <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcr}}</span>
+        <span class="xcr-usd">&middot; <strong>XCR/USD: </strong> {{usd}}</span>
+      </div>
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <div class="status">
-            <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
-            <span class="fee">&middot; <strong>Fee: </strong> {{fee}}%</span>
-            <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcr}}</span>
-            <span class="xcr-usd">&middot; <strong>XCR/USD: </strong> {{usd}}</span>
-          </div>
-        </li>
         <li>
           <a href="/topAccounts">Top accounts</a>
         </li>
