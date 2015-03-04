@@ -121,6 +121,10 @@ a, a:hover, a:visited, a:focus {
 
 .navbar { min-height: 80px; }
 
+.navbar-collapse {
+  overflow: hidden;
+}
+
 .navbar-default .navbar-toggle {
   border-color: #fff;
   margin-top: 20px;
