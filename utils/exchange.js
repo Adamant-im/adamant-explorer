@@ -38,13 +38,12 @@ module.exports = function(config) {
             if (err) {
                 console.log("Loading BTC/USD failed...");
                 console.log("Error:", err);
-                return cb(err);
             } else if (result != '~') {
                 this.BTCUSD = result;
                 console.log("BTC/USD loaded...", result);
-                return cb();
-            } else {
-                return cb();
+            }
+            if (cb) {
+                return cb(err, result);
             }
         }.bind(this));
     }
@@ -55,13 +54,12 @@ module.exports = function(config) {
             if (err) {
                 console.log("Loading BTC/XCR failed...");
                 console.log("Error:", err);
-                return cb(err);
             } else if (result != '~') {
                 this.XCRBTC = result;
                 console.log("BTC/XCR loaded...", result);
-                return cb();
-            } else {
-                return cb();
+            }
+            if (cb) {
+                return cb(err, result);
             }
         }.bind(this));
     }
