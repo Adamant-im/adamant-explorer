@@ -10,11 +10,6 @@
       <a class="navbar-brand" href="/"><div class="logo" title="Crypti"></div></a>
     </div>
     <div class="navbar-collapse collapse" collapse="$root.isCollapsed">
-      <ul class="nav navbar-nav">
-        <li data-ng-repeat="item in menu" ui-route="/{{item.link}}" data-ng-class="{active: $uiRoute}">
-          <a href="/{{item.link}}">{{item.title}}</a>
-        </li>
-      </ul>
       <form id="search-form" data-ng-controller="SearchController" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="search()">
         <div class="form-group" data-ng-class="{'has-error': badQuery}">
           <input id="search" type="text" class="form-control" data-ng-model="q" data-ng-class="{'loading': loading}" placeholder="Search for block, transaction or address" data-ng-submit="search()">
