@@ -823,6 +823,10 @@ a.v_highlight_more {
 
 #search-form-mobile #search { width: 100%; }
 
+#search-form-mobile .no_matching {
+  width: 50%;
+}
+
 @media (min-width: 768px) {
   #search { color: #9b9d9e; }
 }
