@@ -256,6 +256,7 @@ a, a:hover, a:visited, a:focus {
 .navbar-default .navbar-brand {
   color: white;
   padding: 10px;
+  height: 76px;
 }
 
 .navbar-brand .logo {
