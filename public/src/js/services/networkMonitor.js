@@ -190,7 +190,7 @@ var NetworkMap = function () {
     }
 }
 
-angular.module('insight.network').factory('networkMonitor',
+angular.module('cryptichain.network').factory('networkMonitor',
   function () {
       return function ($socket, $scope) {
           var networkMonitor = new NetworkMonitor($socket, $scope);

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.activity').controller('ActivityGraph',
+angular.module('cryptichain.activity').controller('ActivityGraph',
   function(activityGraph, $scope) {
       activityGraph($scope);
   });

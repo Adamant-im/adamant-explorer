@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.address').controller('AddressController',
+angular.module('cryptichain.address').controller('AddressController',
   function($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getAddress = function () {
           $http.get("/api/getAccount", {

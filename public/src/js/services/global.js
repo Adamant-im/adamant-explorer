@@ -1,7 +1,7 @@
 'use strict';
 
 //Global service for global variables
-angular.module('insight.system')
+angular.module('cryptichain.system')
   .factory('Global', [ function() {} ])
   .factory('Version',
     function($resource) {

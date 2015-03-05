@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.address').factory('Address',
+angular.module('cryptichain.address').factory('Address',
   function($resource) {
       return $resource('/api/addr/:addrStr/?noTxList=1', {
           addrStr: '@addStr'

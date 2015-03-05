@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight')
+angular.module('cryptichain')
   .filter('startFrom', function () {
       return function (input, start) {
           start = +start;

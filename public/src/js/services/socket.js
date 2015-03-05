@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.socket').factory('$socket',
+angular.module('cryptichain.socket').factory('$socket',
   function ($location, $rootScope) {
     return function(namespace) {
           var socket = io($location.host() + ':' + $location.port() + namespace);

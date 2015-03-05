@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.search').controller('SearchController',
+angular.module('cryptichain.search').controller('SearchController',
   function($scope, $routeParams, $location, $timeout, Global, $http) {
       $scope.loading = false;
       $scope.badQuery = false;

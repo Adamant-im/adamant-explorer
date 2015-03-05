@@ -331,7 +331,7 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
     });
 }
 
-angular.module('insight.activity').factory('activityGraph',
+angular.module('cryptichain.activity').factory('activityGraph',
   function ($http, $interval) {
       return function (scope) {
           var activityGraph = new ActivityGraph($http);

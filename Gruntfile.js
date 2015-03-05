@@ -128,7 +128,7 @@ module.exports = function(grunt) {
         nggettext_compile: {
             all: {
                 options: {
-                    module: 'insight'
+                    module: 'cryptichain'
                 },
                 files: {
                     'public/src/js/translations.js': ['po/*.po']
