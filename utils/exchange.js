@@ -3,11 +3,11 @@
 module.exports = function(config) {
     this.BTCUSD = this.XCRBTC = "~";
 
-    if (config.enableExchange) {
-        setInterval(function () {
-            this.loadBTCUSD();
-            this.loadXCRBTC();
-        }.bind(this), config.updateExchangeInterval);
+    this.loadRates = function () {
+        async.parallel([
+            function (cb) { exchange.loadBTCUSD(cb) },
+            function (cb) { exchange.loadXCRBTC(cb) }
+        ]);
     }
 
     this.loadBTCUSD = function (cb) {
@@ -50,8 +50,15 @@ module.exports = function(config) {
         }
     }
 
+    // Interval
+
+    if (config.enableExchange) {
+        setInterval(this.loadRates, config.updateExchangeInterval);
+    }
+
     // Private
 
+    var exchange = this;
     var api = require('./exchange-api')(config);
 
     var getBTCUSD = function (cb) {
