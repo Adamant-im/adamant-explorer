@@ -525,13 +525,13 @@ a, a:hover, a:visited, a:focus {
 /* Set the fixed height of the footer here */
 #footer {
   background-color: #343844;
-  color: #b7bec2;
+  color: white;
   height: 51px;
   overflow: hidden;
 }
 
 #footer a, #footer a:focus, #footer a:active {
-  color: #b7bec2;
+  color: white;
   margin-top: 17px;
   margin-right: 20px;
   display: block;
