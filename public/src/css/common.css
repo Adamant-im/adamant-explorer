@@ -563,7 +563,17 @@ a, a:hover, a:visited, a:focus {
 
 #wrap > .container { padding: 70px 15px 0; }
 
-#footer > .container { padding: auto 15px; }
+#footer > .container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+@media (max-width: 767px) {
+  #footer > .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
 
 .code { font-size: 80%; }
 
