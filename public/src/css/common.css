@@ -144,13 +144,13 @@ a, a:hover, a:visited, a:focus {
 }
 
 .navbar-default .navbar-toggle {
-  border-color: #fff;
+  border-color: white;
   margin-top: 20px;
   margin-right: 1px;
   padding: 9px 10px;
 }
 
-.navbar-default .navbar-toggle .icon-bar { background-color: #fff; }
+.navbar-default .navbar-toggle .icon-bar { background-color: white; }
 
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #373D42;}
 
@@ -161,7 +161,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .navbar-default .navbar-nav>li>a {
-  color: #fff;
+  color: white;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   margin-left: 1px;
   padding-left: 25px;
@@ -172,29 +172,29 @@ a, a:hover, a:visited, a:focus {
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
   background-color: #434751;
-  color: #fff;
+  color: white;
 }
 
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>.active>a:hover {
   background-color: #454954;
-  color: #fff;
+  color: white;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
   background-color: #434751;
-  color: #fff;
+  color: white;
 }
 
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
   background-color: #454954;
-  color: #fff;
+  color: white;
 }
 
 .navbar-nav li.open>a>.caret {
   border-top-width: 0;
-  border-bottom: 4px solid #fff;
+  border-bottom: 4px solid white;
 }
 
 @media (max-width: 767px) {
@@ -204,11 +204,11 @@ a, a:hover, a:visited, a:focus {
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
     background-color: #454954;
-    color: #fff;
+    color: white;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
     background-color: #6E7484;
-    color: #fff;
+    color: white;
   }
 }
 
@@ -254,7 +254,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .navbar-default .navbar-brand {
-  color: #FFFFFF;
+  color: white;
   padding: 10px;
 }
 
@@ -399,10 +399,10 @@ a, a:hover, a:visited, a:focus {
 
 .block-id {
   background-color: #373D42;
-  border: 3px solid #FFFFFF;
+  border: 3px solid white;
   margin: 0 auto;
   width: 165px;
-  color: #fff;
+  color: white;
   text-align: center;
 }
 
@@ -412,7 +412,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .block-id h2 {
-  color: #FFFFFF;
+  color: white;
   font-weight: bold;
   line-height: 30px;
   font-size: 24px;
@@ -421,13 +421,13 @@ a, a:hover, a:visited, a:focus {
 }
 
 .icon-block {
-  color: #FFFFFF;
+  color: white;
   font-size: 35px;
   margin-top:  10px;
 }
 
 .icon-block h3 {
-  color: #fff;
+  color: white;
 }
 
 .block-tx {
@@ -448,7 +448,7 @@ a, a:hover, a:visited, a:focus {
 .btn-primary, a.btn-primary {
   background-color: #343844;
   border: 2px solid #343844;
-  color: #fff;
+  color: white;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
@@ -459,7 +459,7 @@ a, a:hover, a:visited, a:focus {
 .btn-danger.active, .open .dropdown-toggle.btn-danger {
   background-color: #454954;
   border: 2px solid #454954;
-  color: #fff;
+  color: white;
 }
 
 .btn-default:hover,
@@ -467,7 +467,7 @@ a, a:hover, a:visited, a:focus {
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-  background-color: #fff;
+  background-color: white;
 }
 
 .btn-default {
@@ -480,7 +480,7 @@ a, a:hover, a:visited, a:focus {
   font-size: 13px;
   text-transform: uppercase;
   font-weight:100;
-  color: #fff;
+  color: white;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
@@ -539,7 +539,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 #footer a:hover {
-  color: #fff;
+  color: white;
 }
 
 .line-footer { border-top: 2px dashed #ccc; }
@@ -573,7 +573,7 @@ a, a:hover, a:visited, a:focus {
   -moz-border-radius-bottomright: 2px;
   -webkit-border-bottom-left-radius: 2px;
   -webkit-border-bottom-right-radius: 2px;
-  background-color: #FFFFFF;
+  background-color: white;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   border-top: none;
@@ -611,7 +611,7 @@ a, a:hover, a:visited, a:focus {
   -webkit-border-radius: 9px;
   background-color: #999999;
   border-radius: 9px;
-  color: #ffffff;
+  color: white;
   font-size: 12.025px;
   font-weight: bold;
   padding: 1px 9px 2px;
@@ -619,7 +619,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .badge:hover {
-  color: #ffffff;
+  color: white;
   text-decoration: none;
   cursor: pointer;
 }
@@ -659,7 +659,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .btn-copy:hover, .btn-expand:hover {
-  color: #000;
+  color: black;
   text-decoration: none;
 }
 
@@ -675,7 +675,7 @@ a, a:hover, a:visited, a:focus {
 }
 
 .tooltip .tooltip-inner {
-  color: #fff;
+  color: white;
   background-color: #39B54A;
 }
 
@@ -699,10 +699,10 @@ a, a:hover, a:visited, a:focus {
 
 .tx-id {
   background-color: #373D42;
-  border: 3px solid #FFFFFF;
+  border: 3px solid white;
   margin: 0 auto;
   width: 165px;
-  color: #FFFFFF;
+  color: white;
   text-align: center;
 }
 
@@ -769,7 +769,7 @@ a.v_highlight_more {
 
 .secondary_navbar {
   width: 100%;
-  background: #fff;
+  background: white;
   position: fixed;
   top: 80px;
   left: 0;
@@ -800,7 +800,7 @@ a.v_highlight_more {
   position: absolute;
   right: 25px;
   padding: 5px 10px;
-  background: #fff;
+  background: white;
   -moz-box-shadow:    0px 2px 3px 0px rgba(0,0,0,0.20);
   -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.20);
   box-shadow:         0px 2px 3px 0px rgba(0,0,0,0.20);
