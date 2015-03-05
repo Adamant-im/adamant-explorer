@@ -137,6 +137,18 @@ a, a:hover, a:visited, a:focus {
   background-color: #E8E8E9;
 }
 
+#header {
+  margin-left: 21px;
+  margin-right: 21px;
+}
+
+@media (max-width: 767px) {
+  #header {
+    margin-left: -9px;
+    margin-right: 0px;
+  }
+}
+
 .navbar { min-height: 80px; }
 
 .navbar-collapse {
@@ -241,15 +253,8 @@ a, a:hover, a:visited, a:focus {
 }
 
 .navbar-default .navbar-header {
-  margin-left: 21px;
   height: 79px;
   line-height: 79px;
-}
-
-@media (max-width: 767px) {
-  .navbar-default .navbar-header {
-    margin-left: -9px;
-  }
 }
 
 .navbar-default .navbar-brand {
