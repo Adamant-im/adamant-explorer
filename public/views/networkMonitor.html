@@ -15,9 +15,9 @@
               <div class="pull-left active-nodes">
                 <p class="small-title">Connected Peers</p>
                 <p class="big-details">
-                    <span class="connected-peers">{{counter.connected || 0}}</span>
-                    <span class="text-muted">&nbsp;/&nbsp;</span>
-                    <span class="total-peers">{{counter.total || 0}}</span>
+                  <span class="connected-peers">{{counter.connected || 0}}</span>
+                  <span class="text-muted">&nbsp;/&nbsp;</span>
+                  <span class="total-peers">{{counter.total || 0}}</span>
                 </p>
                 <p class="text-muted disconnected-peers">{{counter.disconnected || 0}} disconnected peers</p>
               </div>
@@ -34,8 +34,8 @@
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
                 <p class="text-muted">
-                    <span class="xcr">{{lastBlock.totalAmount || 0 | xcr}} XCR</span>
-                    <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
+                  <span class="xcr">{{lastBlock.totalAmount || 0 | xcr}} XCR</span>
+                  <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
                 </p>
                 <p class="text-muted">{{lastBlock.timestamp | timeAgo}}</p>
               </div>
@@ -52,8 +52,8 @@
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
                 <p class="text-muted">
-                    <span class="xcr">{{bestBlock.totalAmount || 0 | xcr}} XCR</span>
-                    <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
+                  <span class="xcr">{{bestBlock.totalAmount || 0 | xcr}} XCR</span>
+                  <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
                 </p>
                 <p class="text-muted">{{bestBlock.timestamp | timeAgo}}</p>
               </div>
