@@ -32,6 +32,7 @@ p.big-details span.connected-peers {
 
 div.platforms {
   text-align: center;
+  min-height: 58px;
 }
 
 div.platforms img.os-icon {
@@ -53,6 +54,7 @@ div.platforms span.linux-counter {
 
 div.versions {
   text-align: center;
+  min-height: 58px;
 }
 
 div.versions div.version {
