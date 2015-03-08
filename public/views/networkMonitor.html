@@ -29,7 +29,10 @@
             <div class="col-xs-12">
               <div class="pull-left last-block">
                 <p class="small-title">Last Block</span>
-                <p class="big-details">{{lastBlock.id || 0}}</p>
+                <p class="big-details" data-ng-switch="!!lastBlock">
+                  <a data-ng-href="/block/{{lastBlock.id}}" data-ng-switch-when="true" target="_new">{{lastBlock.id}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
                 <p class="text-muted">
                     <span class="xcr">{{lastBlock.totalAmount || 0 | xcr}} XCR</span>
                     <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
@@ -44,7 +47,10 @@
             <div class="col-xs-12">
               <div class="pull-left best-block">
                 <p class="small-title">Best Block</p>
-                <p class="big-details">{{bestBlock.id || 0}}</p>
+                <p class="big-details" data-ng-switch="!!bestBlock">
+                  <a data-ng-href="/block/{{bestBlock.id}}" data-ng-switch-when="true" target="_new">{{bestBlock.id}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
                 <p class="text-muted">
                     <span class="xcr">{{bestBlock.totalAmount || 0 | xcr}} XCR</span>
                     <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
