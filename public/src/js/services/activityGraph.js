@@ -1,7 +1,6 @@
 'use strict';
 
-var ActivityGraph = function ($http) {
-    this.$http     = $http;
+var ActivityGraph = function () {
     this.loading   = true;
     this.blocks    = 0;
     this.maxBlocks = 20;
@@ -150,28 +149,19 @@ var ActivityGraph = function ($http) {
     this.statistics = new Statistics(this);
 }
 
-ActivityGraph.prototype.lastBlock = function (callback) {
-    this.$http.get("/api/statistics/getLastBlock").success(_.bind(callback, this));
-}
-
-ActivityGraph.prototype.blockTransactions = function (id, callback) {
-    this.$http.get("/api/getTransactionsByBlock" + "?blockId=" + id).success(_.bind(callback, this));
-}
-
-ActivityGraph.prototype.refresh = function () {
-    this.loading = true;
-    this.lastBlock(function (res) {
-        if (!res.success) { return; }
-        this.addBlock(res.block, true);
-
-        if (this.sigma) {
-            this.sizeNodes();
-            this.positionNodes();
-            this.statistics.refresh();
-            this.loading = false;
-            this.sigma.refresh();
-        }
-    });
+ActivityGraph.prototype.refresh = function (block) {
+    if (block) {
+        this.addBlock(block);
+    }
+    if (this.blocks > 0) {
+        this.loading = false;
+    }
+    if (this.sigma) {
+        this.sizeNodes();
+        this.positionNodes();
+        this.statistics.refresh();
+        this.sigma.refresh();
+    }
 }
 
 ActivityGraph.prototype.clear = function () {
@@ -278,7 +268,7 @@ ActivityGraph.prototype.addTxRecipient = function (tx) {
     });
 }
 
-ActivityGraph.prototype.addBlock = function (block, addTxs) {
+ActivityGraph.prototype.addBlock = function (block) {
     if (_.contains(this.indexes, block.id)) { return; }
     if ((this.blocks + 1) > this.maxBlocks) { this.clear(); }
     this.addNode({
@@ -292,7 +282,7 @@ ActivityGraph.prototype.addBlock = function (block, addTxs) {
     this.blocks++;
     this.indexes.push(block.id);
     this.addBlockGenerator(block);
-    if (addTxs) this.addBlockTxs(block);
+    this.addBlockTxs(block);
 }
 
 ActivityGraph.prototype.generatorID = function (block) {
@@ -317,10 +307,8 @@ ActivityGraph.prototype.addBlockGenerator = function (block) {
 }
 
 ActivityGraph.prototype.addBlockTxs = function (block) {
-    if (block.numberOfTransactions <= 0) { return; }
-    this.blockTransactions(block.id, function (res) {
-        if (!res.success) { return; }
-        _.each(res.transactions, function (tx) {
+    if (!_.isEmpty(block.transactions)) {
+        _.each(block.transactions, function (tx) {
             this.addTx(tx);
             this.addEdge({
                 id: block.id + tx.id,
@@ -330,18 +318,14 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
                 size: 1
             })
         }, this);
-    });
+    }
 }
 
 angular.module('cryptichain.activity').factory('activityGraph',
-  function ($http, $interval) {
+  function ($socket) {
       return function (scope) {
-          var activityGraph = new ActivityGraph($http);
-          activityGraph.refresh();
-
-          $interval(function () {
-              activityGraph.refresh();
-          }, 30000);
+          var activityGraph = new ActivityGraph(),
+              ns = $socket('/activityGraph');
 
           scope.activityGraph = activityGraph;
           scope.nodeSelect = activityGraph.nodeSelect;
@@ -358,6 +342,12 @@ angular.module('cryptichain.activity').factory('activityGraph',
               scope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
               });
+          });
+
+          ns.on('data', function (res) { activityGraph.refresh(res.block); });
+
+          scope.$on('$destroy', function (event) {
+              ns.removeAllListeners();
           });
 
           return activityGraph;
