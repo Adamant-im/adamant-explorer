@@ -1,6 +1,9 @@
 module.exports = function (app, io) {
-    var networkMonitor = io.of('/networkMonitor');
-    var statistics = require('./statistics');
+    var ns = {
+        networkMonitor : io.of('/networkMonitor')
+    }
+
+    var networkMonitor = require('./networkMonitor');
 
     var connectionHandler = function (socket, object) {
         var clients = 0;
@@ -22,5 +25,5 @@ module.exports = function (app, io) {
         });
     }
 
-    new statistics(app, connectionHandler, networkMonitor);
+    new networkMonitor(app, connectionHandler, ns.networkMonitor);
 }
