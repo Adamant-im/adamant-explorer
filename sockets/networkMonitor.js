@@ -44,6 +44,8 @@ module.exports = function (app, connectionHandler, socket) {
         data      = {};
     }
 
+    // Private
+
     var newInterval = function (i, delay, cb) {
         if (intervals[i] !== undefined) {
             return null;
