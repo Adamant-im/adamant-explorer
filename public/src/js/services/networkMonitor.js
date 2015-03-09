@@ -2,6 +2,7 @@
 
 var NetworkMonitor = function ($scope) {
     this.$scope = $scope;
+    this.map    = new NetworkMap();
 
     function Platforms () {
         this.counter   = [0,0,0,0];
@@ -81,8 +82,6 @@ var NetworkMonitor = function ($scope) {
             platforms: platforms.detected(), versions: versions.detected()
         }
     }
-
-    this.map = new NetworkMap();
 
     this.updatePeers = function (peers) {
         this.$scope.peers   = peers.list;
