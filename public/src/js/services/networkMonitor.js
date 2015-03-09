@@ -1,8 +1,7 @@
 'use strict';
 
-var NetworkMonitor = function ($socket, $scope) {
-    this.$socket = $socket('/networkMonitor');
-    this.$scope  = $scope;
+var NetworkMonitor = function ($scope) {
+    this.$scope = $scope;
 
     function Platforms () {
         this.counter   = [0,0,0,0];
@@ -105,30 +104,6 @@ var NetworkMonitor = function ($socket, $scope) {
         this.$scope.volEnd       = volume.end;
         this.$scope.volNow       = moment();
     }
-
-    this.$socket.on('data', function (res) {
-        this.updatePeers(res.peers);
-        this.updateLastBlock(res.lastBlock);
-        this.updateBestBlock(res.bestBlock);
-        this.updateVolume(res.volume);
-    }.bind(this));
-
-    this.$socket.on('data1', function (res) {
-        this.updateLastBlock(res.lastBlock);
-    }.bind(this));
-
-    this.$socket.on('data2', function (res) {
-        this.updateBestBlock(res.bestBlock);
-        this.updateVolume(res.volume);
-    }.bind(this));
-
-    this.$socket.on('data3', function (res) {
-        this.updatePeers(res.peers);
-    }.bind(this));
-
-    this.$scope.$on('$destroy', function (event) {
-        $socket.removeAllListeners();
-    });
 }
 
 var NetworkMap = function () {
@@ -193,7 +168,32 @@ var NetworkMap = function () {
 angular.module('cryptichain.network').factory('networkMonitor',
   function ($socket) {
       return function ($scope) {
-          var networkMonitor = new NetworkMonitor($socket, $scope);
+          var networkMonitor = new NetworkMonitor($scope),
+              ns = $socket('/networkMonitor');
+
+          ns.on('data', function (res) {
+              networkMonitor.updatePeers(res.peers);
+              networkMonitor.updateLastBlock(res.lastBlock);
+              networkMonitor.updateBestBlock(res.bestBlock);
+              networkMonitor.updateVolume(res.volume);
+          });
+
+          ns.on('data1', function (res) {
+              networkMonitor.updateLastBlock(res.lastBlock);
+          });
+
+          ns.on('data2', function (res) {
+              networkMonitor.updateBestBlock(res.bestBlock);
+              networkMonitor.updateVolume(res.volume);
+          });
+
+          ns.on('data3', function (res) {
+              networkMonitor.updatePeers(res.peers);
+          });
+
+          $scope.$on('$destroy', function (event) {
+              ns.removeAllListeners();
+          });
 
           return networkMonitor;
       }
