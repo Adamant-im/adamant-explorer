@@ -103,6 +103,7 @@ var ActivityGraph = function ($http) {
             var txs       = this.graph.nodesByType(0);
             var blocks    = this.graph.nodesByType(1);
             var accounts  = this.graph.nodesByType(2);
+
             this.txs      = txs.size().value();
             this.volume   = txsVolume(txs);
             this.blocks   = blocks.size().value();
@@ -141,6 +142,7 @@ var ActivityGraph = function ($http) {
         var blocksTimespan = function (chain) {
             var max = epochTime() + maxTime(chain) * 1000;
             var min = epochTime() + minTime(chain) * 1000;
+
             return moment.duration((max - min)).humanize();
         }
     }
