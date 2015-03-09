@@ -191,8 +191,8 @@ var NetworkMap = function () {
 }
 
 angular.module('cryptichain.network').factory('networkMonitor',
-  function () {
-      return function ($socket, $scope) {
+  function ($socket) {
+      return function ($scope) {
           var networkMonitor = new NetworkMonitor($socket, $scope);
 
           return networkMonitor;
