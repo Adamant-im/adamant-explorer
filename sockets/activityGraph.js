@@ -11,7 +11,7 @@ module.exports = function (app, connectionHandler, socket) {
         emitLastBlock();
 
         if (interval == null) {
-            setInterval(emitLastBlock, 10000);
+            interval = setInterval(emitLastBlock, 10000);
         }
     }
 
