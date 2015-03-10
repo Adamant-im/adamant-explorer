@@ -14,8 +14,7 @@ angular.module('cryptichain',[
     'cryptichain.transactions',
     'cryptichain.address',
     'cryptichain.search',
-    'cryptichain.activity',
-    'cryptichain.network'
+    'cryptichain.tools'
 ]);
 
 angular.module('cryptichain.system', []);
@@ -24,5 +23,4 @@ angular.module('cryptichain.blocks', []);
 angular.module('cryptichain.transactions', []);
 angular.module('cryptichain.address', []);
 angular.module('cryptichain.search', []);
-angular.module('cryptichain.activity', []);
-angular.module('cryptichain.network', []);
+angular.module('cryptichain.tools', []);

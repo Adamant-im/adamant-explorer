@@ -164,7 +164,7 @@ var NetworkMap = function () {
     }
 }
 
-angular.module('cryptichain.network').factory('networkMonitor',
+angular.module('cryptichain.tools').factory('networkMonitor',
   function ($socket) {
       return function ($scope) {
           var networkMonitor = new NetworkMonitor($scope),
