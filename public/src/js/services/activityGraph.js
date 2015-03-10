@@ -314,30 +314,30 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
 
 angular.module('cryptichain.activity').factory('activityGraph',
   function ($socket) {
-      return function (scope) {
+      return function ($scope) {
           var activityGraph = new ActivityGraph(),
               ns = $socket('/activityGraph');
 
-          scope.activityGraph = activityGraph;
-          scope.nodeSelect = activityGraph.nodeSelect;
-          scope.cameraMenu = activityGraph.cameraMenu;
-          scope.statistics = activityGraph.statistics;
+          $scope.activityGraph = activityGraph;
+          $scope.nodeSelect = activityGraph.nodeSelect;
+          $scope.cameraMenu = activityGraph.cameraMenu;
+          $scope.statistics = activityGraph.statistics;
 
           activityGraph.sigma.bind('clickNode', function (event) {
-              scope.$apply(function () {
+              $scope.$apply(function () {
                   activityGraph.nodeSelect.add(event);
               });
           });
 
           activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
-              scope.$apply(function () {
+              $scope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
               });
           });
 
           ns.on('data', function (res) { activityGraph.refresh(res.block); });
 
-          scope.$on('$destroy', function (event) {
+          $scope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 
