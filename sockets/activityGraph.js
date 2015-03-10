@@ -32,7 +32,7 @@ module.exports = function (app, connectionHandler, socket) {
             function (res) { cb('LastBlock') },
             function (res) {
                 if (res.success && res.block.numberOfTransactions > 0) {
-                    getBlockTranscations(res, cb);
+                    getBlockTransactions(res, cb);
                 } else {
                     cb(null, res);
                 }
@@ -40,10 +40,10 @@ module.exports = function (app, connectionHandler, socket) {
         );
     }
 
-    var getBlockTranscations = function (resBlock, cb) {
+    var getBlockTransactions = function (resBlock, cb) {
         transactions.getTransactionsByBlock(
             resBlock.block.id,
-            function (res) { cb('BlockTranscations') },
+            function (res) { cb('BlockTransactions') },
             function (res) {
                 if (res.success) {
                     resBlock.block.transactions = res.transactions;
