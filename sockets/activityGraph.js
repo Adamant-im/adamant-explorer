@@ -3,7 +3,7 @@ var api = require('../lib/api');
 module.exports = function (app, connectionHandler, socket) {
     var statistics   = new api.statistics(app),
         transactions = new api.transactions(app),
-        connection   = new connectionHandler(socket, this),
+        connection   = new connectionHandler('Activity Graph:', socket, this),
         interval     = null,
         data         = {};
 
@@ -16,7 +16,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     this.onConnect = function () {
-        console.log('Emitting existing data');
+        log('Emitting existing data');
         socket.emit('data', data);
     }
 
@@ -27,6 +27,10 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     // Private
+
+    var log = function (msg) {
+        console.log('Activity Graph:', msg);
+    }
 
     var getLastBlock = function (cb) {
         statistics.getLastBlock(
@@ -65,10 +69,10 @@ module.exports = function (app, connectionHandler, socket) {
     var emitLastBlock = function () {
         getLastBlock(function (err, res) {
             if (err) {
-                console.log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving statistics for: ' + err);
             } else if (newLastBlock(res)) {
                 data = res;
-                console.log('Emitting new data');
+                log('Emitting new data');
                 socket.emit('data', data);
             }
         });

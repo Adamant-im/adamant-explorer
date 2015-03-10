@@ -3,7 +3,7 @@ var api = require('../lib/api'),
 
 module.exports = function (app, connectionHandler, socket) {
     var statistics = new api.statistics(app),
-        connection = new connectionHandler(socket, this),
+        connection = new connectionHandler('Network Monitor:', socket, this),
         intervals  = [],
         data       = {};
 
@@ -16,14 +16,14 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                console.log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving statistics for: ' + err);
             } else {
                 data.bestBlock = res[0];
                 data.lastBlock = res[1];
                 data.volume    = res[2];
                 data.peers     = res[3];
 
-                console.log('Emitting new data');
+                log('Emitting new data');
                 socket.emit('data', data);
 
                 newInterval(0, 10000, emitData1);
@@ -34,7 +34,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     this.onConnect = function () {
-        console.log('Emitting existing data');
+        log('Emitting existing data');
         socket.emit('data', data);
     }
 
@@ -47,6 +47,10 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     // Private
+
+    var log = function (msg) {
+        console.log('Network Monitor:', msg);
+    }
 
     var newInterval = function (i, delay, cb) {
         if (intervals[i] !== undefined) {
@@ -92,11 +96,11 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                console.log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving statistics for: ' + err);
             } else {
                 thisData.lastBlock = data.lastBlock = res[0];
 
-                console.log('Emitting data-1');
+                log('Emitting data-1');
                 socket.emit('data1', thisData);
             }
         }.bind(this));
@@ -111,12 +115,12 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                console.log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving statistics for: ' + err);
             } else {
                 thisData.bestBlock = data.bestBlock = res[0];
                 thisData.volume    = data.volume    = res[1];
 
-                console.log('Emitting data-2');
+                log('Emitting data-2');
                 socket.emit('data2', thisData);
             }
         }.bind(this));
@@ -130,11 +134,11 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                console.log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving statistics for: ' + err);
             } else {
                 thisData.peers = data.peers = res[0];
 
-                console.log('Emitting data-3');
+                log('Emitting data-3');
                 socket.emit('data3', thisData);
             }
         }.bind(this));

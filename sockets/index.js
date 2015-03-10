@@ -7,16 +7,16 @@ module.exports = function (app, io) {
     var activityGraph  = require('./activityGraph'),
         networkMonitor = require('./networkMonitor');
 
-    var connectionHandler = function (socket, object) {
+    var connectionHandler = function (name, socket, object) {
         var clients = 0;
         socket.on('connection', function (socket) {
             if (clients <= 0) {
                 clients = 0;
                 object.onInit();
-                console.log('First connection');
+                console.log(name, 'First connection');
             } else {
                 object.onConnect();
-                console.log('New connection');
+                console.log(name, 'New connection');
             }
             clients++;
             socket.on('disconnect', function () {
@@ -24,7 +24,7 @@ module.exports = function (app, io) {
                 if (clients <= 0) {
                     clients = 0;
                     object.onDisconnect();
-                    console.log('Closed connection');
+                    console.log(name, 'Closed connection');
                 }
             });
         });
