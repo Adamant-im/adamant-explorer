@@ -72,9 +72,9 @@ module.exports = function (app, connectionHandler, socket) {
                 log('Error in retrieving statistics for: ' + err);
             } else if (newLastBlock(res)) {
                 data = res;
-                log('Emitting new data');
-                socket.emit('data', data);
             }
+            log('Emitting new data');
+            socket.emit('data', data);
         });
     }
 }
