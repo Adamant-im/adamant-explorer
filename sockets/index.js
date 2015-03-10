@@ -13,8 +13,10 @@ module.exports = function (app, io) {
             if (clients <= 0) {
                 clients = 0;
                 object.onInit();
+                console.log('First connection');
             } else {
                 object.onConnect();
+                console.log('New connection');
             }
             clients++;
             socket.on('disconnect', function () {
@@ -22,6 +24,7 @@ module.exports = function (app, io) {
                 if (clients <= 0) {
                     clients = 0;
                     object.onDisconnect();
+                    console.log('Closed connection');
                 }
             });
         });

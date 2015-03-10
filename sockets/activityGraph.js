@@ -16,6 +16,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     this.onConnect = function () {
+        console.log('Emitting existing data');
         socket.emit('data', data);
     }
 
@@ -67,6 +68,7 @@ module.exports = function (app, connectionHandler, socket) {
                 console.log('Error in retrieving statistics for: ' + err);
             } else if (newLastBlock(res)) {
                 data = res;
+                console.log('Emitting new data');
                 socket.emit('data', data);
             }
         });

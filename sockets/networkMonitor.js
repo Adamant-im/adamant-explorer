@@ -23,6 +23,7 @@ module.exports = function (app, connectionHandler, socket) {
                 data.volume    = res[2];
                 data.peers     = res[3];
 
+                console.log('Emitting new data');
                 socket.emit('data', data);
 
                 newInterval(0, 10000, emitData1);
@@ -33,6 +34,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     this.onConnect = function () {
+        console.log('Emitting existing data');
         socket.emit('data', data);
     }
 
@@ -93,6 +95,8 @@ module.exports = function (app, connectionHandler, socket) {
                 console.log('Error in retrieving statistics for: ' + err);
             } else {
                 thisData.lastBlock = data.lastBlock = res[0];
+
+                console.log('Emitting data-1');
                 socket.emit('data1', thisData);
             }
         }.bind(this));
@@ -111,6 +115,8 @@ module.exports = function (app, connectionHandler, socket) {
             } else {
                 thisData.bestBlock = data.bestBlock = res[0];
                 thisData.volume    = data.volume    = res[1];
+
+                console.log('Emitting data-2');
                 socket.emit('data2', thisData);
             }
         }.bind(this));
@@ -127,6 +133,8 @@ module.exports = function (app, connectionHandler, socket) {
                 console.log('Error in retrieving statistics for: ' + err);
             } else {
                 thisData.peers = data.peers = res[0];
+
+                console.log('Emitting data-3');
                 socket.emit('data3', thisData);
             }
         }.bind(this));
