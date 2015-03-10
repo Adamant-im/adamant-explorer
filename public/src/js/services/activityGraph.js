@@ -285,21 +285,12 @@ ActivityGraph.prototype.addBlock = function (block) {
     this.addBlockTxs(block);
 }
 
-ActivityGraph.prototype.generatorID = function (block) {
-    if (block.generator !== undefined) {
-        return block.generator;
-    } else {
-        return block.generatorId;
-    }
-}
-
 ActivityGraph.prototype.addBlockGenerator = function (block) {
-    var generatorID = this.generatorID(block);
-    this.addAccount(generatorID);
+    this.addAccount(block.generatorId);
     this.addEdge({
-        id: block.id + generatorID,
+        id: block.id + block.generatorId,
         label: block.height.toString(),
-        source: generatorID,
+        source: block.generatorId,
         target: block.id,
         color: this.colors.account,
         size: 1
