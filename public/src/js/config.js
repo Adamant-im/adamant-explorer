@@ -1,7 +1,7 @@
 'use strict';
 
 // Setting up routes
-angular.module('insight').config(function($routeProvider) {
+angular.module('cryptichain').config(function($routeProvider) {
     $routeProvider.
     when('/block/:blockId', {
         templateUrl: '/views/block.html',
@@ -39,6 +39,10 @@ angular.module('insight').config(function($routeProvider) {
         templateUrl : "/views/topAccounts.html",
         title: "Top Accounts"
     })
+    .when("/networkMonitor", {
+        templateUrl : "/views/networkMonitor.html",
+        title: "Network Monitor"
+    })
     .otherwise({
         templateUrl: '/views/404.html',
         title: 'Error'
@@ -46,7 +50,7 @@ angular.module('insight').config(function($routeProvider) {
 });
 
 // Setting HTML5 location mode
-angular.module('insight')
+angular.module('cryptichain')
   .config(function($locationProvider) {
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');

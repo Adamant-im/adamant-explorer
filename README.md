@@ -1,12 +1,12 @@
 Crypti Blockchain Explorer
 ==========================
 
-Crypti blockchain explorer version 0.2. Works with Crypti wallet API.
-Uses Redis for caching data.
+Crypti blockchain explorer version 0.3. Works with Crypti wallet API. Uses Redis for caching data and Freegeoip for IP geo-location.
 
-# Required components
+# Required Components
 
  * Redis
+ * Freegeoip (https://github.com/fiorix/freegeoip)
  * Bower
  * Grunt.js
 
@@ -17,6 +17,18 @@ To install run:
 ```
 npm install
 bower install
+```
+
+# Freegeoip
+
+Freegeoip is used by the Network Monitor for IP address geo-location.
+
+Installation is very simple. Download and unpack the latest release from: https://github.com/fiorix/freegeoip/releases
+
+Then start the server in the background, using the following command:
+
+```
+./freegeoip > /dev/null 2>&1 &
 ```
 
 # Configuration
@@ -30,7 +42,7 @@ Example:
     "configuration" : {
         "development": {
             "host": "0.0.0.0",
-            "port": 8080
+            "port": 8040
         },
         "production": {
             "host": "0.0.0.0",
@@ -40,6 +52,10 @@ Example:
             "host" : "127.0.0.1",
             "port" : 6040
         },
+        "freegeoip" : {
+            "host" : "127.0.0.1",
+            "port" : 8080
+        },
         "redis" : {
             "host" : "127.0.0.1",
             "port" : 6379,
@@ -48,7 +64,10 @@ Example:
         "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
-        "updateBterInterval" : 900000
+        "enableExchange" : true,
+        "updateExchangeInterval" : 900000,
+        "btcusdExchange" : "bitfinex",
+        "xcrbtcExchange" : "poloniex"
     }
 }
 ```
@@ -56,7 +75,10 @@ Example:
    * `updateTopAccountsInterval` - time to update top accounts in interval.
    * `cacheTTL` - time to live cache in redis.
    * `fixedPoint` - fixed point number of Crypti (10^8).
-   * `updateBterInterval` - time to update bter currency courses.
+   * `enableExchange` - enable or disable exchange currency courses.
+   * `updateExchangeInterval` - time to update exchange currency courses.
+   * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
+   * `xcrbtcExchange` - default is poloniex, alternatives are: cryptsy.
 
 # Build
 
@@ -96,4 +118,8 @@ Ports for both mode can be found in `config.json`
 
 # Top Accounts
 
-Top Acccounts functionality is only supported when using a special version of Crypti which has modified source code.
+To enable Top Accounts functionality, start your crypti node _(not the explorer)_ using the following command:
+
+```
+TOP=true node app.js
+```

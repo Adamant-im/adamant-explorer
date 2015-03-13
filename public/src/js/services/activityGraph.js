@@ -1,9 +1,10 @@
 'use strict';
 
-var ActivityGraph = function($http) {
-    this.$http   = $http;
-    this.loading = true;
-    this.indexes = [];
+var ActivityGraph = function () {
+    this.loading   = true;
+    this.blocks    = 0;
+    this.maxBlocks = 20;
+    this.indexes   = [];
 
     this.colors = {
         account: "#3465a4", // Steel Blue
@@ -19,8 +20,10 @@ var ActivityGraph = function($http) {
     }
 
     this.settings = {
+        sideMargin: 1,
+        singleHover: true,
         minNodeSize: 0.5,
-        maxNodeSize: 32,
+        maxNodeSize: 16,
         drawLabels: false,
         defaultEdgeType: "arrow"
     }
@@ -34,28 +37,28 @@ var ActivityGraph = function($http) {
         this.sigma = sigma;
         this.color = "#5bc0de";
 
-        this.add = function(event) {
+        this.add = function (event) {
             this.remove(event);
             this.node       = event.data.node;
-            this.prev_color = this.node.color;
+            this.prevColor  = this.node.color;
             this.node.color = this.color;
             this.sigma.refresh();
         }
 
-        this.remove = function(event) {
+        this.remove = function (event) {
             if (this.node) {
-                this.node.color = this.prev_color;
-                this.prev_color = undefined;
+                this.node.color = this.prevColor;
+                this.prevColor  = undefined;
                 this.node       = undefined;
             }
             this.sigma.refresh();
         }
 
-        this.selected = function() {
+        this.selected = function () {
             return this.node !== undefined;
         }
 
-        this.type = function() {
+        this.type = function () {
             if (this.selected()) {
                 return this.node.type;
             } else {
@@ -63,8 +66,8 @@ var ActivityGraph = function($http) {
             }
         }
 
-        this.href = function() {
-            switch(this.type()) {
+        this.href = function () {
+            switch (this.type()) {
                 case 0:
                 return "/tx/" + this.node.id;
                 case 1:
@@ -82,7 +85,7 @@ var ActivityGraph = function($http) {
     function CameraMenu(camera) {
         this.camera = camera;
 
-        this.reset = function() {
+        this.reset = function () {
             if (this.camera) {
                 this.camera.goTo({ x: 0, y: 0, angle: 0, ratio: 1 });
             }
@@ -95,48 +98,50 @@ var ActivityGraph = function($http) {
         this.graph  = graph;
         this.volume = this.txs = this.blocks = this.accounts = 0;
 
-        this.refresh = function() {
-            var txs       = this.graph.nodes_by_type(0);
-            var blocks    = this.graph.nodes_by_type(1);
-            var accounts  = this.graph.nodes_by_type(2);
+        this.refresh = function () {
+            var txs       = this.graph.nodesByType(0);
+            var blocks    = this.graph.nodesByType(1);
+            var accounts  = this.graph.nodesByType(2);
+
             this.txs      = txs.size().value();
-            this.volume   = txs_volume(txs);
+            this.volume   = txsVolume(txs);
             this.blocks   = blocks.size().value();
-            this.timespan = blocks_timespan(blocks);
+            this.timespan = blocksTimespan(blocks);
             this.accounts = accounts.size().value();
         }
 
-        var txs_volume = function(chain) {
-            return chain.reduce(function(vol, tx) {
+        var txsVolume = function (chain) {
+            return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
             }, 0).value() / Math.pow(10, 8);
         }
 
-        var epoch_time = function() {
+        var epochTime = function () {
             return parseInt(
                 new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0)
             ).getTime() / 1000);
         }
 
-        var min_time = function(chain) {
-            return chain.min(function(block) {
+        var minTime = function (chain) {
+            return chain.min(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
                 }
             }).value().timestamp;
         }
 
-        var max_time = function(chain) {
-            return chain.max(function(block) {
+        var maxTime = function (chain) {
+            return chain.max(function (block) {
                 if (block.timestamp > 0) {
                     return block.timestamp;
                 }
             }).value().timestamp;
         }
 
-        var blocks_timespan = function(chain) {
-            var max = epoch_time() + max_time(chain) * 1000;
-            var min = epoch_time() + min_time(chain) * 1000;
+        var blocksTimespan = function (chain) {
+            var max = epochTime() + maxTime(chain) * 1000;
+            var min = epochTime() + minTime(chain) * 1000;
+
             return moment.duration((max - min)).humanize();
         }
     }
@@ -144,61 +149,45 @@ var ActivityGraph = function($http) {
     this.statistics = new Statistics(this);
 }
 
-ActivityGraph.prototype.last_transactions = function(callback) {
-    this.$http.get("/api/getLastTransactions").success(_.bind(callback, this));
+ActivityGraph.prototype.refresh = function (block) {
+    if (block) {
+        this.addBlock(block);
+    }
+    if (this.blocks > 0) {
+        this.loading = false;
+    }
+    if (this.sigma) {
+        this.sizeNodes();
+        this.positionNodes();
+        this.statistics.refresh();
+        this.sigma.refresh();
+    }
 }
 
-ActivityGraph.prototype.last_blocks = function(callback) {
-    this.$http.get("/api/lastBlocks").success(_.bind(callback, this));
+ActivityGraph.prototype.clear = function () {
+    this.blocks  = 0;
+    this.indexes = [];
+    if (this.sigma) {
+        this.sigma.graph.clear();
+    }
 }
 
-ActivityGraph.prototype.block_transactions = function(id, callback) {
-    this.$http.get("/api/getTransactionsByBlock" + "?blockId=" + id).success(_.bind(callback, this));
-}
-
-ActivityGraph.prototype.get_block = function(id, callback) {
-    this.$http.get("/api/getBlock" + "?blockId=" + id).success(_.bind(callback, this));
-}
-
-ActivityGraph.prototype.refresh = function() {
-    this.loading = true;
-    this.last_transactions(function(res) {
-        if (!res.success) { return; }
-        _.each(res.transactions, function(tx) {
-            this.add_tx(tx);
-        }, this);
-        this.last_blocks(function(res) {
-            if (!res.success) { return; }
-            _.each(res.blocks, function(block) {
-                this.add_block(block, true);
-            }, this);
-            if (this.sigma) {
-                this.size_nodes();
-                this.position_nodes();
-                this.statistics.refresh();
-                this.loading = false;
-                this.sigma.refresh();
-            }
-        });
-    });
-}
-
-ActivityGraph.prototype.size_nodes = function() {
-    _.each(this.sigma.graph.nodes(), function(node) {
+ActivityGraph.prototype.sizeNodes = function () {
+    _.each(this.sigma.graph.nodes(), function (node) {
         var deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
 }
 
-ActivityGraph.prototype.nodes_by_type = function(type) {
-    return _.chain(this.sigma.graph.nodes()).filter(function(node) {
+ActivityGraph.prototype.nodesByType = function (type) {
+    return _.chain(this.sigma.graph.nodes()).filter(function (node) {
         return node.type == type;
     });
 }
 
-ActivityGraph.prototype.position_nodes = function() {
+ActivityGraph.prototype.positionNodes = function () {
     for (type = 0; type < 3; type++) {
-        var nodes = this.nodes_by_type(type).value();
+        var nodes = this.nodesByType(type).value();
         var i, len = nodes.length, slice = 2 * Math.PI / len;
 
         for (i = 0; i < len; i++) {
@@ -210,7 +199,7 @@ ActivityGraph.prototype.position_nodes = function() {
     }
 }
 
-ActivityGraph.prototype.add_node = function(node) {
+ActivityGraph.prototype.addNode = function (node) {
     if (!_.contains(this.indexes, node.id)) {
         node.x = Math.random();
         node.y = Math.random();
@@ -219,16 +208,16 @@ ActivityGraph.prototype.add_node = function(node) {
     }
 }
 
-ActivityGraph.prototype.add_edge = function(edge) {
+ActivityGraph.prototype.addEdge = function (edge) {
     if (!_.contains(this.indexes, edge.id)) {
         this.indexes.push(edge.id);
         this.sigma.graph.addEdge(edge);
     }
 }
 
-ActivityGraph.prototype.add_tx = function(tx) {
+ActivityGraph.prototype.addTx = function (tx) {
     if (_.contains(this.indexes, tx.id)) { return; }
-    this.add_node({
+    this.addNode({
         id: tx.id,
         label: tx.id,
         type: 0,
@@ -237,13 +226,12 @@ ActivityGraph.prototype.add_tx = function(tx) {
         size: 1
     });
     this.indexes.push(tx.id);
-    this.add_tx_block(tx);
-    this.add_tx_sender(tx);
-    this.add_tx_recipient(tx);
+    this.addTxSender(tx);
+    this.addTxRecipient(tx);
 }
 
-ActivityGraph.prototype.add_account = function(id) {
-    this.add_node({
+ActivityGraph.prototype.addAccount = function (id) {
+    this.addNode({
         id: id,
         type: 2,
         label: id,
@@ -252,13 +240,13 @@ ActivityGraph.prototype.add_account = function(id) {
     });
 }
 
-ActivityGraph.prototype.amount = function(tx, sign) {
+ActivityGraph.prototype.amount = function (tx, sign) {
     return (sign + tx.amount / Math.pow(10, 8)) + " XCR";
 }
 
-ActivityGraph.prototype.add_tx_sender = function(tx) {
-    this.add_account(tx.senderId);
-    this.add_edge({
+ActivityGraph.prototype.addTxSender = function (tx) {
+    this.addAccount(tx.senderId);
+    this.addEdge({
         id: tx.id + tx.senderId + Math.random(),
         label: this.amount(tx, '-'),
         source: tx.senderId,
@@ -268,9 +256,9 @@ ActivityGraph.prototype.add_tx_sender = function(tx) {
     });
 }
 
-ActivityGraph.prototype.add_tx_recipient = function(tx) {
-    this.add_account(tx.recipientId);
-    this.add_edge({
+ActivityGraph.prototype.addTxRecipient = function (tx) {
+    this.addAccount(tx.recipientId);
+    this.addEdge({
         id: tx.id + tx.recipientId + Math.random(),
         label: this.amount(tx, '+'),
         source: tx.id,
@@ -280,24 +268,10 @@ ActivityGraph.prototype.add_tx_recipient = function(tx) {
     });
 }
 
-ActivityGraph.prototype.add_tx_block = function(tx) {
-    this.get_block(tx.blockId, function(res) {
-        if (!res.success) { return; }
-        this.add_block(res.block, false);
-        this.add_edge({
-            id: tx.id + tx.blockId,
-            label: res.block.height.toString(),
-            source: tx.blockId,
-            target: tx.id,
-            color: this.colors.block,
-            size: 1
-        })
-    });
-}
-
-ActivityGraph.prototype.add_block = function(block, add_txs) {
+ActivityGraph.prototype.addBlock = function (block) {
     if (_.contains(this.indexes, block.id)) { return; }
-    this.add_node({
+    if ((this.blocks + 1) > this.maxBlocks) { this.clear(); }
+    this.addNode({
         id: block.id,
         label: block.id,
         timestamp: block.timestamp,
@@ -305,39 +279,29 @@ ActivityGraph.prototype.add_block = function(block, add_txs) {
         color: this.colors.block,
         size: 1
     });
+    this.blocks++;
     this.indexes.push(block.id);
-    this.add_block_generator(block);
-    if (add_txs) this.add_block_txs(block);
+    this.addBlockGenerator(block);
+    this.addBlockTxs(block);
 }
 
-ActivityGraph.prototype.generator_id = function(block) {
-    if (block.generator !== undefined) {
-        return block.generator;
-    } else {
-        return block.generatorId;
-    }
-}
-
-ActivityGraph.prototype.add_block_generator = function(block) {
-    var generator_id = this.generator_id(block);
-    this.add_account(generator_id);
-    this.add_edge({
-        id: block.id + generator_id,
+ActivityGraph.prototype.addBlockGenerator = function (block) {
+    this.addAccount(block.generatorId);
+    this.addEdge({
+        id: block.id + block.generatorId,
         label: block.height.toString(),
-        source: generator_id,
+        source: block.generatorId,
         target: block.id,
         color: this.colors.account,
         size: 1
     })
 }
 
-ActivityGraph.prototype.add_block_txs = function(block) {
-    if (block.transactionsCount <= 0) { return; }
-    this.block_transactions(block.id, function(res) {
-        if (!res.success) { return; }
-        _.each(block.transactions, function(tx) {
-            this.add_tx(tx);
-            this.add_edge({
+ActivityGraph.prototype.addBlockTxs = function (block) {
+    if (!_.isEmpty(block.transactions)) {
+        _.each(block.transactions, function (tx) {
+            this.addTx(tx);
+            this.addEdge({
                 id: block.id + tx.id,
                 source: block.id,
                 target: tx.id,
@@ -345,34 +309,36 @@ ActivityGraph.prototype.add_block_txs = function(block) {
                 size: 1
             })
         }, this);
-    });
+    }
 }
 
-angular.module('insight.activity').factory('activityGraph',
-  function($http, $interval) {
-      return function(scope) {
-          var activityGraph = new ActivityGraph($http);
-          activityGraph.refresh();
+angular.module('cryptichain.tools').factory('activityGraph',
+  function ($socket) {
+      return function ($scope) {
+          var activityGraph = new ActivityGraph(),
+              ns = $socket('/activityGraph');
 
-          $interval(function() {
-              activityGraph.refresh();
-          }, 30000);
+          $scope.activityGraph = activityGraph;
+          $scope.nodeSelect = activityGraph.nodeSelect;
+          $scope.cameraMenu = activityGraph.cameraMenu;
+          $scope.statistics = activityGraph.statistics;
 
-          scope.activityGraph = activityGraph;
-          scope.nodeSelect = activityGraph.nodeSelect;
-          scope.cameraMenu = activityGraph.cameraMenu;
-          scope.statistics = activityGraph.statistics;
-
-          activityGraph.sigma.bind('clickNode', function(event) {
-              scope.$apply(function() {
+          activityGraph.sigma.bind('clickNode', function (event) {
+              $scope.$apply(function () {
                   activityGraph.nodeSelect.add(event);
               });
           });
 
-          activityGraph.sigma.bind('clickStage doubleClickStage', function(event) {
-              scope.$apply(function() {
+          activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
+              $scope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
               });
+          });
+
+          ns.on('data', function (res) { activityGraph.refresh(res.block); });
+
+          $scope.$on('$destroy', function (event) {
+              ns.removeAllListeners();
           });
 
           return activityGraph;

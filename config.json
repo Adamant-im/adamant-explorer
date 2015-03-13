@@ -2,7 +2,7 @@
     "configuration" : {
         "development": {
             "host": "0.0.0.0",
-            "port": 8080
+            "port": 8040
         },
         "production": {
             "host": "0.0.0.0",
@@ -12,6 +12,10 @@
             "host" : "127.0.0.1",
             "port" : 6040
         },
+        "freegeoip" : {
+            "host" : "127.0.0.1",
+            "port" : 8080
+        },
         "redis" : {
             "host" : "127.0.0.1",
             "port" : 6379,
@@ -20,6 +24,9 @@
         "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
-        "updateBterInterval" : 900000
+        "enableExchange" : true,
+        "updateExchangeInterval" : 900000,
+        "btcusdExchange" : "bitfinex",
+        "xcrbtcExchange" : "poloniex"
     }
 }

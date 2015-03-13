@@ -16,7 +16,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr data-ng-repeat="address in topAccounts">
+            <tr data-ng-repeat="address in topAccounts track by address.address">
               <td>{{$index + 1}}</td>
               <td class="text-right hidden-xs">{{address.balance | xcr}} XCR</td>
               <td class="text-right hidden-xs">{{address.usd | fiat}} USD</td>
@@ -29,9 +29,5 @@
         <qrcode size="160" data="{{address.addrStr}}"></qrcode>
       </div>
     </div>
-  </div>
-  <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
-    <h2>Transactions</h2>
-    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
   </div>
 </section>

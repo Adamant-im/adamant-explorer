@@ -1,5 +1,5 @@
 <div class="container">
-  <div data-ng-controller="HeaderController">
+  <div data-ng-controller="HeaderController" id="header" role="navigation">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-ng-click="$root.isCollapsed = !$root.isCollapsed">
         <span class="sr-only">Toggle navigation</span>
@@ -7,34 +7,35 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="insight navbar-brand" href="/"><img src="/img/logo.png" alt="Crypti"></a>
+      <a class="navbar-brand" href="/"><div class="logo" title="Crypti"></div></a>
     </div>
     <div class="navbar-collapse collapse" collapse="$root.isCollapsed">
-      <ul class="nav navbar-nav">
-        <li data-ng-repeat="item in menu" ui-route="/{{item.link}}" data-ng-class="{active: $uiRoute}">
-          <a href="/{{item.link}}">{{item.title}}</a>
-        </li>
-      </ul>
       <form id="search-form" data-ng-controller="SearchController" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="search()">
         <div class="form-group" data-ng-class="{'has-error': badQuery}">
           <input id="search" type="text" class="form-control" data-ng-model="q" data-ng-class="{'loading': loading}" placeholder="Search for block, transaction or address" data-ng-submit="search()">
         </div>
         <div class="no_matching text-danger" data-ng-show="badQuery">No matching records found!</div>
       </form>
+      <div class="status" data-if-show="totalBlocks">
+        <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
+        <span class="fee">&middot; <strong>Fee: </strong> {{fee}}%</span>
+        <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcr}}</span>
+        <span class="xcr-usd">&middot; <strong>XCR/USD: </strong> {{usd}}</span>
+      </div>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <div class="status">
-            <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
-            <span class="fee">&middot; <strong>Fee percent: </strong> {{fee}}%</span>
-            <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcr}}</span>
-            <span class="xcr-usd">&middot; <strong>XCR/USD: </strong> {{usd}}</span>
-          </div>
-        </li>
-        <li>
-          <a href="/activityGraph">Activity graph</a>
-        </li>
-        <li>
           <a href="/topAccounts">Top accounts</a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="/activityGraph">Activity graph</a>
+            </li>
+            <li>
+              <a href="/networkMonitor">Network monitor</a>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>

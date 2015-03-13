@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.system').controller('FooterController',
+angular.module('cryptichain.system').controller('FooterController',
   function($scope) {
 
   });

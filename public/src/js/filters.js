@@ -1,26 +1,42 @@
 'use strict';
 
-angular.module('insight')
-  .filter('startFrom', function() {
-      return function(input, start) {
+angular.module('cryptichain')
+  .filter('startFrom', function () {
+      return function (input, start) {
           start = +start;
           return input.slice(start);
       }
   })
-  .filter('split', function() {
-      return function(input, delimiter) {
+  .filter('split', function () {
+      return function (input, delimiter) {
           var delimiter = delimiter || ',';
           return input.split(delimiter);
       }
   })
-  .filter('timestamp', function() {
-      return function (timestamp) {
+  .filter('epochStamp', function () {
+      return function (d) {
           var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
           var epochTime = parseInt(epochDate.getTime() / 1000);
 
-          timestamp = epochTime + timestamp;
+          return new Date((epochTime + d) * 1000);
+      }
+  })
+  .filter('timeAgo', function (epochStampFilter) {
+      return function (timestamp) {
+          return moment(epochStampFilter(timestamp)).fromNow();
+      }
+  })
+  .filter('timeDistance', function (epochStampFilter) {
+      return function (a, b) {
+          var a = epochStampFilter(a);
+          var d = (a < b) ? (b - a) : (b + a);
 
-          var d = new Date(timestamp * 1000);
+          return moment.duration(d).humanize();
+      }
+  })
+  .filter('timestamp', function (epochStampFilter) {
+      return function (timestamp) {
+          var d     = epochStampFilter(timestamp);
           var month = d.getMonth() + 1;
 
           if (month < 10) {
@@ -52,13 +68,13 @@ angular.module('insight')
           return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
       }
   })
-  .filter('fiat', function() {
-      return function(amount) {
+  .filter('fiat', function () {
+      return function (amount) {
           return (parseInt(amount) / 100000000).toFixed(2);
       }
   })
-  .filter('xcr', function() {
-      return function(amount) {
+  .filter('xcr', function () {
+      return function (amount) {
           if (isNaN(amount)) {
               return amount;
           } else {

@@ -4,15 +4,12 @@ var express = require('express'),
     production = config.production,
     routes = require("./api"),
     path = require('path'),
-    topAccounts = require('./utils').topAccounts,
-    time = require('./utils').time,
     redis = require("redis"),
     client = redis.createClient(
         config.redis.port,
         config.redis.host
     ),
-    cache = require('./cache.js'),
-    bter = require('./utils').bter,
+    cache = require('./cache.js')
     async = require('async');
 
 if (config.redis.password) {
@@ -24,42 +21,35 @@ if (config.redis.password) {
     });
 }
 
-var app = express();
-app.bterXcr = "~";
+var utils = require('./utils'),
+    time = utils.time,
+    topAccounts = utils.topAccounts;
 
+var app = express();
+app.exchange = new utils.exchange(config),
 
 app.configure(function () {
+    app.set('version', '0.3');
+
     app.set('strict routing', true);
 
-
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
+    app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
+
     app.use(function (req, res, next) {
         req.crypti = app.get("crypti address");
         return next();
     });
-
 
     app.use(function (req, res, next) {
         req.time = time;
         return next();
     });
 
-    app.use(function (req, res, next) {
-        req.fixedPoint = config.fixedPoint;
-        next();
-    });
+    app.set("fixed point", config.fixedPoint);
 
     app.use(function (req, res, next) {
         req.redis = client;
-        return next();
-    });
-
-    app.use(function (req, res, next) {
-        req.convertXCR = function (amount) {
-            return "~";
-            //return bter.convertXCRTOUSD(amount, app.bterXcr, app.bterBtc).toFixed(3);
-        }
-
         return next();
     });
 
@@ -72,29 +62,6 @@ app.configure(function () {
             }
         });
     }, config.updateTopAccountsInterval);
-
-    /*setInterval(function () {
-        bter.getXCRBTC(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/XCR failed...");
-                console.log(err);
-            } else {
-                app.bterXcr = result;
-            }
-        });
-
-        bter.getBTCUSD(function (err, result) {
-            bter.getBTCUSD(function (err, result) {
-                if (err) {
-                    console.log("Loading BTC/USD failed...");
-                    console.log(err);
-                } else {
-                    app.bterBtc = result;
-                }
-            });
-        });
-    }, config.updateBterInterval);*/
-
 
     app.use(express.logger());
     app.use(express.static(path.join(__dirname, "public")));
@@ -152,7 +119,6 @@ routes(app);
 
 console.log("Routes loaded");
 
-
 app.use(function (req, res, next) {
     console.log(req.originalUrl.split('/')[1]);
 
@@ -207,38 +173,17 @@ async.parallel([
             }
         });
     },
-    /*function (cb) {
-        console.log("Loading BTC/USD curs from bter...");
-        bter.getBTCUSD(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/USD failed...");
-                cb(err);
-            } else {
-                app.bterBtc = result;
-                console.log("BTC/USD loaded...");
-                cb();
-            }
-        });
-    },
-    function (cb) {
-        console.log("Loading XCR/BTC curs from bter...");
-        bter.getXCRBTC(function (err, result) {
-            if (err) {
-                console.log("Loading BTC/XCR failed...");
-                cb(err);
-            } else {
-                app.bterXcr = result;
-                console.log("BTC/XCR loaded...");
-                cb();
-            }
-        });
-    }*/
+    function (cb) { app.exchange.loadBTCUSD(cb) },
+    function (cb) { app.exchange.loadXCRBTC(cb) }
 ], function (err) {
-    app.listen(app.get("port"), app.get("host"), function (err) {
+    var server = app.listen(app.get("port"), app.get("host"), function (err) {
         if (err) {
             console.log(err);
         } else {
             console.log("Crypti started at " + app.get("host") + ":" + app.get("port"));
+
+            var io = require("socket.io").listen(server);
+            require("./sockets")(app, io);
         }
     });
 });

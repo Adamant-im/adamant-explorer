@@ -2,7 +2,7 @@
 
 var ZeroClipboard = window.ZeroClipboard;
 
-angular.module('insight')
+angular.module('cryptichain')
   .directive('scroll', function ($window) {
       return function(scope, element, attrs) {
           angular.element($window).bind('scroll', function() {
@@ -70,6 +70,17 @@ angular.module('insight')
               clip.on('noFlash wrongflash', function() {
                   return elm.remove();
               });
+          }
+      };
+  })
+  .directive('osIcon', function() {
+      return {
+          restric: 'A',
+          replace: true,
+          template: '<img class="os-icon">',
+          link: function(scope, elm, attr) {
+              elm[0].alt = elm[0].title = attr.os;
+              elm[0].src = '/img/os/'.concat(attr.brand, '.png');
           }
       };
   });

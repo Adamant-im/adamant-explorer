@@ -1,6 +1,6 @@
 {
-    "name": "cryptiblockchain",
-    "version": "0.2.1",
+    "name": "Cryptichain",
+    "version": "0.3.0",
     "description": "Crypti Blockchain Explorer",
     "main": "app.js",
     "scripts": {
@@ -12,11 +12,10 @@
         "async": "^0.9.0",
         "express": "^3.17.1",
         "hiredis": "^0.1.17",
-        "hyperquest": "^1.0.1",
         "moment": "^2.8.3",
-        "nonce": "^1.0.3",
         "redis": "^0.12.1",
         "request": "^2.42.0",
+        "socket.io": "~1.3.4",
         "underscore": "^1.7.0"
     },
     "devDependencies": {

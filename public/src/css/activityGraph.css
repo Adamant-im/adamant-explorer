@@ -4,7 +4,7 @@
   position: relative;
   margin-top: 12px;
   margin-bottom: 12px;
-  border: 1px solid #373D42;
+  border: 1px solid #343844;
 }
 
 #sigma-canvas div.hud {
@@ -18,7 +18,7 @@
   top: 0px;
   right: 0px;
   text-align: center;
-  background-color: #373D42;
+  background-color: #343844;
   opacity: 0.9;
 }
 

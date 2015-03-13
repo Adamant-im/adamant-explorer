@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insight.transactions').controller('transactionsController',
+angular.module('cryptichain.transactions').controller('transactionsController',
   function($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getTransaction = function () {
           $http.get("/api/getTransaction", {
