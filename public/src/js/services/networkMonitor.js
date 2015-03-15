@@ -136,6 +136,11 @@ var NetworkMap = function () {
         for (var i = 0; i < peers.connected.length; i++) {
             var p = peers.connected[i];
 
+            if (!validLocation(p.location)) {
+                console.warn('Invalid geo-location data received for:' + p.dottedQuad);
+                continue;
+            }
+
             if (!_.has(this.markers, p.dottedQuad)) {
                 this.cluster.addLayer(
                     this.markers[p.dottedQuad] = L.marker(
@@ -161,6 +166,14 @@ var NetworkMap = function () {
                 delete this.markers[ip];
             }
         }
+    }
+
+    // Private
+
+    var validLocation = function (location) {
+        return location
+            && angular.isNumber(location.latitude)
+            && angular.isNumber(location.longitude);
     }
 }
 
