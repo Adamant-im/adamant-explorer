@@ -24,7 +24,6 @@ module.exports = function (app) {
 
     app.get('/api/statistics/getPeers', function (req, res) {
         new api.statistics(app).getPeers(
-            req.query.address,
             function (data) { res.json(data); },
             function (data) { res.json(data); }
         );
