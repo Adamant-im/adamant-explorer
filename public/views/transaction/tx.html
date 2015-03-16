@@ -8,27 +8,14 @@
 </div>
 <div class="row line-mid">
   <div class="col-md-5">
-    <div class="row" data-ng-if="!tx.isCoinBase">
-
-      <!-- <<< Simple view -->
-      <div data-ng-if="!itemsExpanded" data-ng-init="currentInNoExpanded=0; sizeInNoExpanded=5">
-        <div class="panel panel-default">
-          <div class="panel-body transaction-vin-vout">
-            <div class="pull-right btc-value" data-ng-class="{'text-danger': $root.currentAddr == tx.senderId}">{{tx.amount | xcr}} XCR</div>
-            <div class="ellipsis">
-              <span class="text-muted" title="Current XCR Address" data-ng-show="tx.senderId == $root.currentAddr">{{tx.senderId}}</span>
-              <a href="/address/{{tx.senderId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.senderId}}</a>
-            </div>
-            <div data-ng-show="vin.unconfirmedInput" class="text-danger"> <span class="glyphicon glyphicon-warning-sign"></span> (Input unconfirmed)</div>
-            <div data-ng-show="vin.dbError" class="text-danger"> <span class="glyphicon glyphicon-warning-sign"></span> Incoherence in levelDB detected: {{vin.dbError}}</div>
-            <div data-ng-show="vin.doubleSpentTxID" class="text-danger"> <span class="glyphicon glyphicon-warning-sign"></span> Double spent attempt detected. From tx:
-              <a href="/tx/{{vin.doubleSpentTxID}}">{{vin.doubleSpentTxID}},{{vin.doubleSpentIndex}}</a>
-            </div>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="pull-right" data-ng-class="{'text-danger': $root.currentAddr == tx.senderId}">{{tx.amount | xcr}} XCR</div>
+          <div class="ellipsis">
+            <span class="text-muted" data-ng-show="tx.senderId == $root.currentAddr">{{tx.senderId}}</span>
+            <a href="/address/{{tx.senderId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.senderId}}</a>
           </div>
-        </div>
-        <div class="showmore_collapse text-left" data-ng-show="tx.vinSimple.length > 5" data-ng-class="{ 'hidden': itemsExpanded}">
-          <button type="button" class="btn btn-info btn-sm" ng-hide="sizeInNoExpanded != tx.vinSimple.length" ng-click="currentInNoExpanded=0; sizeInNoExpanded=5"><i class="glyphicon glyphicon-chevron-up"></i> Show less</button>
-          <button type="button" class="btn btn-info btn-sm" ng-hide="currentInNoExpanded >= tx.vinSimple.length/sizeInNoExpanded - 1" ng-click="currentInNoExpanded=0; sizeInNoExpanded=tx.vinSimple.length"><i class="glyphicon glyphicon-chevron-down"></i> Show more</button>
         </div>
       </div>
     </div>
@@ -43,87 +30,25 @@
   </div>
   <div class="col-md-6">
     <div class="row">
-      <!-- Simple view >>> -->
-      <div data-ng-if="!itemsExpanded" data-ng-init="currentOutNoExpanded=0; sizeOutNoExpanded=5">
-        <div>
-          <div class="transaction-vin-vout panel panel-default">
-            <div class="panel-body">
-              <div class="pull-right btc-value" data-ng-class="{'text-success': $root.currentAddr == tx.recipientId}">{{tx.amount | xcr}} XCR</div>
-
-              <div class="ellipsis" ng-show="tx.type == 0 && tx.subtype == 0">
-                <a href="/address/{{tx.recipientId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.recipientId}}</a>
-              </div>
-              <div class="ellipsis" ng-show="tx.type == 1 && tx.subtype == 0">
-                  {{tx.recipientId}}
-              </div>
-              <div class="ellipsis" ng-show="tx.type == 2 && tx.subtype == 0">
-                  Second signature creation
-              </div>
-              <div class="ellipsis" ng-show="tx.type == 3 && tx.subtype == 0">
-                  Company creation
-              </div>
+      <div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="pull-right" data-ng-class="{'text-success': $root.currentAddr == tx.recipientId}">{{tx.amount | xcr}} XCR</div>
+            <div class="ellipsis" ng-show="tx.type == 0 && tx.subtype == 0">
+              <a href="/address/{{tx.recipientId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.recipientId}}</a>
+            </div>
+            <div class="ellipsis" ng-show="tx.type == 1 && tx.subtype == 0">
+                {{tx.recipientId}}
+            </div>
+            <div class="ellipsis" ng-show="tx.type == 2 && tx.subtype == 0">
+                Second signature creation
+            </div>
+            <div class="ellipsis" ng-show="tx.type == 3 && tx.subtype == 0">
+                Company creation
             </div>
           </div>
-        </div>
-        <div class="showmore_collapse text-left" data-ng-show="tx.voutSimple.length > 5" data-ng-class="{ 'hidden': itemsExpanded}">
-          <button type="button" class="btn btn-info btn-sm" ng-hide="sizeOutNoExpanded != tx.voutSimple.length" ng-click="currentOutNoExpanded=0; sizeOutNoExpanded=5"><i class="glyphicon glyphicon-chevron-up"></i> Show less</button>
-          <button type="button" class="btn btn-info btn-sm" ng-hide="currentOutNoExpanded >= tx.voutSimple.length/sizeOutNoExpanded - 1" ng-click="currentOutNoExpanded=0; sizeOutNoExpanded=tx.voutSimple.length"><i class="glyphicon glyphicon-chevron-down"></i> Show more</button>
-        </div>
-      </div>
-
-      <!-- Full view >>> -->
-      <div data-ng-if="itemsExpanded" data-ng-init="currentOutExpanded=0; sizeOutExpanded=(from_vout) ? tx.vout.length : 5; fromVoutCollapsed=(from_vout)">
-        <div data-ng-repeat="vout in tx.vout| startFrom:currentOutExpanded*sizeOutExpanded | limitTo:sizeOutExpanded" data-ng-if="fromVoutCollapsed ? v_index == vout.n : 1">
-          <div class="panel panel-default transaction-vin-vout">
-            <div class="panel-body">
-              <div class="pull-right btc-value">
-                <span>{{$root.currency.getConvertion(vout.value) || vout.value + ' BTC'}}
-                  <span class="text-success" data-ng-show="!vout.spentTxId" tooltip="Output is unspent" tooltip-placement="left">(U)</span>
-                  <a class="glyphicon glyphicon-chevron-right" data-ng-show="vout.spentTxId" href="/tx/{{vout.spentTxId}}/</{{vout.spentIndex}}" title="Spent at: {{vout.spentTxId}},{{vout.spentIndex}}"></a>
-                </span>
-              </div>
-              <div class="ellipsis">
-                <a href="/address/{{address}}" data-ng-repeat="address in vout.scriptPubKey.addresses">{{address}}</a>
-              </div>
-            </div>
-          </div>
-          <div style="padding-left: 0.7em; padding-bottom: 2em; word-wrap:break-word" data-ng-class="{true: 'v_highlight', false: ''}[from_vout == true && v_index == vout.n]">
-              <p class="small">
-                <strong>Type</strong>
-                <span class="text-muted">{{vout.scriptPubKey.type}}</span>
-              </p>
-              <div class="small">
-                <p><strong>scriptPubKey</strong></p>
-                <span class="col-md-11 text-muted ellipsis">{{vout.scriptPubKey.asm}}</span>
-                <span class="btn-copy col-md-1" clip-copy="vout.scriptPubKey.asm"></span>
-              </div>
-          </div>
-        </div>
-        <div class="text-right">
-          <button type="button" class="btn btn-default btn-sm" data-ng-show="(from_vout) && tx.vout.length > 1" data-ng-disabled="fromVoutCollapsed" data-ng-click="currentOutExpanded=0; sizeOutExpanded=tx.vout.length;fromVoutCollapsed=1">Show output #{{ v_index }}</button>
-          <button type="button" class="btn btn-default btn-sm" data-ng-show="(from_vout) && tx.vout.length > 1" data-ng-disabled="!fromVoutCollapsed" data-ng-click="currentOutExpanded=0; sizeOutExpanded=tx.vout.length;fromVoutCollapsed=0">Show all</button>
-        </div>
-        <div class="showmore_collapse text-left" data-ng-show="tx.vout.length > 5 && !fromVoutCollapsed" data-ng-class="{ 'hidden': !itemsExpanded}">
-          <button type="button" class="btn btn-info btn-sm" ng-hide="sizeOutExpanded != tx.vout.length" ng-click="currentOutExpanded=0; sizeOutExpanded=5"><i class="glyphicon glyphicon-chevron-up"></i>Show less</button>
-          <button type="button" class="btn btn-info btn-sm" ng-hide="currentOutExpanded >= tx.vout.length/sizeOutExpanded - 1" ng-click="currentOutExpanded=0; sizeOutExpanded=tx.vout.length"><i class="glyphicon glyphicon-chevron-down"></i> Show more</button>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="well well-sm bgwhite ellipsis" data-ng-if="itemsExpanded && !block.id && tx.blockId">
-  <strong>Included in Block</strong> <a class="text-muted" href="/block/{{tx.blockhash}}">{{tx.blockhash}}</a>
-  <span class="btn-copy" clip-copy="tx.blockhash"></span>
-</div>
-
-<div class="line-top row" data-ng-hide="!tx">
-  <div class="col-xs-12 col-sm-4 col-md-4">
-    <span data-ng-show="!tx.isCoinBase &&  !isNaN(parseFloat(tx.fee))" class="txvalues txvalues-default">Fees: {{tx.fee | xcr}} XCR</span>
-  </div>
-  <div class="col-xs-12 col-sm-8 col-md-8 text-right">
-    <span data-ng-show="block.confirmations > 0 || tx.confirmations > 0" class="txvalues txvalues-success">{{block.confirmations || tx.confirmations}} Confirmations</span>
-    <span data-ng-show="!block.confirmations && !tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
-    <span class="txvalues txvalues-primary">{{tx.amount | xcr}} XCR</span>
   </div>
 </div>
