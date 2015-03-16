@@ -37,15 +37,9 @@
             <div class="ellipsis" ng-show="tx.type == 0 && tx.subtype == 0">
               <a href="/address/{{tx.recipientId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.recipientId}}</a>
             </div>
-            <div class="ellipsis" ng-show="tx.type == 1 && tx.subtype == 0">
-                {{tx.recipientId}}
-            </div>
-            <div class="ellipsis" ng-show="tx.type == 2 && tx.subtype == 0">
-                Second signature creation
-            </div>
-            <div class="ellipsis" ng-show="tx.type == 3 && tx.subtype == 0">
-                Company creation
-            </div>
+            <div class="ellipsis" ng-show="tx.type == 1 && tx.subtype == 0">{{tx.recipientId}}</div>
+            <div class="ellipsis" ng-show="tx.type == 2 && tx.subtype == 0">Second signature creation</div>
+            <div class="ellipsis" ng-show="tx.type == 3 && tx.subtype == 0">Company creation</div>
           </div>
         </div>
       </div>
