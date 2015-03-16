@@ -39,11 +39,15 @@
         <tbody>
           <tr>
             <td><strong>Sender</strong></td>
-            <td class="text-muted text-right"><a href="/address/{{tx.senderId}}">{{tx.senderId}}</a></td>
+            <td class="text-muted text-right">
+              <a href="/address/{{tx.senderId}}">{{tx.senderId}}</a>
+            </td>
           </tr>
           <tr>
             <td><strong>Recipient</strong></td>
-            <td class="text-muted text-right"><a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a></td>
+            <td class="text-muted text-right">
+              <a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a>
+            </td>
           </tr>
           <tr>
             <td><strong>Confirmations</strong></td>
@@ -67,7 +71,9 @@
           </tr>
           <tr>
             <td><strong>Block </strong></td>
-            <td data-ng-show="tx.blockId" class="text-muted text-right"> <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a></td>
+            <td data-ng-show="tx.blockId" class="text-muted text-right">
+              <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
+            </td>
             <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
           </tr>
         </tbody>
