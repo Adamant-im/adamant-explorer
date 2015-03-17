@@ -3,7 +3,7 @@
 angular.module('cryptichain.socket').factory('$socket',
   function ($location, $rootScope) {
     return function(namespace) {
-          var socket = io($location.host() + ':' + $location.port() + namespace);
+          var socket = io($location.host() + ':' + $location.port() + namespace, { 'forceNew': true });
 
           return {
               on: function (eventName, callback) {
