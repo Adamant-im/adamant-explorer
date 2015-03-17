@@ -2,8 +2,8 @@
   <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="address.address">
     <div class="container" data-ng-hide="!address.balance">
       <div class="col-md-8 text-left">
-          <h3>Address</h3> {{address.address}}
-          <span class="btn-copy" clip-copy="address.address"></span>
+        <h3>Address</h3> {{address.address}}
+        <span class="btn-copy" clip-copy="address.address"></span>
       </div>
       <div class="col-md-4">
         <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | xcr}} XCR</span>
@@ -36,8 +36,8 @@
             <td class="ellipsis text-right">{{address.balance | xcr}} XCR</td>
           </tr>
           <tr>
-              <td><strong>USD equivalent</strong></td>
-              <td class="ellipsis text-right">{{address.usd | fiat}} USD</td>
+            <td><strong>USD equivalent</strong></td>
+            <td class="ellipsis text-right">{{address.usd | fiat}} USD</td>
           </tr>
           </tbody>
         </table>

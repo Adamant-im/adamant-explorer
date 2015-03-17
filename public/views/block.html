@@ -20,8 +20,8 @@
             <td class="text-right text-muted">{{block.numberOfTransactions}}</td>
           </tr>
           <tr>
-              <td><strong>Confirmations</strong></td>
-              <td class="text-right text-muted">{{block.confirmations}}</td>
+            <td><strong>Confirmations</strong></td>
+            <td class="text-right text-muted">{{block.confirmations}}</td>
           </tr>
           <tr>
             <td><strong>Height</strong></td>
@@ -34,28 +34,28 @@
             <td class="text-right text-muted">{{block.totalFee}} XCR</td>
           </tr>
           <tr>
-              <td><strong>Total Amount</strong></td>
-              <td class="text-right text-muted">{{block.totalAmount}} XCR</td>
+            <td><strong>Total Amount</strong></td>
+            <td class="text-right text-muted">{{block.totalAmount}} XCR</td>
           </tr>
           <tr>
-              <td><strong>USD equivalent</strong></td>
-              <td class="text-right text-muted">{{ block.usd }} USD</td>
+            <td><strong>USD equivalent</strong></td>
+            <td class="text-right text-muted">{{ block.usd }} USD</td>
           </tr>
           <tr>
             <td><strong>Timestamp</strong></td>
             <td class="text-right text-muted">{{block.timestamp | timestamp}}</td>
           </tr>
           <tr data-ng-show="block.nextBlock">
-              <td><strong>Next block</strong></td>
-              <td class="text-right text-muted">
-                  <a href="/block/{{ block.nextBlock }}">{{ block.nextBlock }}</a>
-              </td>
+            <td><strong>Next block</strong></td>
+            <td class="text-right text-muted">
+              <a href="/block/{{ block.nextBlock }}">{{ block.nextBlock }}</a>
+            </td>
           </tr>
           <tr data-ng-show="block.previousBlock">
-              <td><strong>Previous block</strong></td>
-              <td class="text-right text-muted">
-                  <a href="/block/{{ block.previousBlock }}">{{ block.previousBlock }}</a>
-              </td>
+            <td><strong>Previous block</strong></td>
+            <td class="text-right text-muted">
+              <a href="/block/{{ block.previousBlock }}">{{ block.previousBlock }}</a>
+            </td>
           </tr>
           <tr>
             <td><strong>Generator</strong></td>
