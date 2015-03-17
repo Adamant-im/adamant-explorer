@@ -7,8 +7,8 @@ module.exports = function (app, io) {
     var activityGraph  = require('./activityGraph'),
         networkMonitor = require('./networkMonitor');
 
-    var connectionHandler = function (name, socket, object) {
-        socket.on('connection', function (socket) {
+    var connectionHandler = function (name, ns, object) {
+        ns.on('connection', function (socket) {
             if (clients() <= 1) {
                 object.onInit();
                 console.log(name, 'First connection');
@@ -27,7 +27,7 @@ module.exports = function (app, io) {
         // Private
 
         var clients = function () {
-            return Object.keys(socket.connected).length;
+            return Object.keys(ns.connected).length;
         }
     }
 
