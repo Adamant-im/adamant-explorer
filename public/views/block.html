@@ -1,5 +1,5 @@
 <section data-ng-controller="BlocksController" data-ng-init="findOne()">
-  <h1>Block #{{block.id}}</h1>
+  <h1>Block <small>{{block.id}}</small></h1>
   <div class="text-muted" data-ng-if="!block.height">
     <span>Loading Block <span class="loader-gif"></span>
   </div>
