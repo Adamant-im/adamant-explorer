@@ -208,7 +208,7 @@ angular.module('cryptichain.tools').factory('networkMonitor',
           });
 
           $scope.$on('$locationChangeStart', function (event, next, current) {
-              ns.emit('locationChange');
+              ns.emit('forceDisconnect');
           });
 
           return networkMonitor;

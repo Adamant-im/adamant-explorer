@@ -342,7 +342,7 @@ angular.module('cryptichain.tools').factory('activityGraph',
           });
 
           $scope.$on('$locationChangeStart', function (event, next, current) {
-              ns.emit('locationChange');
+              ns.emit('forceDisconnect');
           });
 
           return activityGraph;

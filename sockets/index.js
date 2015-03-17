@@ -22,7 +22,7 @@ module.exports = function (app, io) {
                     console.log(name, 'Closed connection');
                 }
             });
-            socket.on('locationChange', function () {
+            socket.on('forceDisconnect', function () {
                 socket.disconnect();
             });
         });
