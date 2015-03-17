@@ -8,26 +8,27 @@ module.exports = function (app, io) {
         networkMonitor = require('./networkMonitor');
 
     var connectionHandler = function (name, socket, object) {
-        var clients = 0;
         socket.on('connection', function (socket) {
-            if (clients <= 0) {
-                clients = 0;
+            if (clients() <= 1) {
                 object.onInit();
                 console.log(name, 'First connection');
             } else {
                 object.onConnect();
                 console.log(name, 'New connection');
             }
-            clients++;
             socket.on('disconnect', function () {
-                clients--;
-                if (clients <= 0) {
-                    clients = 0;
+                if (clients() <= 0) {
                     object.onDisconnect();
                     console.log(name, 'Closed connection');
                 }
             });
         });
+
+        // Private
+
+        var clients = function () {
+            return Object.keys(socket.connected).length;
+        }
     }
 
     new activityGraph(app, connectionHandler, ns.activityGraph);
