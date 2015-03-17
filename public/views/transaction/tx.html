@@ -1,8 +1,14 @@
 <div class="line-bot row" data-ng-hide="!tx">
-  <div class="col-xs-12 col-md-8">
+  <div class="col-xs-7">
     <div class="ellipsis">
       <a class="txid" href="/tx/{{tx.id}}">{{tx.id}}</a>
       <span class="btn-copy" clip-copy="tx.id"></span>
+    </div>
+  </div>
+  <div class="col-xs-5">
+    <div class="ellipsis text-right">
+      <span class="text-muted glyphicon glyphicon-time"></span>
+      <span class="text-muted">{{tx.timestamp | timeAgo }}</span>
     </div>
   </div>
 </div>
