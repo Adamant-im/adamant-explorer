@@ -207,6 +207,10 @@ angular.module('cryptichain.tools').factory('networkMonitor',
               ns.removeAllListeners();
           });
 
+          $scope.$on('$locationChangeStart', function (event, next, current) {
+              ns.emit('locationChange');
+          });
+
           return networkMonitor;
       }
   });

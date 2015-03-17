@@ -341,6 +341,10 @@ angular.module('cryptichain.tools').factory('activityGraph',
               ns.removeAllListeners();
           });
 
+          $scope.$on('$locationChangeStart', function (event, next, current) {
+              ns.emit('locationChange');
+          });
+
           return activityGraph;
       }
   });
