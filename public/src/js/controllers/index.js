@@ -4,7 +4,7 @@ var TRANSACTION_DISPLAYED = 20;
 var BLOCKS_DISPLAYED = 20;
 
 angular.module('cryptichain.system').controller('IndexController',
-  function($scope, $http, $interval) {
+  function ($scope, $http, $interval) {
       $scope.getLastBlocks = function () {
           $http.get("/api/lastBlocks").then(function (resp) {
               if (resp.data.success) {

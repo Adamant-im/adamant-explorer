@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.transactions').controller('transactionsController',
-  function($scope, $rootScope, $routeParams, $location, $http) {
+  function ($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getTransaction = function () {
           $http.get("/api/getTransaction", {
               params : {

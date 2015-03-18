@@ -1,7 +1,7 @@
 'use strict';
 
 // Setting up routes
-angular.module('cryptichain').config(function($routeProvider) {
+angular.module('cryptichain').config(function ($routeProvider) {
     $routeProvider.
     when('/block/:blockId', {
         templateUrl: '/views/block.html',
@@ -51,17 +51,17 @@ angular.module('cryptichain').config(function($routeProvider) {
 
 // Setting HTML5 location mode
 angular.module('cryptichain')
-  .config(function($locationProvider) {
+  .config(function ($locationProvider) {
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
   })
-  .run(function($rootScope, $route, $location, $routeParams, $anchorScroll, ngProgress, gettextCatalog) {
+  .run(function ($rootScope, $route, $location, $routeParams, $anchorScroll, ngProgress, gettextCatalog) {
       gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$routeChangeStart', function() {
+      $rootScope.$on('$routeChangeStart', function () {
           ngProgress.start();
       });
 
-      $rootScope.$on('$routeChangeSuccess', function() {
+      $rootScope.$on('$routeChangeSuccess', function () {
           ngProgress.complete();
 
           // Change page title, based on route information

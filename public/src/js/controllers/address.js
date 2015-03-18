@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.address').controller('AddressController',
-  function($scope, $rootScope, $routeParams, $location, $http) {
+  function ($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getAddress = function () {
           $http.get("/api/getAccount", {
               params : {

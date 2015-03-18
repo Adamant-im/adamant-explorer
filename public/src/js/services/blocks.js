@@ -2,7 +2,7 @@
 
 angular.module('cryptichain.blocks')
   .factory('Block',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/block/:blockHash', {
             blockHash: '@blockHash'
         }, {
@@ -22,10 +22,10 @@ angular.module('cryptichain.blocks')
         });
   })
   .factory('Blocks',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/blocks');
     })
   .factory('BlockByHeight',
-    function($resource) {
+    function ($resource) {
         return $resource('/api/block-index/:blockHeight');
     });

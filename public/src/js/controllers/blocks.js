@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.blocks').controller('BlocksController',
-  function($scope, $rootScope, $routeParams, $location, $http, $interval) {
+  function ($scope, $rootScope, $routeParams, $location, $http, $interval) {
       $scope.getLastBlocks = function (n) {
           var offset = 0;
           if (n) {

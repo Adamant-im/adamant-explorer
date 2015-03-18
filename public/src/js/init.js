@@ -1,7 +1,7 @@
 'use strict';
 
 angular.element(document).ready(
-  function() {
+  function () {
       // Init the app
       // angular.bootstrap(document, ['cryptichain']);
   });

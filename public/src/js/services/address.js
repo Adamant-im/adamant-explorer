@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.address').factory('Address',
-  function($resource) {
+  function ($resource) {
       return $resource('/api/addr/:addrStr/?noTxList=1', {
           addrStr: '@addStr'
       }, {
