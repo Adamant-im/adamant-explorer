@@ -35,6 +35,17 @@ module.exports = function (config) {
             ]
         },
         XCRBTC : {
+            bter : [
+                "Bter",
+                "http://data.bter.com/api/1/ticker/xcr_btc",
+                function (res, cb) {
+                    if (res.message) {
+                        return cb(res.message);
+                    } else {
+                        return cb(null, res.last);
+                    }
+                }
+            ],
             cryptsy : [
                 "Cryptsy",
                 "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=280",
