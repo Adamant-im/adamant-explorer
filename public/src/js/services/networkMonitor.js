@@ -137,19 +137,19 @@ var NetworkMap = function () {
             var p = peers.connected[i];
 
             if (!validLocation(p.location)) {
-                console.warn('Invalid geo-location data received for:' + p.dottedQuad);
+                console.warn('Invalid geo-location data received for:' + p.ipString);
                 continue;
             }
 
-            if (!_.has(this.markers, p.dottedQuad)) {
+            if (!_.has(this.markers, p.ipString)) {
                 this.cluster.addLayer(
-                    this.markers[p.dottedQuad] = L.marker(
+                    this.markers[p.ipString] = L.marker(
                         [p.location.latitude, p.location.longitude],
-                        { title: p.dottedQuad, icon: platformIcons[p.osBrand] }
+                        { title: p.ipString, icon: platformIcons[p.osBrand] }
                     ).addTo(this.map)
                 );
             }
-            connected.push(p.dottedQuad);
+            connected.push(p.ipString);
         }
 
         this.removeDisconnected(connected);
