@@ -54,7 +54,7 @@
 </div>
 <div class="line-top row" data-ng-hide="!tx">
   <div class="col-xs-12 col-sm-4 col-md-4">
-    <span data-ng-show="!isNaN(parseFloat(tx.fee))" class="txvalues txvalues-default">Fee: {{tx.fee | xcr}} XCR</span>
+    <span class="txvalues txvalues-default">Fee: {{tx.fee | xcr}} XCR</span>
   </div>
   <div class="col-xs-12 col-sm-8 col-md-8 text-right">
     <span data-ng-show="block.confirmations > 0 || tx.confirmations > 0" class="txvalues txvalues-success">{{block.confirmations || tx.confirmations}} Confirmations</span>
