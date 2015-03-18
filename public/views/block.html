@@ -24,9 +24,7 @@
           </tr>
           <tr>
             <td><strong>Height</strong></td>
-            <td class="text-right text-muted">{{block.height}}
-              <span data-ng-show="block.isMainChain" class="text-success">(Mainchain)</span>
-            </td>
+            <td class="text-right text-muted">{{block.height}}</td>
           </tr>
           <tr>
             <td><strong>Total Fee</strong></td>
@@ -66,8 +64,8 @@
         </table>
       </div>
   </div>
-  <div data-ng-if="block.transactions.length > 0" data-ng-controller="transactionsController" data-ng-init="load('block')">
+  <div data-ng-if="block.transactions.length > 0">
     <h3>Transactions</h3>
-    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
+    <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
 </section>
