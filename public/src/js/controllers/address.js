@@ -16,12 +16,14 @@ angular.module('cryptichain.address').controller('AddressController',
 
       $scope.loadTxs = function () {
           Pager.disable();
+          $scope.loading = true;
           Pager.getTxs(0, (Pager.limit + 1),
               function (resp) { Pager.loadTxs(resp) });
       }
 
       $scope.loadMore = function () {
           Pager.disable();
+          $scope.loading = true;
           Pager.getTxs(0, 1, function (resp) {
               var changed = false;
 
@@ -79,6 +81,7 @@ angular.module('cryptichain.address').controller('AddressController',
               resp.data.transactions.splice(-1, 1);
               $scope.txs = resp.data.transactions;
               $scope.lessTxs = this.lessTxs($scope.txs.length);
+              $scope.loading = false;
           },
 
           moreTxs : function (length) {
@@ -93,6 +96,7 @@ angular.module('cryptichain.address').controller('AddressController',
                   $scope.moreTxs = false;
               }
               $scope.lessTxs = this.lessTxs($scope.txs.length);
+              $scope.loading = false;
           },
 
           nextOffset : function () {
