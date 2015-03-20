@@ -76,9 +76,17 @@ angular.module('cryptichain.address').controller('AddressController',
               });
           },
 
+          spliceTxs : function (resp) {
+              if (resp.data.transactions.length > 1) {
+                  $scope.moreTxs = this.moreTxs(resp.data.transactions.length);
+                  resp.data.transactions.splice(-1, 1);
+              } else {
+                  $scope.moreTxs = false;
+              }
+          },
+
           loadTxs : function (resp) {
-              $scope.moreTxs = this.moreTxs(resp.data.transactions.length);
-              resp.data.transactions.splice(-1, 1);
+              this.spliceTxs(resp);
               $scope.txs = resp.data.transactions;
               $scope.lessTxs = this.lessTxs($scope.txs.length);
               $scope.loading = false;
@@ -89,8 +97,7 @@ angular.module('cryptichain.address').controller('AddressController',
           },
 
           loadMore : function (resp) {
-              $scope.moreTxs = this.moreTxs(resp.data.transactions.length);
-              resp.data.transactions.splice(-1, 1);
+              this.spliceTxs(resp);
               $scope.txs = $scope.txs.concat(resp.data.transactions);
               if ($scope.txs.length + this.limit > 1000) {
                   $scope.moreTxs = false;
