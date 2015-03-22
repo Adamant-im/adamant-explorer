@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <th>Timespan</th>
-          <td>{{statistics.timespan || '&infin;'}}</td>
+          <td>{{statistics.beginning | timeSpan:statistics.end}}</td>
         </tr>
         <tr>
           <th>Accounts</th>

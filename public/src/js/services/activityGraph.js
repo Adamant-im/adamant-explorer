@@ -99,25 +99,22 @@ var ActivityGraph = function () {
         this.volume = this.txs = this.blocks = this.accounts = 0;
 
         this.refresh = function () {
-            var txs       = this.graph.nodesByType(0);
-            var blocks    = this.graph.nodesByType(1);
-            var accounts  = this.graph.nodesByType(2);
+            var txs      = this.graph.nodesByType(0);
+            var blocks   = this.graph.nodesByType(1);
+            var accounts = this.graph.nodesByType(2);
 
-            this.txs      = txs.size().value();
-            this.volume   = txsVolume(txs);
-            this.blocks   = blocks.size().value();
-            this.timespan = blocksTimespan(blocks);
-            this.accounts = accounts.size().value();
+            this.txs       = txs.size().value();
+            this.volume    = txsVolume(txs);
+            this.blocks    = blocks.size().value();
+            this.beginning = minTime(blocks);
+            this.end       = maxTime(blocks);
+            this.accounts  = accounts.size().value();
         }
 
         var txsVolume = function (chain) {
             return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
             }, 0).value() / Math.pow(10, 8);
-        }
-
-        var epochTime = function () {
-            return Date.UTC(2014, 4, 2, 0, 0, 0, 0) / 1000;
         }
 
         var minTime = function (chain) {
@@ -134,13 +131,6 @@ var ActivityGraph = function () {
                     return block.timestamp;
                 }
             }).value().timestamp;
-        }
-
-        var blocksTimespan = function (chain) {
-            var max = epochTime() + maxTime(chain) * 1000;
-            var min = epochTime() + minTime(chain) * 1000;
-
-            return moment.duration((max - min)).humanize();
         }
     }
 
