@@ -101,7 +101,6 @@ var NetworkMonitor = function ($scope) {
         this.$scope.volAmount    = volume.amount;
         this.$scope.volBeginning = volume.beginning;
         this.$scope.volEnd       = volume.end;
-        this.$scope.volNow       = moment();
     }
 }
 
