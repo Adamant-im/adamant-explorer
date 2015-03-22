@@ -15,10 +15,9 @@ angular.module('cryptichain')
   })
   .filter('epochStamp', function () {
       return function (d) {
-          var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
-          var epochTime = parseInt(epochDate.getTime() / 1000);
-
-          return new Date((epochTime + d) * 1000);
+          return new Date(
+              (((Date.UTC(2014, 4, 2, 0, 0, 0, 0) / 1000) + d) * 1000)
+          );
       }
   })
   .filter('timeAgo', function (epochStampFilter) {
