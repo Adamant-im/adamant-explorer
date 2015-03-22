@@ -27,10 +27,9 @@ angular.module('cryptichain')
   })
   .filter('timeSpan', function (epochStampFilter) {
       return function (a, b) {
-          var a = epochStampFilter(a);
-          var d = (a < b) ? (b - a) : (b + a);
-
-          return moment.duration(d).humanize();
+          return moment.duration(
+              epochStampFilter(a) - epochStampFilter(b)
+          ).humanize();
       }
   })
   .filter('timestamp', function (epochStampFilter) {
