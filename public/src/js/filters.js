@@ -26,7 +26,7 @@ angular.module('cryptichain')
           return moment(epochStampFilter(timestamp)).fromNow();
       }
   })
-  .filter('timeDistance', function (epochStampFilter) {
+  .filter('timeSpan', function (epochStampFilter) {
       return function (a, b) {
           var a = epochStampFilter(a);
           var d = (a < b) ? (b - a) : (b + a);
