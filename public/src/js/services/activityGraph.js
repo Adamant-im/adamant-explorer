@@ -117,9 +117,7 @@ var ActivityGraph = function () {
         }
 
         var epochTime = function () {
-            return parseInt(
-                new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0)
-            ).getTime() / 1000);
+            return Date.UTC(2014, 4, 2, 0, 0, 0, 0) / 1000;
         }
 
         var minTime = function (chain) {
