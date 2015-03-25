@@ -119,7 +119,8 @@ var NetworkMap = function () {
     var PlatformIcon = L.Icon.extend({
         options: {
             iconSize:   [32, 41],
-            iconAnchor: [16, 41]
+            iconAnchor: [16, 41],
+            popupAnchor: [0, -41]
         }
     });
 
@@ -145,7 +146,7 @@ var NetworkMap = function () {
                     this.markers[p.ipString] = L.marker(
                         [p.location.latitude, p.location.longitude],
                         { title: p.ipString, icon: platformIcons[p.osBrand] }
-                    ).addTo(this.map)
+                    ).addTo(this.map).bindPopup(popupContent(p))
                 );
             }
             connected.push(p.ipString);
@@ -173,6 +174,33 @@ var NetworkMap = function () {
         return location
             && angular.isNumber(location.latitude)
             && angular.isNumber(location.longitude);
+    }
+
+    var popupContent = function (p) {
+        var content = '<p class="ip">'.concat(p.ipString, '</p>');
+
+        content += '<p class="version">'
+           .concat('<span class="label">Version: </span>', p.version, '</p>');
+
+        content += '<p class="os">'
+           .concat('<span class="label">OS: </span>', p.os, '</p>');
+
+        if (p.location.city) {
+            content += '<p class="city">'
+               .concat('<span class="label">City: </span>', p.location.city, '</p>');
+        }
+
+        if (p.location.region_name) {
+            content += '<p class="region">'
+               .concat('<span class="label">Region: </span>', p.location.region_name, '</p>');
+        }
+
+        if (p.location.country_name) {
+            content += '<p class="country">'
+               .concat('<span class="label">Country: </span>', p.location.country_name, '</p>');
+        }
+
+        return content;
     }
 }
 
