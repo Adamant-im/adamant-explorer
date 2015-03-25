@@ -137,7 +137,7 @@ var NetworkMap = function () {
             var p = peers.connected[i];
 
             if (!validLocation(p.location)) {
-                console.warn('Invalid geo-location data received for:' + p.ipString);
+                console.warn('Invalid geo-location data received for:', p.ipString);
                 continue;
             }
 
