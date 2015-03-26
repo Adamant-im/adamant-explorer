@@ -245,6 +245,7 @@ ActivityGraph.prototype.addTxSender = function (tx) {
 }
 
 ActivityGraph.prototype.addTxRecipient = function (tx) {
+    if (!tx.recipientId) { return; }
     this.addAccount(tx.recipientId);
     this.addEdge({
         id: tx.id + tx.recipientId + Math.random(),
