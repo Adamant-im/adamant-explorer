@@ -77,8 +77,10 @@ angular.module('cryptichain.address').controller('AddressController',
           },
 
           spliceTxs : function (resp) {
-              if (resp.data.transactions.length > 1) {
-                  $scope.moreTxs = this.moreTxs(resp.data.transactions.length);
+              var length = resp.data.transactions.length;
+
+              if (length > 1 && length % this.limit == 1) {
+                  $scope.moreTxs = this.moreTxs(length);
                   resp.data.transactions.splice(-1, 1);
               } else {
                   $scope.moreTxs = false;
