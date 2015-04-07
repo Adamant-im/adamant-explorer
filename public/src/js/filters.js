@@ -15,10 +15,9 @@ angular.module('cryptichain')
   })
   .filter('epochStamp', function () {
       return function (d) {
-          var epochDate = new Date(Date.UTC(2014, 4, 2, 0, 0, 0, 0));
-          var epochTime = parseInt(epochDate.getTime() / 1000);
-
-          return new Date((epochTime + d) * 1000);
+          return new Date(
+              (((Date.UTC(2014, 4, 2, 0, 0, 0, 0) / 1000) + d) * 1000)
+          );
       }
   })
   .filter('timeAgo', function (epochStampFilter) {
@@ -26,12 +25,11 @@ angular.module('cryptichain')
           return moment(epochStampFilter(timestamp)).fromNow();
       }
   })
-  .filter('timeDistance', function (epochStampFilter) {
+  .filter('timeSpan', function (epochStampFilter) {
       return function (a, b) {
-          var a = epochStampFilter(a);
-          var d = (a < b) ? (b - a) : (b + a);
-
-          return moment.duration(d).humanize();
+          return moment.duration(
+              epochStampFilter(a) - epochStampFilter(b)
+          ).humanize();
       }
   })
   .filter('timestamp', function (epochStampFilter) {

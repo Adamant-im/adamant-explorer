@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.system').controller('HeaderController',
-  function($scope, $rootScope, $modal, $http, $interval) {
+  function ($scope, $rootScope, $modal, $http, $interval) {
       $scope.getHeight = function () {
           $http.get("/api/getBlocksCount").then(function (resp) {
               if (resp.data.success) {

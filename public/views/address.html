@@ -1,9 +1,9 @@
-<section data-ng-controller="AddressController" data-ng-init="findOne()">
+<section data-ng-controller="AddressController">
   <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="address.address">
     <div class="container" data-ng-hide="!address.balance">
       <div class="col-md-8 text-left">
-          <h3>Address</h3> {{address.address}}
-          <span class="btn-copy" clip-copy="address.address"></span>
+        <h3>Address</h3> {{address.address}}
+        <span class="btn-copy" clip-copy="address.address"></span>
       </div>
       <div class="col-md-4">
         <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | xcr}} XCR</span>
@@ -29,23 +29,23 @@
     <h2>Summary <small>confirmed</small></h2>
     <div class="row" data-ng-hide="!address.address">
       <div class="col-md-12">
-        <table class="table">
+        <table class="table table-responsive">
           <tbody>
           <tr>
             <td><strong>Total balance</strong></td>
             <td class="ellipsis text-right">{{address.balance | xcr}} XCR</td>
           </tr>
           <tr>
-              <td><strong>USD equivalent</strong></td>
-              <td class="ellipsis text-right">{{address.usd | fiat}} USD</td>
+            <td><strong>USD equivalent</strong></td>
+            <td class="ellipsis text-right">{{address.usd | fiat}} USD</td>
           </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <div data-ng-if="address.address" data-ng-controller="transactionsController" data-ng-init="loadTrs('address')">
+  <div data-ng-if="address.address" data-ng-controller="AddressController" data-ng-init="loadTxs()">
     <h2>Transactions</h2>
-    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
+    <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
 </section>

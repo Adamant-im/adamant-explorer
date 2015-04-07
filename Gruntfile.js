@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     // Load NPM Tasks
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             options: {
-                process: function(src, filepath) {
+                process: function (src, filepath) {
                     if (filepath.substr(filepath.length - 2) === 'js') {
                         return '// Source: ' + filepath + '\n' +
                         src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');

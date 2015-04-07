@@ -1,4 +1,4 @@
-<section data-ng-controller="transactionsController" data-ng-init="findThis()">
+<section data-ng-controller="TransactionsController">
   <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="tx.id" data-ng-init="hideSNavbar=0">
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-6 col-lg-7 text-left">
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div data-ng-if="tx.id">
-    <h1>Transaction {{tx.id}}</h1>
+    <h1>Transaction <small>{{tx.id}}</small></h1>
     <div class="progress progress-striped active" data-ng-if="!tx.id">
       <div class="progress-bar progress-bar-info" style="width: 100%">
         <span>Loading Transaction <span class="loader-gif"></span>
@@ -30,21 +30,13 @@
     </div>
     <div data-ng-if="tx.id">
       <div class="well well-sm ellipsis">
-        <strong>Transaction</strong>
+        <strong>Transaction ID</strong>
         <span class="txid text-muted">{{tx.id}}</span>
         <span class="btn-copy" clip-copy="tx.id"></span>
       </div>
       <h2>Summary</h2>
-      <table class="table" style="table-layout: fixed">
+      <table class="table table-responsive">
         <tbody>
-          <tr>
-            <td><strong>Sender</strong></td>
-            <td class="text-muted text-right"><a href="/address/{{tx.senderId}}">{{tx.senderId}}</a></td>
-          </tr>
-          <tr>
-            <td><strong>Recipient</strong></td>
-            <td class="text-muted text-right"><a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a></td>
-          </tr>
           <tr>
             <td><strong>Confirmations</strong></td>
             <td class="text-muted text-right">{{tx.confirmations || 0}}</td>
@@ -67,7 +59,9 @@
           </tr>
           <tr>
             <td><strong>Block </strong></td>
-            <td data-ng-show="tx.blockId" class="text-muted text-right"> <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a></td>
+            <td data-ng-show="tx.blockId" class="text-muted text-right">
+              <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
+            </td>
             <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
           </tr>
         </tbody>

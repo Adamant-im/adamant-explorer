@@ -1,61 +1,58 @@
-<section data-ng-controller="BlocksController" data-ng-init="findOne()">
-  <h1>Block #{{block.id}}</h1>
+<section data-ng-controller="BlocksController">
+  <h1>Block <small>{{block.id}}</small></h1>
   <div class="text-muted" data-ng-if="!block.height">
     <span>Loading Block <span class="loader-gif"></span>
   </div>
   <div data-ng-if="block.height">
     <div class="well well-sm ellipsis">
-      <strong>Payload Hash</strong>
-      <br>
-      <span class="txid text-muted">{{block.payloadHash}}</span>
-      <span class="btn-copy" clip-copy="block.payloadHash"></span>
+      <strong>Block ID</strong>
+      <span class="txid text-muted">{{block.id}}</span>
+      <span class="btn-copy" clip-copy="block.id"></span>
     </div>
     <h2>Summary</h2>
     <div class="row">
       <div class="col-md-12">
-        <table class="table" style="table-layout: fixed">
+        <table class="table table-responsive">
           <tbody>
           <tr>
             <td><strong>Transactions</strong></td>
             <td class="text-right text-muted">{{block.numberOfTransactions}}</td>
           </tr>
           <tr>
-              <td><strong>Confirmations</strong></td>
-              <td class="text-right text-muted">{{block.confirmations}}</td>
+            <td><strong>Confirmations</strong></td>
+            <td class="text-right text-muted">{{block.confirmations}}</td>
           </tr>
           <tr>
             <td><strong>Height</strong></td>
-            <td class="text-right text-muted">{{block.height}}
-              <span data-ng-show="block.isMainChain" class="text-success">(Mainchain)</span>
-            </td>
+            <td class="text-right text-muted">{{block.height}}</td>
           </tr>
           <tr>
             <td><strong>Total Fee</strong></td>
             <td class="text-right text-muted">{{block.totalFee}} XCR</td>
           </tr>
           <tr>
-              <td><strong>Total Amount</strong></td>
-              <td class="text-right text-muted">{{block.totalAmount}} XCR</td>
+            <td><strong>Total Amount</strong></td>
+            <td class="text-right text-muted">{{block.totalAmount}} XCR</td>
           </tr>
           <tr>
-              <td><strong>USD equivalent</strong></td>
-              <td class="text-right text-muted">{{ block.usd }} USD</td>
+            <td><strong>USD equivalent</strong></td>
+            <td class="text-right text-muted">{{ block.usd }} USD</td>
           </tr>
           <tr>
             <td><strong>Timestamp</strong></td>
             <td class="text-right text-muted">{{block.timestamp | timestamp}}</td>
           </tr>
           <tr data-ng-show="block.nextBlock">
-              <td><strong>Next block</strong></td>
-              <td class="text-right text-muted">
-                  <a href="/block/{{ block.nextBlock }}">{{ block.nextBlock }}</a>
-              </td>
+            <td><strong>Next block</strong></td>
+            <td class="text-right text-muted">
+              <a href="/block/{{ block.nextBlock }}">{{ block.nextBlock }}</a>
+            </td>
           </tr>
           <tr data-ng-show="block.previousBlock">
-              <td><strong>Previous block</strong></td>
-              <td class="text-right text-muted">
-                  <a href="/block/{{ block.previousBlock }}">{{ block.previousBlock }}</a>
-              </td>
+            <td><strong>Previous block</strong></td>
+            <td class="text-right text-muted">
+              <a href="/block/{{ block.previousBlock }}">{{ block.previousBlock }}</a>
+            </td>
           </tr>
           <tr>
             <td><strong>Generator</strong></td>
@@ -67,8 +64,8 @@
         </table>
       </div>
   </div>
-  <div data-ng-if="block.transactions.length > 0" data-ng-controller="transactionsController" data-ng-init="load('block')">
+  <div data-ng-if="block.transactions.length > 0">
     <h3>Transactions</h3>
-    <div data-ng-include src="'/views/transaction/list.html'" when-scrolled="loadMore()"></div>
+    <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
 </section>

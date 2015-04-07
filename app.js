@@ -22,7 +22,6 @@ if (config.redis.password) {
 }
 
 var utils = require('./utils'),
-    time = utils.time,
     topAccounts = utils.topAccounts;
 
 var app = express();
@@ -35,16 +34,6 @@ app.configure(function () {
 
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
     app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
-
-    app.use(function (req, res, next) {
-        req.crypti = app.get("crypti address");
-        return next();
-    });
-
-    app.use(function (req, res, next) {
-        req.time = time;
-        return next();
-    });
 
     app.set("fixed point", config.fixedPoint);
 

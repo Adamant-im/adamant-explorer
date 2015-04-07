@@ -1,20 +1,22 @@
-<section data-ng-controller="BlocksController" data-ng-init="list()">
+<section data-ng-controller="BlocksController">
   <div class="row">
     <div class="col-xs-12 col-md-12">
       <div class="page-header">
         <h1>
           Blocks
-          <small>by date. {{detail}} {{before}}</small>
+          <small data-ng-show="blocks.length > 1">
+            {{blocks[0].height}} &#8594; {{blocks[blocks.length - 1].height}}
+          </small>
         </h1>
       </div>
-      <table class="table table-hover table-striped" style="table-layout: fixed;">
+      <table class="table table-hover table-striped table-responsive">
         <thead>
           <tr>
             <th>Id</th>
             <th class="text-right">Height</th>
             <th class="text-right hidden-xs">Timestamp</th>
-            <th class="text-right hidden-xs"><span class="ellipsis">Transactions</span></th>
-            <th class="text-right hidden-xs hidden-sm"><span class="ellipsis">Generator</span></th>
+            <th class="text-right hidden-xs">Transactions</th>
+            <th class="text-right hidden-xs hidden-sm">Generator</th>
             <th class="text-right hidden-xs hidden-sm">Amount (XCR)</th>
             <th class="text-right hidden-xs hidden-sm">Fee (XCR)</th>
           </tr>

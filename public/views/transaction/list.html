@@ -7,3 +7,11 @@
     <span>Loading Transactions...</span>
   </div>
 </div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Less/More Transactions" data-ng-hide="!lessTxs && !moreTxs">
+  <div class="btn-group" role="group">
+    <button class="btn btn-default" data-ng-disabled="!lessTxs" data-ng-click="loadLess()">Less</a>
+  </div>
+  <div class="btn-group" role="group">
+    <button class="btn btn-default" data-ng-disabled="!moreTxs" data-ng-click="loadMore()">More</a>
+  </div>
+</div>

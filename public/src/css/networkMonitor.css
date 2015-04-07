@@ -30,6 +30,25 @@ p.big-details span.connected-peers {
   border: 1px solid #373D42;
 }
 
+#map .leaflet-popup-content p,
+#map .leaflet-popup-content span {
+  margin: 0;
+  padding: 0;
+}
+
+#map .leaflet-popup-content p.ip {
+  font-weight: bold;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #373D42;
+}
+
+#map .leaflet-popup-content span.label {
+  display: inline-block;
+  width: 50px;
+  text-align: left;
+  color: #373D42;
+}
+
 div.platforms {
   text-align: center;
   min-height: 58px;

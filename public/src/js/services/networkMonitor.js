@@ -27,7 +27,7 @@ var NetworkMonitor = function ($scope) {
     function Versions (peers) {
         var inspect = function () {
             if (angular.isArray(peers)) {
-                return _.uniq(_.map(peers, function(p) { return p.version; })
+                return _.uniq(_.map(peers, function (p) { return p.version; })
                         .sort(), true).reverse().slice(0, 3);
             } else {
                 return [];
@@ -101,7 +101,6 @@ var NetworkMonitor = function ($scope) {
         this.$scope.volAmount    = volume.amount;
         this.$scope.volBeginning = volume.beginning;
         this.$scope.volEnd       = volume.end;
-        this.$scope.volNow       = moment();
     }
 }
 
@@ -120,7 +119,8 @@ var NetworkMap = function () {
     var PlatformIcon = L.Icon.extend({
         options: {
             iconSize:   [32, 41],
-            iconAnchor: [16, 41]
+            iconAnchor: [16, 41],
+            popupAnchor: [0, -41]
         }
     });
 
@@ -136,15 +136,20 @@ var NetworkMap = function () {
         for (var i = 0; i < peers.connected.length; i++) {
             var p = peers.connected[i];
 
-            if (!_.has(this.markers, p.dottedQuad)) {
+            if (!validLocation(p.location)) {
+                console.warn('Invalid geo-location data received for:', p.ipString);
+                continue;
+            }
+
+            if (!_.has(this.markers, p.ipString)) {
                 this.cluster.addLayer(
-                    this.markers[p.dottedQuad] = L.marker(
+                    this.markers[p.ipString] = L.marker(
                         [p.location.latitude, p.location.longitude],
-                        { title: p.dottedQuad, icon: platformIcons[p.osBrand] }
-                    ).addTo(this.map)
+                        { title: p.ipString, icon: platformIcons[p.osBrand] }
+                    ).addTo(this.map).bindPopup(popupContent(p))
                 );
             }
-            connected.push(p.dottedQuad);
+            connected.push(p.ipString);
         }
 
         this.removeDisconnected(connected);
@@ -161,6 +166,41 @@ var NetworkMap = function () {
                 delete this.markers[ip];
             }
         }
+    }
+
+    // Private
+
+    var validLocation = function (location) {
+        return location
+            && angular.isNumber(location.latitude)
+            && angular.isNumber(location.longitude);
+    }
+
+    var popupContent = function (p) {
+        var content = '<p class="ip">'.concat(p.ipString, '</p>');
+
+        content += '<p class="version">'
+           .concat('<span class="label">Version: </span>', p.version, '</p>');
+
+        content += '<p class="os">'
+           .concat('<span class="label">OS: </span>', p.os, '</p>');
+
+        if (p.location.city) {
+            content += '<p class="city">'
+               .concat('<span class="label">City: </span>', p.location.city, '</p>');
+        }
+
+        if (p.location.region_name) {
+            content += '<p class="region">'
+               .concat('<span class="label">Region: </span>', p.location.region_name, '</p>');
+        }
+
+        if (p.location.country_name) {
+            content += '<p class="country">'
+               .concat('<span class="label">Country: </span>', p.location.country_name, '</p>');
+        }
+
+        return content;
     }
 }
 
@@ -192,6 +232,10 @@ angular.module('cryptichain.tools').factory('networkMonitor',
 
           $scope.$on('$destroy', function (event) {
               ns.removeAllListeners();
+          });
+
+          $scope.$on('$locationChangeStart', function (event, next, current) {
+              ns.emit('forceDisconnect');
           });
 
           return networkMonitor;

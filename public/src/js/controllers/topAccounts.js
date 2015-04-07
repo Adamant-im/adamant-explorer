@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.address').controller('TopAccounts',
-  function($scope, $rootScope, $routeParams, $location, $http) {
+  function ($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getTopAccounts = function () {
           $http.get("/api/getTopAccounts").then(function (resp) {
               if (resp.data.success) {

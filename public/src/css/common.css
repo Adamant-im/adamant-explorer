@@ -266,7 +266,7 @@ a, a:hover, a:visited, a:focus {
 .navbar-brand .logo {
   background-image: url(/img/logo.png);
   background-size: 250px 56px;
-  background-position: -125px 1px;
+  background-position: -125px 0px;
   height: 56px;
   width: 125px;
 }

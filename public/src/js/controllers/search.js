@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('cryptichain.search').controller('SearchController',
-  function($scope, $routeParams, $location, $timeout, Global, $http) {
+  function ($scope, $routeParams, $location, $timeout, Global, $http) {
       $scope.loading = false;
       $scope.badQuery = false;
 
-      var _badQuery = function() {
+      var _badQuery = function () {
           $scope.badQuery = true;
 
-          $timeout(function() {
+          $timeout(function () {
               $scope.badQuery = false;
           }, 2000);
       };
 
-      var _resetSearch = function() {
+      var _resetSearch = function () {
           $scope.q = '';
           $scope.loading = false;
       };
