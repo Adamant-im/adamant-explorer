@@ -2,7 +2,7 @@
     "configuration" : {
         "development": {
             "host": "0.0.0.0",
-            "port": 8040
+            "port": 6040
         },
         "production": {
             "host": "0.0.0.0",
@@ -10,7 +10,7 @@
         },
         "crypti" : {
             "host" : "127.0.0.1",
-            "port" : 6040
+            "port" : 8040
         },
         "freegeoip" : {
             "host" : "127.0.0.1",

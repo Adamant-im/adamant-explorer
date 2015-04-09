@@ -137,19 +137,19 @@ var NetworkMap = function () {
             var p = peers.connected[i];
 
             if (!validLocation(p.location)) {
-                console.warn('Invalid geo-location data received for:', p.ipString);
+                console.warn('Invalid geo-location data received for:', p.ip);
                 continue;
             }
 
-            if (!_.has(this.markers, p.ipString)) {
+            if (!_.has(this.markers, p.ip)) {
                 this.cluster.addLayer(
-                    this.markers[p.ipString] = L.marker(
+                    this.markers[p.ip] = L.marker(
                         [p.location.latitude, p.location.longitude],
                         { title: p.ipString, icon: platformIcons[p.osBrand] }
                     ).addTo(this.map).bindPopup(popupContent(p))
                 );
             }
-            connected.push(p.ipString);
+            connected.push(p.ip);
         }
 
         this.removeDisconnected(connected);
@@ -177,7 +177,7 @@ var NetworkMap = function () {
     }
 
     var popupContent = function (p) {
-        var content = '<p class="ip">'.concat(p.ipString, '</p>');
+        var content = '<p class="ip">'.concat(p.ip, '</p>');
 
         content += '<p class="version">'
            .concat('<span class="label">Version: </span>', p.version, '</p>');
