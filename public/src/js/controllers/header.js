@@ -37,7 +37,7 @@ angular.module('cryptichain.system').controller('HeaderController',
 
       $scope.heightInterval = $interval(function () {
           $scope.getHeight();
-      }, 30000);
+      }, 10000);
 
       $scope.feeInterval = $interval(function () {
           $scope.getFee();
