@@ -43,6 +43,37 @@
         </table>
       </div>
     </div>
+    <div class="delegate" data-ng-hide="!address.delegate">
+      <h2>Delegate</h2>
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-responsive">
+            <tbody>
+              <tr>
+                <td><strong>Username</strong></td>
+                <td class="ellipsis text-right">{{address.delegate.username}}</td>
+              </tr>
+              <tr>
+                <td><strong>Productivity</strong></td>
+                <td class="ellipsis text-right">{{address.delegate.productivity || 0.00}}%</td>
+              </tr>
+              <tr>
+                <td><strong>Rank / Status</strong></td>
+                <td class="ellipsis text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
+              </tr>
+              <tr>
+                <td><strong>Approval</strong></td>
+                <td class="ellipsis text-right">{{getApproval(address.delegate.vote) | number: 2}}%</td>
+              </tr>
+              <tr>
+                <td><strong>Forged</strong></td>
+                <td class="ellipsis text-right">{{address.delegate.fees || 0 | xcr}} XCR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
   <div data-ng-if="address.address" data-ng-controller="AddressController" data-ng-init="loadTxs()">
     <h2>Transactions</h2>
