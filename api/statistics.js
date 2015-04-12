@@ -1,7 +1,7 @@
-var api = require('../lib/api');
+var statistics = require('../lib/api/statistics');
 
 module.exports = function (app) {
-    var statistics = new api.statistics(app);
+    var statistics = new statistics(app);
 
     app.get('/api/statistics/getBestBlock', function (req, res) {
         statistics.getBestBlock(
