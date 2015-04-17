@@ -121,7 +121,16 @@ module.exports = function (grunt) {
         },
         copy: {
             dist: {
-                files: []
+                files: [
+                    {
+                        // Copy Bootstrap fonts to public/fonts.
+                        expand: true,
+                        dot: true,
+                        cwd: 'bower_components/bootstrap/dist',
+                        src: ['fonts/*.*'],
+                        dest: 'public'
+                    }
+                ]
             },
         },
         nggettext_extract: {
