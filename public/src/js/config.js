@@ -9,7 +9,7 @@ angular.module('cryptichain').config(function ($routeProvider) {
     }).
     when('/blocks/:page?', {
         templateUrl: '/views/blocks.html',
-        title: 'Blocks List'
+        title: 'Blocks'
     }).
     when('/block/:blockId', {
         templateUrl: '/views/block.html',
