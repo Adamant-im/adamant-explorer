@@ -7,7 +7,7 @@ angular.module('cryptichain').config(function ($routeProvider) {
         templateUrl: '/views/block.html',
         title: 'Block '
     }).
-    when('/tx/:txId/:v_type?/:v_index?', {
+    when('/tx/:txId', {
         templateUrl: '/views/transaction.html',
         title: 'Transaction '
     }).
