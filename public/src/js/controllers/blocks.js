@@ -65,8 +65,8 @@ angular.module('cryptichain.blocks').controller('BlocksController',
 
           $scope.getBlock($routeParams.blockId);
       } else {
-          if ($routeParams.blockDate) {
-              $scope.getLastBlocks($routeParams.blockDate);
+          if ($routeParams.page) {
+              $scope.getLastBlocks($routeParams.page);
           } else {
               $scope.getLastBlocks();
           }

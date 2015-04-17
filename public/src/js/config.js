@@ -7,10 +7,6 @@ angular.module('cryptichain').config(function ($routeProvider) {
         templateUrl: '/views/block.html',
         title: 'Block '
     }).
-    when('/block-index/:blockHeight', {
-        controller: 'BlocksController',
-        templateUrl: '/views/redirect.html'
-    }).
     when('/tx/:txId/:v_type?/:v_index?', {
         templateUrl: '/views/transaction.html',
         title: 'Transaction '
@@ -19,11 +15,7 @@ angular.module('cryptichain').config(function ($routeProvider) {
         templateUrl: '/views/index.html',
         title: 'Home'
     }).
-    when('/blocks', {
-        templateUrl: '/views/block_list.html',
-        title: 'Blocks List'
-    }).
-    when('/blocks-date/:blockDate?', {
+    when('/blocks/:page?', {
         templateUrl: '/views/block_list.html',
         title: 'Blocks List'
     }).
