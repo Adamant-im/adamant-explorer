@@ -6,6 +6,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-css');
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-macreload');
@@ -118,6 +119,11 @@ module.exports = function (grunt) {
                 tasks: ['concat:css', 'cssmin'],
             },
         },
+        copy: {
+            dist: {
+                files: []
+            },
+        },
         nggettext_extract: {
             pot: {
                 files: {
@@ -144,7 +150,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['watch']);
 
     // Compile task (concat + minify).
-    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy']);
 
     // Copy ZeroClipboard.swf to public/swf.
     grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
