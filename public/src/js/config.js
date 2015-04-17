@@ -3,14 +3,6 @@
 // Setting up routes
 angular.module('cryptichain').config(function ($routeProvider) {
     $routeProvider.
-    when('/block/:blockId', {
-        templateUrl: '/views/block.html',
-        title: 'Block '
-    }).
-    when('/tx/:txId', {
-        templateUrl: '/views/transaction.html',
-        title: 'Transaction '
-    }).
     when('/', {
         templateUrl: '/views/index.html',
         title: 'Home'
@@ -18,6 +10,14 @@ angular.module('cryptichain').config(function ($routeProvider) {
     when('/blocks/:page?', {
         templateUrl: '/views/blocks.html',
         title: 'Blocks List'
+    }).
+    when('/block/:blockId', {
+        templateUrl: '/views/block.html',
+        title: 'Block '
+    }).
+    when('/tx/:txId', {
+        templateUrl: '/views/transaction.html',
+        title: 'Transaction '
     }).
     when('/address/:address', {
         templateUrl: '/views/address.html',
