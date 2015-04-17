@@ -9,4 +9,12 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+
+    app.get("/api/delegates/getStandby", function (req, res, next) {
+        api.getStandby(
+            req.query.n,
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
 }
