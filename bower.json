@@ -10,6 +10,7 @@
         "angular-route": "~1.2.24",
         "angular-ui-utils": "~0.1.1",
         "bootstrap": "~3.1.1",
+        "font-awesome": "~4.3.0",
         "leaflet": "~0.7.3",
         "leaflet.markercluster": "~0.4.0",
         "momentjs": "~2.5.1",

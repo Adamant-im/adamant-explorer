@@ -61,6 +61,7 @@ module.exports = function (grunt) {
             },
             css: {
                 src: ['bower_components/bootstrap/dist/css/bootstrap.min.css',
+                      'bower_components/font-awesome/css/font-awesome.min.css',
                       'bower_components/leaflet/dist/leaflet.css',
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
                       'public/src/css/**/*.css'],
@@ -127,6 +128,14 @@ module.exports = function (grunt) {
                         expand: true,
                         dot: true,
                         cwd: 'bower_components/bootstrap/dist',
+                        src: ['fonts/*.*'],
+                        dest: 'public'
+                    },
+                    {
+                        // Copy Font-awesome fonts to public/fonts.
+                        expand: true,
+                        dot: true,
+                        cwd: 'bower_components/font-awesome',
                         src: ['fonts/*.*'],
                         dest: 'public'
                     }
