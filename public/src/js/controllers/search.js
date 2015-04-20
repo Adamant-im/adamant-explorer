@@ -27,7 +27,7 @@ angular.module('cryptichain.search').controller('SearchController',
                   id : $scope.q
               }
           }).then(function (resp) {
-              if (resp.data.success == false || resp.data.found == false) {
+              if (resp.data.success == false) {
                   $scope.loading = false;
                   _badQuery();
               } else if (resp.data.id) {
