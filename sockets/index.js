@@ -1,11 +1,13 @@
 module.exports = function (app, io) {
     var ns = {
-        activityGraph  : io.of('/activityGraph'),
-        networkMonitor : io.of('/networkMonitor')
+        activityGraph   : io.of('/activityGraph'),
+        delegateMonitor : io.of('/delegateMonitor'),
+        networkMonitor  : io.of('/networkMonitor')
     }
 
-    var activityGraph  = require('./activityGraph'),
-        networkMonitor = require('./networkMonitor');
+    var activityGraph   = require('./activityGraph'),
+        delegateMonitor = require('./delegateMonitor');
+        networkMonitor  = require('./networkMonitor');
 
     var connectionHandler = function (name, ns, object) {
         ns.on('connection', function (socket) {
@@ -35,5 +37,6 @@ module.exports = function (app, io) {
     }
 
     new activityGraph(app, connectionHandler, ns.activityGraph);
+    new delegateMonitor(app, connectionHandler, ns.delegateMonitor);
     new networkMonitor(app, connectionHandler, ns.networkMonitor);
 }
