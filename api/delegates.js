@@ -17,4 +17,11 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+
+    app.get("/api/delegates/getLatestRegistrations", function (req, res, next) {
+        api.getLatestRegistrations(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
 }
