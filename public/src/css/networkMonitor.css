@@ -1,24 +1,3 @@
-.big-info {
-  padding-bottom: 23px;
-  padding-top: 23px;
-}
-
-.big-info p.small-title {
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding-top: 6px;
-  opacity: 0.5;
-}
-
-.big-info p.big-details {
-  font-weight: 200;
-  font-size: 24px;
-  line-height: 32px;
-}
-
 p.big-details span.connected-peers {
   font-weight: 700;
 }
