@@ -10,7 +10,11 @@ angular.module('cryptichain.address').controller('AddressController',
           }).then(function (resp) {
               if (resp.data.success) {
                   $scope.address = resp.data;
+              } else {
+                  throw 'Account was not found!'
               }
+          }).catch(function (error) {
+              $location.path("/");
           });
       }
 

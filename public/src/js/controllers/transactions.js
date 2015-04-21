@@ -10,7 +10,11 @@ angular.module('cryptichain.transactions').controller('TransactionsController',
           }).then(function (resp) {
               if (resp.data.success) {
                   $scope.tx = resp.data.transaction;
+              } else {
+                  throw 'Transaction was not found!'
               }
+          }).catch(function (error) {
+              $location.path("/");
           });
       }
 

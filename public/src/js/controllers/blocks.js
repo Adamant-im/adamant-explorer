@@ -53,7 +53,6 @@ angular.module('cryptichain.blocks').controller('BlocksController',
               }
               $scope.txs = $scope.block.transactions;
           }).catch(function (error) {
-              console.log(error);
               $location.path("/");
           });
       }
