@@ -31,4 +31,11 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+
+    app.get("/api/delegates/getLastBlock", function (req, res, next) {
+        api.getLastBlock(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
 }
