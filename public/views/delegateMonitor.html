@@ -1,0 +1,263 @@
+<div data-ng-controller="DelegateMonitor">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Delegate Monitor</h1>
+
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left delegates">
+                <p class="small-title">Delegates</p>
+                <p class="big-details">
+                  <span class="total-delegates">{{totalDelegates || 0}}</span>
+                </p>
+                <p class="text-muted total-active">{{totalActive || 0}} active delegates</p>
+                <p class="text-muted total-standby">{{totalStandby || 0}} delegates on standby</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left last-block">
+                <p class="small-title">Last Block By</span>
+                <p class="big-details" data-ng-switch="!!lastBlock">
+                  <a data-ng-href="/address/{{lastBlock.delegate.address}}" data-ng-switch-when="true" target="_new">{{lastBlock.delegate.username}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
+                <p class="text-muted" data-ng-switch="!!lastBlock">
+                  <a data-ng-href="/block/{{lastBlock.id}}" data-ng-switch-when="true" target="_new">{{lastBlock.id}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
+                <p class="text-muted">
+                  <span class="xcr">{{lastBlock.totalFee || 0 | xcr}} XCR forged</span>
+                  <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left best-forger">
+                <p class="small-title">Best Forger</p>
+                <p class="big-details" data-ng-switch="!!bestForger">
+                  <a data-ng-href="/address/{{bestForger.address}}" data-ng-switch-when="true" target="_new">{{bestForger.username}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
+                <p class="text-muted xcr">{{bestForger.fees || 0 | xcr}} XCR forged</p>
+                <p class="text-muted time-since">since registration</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left total-forged">
+                <p class="small-title">Total Forged <span class="text-muted">(XCR)</span></p>
+                <p class="big-details">
+                  <span class="xcr">{{totalForged || 0 | xcr}}</span>
+                </p>
+                <p class="text-muted total-active">between {{totalActive || 0 }} active delegates</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left best-uptime">
+                <p class="small-title">Best Uptime</p>
+                <p class="big-details">{{bestUptime.productivity || 0}}%</p>
+                <p data-ng-switch="!!bestUptime">
+                  <span class="text-muted">by</span>
+                  <a data-ng-href="/address/{{bestUptime.address}}" data-ng-switch-when="true" target="_new">{{bestUptime.username}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="pull-left worst-uptime">
+                <p class="small-title">Worst Uptime</p>
+                <p class="big-details">{{worstUptime.productivity || 0}}%</p>
+                <p data-ng-switch="!!worstUptime">
+                  <span class="text-muted">by</span>
+                  <a data-ng-href="/address/{{worstUptime.address}}" data-ng-switch-when="true" target="_new">{{worstUptime.username}}</a>
+                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="latest-votes">
+                <p class="small-title">Latest Votes</span>
+
+                <table class="table table-condensed table-responsive votes">
+                  <thead>
+                    <tr>
+                      <th>Voter</th>
+                      <th>Delegate</th>
+                      <th class="hidden-xs">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-show="!votes">
+                      <td colspan="4">Waiting for votes <span class="loader-gif"></span></td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr data-ng-repeat='v in votes track by v.id'>
+                      <td class="voter">
+                        <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
+                      </td>
+                      <td class="delegate">
+                        <a data-ng-href="/address/{{v.delegate.address}}" target="_new">{{v.delegate.username}}</a>
+                      </td>
+                      <td class="time-ago hidden-xs">
+                        <span class="text-muted">{{v.timestamp | timeAgo}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div class="row big-info">
+            <div class="col-xs-12">
+              <div class="newest-delegates">
+                <p class="small-title">Newest Delegates</span>
+
+                <table class="table table-condensed table-responsive registrations">
+                  <thead>
+                    <tr>
+                      <th>Delegate</th>
+                      <th>Transaction</th>
+                      <th class="hidden-xs">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr data-ng-show="!registrations">
+                      <td colspan="4">Waiting for registrations <span class="loader-gif"></span></td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr data-ng-repeat='v in registrations track by v.id'>
+                      <td class="delegate">{{v.delegate.username}}</td>
+                      <td class="tx">
+                        <a data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
+                      </td>
+                      <td class="time-ago hidden-xs">
+                        <span class="text-muted">{{v.timestamp | timeAgo}}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 big-info">
+      <tabset vertical="true" type="pills">
+        <tab heading="Active Delegates">
+          <p class="small-title">Active Delegates</span>
+
+          <table class="table table-hover table-striped table-responsive">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th class="hidden-xs">Address</th>
+                <th class="hidden-xs hidden-sm">Forged</th>
+                <th class="hidden-xs">Uptime</th>
+                <th class="hidden-xs">Approval</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-show="!activeDelegates">
+                <td colspan="4">Waiting for delegates <span class="loader-gif"></span></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr class="fader" data-ng-repeat='d in activeDelegates track by d.rate'>
+                <td>{{d.rate}}</td>
+                <td>{{d.username}}</td>
+                <td class="hidden-xs"><a data-ng-href="/address/{{d.address}}" target="_new">{{d.address}}</a></td>
+                <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">XCR</span></td>
+                <td class="hidden-xs">{{d.productivity || 0}}%</td>
+                <td class="hidden-xs">{{d.vote | approval }}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </tab>
+        <tab heading="Standby Delegates" data-ng-click="getStandby(1)">
+          <p class="small-title">Standby Delegates</span>
+
+          <table class="table table-hover table-striped table-responsive">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th class="hidden-xs">Address</th>
+                <th class="hidden-xs">Uptime</th>
+                <th class="hidden-xs">Approval</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-show="!standbyDelegates">
+                <td colspan="4">Waiting for delegates <span class="loader-gif"></span></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr class="fader" data-ng-repeat='d in standbyDelegates track by d.rate'>
+                <td>{{d.rate}}</td>
+                <td>{{d.username}}</td>
+                <td class="hidden-xs"><a data-ng-href="/address/{{d.address}}" target="_new">{{d.address}}</a></td>
+                <td class="hidden-xs">{{d.productivity || 0}}%</td>
+                <td class="hidden-xs">{{d.vote | approval }}%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div data-ng-if="pagination.more || pagination.before">
+            <button class="btn btn-primary" data-ng-click="getStandby(pagination.previousPage)" data-ng-show="pagination.before">Previous page</button>
+            <button class="btn btn-primary" data-ng-click="getStandby(pagination.nextPage)" data-ng-show="pagination.more">Next page</button>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>
