@@ -229,7 +229,6 @@ a, a:hover, a:visited, a:focus {
 }
 
 .navbar-form {
-  /*width: 35%;*/
   margin-top: 20px;
 }
 
@@ -619,7 +618,7 @@ a, a:hover, a:visited, a:focus {
   width: 275px;
 }
 
-/*Animations*/
+/* Animations */
 .fader.ng-enter {
   opacity: 0;
   -webkit-transition: opacity 1s;
