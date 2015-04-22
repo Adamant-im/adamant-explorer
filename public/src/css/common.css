@@ -36,6 +36,9 @@ a, a:hover, a:visited, a:focus {
   color: #1F9BDE;
 }
 
+/* Bootstrap fix for ui.bootstrap */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide {
   display: none !important;
 }
