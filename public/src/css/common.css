@@ -43,6 +43,11 @@ a, a:hover, a:visited, a:focus {
   display: none !important;
 }
 
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+  color: white;
+  background-color: #434752;
+}
+
 /* Styling for the ngProgress itself */
 #ngProgress {
   background-color: #38AF49 !important;
