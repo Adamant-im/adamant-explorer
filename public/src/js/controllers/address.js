@@ -55,12 +55,6 @@ angular.module('cryptichain.address').controller('AddressController',
 
       $scope.getAddress();
 
-      $scope.allVotes = (10000000000000000);
-
-      $scope.getApproval = function (vote) {
-          return (vote / $scope.allVotes ) * 100;
-      }
-
       // Private
 
       var Pager = {

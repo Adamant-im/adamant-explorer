@@ -79,4 +79,13 @@ angular.module('cryptichain')
               return (parseInt(amount) / 100000000);
           }
       }
+  })
+  .filter('approval', function () {
+      return function (votes) {
+          if (isNaN(votes)) {
+              return 0;
+          } else {
+              return ((parseInt(votes) / 10000000000000000) * 100).toFixed(2);
+          }
+      }
   });
