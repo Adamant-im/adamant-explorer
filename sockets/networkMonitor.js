@@ -16,7 +16,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving data for: ' + err);
             } else {
                 data.bestBlock = res[0];
                 data.lastBlock = res[1];
@@ -96,7 +96,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving data for: ' + err);
             } else {
                 thisData.lastBlock = data.lastBlock = res[0];
 
@@ -115,7 +115,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving data for: ' + err);
             } else {
                 thisData.bestBlock = data.bestBlock = res[0];
                 thisData.volume    = data.volume    = res[1];
@@ -134,7 +134,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving statistics for: ' + err);
+                log('Error in retrieving data for: ' + err);
             } else {
                 thisData.peers = data.peers = res[0];
 
