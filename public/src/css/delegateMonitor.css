@@ -1,0 +1,21 @@
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills>li.active>a:focus {
+  color: #fff;
+  background-color: #343844;
+}
+
+.nav-pills>li>a,
+.nav-pills>li>a:hover,
+.nav-pills>li>a:focus {
+  color: #343844;
+  background-color: white;
+}
+
+.tab-content {
+  padding-top: 50px;
+}
+
+.big-details span.total-delegates {
+  font-weight: 700;
+}
