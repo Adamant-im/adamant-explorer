@@ -141,6 +141,13 @@ a, a:hover, a:visited, a:focus {
   margin-left: 0;
 }
 
+@media (max-width: 320px) {
+  .table-responsive td:first-of-type {
+    max-width: 150px;
+    overflow: hidden;
+  }
+}
+
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
   background-color: #E8E8E9;
 }
