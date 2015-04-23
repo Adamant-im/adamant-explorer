@@ -171,15 +171,15 @@
                     </tr>
                   </tbody>
                   <tbody>
-                    <tr data-ng-repeat='v in registrations track by v.id'>
+                    <tr data-ng-repeat='r in registrations track by r.id'>
                       <td class="delegate">
-                        <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.delegate.username}}</a>
+                        <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
                       </td>
                       <td class="tx">
-                        <a data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
+                        <a data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
                       </td>
                       <td class="time-ago hidden-xs">
-                        <span class="text-muted">{{v.timestamp | timeAgo}}</span>
+                        <span class="text-muted">{{r.timestamp | timeAgo}}</span>
                       </td>
                     </tr>
                   </tbody>
