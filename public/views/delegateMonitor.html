@@ -214,8 +214,8 @@
             <tbody>
               <tr class="fader" data-ng-repeat='d in activeDelegates track by d.rate'>
                 <td>{{d.rate}}</td>
-                <td>{{d.username}}</td>
-                <td class="hidden-xs"><a data-ng-href="/address/{{d.address}}" target="_new">{{d.address}}</a></td>
+                <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
+                <td class="hidden-xs">{{d.address}}</td>
                 <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">XCR</span></td>
                 <td class="hidden-xs">{{d.productivity || 0}}%</td>
                 <td class="hidden-xs">{{d.vote | approval }}%</td>
@@ -244,8 +244,8 @@
             <tbody>
               <tr class="fader" data-ng-repeat='d in standbyDelegates track by d.rate'>
                 <td>{{d.rate}}</td>
-                <td>{{d.username}}</td>
-                <td class="hidden-xs"><a data-ng-href="/address/{{d.address}}" target="_new">{{d.address}}</a></td>
+                <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
+                <td class="hidden-xs">{{d.address}}</td>
                 <td class="hidden-xs">{{d.productivity || 0}}%</td>
                 <td class="hidden-xs">{{d.vote | approval }}%</td>
               </tr>
