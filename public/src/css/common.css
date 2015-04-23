@@ -703,32 +703,33 @@ a, a:hover, a:visited, a:focus {
 .badge-inverse:hover { background-color: #1a1a1a; }
 
 .btn-copy {
-  color: #9b9b9b;
+  color: #999;
   display: inline-block;
-  height: 16px;
-  width: 16px;
   outline: none;
-  vertical-align: sub;
+  border-radius: 5px;
+  text-align: center;
 }
 
 .btn-expand {
-  color: #9b9b9b;
+  color: #999;
   vertical-align: middle;
 }
 
 .btn-copy:hover, .btn-expand:hover {
-  color: black;
+  color: #999;
   text-decoration: none;
 }
 
-.btn-copy {
-  background: transparent url('/img/icons/copy.png') center center no-repeat;
+.btn-copy:before {
+  font-size: 14px;
+  font-family: "FontAwesome";
+  content: "\f0ea";
 }
 
 .btn-copy .tooltip {
   display: block;
-  margin-left: 20px;
-  margin-top: -2px;
+  margin-left: 16px;
+  margin-top: -22px;
   opacity: 0;
 }
 
@@ -741,7 +742,8 @@ a, a:hover, a:visited, a:focus {
   border-right-color: #39B54A;
 }
 
-.btn-copy.zeroclipboard-is-hover { color: #2a6496; }
+.btn-copy.zeroclipboard-is-hover {
+}
 
 .btn-copy.zeroclipboard-is-active .tooltip { opacity: 1; }
 
