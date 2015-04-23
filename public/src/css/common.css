@@ -320,6 +320,27 @@ a, a:hover, a:visited, a:focus {
 
 #search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
+#search.loading {
+  color: white;
+  background-color: #1F9BDE;
+  -webkit-animation-name: loading;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: example;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes loading {
+  from { background-color: #1F9BDE; }
+  to { background-color: #38B449; }
+}
+
+@keyframes loading {
+    from { background-color: #1F9BDE; }
+    to { background-color: #38B449; }
+}
+
 #search::-webkit-input-placeholder {
   color: #9b9d9e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
