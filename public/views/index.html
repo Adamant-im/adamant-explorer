@@ -46,7 +46,7 @@
           <tbody>
             <tr data-ng-show="!blocks.length"><td colspan="7">Waiting for blocks...</td></tr>
             <tr class="fader" data-ng-repeat='b in blocks track by b.id'>
-              <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
+              <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
               <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
               <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
