@@ -1,7 +1,7 @@
 <section data-ng-controller="BlocksController">
   <h1>Block <small>{{block.id}}</small></h1>
   <div class="text-muted" data-ng-if="!block.height">
-    <span>Loading Block <span class="loader-gif"></span>
+    <span>Loading Block <i class="fa fa-spinner fa-spin"></i>
   </div>
   <div data-ng-if="block.height">
     <div class="well well-sm ellipsis">

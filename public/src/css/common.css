@@ -320,21 +320,6 @@ a, a:hover, a:visited, a:focus {
 
 #search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
-#search.loading {
-  background-image: url('/img/loading.gif');
-  background-position: 5px center;
-  background-repeat: no-repeat;
-  padding-left: 25px;
-}
-
-.loader-gif {
-  display: inline-block;
-  width: 16px;
-  height: 11px;
-  background: transparent url(../img/loading.gif) no-repeat;
-  margin-left: 5px;
-}
-
 #search::-webkit-input-placeholder {
   color: #9b9d9e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
