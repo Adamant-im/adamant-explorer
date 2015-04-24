@@ -3,6 +3,7 @@
 	height: 32px;
 	line-height: 32px;
 	display: inline-block;
+	vertical-align: middle;
 	background: url(/img/flags.png) no-repeat;
 }
 
