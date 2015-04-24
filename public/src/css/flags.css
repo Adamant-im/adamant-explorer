@@ -1,10 +1,10 @@
 .flag {
-	width: 32px;
-	height: 32px;
-	line-height: 32px;
-	display: inline-block;
-	vertical-align: middle;
-	background: url(/img/flags.png) no-repeat;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(/img/flags.png) no-repeat;
 }
 
 .flag.flag- {
