@@ -139,7 +139,7 @@
                         <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
                       </td>
                       <td class="tx hidden-xs">
-                        <a data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
+                        <a class="ellipsis" data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
                       </td>
                       <td class="time-ago">
                         <span class="text-muted">{{v.timestamp | timeAgo}}</span>
@@ -176,7 +176,7 @@
                         <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
                       </td>
                       <td class="tx hidden-xs">
-                        <a data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
+                        <a class="ellipsis" data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
                       </td>
                       <td class="time-ago">
                         <span class="text-muted">{{r.timestamp | timeAgo}}</span>

@@ -21,7 +21,7 @@
             <td colspan="5">Waiting for blocks <i class="fa fa-spinner fa-spin"></i></td>
           </tr>
           <tr class="fader" data-ng-repeat='b in blocks track by b.id'>
-            <td><a href="/block/{{b.id}}">{{b.id}}</a></td>
+            <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
             <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
             <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
             <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
