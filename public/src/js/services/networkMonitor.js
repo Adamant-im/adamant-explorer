@@ -64,6 +64,15 @@ var NetworkMonitor = function ($scope) {
         }
     }
 
+    this.sortedPeers = function (peers) {
+        var sortBy = function (peer) { return peer.ip; };
+
+        peers.connected    = _.sortBy(peers.connected, sortBy);
+        peers.disconnected = _.sortBy(peers.disconnected, sortBy);
+
+        return peers;
+    }
+
     this.counter = function (peers) {
         var platforms = new Platforms(),
             versions  = new Versions(peers.connected);
@@ -84,7 +93,7 @@ var NetworkMonitor = function ($scope) {
     }
 
     this.updatePeers = function (peers) {
-        this.$scope.peers   = peers.list;
+        this.$scope.peers   = this.sortedPeers(peers.list);
         this.$scope.counter = this.counter(peers.list);
         this.map.addConnected(peers.list);
     }
