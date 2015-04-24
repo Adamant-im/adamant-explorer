@@ -97,6 +97,10 @@ table.peers td {
   overflow: hidden;
 }
 
+table.peers td .hostname {
+  max-width: 300px;
+}
+
 table.peers td .os-icon {
   width: 22px;
   height: 22px;
