@@ -188,6 +188,11 @@ var NetworkMap = function () {
     var popupContent = function (p) {
         var content = '<p class="ip">'.concat(p.ip, '</p>');
 
+        if (p.location.hostname) {
+            content += '<p class="hostname">'
+               .concat('<span class="label">Hostname: </span>', p.location.hostname, '</p>');
+        }
+
         content += '<p class="version">'
            .concat('<span class="label">Version: </span>', p.version, '</p>');
 
