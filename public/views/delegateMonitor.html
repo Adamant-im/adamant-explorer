@@ -124,7 +124,7 @@
                   <thead>
                     <tr>
                       <th>Voter</th>
-                      <th>Delegate</th>
+                      <th>Tx</th>
                       <th class="hidden-xs">Time</th>
                     </tr>
                   </thead>
@@ -138,8 +138,8 @@
                       <td class="voter">
                         <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
                       </td>
-                      <td class="delegate">
-                        <a data-ng-href="/address/{{v.delegate.address}}" target="_new">{{v.delegate.username}}</a>
+                      <td class="tx">
+                        <a data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
                       </td>
                       <td class="time-ago hidden-xs">
                         <span class="text-muted">{{v.timestamp | timeAgo}}</span>
