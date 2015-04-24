@@ -77,10 +77,10 @@ angular.module('cryptichain')
       return {
           restric: 'A',
           replace: true,
-          template: '<img class="os-icon">',
+          template: '<span class="os-icon os-"></span>',
           link: function (scope, elm, attr) {
               elm[0].alt = elm[0].title = attr.os;
-              elm[0].src = '/img/os/'.concat(attr.brand, '.png');
+              elm[0].className = elm[0].className + attr.brand;
           }
       };
   });

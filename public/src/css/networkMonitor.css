@@ -2,6 +2,31 @@
   font-weight: 700;
 }
 
+.os-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.os-0 {
+  background-image: url(/img/os/0.png);
+}
+
+.os-1 {
+  background-image: url(/img/os/1.png);
+}
+
+.os-2 {
+  background-image: url(/img/os/2.png);
+}
+
+.os-3 {
+  background-image: url(/img/os/3.png);
+}
+
+.peers>tbody>tr>td {
+  vertical-align: middle;
+}
+
 #map {
   width: 100%;
   height: 368px;
@@ -33,9 +58,11 @@ div.platforms {
   min-height: 58px;
 }
 
-div.platforms img.os-icon {
+div.platforms .os-icon {
   width: 48px;
   height: 48px;
+  line-height: 48px;
+  background-size: 48px 48px;
 }
 
 div.platforms span.windows-counter {
@@ -102,8 +129,11 @@ table.peers td .hostname {
 }
 
 table.peers td .os-icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  display: inline-block;
+  background-size: 24px 24px;
 }
 
 table.peers .peer-state:before {
