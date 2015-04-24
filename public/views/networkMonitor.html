@@ -156,6 +156,7 @@
           <tr>
             <th>IP Address</th>
             <th class="hidden-xs">Hostname</th>
+            <th class="hidden-xs">Country</th>
             <th>Status</th>
             <th>Version</th>
             <th>Platform</th>
@@ -170,6 +171,7 @@
           <tr class="fader" data-ng-repeat='p in value track by p.ip'>
             <td><span class="text-muted">{{p.ip}}</span></td>
             <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
+            <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
             <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
             <td><span class="text-muted">{{p.version}}</span></td>
             <td><img os-icon os="{{p.os}}" brand="{{p.osBrand}}"></td>
