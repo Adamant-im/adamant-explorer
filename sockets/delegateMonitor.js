@@ -96,6 +96,7 @@ module.exports = function (app, connectionHandler, socket) {
                 thisData.registrations = res[2];
                 thisData.votes         = res[3];
 
+                data = thisData;
                 log('Emitting data');
                 socket.emit('data', thisData);
             }
