@@ -37,7 +37,9 @@ module.exports = function (app) {
 
     app.get("/api/getTransactionsByBlock", function (req, res, next) {
         api.getTransactionsByBlock(
-            req.query.blockId,
+          { blockId : req.query.blockId,
+            offset  : req.query.offset,
+            limit   : req.query.limit },
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
         );

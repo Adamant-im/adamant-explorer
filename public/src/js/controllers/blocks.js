@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.blocks').controller('BlocksController',
-  function ($scope, $rootScope, $routeParams, $location, $http, $interval) {
+  function ($scope, $rootScope, $routeParams, $location, $http, blockTxs) {
       $scope.getLastBlocks = function (n) {
           var offset = 0;
 
@@ -36,22 +36,10 @@ angular.module('cryptichain.blocks').controller('BlocksController',
           }).then(function (resp) {
               if (resp.data.success) {
                   $scope.block = resp.data.block;
-                  return $http.get("/api/getTransactionsByBlock", {
-                      params : {
-                          blockId : blockId
-                      }
-                  });
+                  $scope.loading = false;
               } else {
                   throw 'Block was not found!'
               }
-          }).then(function (resp) {
-              if (resp.data.success) {
-                  $scope.block.transactions = resp.data.transactions;
-                  $scope.loading = false;
-              } else {
-                  throw 'Block transactions were not found!'
-              }
-              $scope.txs = $scope.block.transactions;
           }).catch(function (error) {
               $location.path("/");
           });
@@ -62,6 +50,7 @@ angular.module('cryptichain.blocks').controller('BlocksController',
               id : $routeParams.blockId
           };
           $scope.getBlock($routeParams.blockId);
+          $scope.txs = blockTxs($routeParams.blockId);
       } else if ($routeParams.page) {
           $scope.getLastBlocks($routeParams.page);
       } else {
