@@ -52,13 +52,13 @@ var DelegateMonitor = function ($scope) {
 
     var bestUptime = function (delegates) {
         if (_.size(delegates) > 0) {
-            return _.max(delegates, function (d) { return d.productivity; });
+            return _.max(delegates, function (d) { return parseFloat(d.productivity); });
         }
     }
 
     var worstUptime = function (delegates) {
         if (_.size(delegates) > 0) {
-            return _.min(delegates, function (d) { return d.productivity; });
+            return _.min(delegates, function (d) { return parseFloat(d.productivity); });
         }
     }
 }
