@@ -61,7 +61,6 @@ Example:
             "port" : 6379,
             "password" : ""
         },
-        "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
         "enableExchange" : true,
@@ -72,7 +71,6 @@ Example:
 }
 ```
 
-   * `updateTopAccountsInterval` - time to update top accounts in interval.
    * `cacheTTL` - time to live cache in redis.
    * `fixedPoint` - fixed point number of Crypti (10^8).
    * `enableExchange` - enable or disable exchange currency courses.

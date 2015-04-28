@@ -21,8 +21,7 @@ if (config.redis.password) {
     });
 }
 
-var utils = require('./utils'),
-    topAccounts = utils.topAccounts;
+var utils = require('./utils');
 
 var app = express();
 app.exchange = new utils.exchange(config),
@@ -41,16 +40,6 @@ app.configure(function () {
         req.redis = client;
         return next();
     });
-
-    setInterval(function () {
-        topAccounts(app.get("crypti address"), function (err, accounts) {
-            if (err) {
-                console.log(err);
-            } else {
-                app.topAccounts = accounts;
-            }
-        });
-    }, config.updateTopAccountsInterval);
 
     app.use(express.logger());
     app.use(express.static(path.join(__dirname, "public")));
@@ -149,19 +138,6 @@ app.get("*", function (req, res, next) {
 });
 
 async.parallel([
-    function (cb) {
-        console.log("Getting top accounts...");
-        topAccounts(app.get("crypti address"), function (err, accounts) {
-            if (err) {
-                console.log("Error getting top accounts...");
-                cb(err);
-            } else {
-                app.topAccounts = accounts;
-                console.log("Got top accounts!");
-                cb();
-            }
-        });
-    },
     function (cb) { app.exchange.loadBTCUSD(cb) },
     function (cb) { app.exchange.loadXCRBTC(cb) }
 ], function (err) {

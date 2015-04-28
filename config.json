@@ -21,7 +21,6 @@
             "port" : 6379,
             "password" : ""
         },
-        "updateTopAccountsInterval" : 10800000,
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
         "enableExchange" : true,

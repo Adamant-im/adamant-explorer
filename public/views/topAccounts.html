@@ -1,10 +1,10 @@
-<section data-ng-controller="TopAccounts">
+<section data-ng-controller="TopAccounts" data-ng-init="topAccounts.loadData()">
   <h1>Top Accounts</h1>
-  <div class="text-muted" data-ng-if="!topAccounts">
+  <div class="text-muted" data-ng-if="topAccounts.loading">
     <span>Loading Top Accounts <i class="fa fa-spinner fa-spin"></i>
   </div>
-  <div data-ng-if="topAccounts">
-    <div class="row" data-ng-hide="!topAccounts">
+  <div data-ng-if="topAccounts.results.length">
+    <div class="row"  data-ng-hide="!topAccounts.results.length">
       <div class="col-md-12">
         <table class="table table-hover table-striped table-responsive">
           <thead>
@@ -16,7 +16,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr data-ng-repeat="address in topAccounts track by address.address">
+            <tr data-ng-repeat="address in topAccounts.results track by address.address">
               <td>{{$index + 1}}</td>
               <td class="text-right hidden-xs">{{address.balance | xcr}} XCR</td>
               <td class="text-right hidden-xs">{{address.usd | fiat}} USD</td>
@@ -28,6 +28,14 @@
       <div class="col-md-2 text-center">
         <qrcode size="160" data="{{address.addrStr}}"></qrcode>
       </div>
+    </div>
+  </div>
+  <div class="btn-group btn-group-justified" role="group" aria-label="Less/More Accounts" data-ng-hide="topAccounts.disabled()">
+    <div class="btn-group" role="group">
+      <button class="btn btn-default" data-ng-disabled="!topAccounts.lessData" data-ng-click="topAccounts.loadLess()">Less</a>
+    </div>
+    <div class="btn-group" role="group">
+      <button class="btn btn-default" data-ng-disabled="!topAccounts.moreData" data-ng-click="topAccounts.loadMore()">More</a>
     </div>
   </div>
 </section>
