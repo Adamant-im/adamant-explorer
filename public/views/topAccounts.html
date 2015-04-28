@@ -1,8 +1,5 @@
 <section data-ng-controller="TopAccounts" data-ng-init="topAccounts.loadData()">
   <h1>Top Accounts</h1>
-  <div class="text-muted" data-ng-if="topAccounts.loading">
-    <span>Loading Top Accounts <i class="fa fa-spinner fa-spin"></i>
-  </div>
   <div data-ng-if="topAccounts.results.length">
     <div class="row"  data-ng-hide="!topAccounts.results.length">
       <div class="col-md-12">
@@ -25,6 +22,11 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+  <div class="progress progress-striped active" data-ng-show="topAccounts.loading">
+    <div class="progress-bar progress-bar-info" style="width: 100%">
+      <span>Loading Accounts...</span>
     </div>
   </div>
   <div class="btn-group btn-group-justified" role="group" aria-label="Less/More Accounts" data-ng-hide="topAccounts.disabled()">
