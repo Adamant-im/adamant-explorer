@@ -61,7 +61,7 @@ a, a:hover, a:visited, a:focus {
   margin: 0;
   opacity: 0;
   padding: 0;
-  z-index: 99998;
+  z-index: 998;
   /* Add CSS3 styles for transition smoothing */
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -77,7 +77,7 @@ a, a:hover, a:visited, a:focus {
   top: 80px;
   left: 0;
   right: 0;
-  z-index: 99999;
+  z-index: 999;
 }
 
 /* QR modal */
@@ -641,6 +641,7 @@ a, a:hover, a:visited, a:focus {
   text-align: center;
   top: 45px;
   width: 275px;
+  z-index: 9999;
 }
 
 /* Animations */
