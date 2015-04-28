@@ -285,6 +285,7 @@ a, a:hover, a:visited, a:focus {
   background-image: url(/img/logo.png);
   background-size: 250px 56px;
   background-position: -125px 0px;
+  margin-top: 1px;
   height: 56px;
   width: 125px;
 }
