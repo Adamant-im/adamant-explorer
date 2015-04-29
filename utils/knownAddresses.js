@@ -14,6 +14,10 @@ module.exports = function () {
             return this.addresses[address] || null;
         }
 
+        this.inDelegate = function (delegate) {
+            return (delegate) ? { owner : delegate.username } : null;
+        }
+
         this.load = function () {
             try {
                 console.log("Loading known addresses...");
