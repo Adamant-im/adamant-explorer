@@ -21,10 +21,11 @@ if (config.redis.password) {
     });
 }
 
-var utils = require('./utils');
+var app = express(), utils = require('./utils');
 
-var app = express();
 app.exchange = new utils.exchange(config),
+app.knownAddresses = new utils.knownAddresses();
+app.knownAddresses.load();
 
 app.configure(function () {
     app.set('version', '0.3');

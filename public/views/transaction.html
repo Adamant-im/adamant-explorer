@@ -38,6 +38,26 @@
       <table class="table table-responsive">
         <tbody>
           <tr>
+            <td><strong>Sender</strong></td>
+            <td class="text-right">
+              <a href="/address/{{tx.senderId}}">{{tx.senderId}}</a>
+              <div data-ng-if="tx.knownSender">
+                <span class="owner-name">{{tx.knownSender.owner}}</span>
+                <span class="owner-desc text-muted">{{tx.knownSender.description}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr data-ng-if="tx.recipientId">
+            <td><strong>Recipient</strong></td>
+            <td class="text-right">
+              <a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a>
+              <div data-ng-if="tx.knownRecipient">
+                <span class="owner-name">{{tx.knownRecipient.owner}}</span>
+                <span class="owner-desc text-muted">{{tx.knownRecipient.description}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <td><strong>Confirmations</strong></td>
             <td class="text-muted text-right">{{tx.confirmations || 0}}</td>
           </tr>
