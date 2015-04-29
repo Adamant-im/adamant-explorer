@@ -21,75 +21,71 @@
       </a>
     </div>
   </div>
+  <h1>Transaction <small>{{tx.id}}</small></h1>
+  <div class="text-muted" data-ng-if="!tx.id">
+    <span>Loading Transaction <i class="fa fa-spinner fa-spin"></i>
+  </div>
   <div data-ng-if="tx.id">
-    <h1>Transaction <small>{{tx.id}}</small></h1>
-    <div class="progress progress-striped active" data-ng-if="!tx.id">
-      <div class="progress-bar progress-bar-info" style="width: 100%">
-        <span>Loading Transaction <i class="fa fa-spinner fa-spin"></i></span>
-      </div>
+    <div class="well well-sm ellipsis">
+      <strong>Transaction ID</strong>
+      <span class="txid text-muted">{{tx.id}}</span>
+      <span class="btn-copy" clip-copy="tx.id"></span>
     </div>
-    <div data-ng-if="tx.id">
-      <div class="well well-sm ellipsis">
-        <strong>Transaction ID</strong>
-        <span class="txid text-muted">{{tx.id}}</span>
-        <span class="btn-copy" clip-copy="tx.id"></span>
-      </div>
-      <h2>Summary</h2>
-      <table class="table table-responsive">
-        <tbody>
-          <tr>
-            <td><strong>Sender</strong></td>
-            <td class="text-right">
-              <a href="/address/{{tx.senderId}}">{{tx.senderId}}</a>
-              <div data-ng-if="tx.knownSender">
-                <span class="owner-name">{{tx.knownSender.owner}}</span>
-                <span class="owner-desc text-muted">{{tx.knownSender.description}}</span>
-              </div>
-            </td>
-          </tr>
-          <tr data-ng-if="tx.recipientId">
-            <td><strong>Recipient</strong></td>
-            <td class="text-right">
-              <a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a>
-              <div data-ng-if="tx.knownRecipient">
-                <span class="owner-name">{{tx.knownRecipient.owner}}</span>
-                <span class="owner-desc text-muted">{{tx.knownRecipient.description}}</span>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Confirmations</strong></td>
-            <td class="text-muted text-right">{{tx.confirmations || 0}}</td>
-          </tr>
-          <tr>
-            <td><strong>Amount</strong></td>
-            <td class="text-muted text-right">{{tx.amount | xcr}} XCR</td>
-          </tr>
-          <tr>
-            <td><strong>Fee</strong></td>
-            <td class="text-muted text-right">{{tx.fee | xcr}} XCR</td>
-          </tr>
-          <tr>
-            <td><strong>USD equivalent</strong></td>
-            <td class="text-muted text-right">{{tx.usd | fiat}} USD</td>
-          </tr>
-          <tr>
-            <td><strong>Timestamp</strong></td>
-            <td class="text-muted text-right">{{tx.timestamp | timestamp}}</td>
-          </tr>
-          <tr>
-            <td><strong>Block </strong></td>
-            <td data-ng-show="tx.blockId" class="text-muted text-right">
-              <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
-            </td>
-            <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <h2>Details</h2>
-    <div class="block-tx" data-ng-if="tx.id">
-      <div data-ng-include src="'/views/transaction/tx.html'"></div>
-    </div>
+    <h2>Summary</h2>
+    <table class="table table-responsive">
+      <tbody>
+        <tr>
+          <td><strong>Sender</strong></td>
+          <td class="text-right">
+            <a href="/address/{{tx.senderId}}">{{tx.senderId}}</a>
+            <div data-ng-if="tx.knownSender">
+              <span class="owner-name">{{tx.knownSender.owner}}</span>
+              <span class="owner-desc text-muted">{{tx.knownSender.description}}</span>
+            </div>
+          </td>
+        </tr>
+        <tr data-ng-if="tx.recipientId">
+          <td><strong>Recipient</strong></td>
+          <td class="text-right">
+            <a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a>
+            <div data-ng-if="tx.knownRecipient">
+              <span class="owner-name">{{tx.knownRecipient.owner}}</span>
+              <span class="owner-desc text-muted">{{tx.knownRecipient.description}}</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Confirmations</strong></td>
+          <td class="text-muted text-right">{{tx.confirmations || 0}}</td>
+        </tr>
+        <tr>
+          <td><strong>Amount</strong></td>
+          <td class="text-muted text-right">{{tx.amount | xcr}} XCR</td>
+        </tr>
+        <tr>
+          <td><strong>Fee</strong></td>
+          <td class="text-muted text-right">{{tx.fee | xcr}} XCR</td>
+        </tr>
+        <tr>
+          <td><strong>USD equivalent</strong></td>
+          <td class="text-muted text-right">{{tx.usd | fiat}} USD</td>
+        </tr>
+        <tr>
+          <td><strong>Timestamp</strong></td>
+          <td class="text-muted text-right">{{tx.timestamp | timestamp}}</td>
+        </tr>
+        <tr>
+          <td><strong>Block </strong></td>
+          <td data-ng-show="tx.blockId" class="text-muted text-right">
+            <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
+          </td>
+          <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2>Details</h2>
+  <div class="block-tx" data-ng-if="tx.id">
+    <div data-ng-include src="'/views/transaction/tx.html'"></div>
   </div>
 </section>
