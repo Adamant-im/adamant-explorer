@@ -23,10 +23,6 @@
   background-image: url(/img/os/3.png);
 }
 
-.peers>tbody>tr>td {
-  vertical-align: middle;
-}
-
 #map {
   width: 100%;
   height: 368px;

@@ -145,6 +145,10 @@ a, a:hover, a:visited, a:focus {
   margin-left: 0;
 }
 
+.table>tbody>tr>td {
+  vertical-align: middle;
+}
+
 @media (max-width: 320px) {
   .table-responsive td:first-of-type {
     max-width: 150px;
