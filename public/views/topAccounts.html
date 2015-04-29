@@ -22,7 +22,7 @@
               <td class="text-right hidden-xs">{{address.balance | xcr}} XCR</td>
               <td class="text-right hidden-xs">{{address.usd | fiat}} USD</td>
               <td class="text-right hidden-xs hidden-sm">
-                <span class="owner-name">{{address.knowledge.owner}}</span>
+                <span class="owner-name">{{address.knowledge.owner || 'N/A'}}</span>
                 <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
               </td>
             </tr>
