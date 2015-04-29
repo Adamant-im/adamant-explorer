@@ -88,4 +88,9 @@ angular.module('cryptichain')
               return ((parseInt(votes) / 10000000000000000) * 100).toFixed(2);
           }
       }
+  })
+  .filter('supply', function (xcrFilter) {
+      return function (amount) {
+          return ((xcrFilter(amount) / 100000000) * 100).toFixed(2);
+      }
   });
