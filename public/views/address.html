@@ -1,5 +1,5 @@
 <section data-ng-controller="AddressController">
-  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="address.address">
+  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="address.address">
     <div class="container" data-ng-hide="!address.balance">
       <div class="col-md-8 text-left">
         <h3>Address</h3> {{address.address}}
@@ -11,12 +11,12 @@
     </div>
     <div class="hide_snavbar">
       <a href="#" data-ng-click="hideSNavbar=!hideSNavbar">
-        <span data-ng-show="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
-        <span data-ng-show="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
+        <span data-ng-if="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
+        <span data-ng-if="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
       </a>
     </div>
   </div>
-  <h1>Address <small data-ng-show="address.address">{{address.balance | xcr}} XCR</small></h1>
+  <h1>Address <small data-ng-if="address.address">{{address.balance | xcr}} XCR</small></h1>
   <div class="text-muted" data-ng-if="!address.address">
     <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
   </div>

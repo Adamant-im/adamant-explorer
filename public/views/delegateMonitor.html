@@ -129,7 +129,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr data-ng-show="!votes">
+                    <tr data-ng-if="!votes">
                       <td colspan="4">Waiting for votes <i class="fa fa-spinner fa-spin"></i></td>
                     </tr>
                   </tbody>
@@ -166,7 +166,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr data-ng-show="!registrations">
+                    <tr data-ng-if="!registrations">
                       <td colspan="4">Waiting for registrations <i class="fa fa-spinner fa-spin"></i></td>
                     </tr>
                   </tbody>
@@ -209,7 +209,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-ng-show="!activeDelegates">
+              <tr data-ng-if="!activeDelegates">
                 <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
               </tr>
             </tbody>
@@ -239,7 +239,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-ng-show="!standbyDelegates">
+              <tr data-ng-if="!standbyDelegates">
                 <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
               </tr>
             </tbody>
@@ -255,8 +255,8 @@
           </table>
 
           <div data-ng-if="pagination.more || pagination.before">
-            <button class="btn btn-primary" data-ng-click="getStandby(pagination.previousPage)" data-ng-show="pagination.before">Previous page</button>
-            <button class="btn btn-primary" data-ng-click="getStandby(pagination.nextPage)" data-ng-show="pagination.more">Next page</button>
+            <button class="btn btn-primary" data-ng-click="getStandby(pagination.previousPage)" data-ng-if="pagination.before">Previous page</button>
+            <button class="btn btn-primary" data-ng-click="getStandby(pagination.nextPage)" data-ng-if="pagination.more">Next page</button>
           </div>
         </tab>
       </tabset>

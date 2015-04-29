@@ -1,8 +1,8 @@
-<div class="alert alert-warning" data-ng-show="!txs.loading && !txs.results.length">There are no transactions involving this {{txs.parent}}.</div>
-<div class="block-tx" data-ng-show="txs.results[0].id" data-ng-repeat="tx in txs.results track by tx.id">
+<div class="alert alert-warning" data-ng-if="!txs.loading && !txs.results.length">There are no transactions involving this {{txs.parent}}.</div>
+<div class="block-tx" data-ng-if="txs.results[0].id" data-ng-repeat="tx in txs.results track by tx.id">
   <div data-ng-include src="'/views/transaction/tx.html'"></div>
 </div>
-<div class="progress progress-striped active" data-ng-show="txs.loading">
+<div class="progress progress-striped active" data-ng-if="txs.loading">
   <div class="progress-bar progress-bar-info" style="width: 100%">
     <span>Loading Transactions...</span>
   </div>

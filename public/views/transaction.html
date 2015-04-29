@@ -1,5 +1,5 @@
 <section data-ng-controller="TransactionsController">
-  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-show="tx.id" data-ng-init="hideSNavbar=0">
+  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="tx.id" data-ng-init="hideSNavbar=0">
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-6 col-lg-7 text-left">
         <h3>Transaction</h3>
@@ -9,15 +9,15 @@
         </div>
       </div>
       <div class="col-md-6 col-lg-5 text-right">
-        <span data-ng-show="tx.confirmations" class="txvalues txvalues-success">{{tx.confirmations}} Confirmations</span>
-        <span data-ng-show="!tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
+        <span data-ng-if="tx.confirmations" class="txvalues txvalues-success">{{tx.confirmations}} Confirmations</span>
+        <span data-ng-if="!tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
         <span class="txvalues txvalues-primary">{{tx.amount | xcr}} XCR</span>
       </div>
     </div>
     <div class="hide_snavbar">
       <a href="#" data-ng-click="hideSNavbar=!hideSNavbar">
-        <span data-ng-show="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
-        <span data-ng-show="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
+        <span data-ng-if="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
+        <span data-ng-if="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
       </a>
     </div>
   </div>
@@ -76,10 +76,10 @@
         </tr>
         <tr>
           <td><strong>Block </strong></td>
-          <td data-ng-show="tx.blockId" class="text-muted text-right">
+          <td data-ng-if="tx.blockId" class="text-muted text-right">
             <a href="/block/{{tx.blockId}}">{{tx.blockId}}</a>
           </td>
-          <td data-ng-show="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
+          <td data-ng-if="!tx.blockId" class="text-muted text-right">Unconfirmed</td>
         </tr>
       </tbody>
     </table>

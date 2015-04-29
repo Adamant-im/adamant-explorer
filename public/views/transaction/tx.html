@@ -18,8 +18,8 @@
         <div class="panel-body">
           <div class="pull-right" data-ng-class="{'text-danger': $root.currentAddr == tx.senderId}">{{tx.amount | xcr}} XCR</div>
           <div class="ellipsis">
-            <span class="text-muted" data-ng-show="tx.senderId == $root.currentAddr">{{tx.senderId}}</span>
-            <a href="/address/{{tx.senderId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.senderId}}</a>
+            <span class="text-muted" data-ng-if="tx.senderId == $root.currentAddr">{{tx.senderId}}</span>
+            <a href="/address/{{tx.senderId}}" data-ng-if="tx.senderId != $root.currentAddr">{{tx.senderId}}</a>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
           <div class="panel-body">
             <div class="pull-right" data-ng-class="{'text-success': $root.currentAddr == tx.recipientId}">{{tx.amount | xcr}} XCR</div>
             <div class="ellipsis" ng-show="tx.type == 0">
-              <a href="/address/{{tx.recipientId}}" data-ng-show="tx.senderId != $root.currentAddr">{{tx.recipientId}}</a>
+              <a href="/address/{{tx.recipientId}}" data-ng-if="tx.senderId != $root.currentAddr">{{tx.recipientId}}</a>
             </div>
             <div class="ellipsis" ng-show="tx.type == 1">Second signature creation</div>
             <div class="ellipsis" ng-show="tx.type == 2">Delegate registration</div>
@@ -56,8 +56,8 @@
     <span class="txvalues txvalues-default">Fee: {{tx.fee | xcr}} XCR</span>
   </div>
   <div class="col-xs-12 col-sm-8 col-md-8 text-right">
-    <span data-ng-show="block.confirmations > 0 || tx.confirmations > 0" class="txvalues txvalues-success">{{block.confirmations || tx.confirmations}} Confirmations</span>
-    <span data-ng-show="!block.confirmations && !tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
+    <span data-ng-if="block.confirmations > 0 || tx.confirmations > 0" class="txvalues txvalues-success">{{block.confirmations || tx.confirmations}} Confirmations</span>
+    <span data-ng-if="!block.confirmations && !tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
     <span class="txvalues txvalues-primary">{{tx.amount | xcr}} XCR</span>
   </div>
 </div>
