@@ -20,8 +20,8 @@
               <td class="text-right">
                 <a href="/address/{{ address.address }}">{{address.address}}</a>
               </td>
-              <td class="text-right hidden-xs">{{address.balance | xcr}} XCR</td>
-              <td class="text-right hidden-xs">{{address.usd | fiat}} USD</td>
+              <td class="text-right hidden-xs">{{address.balance | xcr}} <span class="text-muted">XCR</span></td>
+              <td class="text-right hidden-xs">{{address.usd | fiat}} <span class="text-muted">USD</span></td>
               <td class="text-right hidden-xs">{{address.balance | supply}}%</td>
               <td class="text-right hidden-xs hidden-sm">
                 <span class="owner-name">{{address.knowledge.owner}}</span>
