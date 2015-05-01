@@ -102,14 +102,9 @@ var NetworkMonitor = function ($scope) {
         this.$scope.lastBlock = lastBlock.block;
     }
 
-    this.updateBestBlock = function (bestBlock) {
-        this.$scope.bestBlock = bestBlock.block;
-    }
-
-    this.updateVolume = function (volume) {
-        this.$scope.volAmount    = volume.amount;
-        this.$scope.volBeginning = volume.beginning;
-        this.$scope.volEnd       = volume.end;
+    this.updateBlocks = function (blocks) {
+        this.$scope.bestBlock = blocks.best;
+        this.$scope.volume    = blocks.volume;
     }
 }
 
@@ -227,8 +222,7 @@ angular.module('cryptichain.tools').factory('networkMonitor',
           ns.on('data', function (res) {
               networkMonitor.updatePeers(res.peers);
               networkMonitor.updateLastBlock(res.lastBlock);
-              networkMonitor.updateBestBlock(res.bestBlock);
-              networkMonitor.updateVolume(res.volume);
+              networkMonitor.updateBlocks(res.blocks);
           });
 
           ns.on('data1', function (res) {
@@ -236,8 +230,7 @@ angular.module('cryptichain.tools').factory('networkMonitor',
           });
 
           ns.on('data2', function (res) {
-              networkMonitor.updateBestBlock(res.bestBlock);
-              networkMonitor.updateVolume(res.volume);
+              networkMonitor.updateBlocks(res.blocks);
           });
 
           ns.on('data3', function (res) {

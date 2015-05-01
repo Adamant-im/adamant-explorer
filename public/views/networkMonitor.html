@@ -29,15 +29,23 @@
             <div class="col-xs-12">
               <div class="pull-left last-block">
                 <p class="small-title">Last Block</span>
-                <p class="big-details" data-ng-switch="!!lastBlock">
-                  <a data-ng-href="/block/{{lastBlock.id}}" data-ng-switch-when="true" target="_new">{{lastBlock.id}}</a>
-                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
-                </p>
-                <p class="text-muted">
-                  <span class="xcr">{{lastBlock.totalAmount || 0 | xcr}} XCR</span>
-                  <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
-                </p>
-                <p class="text-muted">{{lastBlock.timestamp | timeAgo}}</p>
+
+                <div data-ng-if="!lastBlock">
+                  <p class="big-details">
+                    <span class="text-muted">N/A</span>
+                  </p>
+                  <p class="text-muted">waiting for block <i class="fa fa-spinner fa-spin"></i></p>
+                </div>
+                <div data-ng-if="lastBlock">
+                  <p class="big-details">
+                    <a data-ng-href="/block/{{lastBlock.id}}" target="_new">{{lastBlock.id}}</a>
+                  </p>
+                  <p class="text-muted">
+                    <span class="xcr">{{lastBlock.totalAmount + lastBlock.totalFee || 0 | xcr}} XCR</span>
+                    <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
+                  </p>
+                  <p class="text-muted">{{lastBlock.timestamp | timeAgo}}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -47,15 +55,23 @@
             <div class="col-xs-12">
               <div class="pull-left best-block">
                 <p class="small-title">Best Block</p>
-                <p class="big-details" data-ng-switch="!!bestBlock">
-                  <a data-ng-href="/block/{{bestBlock.id}}" data-ng-switch-when="true" target="_new">{{bestBlock.id}}</a>
-                  <span class="text-muted" data-ng-switch-when="false">N/A</span>
-                </p>
-                <p class="text-muted">
-                  <span class="xcr">{{bestBlock.totalAmount || 0 | xcr}} XCR</span>
-                  <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
-                </p>
-                <p class="text-muted">{{bestBlock.timestamp | timeAgo}}</p>
+
+                <div data-ng-if="!bestBlock">
+                  <p class="big-details">
+                    <span class="text-muted">N/A</span>
+                  </p>
+                  <p class="text-muted">waiting for blocks <i class="fa fa-spinner fa-spin"></i></p>
+                </div>
+                <div data-ng-if="bestBlock">
+                  <p class="big-details">
+                    <a data-ng-href="/block/{{bestBlock.id}}" target="_new">{{bestBlock.id}}</a>
+                  </p>
+                  <p class="text-muted">
+                    <span class="xcr">{{bestBlock.totalAmount + bestBlock.totalFee || 0 | xcr}} XCR</span>
+                    <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
+                  </p>
+                  <p class="text-muted">{{bestBlock.timestamp | timeAgo}}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -65,10 +81,17 @@
             <div class="col-xs-12">
               <div class="pull-left volume">
                 <p class="small-title">Volume <span class="text-muted">(XCR)</span></p>
+
                 <p class="big-details">
-                  <span class="volume-amount">{{volAmount || 0 | xcr}}</span>
+                  <span class="volume-amount">{{volume.amount || 0 | xcr}}</span>
                 </p>
-                <p class="text-muted vol-timespan">transferred within {{volBeginning | timeSpan:volEnd}}</p>
+                <div data-ng-if="!volume.amount">
+                  <p class="text-muted">waiting for transactions <i class="fa fa-spinner fa-spin"></i></p>
+                </div>
+                <div data-ng-if="volume.amount">
+                  <p class="text-muted vol-timespan">transferred within {{volume.beginning | timeSpan:volume.end}}</p>
+                  <p class="text-muted vol-blocks">from {{volume.withTxs || 0}} / {{volume.blocks || 0}} blocks</p>
+                </div>
               </div>
             </div>
           </div>

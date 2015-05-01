@@ -3,8 +3,8 @@ var statistics = require('../lib/api/statistics');
 module.exports = function (app) {
     var api = new statistics(app);
 
-    app.get('/api/statistics/getBestBlock', function (req, res) {
-        api.getBestBlock(
+    app.get('/api/statistics/getBlocks', function (req, res) {
+        api.getBlocks(
             function (data) { res.json(data); },
             function (data) { res.json(data); }
         );
@@ -12,13 +12,6 @@ module.exports = function (app) {
 
     app.get('/api/statistics/getLastBlock', function (req, res) {
         api.getLastBlock(
-            function (data) { res.json(data); },
-            function (data) { res.json(data); }
-        );
-    });
-
-    app.get('/api/statistics/getVolume', function (req, res) {
-        api.getVolume(
             function (data) { res.json(data); },
             function (data) { res.json(data); }
         );

@@ -9,19 +9,17 @@ module.exports = function (app, connectionHandler, socket) {
 
     this.onInit = function () {
         async.parallel([
-            getBestBlock,
             getLastBlock,
-            getVolume,
+            getBlocks,
             getPeers
         ],
         function (err, res) {
             if (err) {
                 log('Error in retrieving data for: ' + err);
             } else {
-                data.bestBlock = res[0];
-                data.lastBlock = res[1];
-                data.volume    = res[2];
-                data.peers     = res[3];
+                data.lastBlock = res[0];
+                data.blocks    = res[1];
+                data.peers     = res[2];
 
                 log('Emitting new data');
                 socket.emit('data', data);
@@ -60,13 +58,6 @@ module.exports = function (app, connectionHandler, socket) {
         }
     }
 
-    var getBestBlock = function (cb) {
-        statistics.getBestBlock(
-            function (res) { cb('BestBlock') },
-            function (res) { cb(null, res) }
-        );
-    }
-
     var getLastBlock = function (cb) {
         statistics.getLastBlock(
             function (res) { cb('LastBlock') },
@@ -74,9 +65,9 @@ module.exports = function (app, connectionHandler, socket) {
         );
     }
 
-    var getVolume = function (cb) {
-        statistics.getVolume(
-            function (res) { cb('Volume') },
+    var getBlocks = function (cb) {
+        statistics.getBlocks(
+            function (res) { cb('Blocks') },
             function (res) { cb(null, res) }
         );
     }
@@ -110,15 +101,13 @@ module.exports = function (app, connectionHandler, socket) {
         var thisData = {};
 
         async.parallel([
-            getBestBlock,
-            getVolume
+            getBlocks,
         ],
         function (err, res) {
             if (err) {
                 log('Error in retrieving data for: ' + err);
             } else {
-                thisData.bestBlock = data.bestBlock = res[0];
-                thisData.volume    = data.volume    = res[1];
+                thisData.blocks = data.blocks = res[0];
 
                 log('Emitting data-2');
                 socket.emit('data2', thisData);
