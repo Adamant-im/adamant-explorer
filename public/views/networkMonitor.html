@@ -90,7 +90,7 @@
                 </div>
                 <div data-ng-if="volume.amount">
                   <p class="text-muted vol-timespan">transferred within {{volume.beginning | timeSpan:volume.end}}</p>
-                  <p class="text-muted vol-blocks">from {{volume.withTxs || 0}} / {{volume.blocks || 0}} blocks</p>
+                  <p class="text-muted vol-blocks">from {{volume.txs || 0}} transactions in {{volume.withTxs || 0}} / {{volume.blocks || 0}} blocks</p>
                 </div>
               </div>
             </div>
