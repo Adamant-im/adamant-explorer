@@ -1,23 +1,23 @@
-var express = require('express'),
-    config = require('./config.json').configuration,
+var express = require("express"),
+    config = require("./config.json").configuration,
     client = require("./redis")(config),
     development = config.development,
     production = config.production,
     routes = require("./api"),
-    path = require('path'),
-    cache = require('./cache.js')
-    async = require('async');
+    path = require("path"),
+    cache = require("./cache.js")
+    async = require("async");
 
-var app = express(), utils = require('./utils');
+var app = express(), utils = require("./utils");
 
 app.exchange = new utils.exchange(config),
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 
 app.configure(function () {
-    app.set('version', '0.3');
+    app.set("version", "0.3");
 
-    app.set('strict routing', true);
+    app.set("strict routing", true);
 
     app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
     app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
@@ -47,7 +47,7 @@ app.configure("production", function () {
 });
 
 app.use(function (req, res, next) {
-    if (req.originalUrl.split('/')[1] != 'api') {
+    if (req.originalUrl.split("/")[1] != "api") {
         return next();
     }
 
@@ -86,9 +86,9 @@ routes(app);
 console.log("Routes loaded");
 
 app.use(function (req, res, next) {
-    console.log(req.originalUrl.split('/')[1]);
+    console.log(req.originalUrl.split("/")[1]);
 
-    if (req.originalUrl.split('/')[1] != 'api') {
+    if (req.originalUrl.split("/")[1] != "api") {
         return next();
     }
 
@@ -105,7 +105,7 @@ app.use(function (req, res, next) {
             } else {
                 var ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
 
-                req.redis.send_command('EXPIRE', [req.originalUrl, ttl], function (err) {
+                req.redis.send_command("EXPIRE", [req.originalUrl, ttl], function (err) {
                     if (err) {
                         console.log(err);
                     }
@@ -118,7 +118,7 @@ app.use(function (req, res, next) {
 });
 
 app.get("*", function (req, res, next) {
-    if (req.url.indexOf('api') != 1) {
+    if (req.url.indexOf("api") != 1) {
         return res.sendfile(path.join(__dirname, "public", "index.html"));
     } else {
         return next();
