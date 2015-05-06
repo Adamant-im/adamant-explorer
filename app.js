@@ -1,25 +1,12 @@
 var express = require('express'),
     config = require('./config.json').configuration,
+    client = require("./redis")(config),
     development = config.development,
     production = config.production,
     routes = require("./api"),
     path = require('path'),
-    redis = require("redis"),
-    client = redis.createClient(
-        config.redis.port,
-        config.redis.host
-    ),
     cache = require('./cache.js')
     async = require('async');
-
-if (config.redis.password) {
-    client.auth(config.redis.password, function (err) {
-        if (err) {
-            console.log(err);
-            console.log("Can't connect to redis");
-        }
-    });
-}
 
 var app = express(), utils = require('./utils');
 
