@@ -5,7 +5,7 @@ var express = require("express"),
     production = config.production,
     routes = require("./api"),
     path = require("path"),
-    cache = require("./cache.js")
+    cache = require("./cache")
     async = require("async");
 
 var app = express(), utils = require("./utils");
