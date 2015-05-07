@@ -30,10 +30,10 @@ module.exports = function (grunt) {
                 src: ['bower_components/momentjs/min/moment.min.js',
                       'bower_components/leaflet/dist/leaflet.js',
                       'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
-                      'bower_components/underscore/underscore-min.js',
-                      'bower_components/zeroclipboard/ZeroClipboard.min.js',
                       'bower_components/sigma/sigma.min.js',
-                      'bower_components/sigma/plugins/*.min.js'],
+                      'bower_components/sigma/plugins/*.min.js',
+                      'bower_components/underscore/underscore-min.js',
+                      'bower_components/zeroclipboard/ZeroClipboard.min.js'],
                 dest: 'public/js/vendors.js'
             },
             angular: {
