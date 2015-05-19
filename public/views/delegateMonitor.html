@@ -120,33 +120,35 @@
               <div class="latest-votes">
                 <p class="small-title">Latest Votes</span>
 
-                <table class="table table-condensed table-responsive votes">
-                  <thead>
-                    <tr>
-                      <th>Voter</th>
-                      <th class="hidden-xs">Transaction</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-if="!votes">
-                      <td colspan="4">Waiting for votes <i class="fa fa-spinner fa-spin"></i></td>
-                    </tr>
-                  </tbody>
-                  <tbody>
-                    <tr data-ng-repeat='v in votes track by v.id'>
-                      <td class="voter">
-                        <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
-                      </td>
-                      <td class="tx hidden-xs">
-                        <a class="ellipsis" data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
-                      </td>
-                      <td class="time-ago">
-                        <span class="text-muted">{{v.timestamp | timeAgo}}</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-condensed votes">
+                    <thead>
+                      <tr>
+                        <th>Voter</th>
+                        <th class="hidden-xs">Transaction</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-ng-if="!votes">
+                        <td colspan="4">Waiting for votes <i class="fa fa-spinner fa-spin"></i></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr data-ng-repeat='v in votes track by v.id'>
+                        <td class="voter">
+                          <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
+                        </td>
+                        <td class="tx hidden-xs">
+                          <a class="ellipsis" data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
+                        </td>
+                        <td class="time-ago">
+                          <span class="text-muted">{{v.timestamp | timeAgo}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -157,33 +159,35 @@
               <div class="newest-delegates">
                 <p class="small-title">Newest Delegates</span>
 
-                <table class="table table-condensed table-responsive registrations">
-                  <thead>
-                    <tr>
-                      <th>Delegate</th>
-                      <th class="hidden-xs">Transaction</th>
-                      <th>Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-if="!registrations">
-                      <td colspan="4">Waiting for registrations <i class="fa fa-spinner fa-spin"></i></td>
-                    </tr>
-                  </tbody>
-                  <tbody>
-                    <tr data-ng-repeat='r in registrations track by r.id'>
-                      <td class="delegate">
-                        <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
-                      </td>
-                      <td class="tx hidden-xs">
-                        <a class="ellipsis" data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
-                      </td>
-                      <td class="time-ago">
-                        <span class="text-muted">{{r.timestamp | timeAgo}}</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table table-condensed registrations">
+                    <thead>
+                      <tr>
+                        <th>Delegate</th>
+                        <th class="hidden-xs">Transaction</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr data-ng-if="!registrations">
+                        <td colspan="4">Waiting for registrations <i class="fa fa-spinner fa-spin"></i></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr data-ng-repeat='r in registrations track by r.id'>
+                        <td class="delegate">
+                          <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
+                        </td>
+                        <td class="tx hidden-xs">
+                          <a class="ellipsis" data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
+                        </td>
+                        <td class="time-ago">
+                          <span class="text-muted">{{r.timestamp | timeAgo}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -197,63 +201,66 @@
         <tab heading="Active Delegates">
           <p class="small-title">Active Delegates</span>
 
-          <table class="table table-hover table-striped table-responsive">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th class="hidden-xs">Address</th>
-                <th class="hidden-xs hidden-sm">Forged</th>
-                <th class="hidden-xs">Uptime</th>
-                <th class="hidden-xs">Approval</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-ng-if="!activeDelegates">
-                <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr class="fader" data-ng-repeat='d in activeDelegates track by d.rate'>
-                <td>{{d.rate}}</td>
-                <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
-                <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
-                <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">XCR</span></td>
-                <td class="hidden-xs">{{d.productivity || 0}}%</td>
-                <td class="hidden-xs">{{d.vote | approval }}%</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th class="hidden-xs">Address</th>
+                  <th class="hidden-xs hidden-sm">Forged</th>
+                  <th class="hidden-xs">Uptime</th>
+                  <th class="hidden-xs">Approval</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-if="!activeDelegates">
+                  <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr class="fader" data-ng-repeat='d in activeDelegates track by d.rate'>
+                  <td>{{d.rate}}</td>
+                  <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
+                  <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
+                  <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">XCR</span></td>
+                  <td class="hidden-xs">{{d.productivity || 0}}%</td>
+                  <td class="hidden-xs">{{d.vote | approval }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </tab>
         <tab heading="Standby Delegates" data-ng-click="getStandby(1)">
           <p class="small-title">Standby Delegates</span>
 
-          <table class="table table-hover table-striped table-responsive">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th class="hidden-xs">Address</th>
-                <th class="hidden-xs">Uptime</th>
-                <th class="hidden-xs">Approval</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-ng-if="!standbyDelegates">
-                <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr class="fader" data-ng-repeat='d in standbyDelegates track by d.rate'>
-                <td>{{d.rate}}</td>
-                <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
-                <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
-                <td class="hidden-xs">{{d.productivity || 0}}%</td>
-                <td class="hidden-xs">{{d.vote | approval }}%</td>
-              </tr>
-            </tbody>
-          </table>
-
+          <div class="table-responsive">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th class="hidden-xs">Address</th>
+                  <th class="hidden-xs">Uptime</th>
+                  <th class="hidden-xs">Approval</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-if="!standbyDelegates">
+                  <td colspan="4">Waiting for delegates <i class="fa fa-spinner fa-spin"></i></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr class="fader" data-ng-repeat='d in standbyDelegates track by d.rate'>
+                  <td>{{d.rate}}</td>
+                  <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
+                  <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
+                  <td class="hidden-xs">{{d.productivity || 0}}%</td>
+                  <td class="hidden-xs">{{d.vote | approval }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div data-ng-if="pagination.more || pagination.before">
             <button class="btn btn-primary" data-ng-click="getStandby(pagination.previousPage)" data-ng-if="pagination.before">Previous page</button>
             <button class="btn btn-primary" data-ng-click="getStandby(pagination.nextPage)" data-ng-if="pagination.more">Next page</button>

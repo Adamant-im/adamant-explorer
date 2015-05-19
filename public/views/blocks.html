@@ -4,33 +4,35 @@
       <div class="page-header">
         <h1>Blocks <small data-ng-if="blocks.length > 1">{{blocks[0].height}} &#8594; {{blocks[blocks.length - 1].height}}</small></h1>
       </div>
-      <table class="table table-hover table-striped table-responsive">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th class="text-right">Height</th>
-            <th class="text-right hidden-xs">Timestamp</th>
-            <th class="text-right hidden-xs">Transactions</th>
-            <th class="text-right hidden-xs hidden-sm">Generator</th>
-            <th class="text-right hidden-xs hidden-sm">Amount (XCR)</th>
-            <th class="text-right hidden-xs hidden-sm">Fee (XCR)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-ng-if="loading">
-            <td colspan="5">Waiting for blocks <i class="fa fa-spinner fa-spin"></i></td>
-          </tr>
-          <tr class="fader" data-ng-repeat='b in blocks track by b.id'>
-            <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
-            <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
-            <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
-            <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
-            <td class="text-right hidden-xs hidden-sm">{{b.generator}}</td>
-            <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
-            <td class="text-right hidden-xs hidden-sm">{{b.totalFee}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th class="text-right">Height</th>
+              <th class="text-right hidden-xs">Timestamp</th>
+              <th class="text-right hidden-xs">Transactions</th>
+              <th class="text-right hidden-xs hidden-sm">Generator</th>
+              <th class="text-right hidden-xs hidden-sm">Amount (XCR)</th>
+              <th class="text-right hidden-xs hidden-sm">Fee (XCR)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-if="loading">
+              <td colspan="5">Waiting for blocks <i class="fa fa-spinner fa-spin"></i></td>
+            </tr>
+            <tr class="fader" data-ng-repeat='b in blocks track by b.id'>
+              <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
+              <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
+              <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
+              <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
+              <td class="text-right hidden-xs hidden-sm">{{b.generator}}</td>
+              <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
+              <td class="text-right hidden-xs hidden-sm">{{b.totalFee}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div data-ng-if="pagination.more || pagination.before">
         <a class="btn btn-primary" href="/blocks/{{pagination.previousPage}}" data-ng-if="pagination.before">Previous page</a>
         <a class="btn btn-primary" href="/blocks/{{pagination.nextPage}}" data-ng-if="pagination.more && pagination.nextPage != 0">Next page</a>

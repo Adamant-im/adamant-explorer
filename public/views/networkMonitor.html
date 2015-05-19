@@ -174,33 +174,35 @@
     <div class="col-xs-12 big-info">
       <p class="small-title">Peers</p>
 
-      <table class="table table-hover table-striped table-responsive peers">
-        <thead>
-          <tr>
-            <th>IP Address</th>
-            <th class="hidden-xs">Hostname</th>
-            <th class="hidden-xs">Country</th>
-            <th>Status</th>
-            <th>Version</th>
-            <th>Platform</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-ng-if="!peers">
-            <td colspan="4">Waiting for peers <i class="fa fa-spinner fa-spin"></i></td>
-          </tr>
-        </tbody>
-        <tbody data-ng-repeat='(key, value) in peers'>
-          <tr class="fader" data-ng-repeat='p in value track by p.ip'>
-            <td><span class="text-muted">{{p.ip}}</span></td>
-            <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
-            <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
-            <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
-            <td><span class="text-muted">{{p.version}}</span></td>
-            <td><span os-icon os="{{p.os}}" brand="{{p.osBrand}}"></span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped peers">
+          <thead>
+            <tr>
+              <th>IP Address</th>
+              <th class="hidden-xs">Hostname</th>
+              <th class="hidden-xs">Country</th>
+              <th>Status</th>
+              <th>Version</th>
+              <th>Platform</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-if="!peers">
+              <td colspan="4">Waiting for peers <i class="fa fa-spinner fa-spin"></i></td>
+            </tr>
+          </tbody>
+          <tbody data-ng-repeat='(key, value) in peers'>
+            <tr class="fader" data-ng-repeat='p in value track by p.ip'>
+              <td><span class="text-muted">{{p.ip}}</span></td>
+              <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
+              <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
+              <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
+              <td><span class="text-muted">{{p.version}}</span></td>
+              <td><span os-icon os="{{p.os}}" brand="{{p.osBrand}}"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

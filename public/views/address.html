@@ -29,55 +29,59 @@
     <h2>Summary <small>confirmed</small></h2>
     <div class="row" data-ng-hide="!address.address">
       <div class="col-md-12">
-        <table class="table table-responsive">
-          <tbody>
-            <tr data-ng-if="address.knowledge">
-              <td><strong>Owner</strong></td>
-              <td class="ellipsis text-right">
-                <span class="owner-name">{{address.knowledge.owner}}</span>
-                <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Total balance</strong></td>
-              <td class="ellipsis text-right">{{address.balance | xcr}} <span class="text-muted">XCR</span></td>
-            </tr>
-            <tr>
-              <td><strong>USD equivalent</strong></td>
-              <td class="ellipsis text-right">{{address.usd | fiat}} <span class="text-muted">USD</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr data-ng-if="address.knowledge">
+                <td><strong>Owner</strong></td>
+                <td class="ellipsis text-right">
+                  <span class="owner-name">{{address.knowledge.owner}}</span>
+                  <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Total balance</strong></td>
+                <td class="ellipsis text-right">{{address.balance | xcr}} <span class="text-muted">XCR</span></td>
+              </tr>
+              <tr>
+                <td><strong>USD equivalent</strong></td>
+                <td class="ellipsis text-right">{{address.usd | fiat}} <span class="text-muted">USD</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="delegate" data-ng-hide="!address.delegate">
       <h2>Delegate</h2>
       <div class="row">
         <div class="col-md-12">
-          <table class="table table-responsive">
-            <tbody>
-              <tr>
-                <td><strong>Username</strong></td>
-                <td class="ellipsis text-right">{{address.delegate.username}}</td>
-              </tr>
-              <tr>
-                <td><strong>Uptime</strong></td>
-                <td class="ellipsis text-right">{{address.delegate.productivity || 0.00}}%</td>
-              </tr>
-              <tr>
-                <td><strong>Rank / Status</strong></td>
-                <td class="ellipsis text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
-              </tr>
-              <tr>
-                <td><strong>Approval</strong></td>
-                <td class="ellipsis text-right">{{address.delegate.vote | approval }}%</td>
-              </tr>
-              <tr>
-                <td><strong>Forged</strong></td>
-                <td class="ellipsis text-right">{{address.delegate.fees || 0 | xcr}} <span class="text-muted">XCR</span></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td><strong>Username</strong></td>
+                  <td class="ellipsis text-right">{{address.delegate.username}}</td>
+                </tr>
+                <tr>
+                  <td><strong>Uptime</strong></td>
+                  <td class="ellipsis text-right">{{address.delegate.productivity || 0.00}}%</td>
+                </tr>
+                <tr>
+                  <td><strong>Rank / Status</strong></td>
+                  <td class="ellipsis text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Approval</strong></td>
+                  <td class="ellipsis text-right">{{address.delegate.vote | approval }}%</td>
+                </tr>
+                <tr>
+                  <td><strong>Forged</strong></td>
+                  <td class="ellipsis text-right">{{address.delegate.fees || 0 | xcr}} <span class="text-muted">XCR</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

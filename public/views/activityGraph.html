@@ -53,28 +53,30 @@
       <hr />
 
       <h4>Statistics</h4>
-      <table class="table table-responsive">
-        <tr>
-          <th>Txs</th>
-          <td>{{statistics.txs}}</td>
-        </tr>
-        <tr>
-          <th>Volume</th>
-          <td>{{statistics.volume}} <span class="text-muted">XCR</span></td>
-        </tr>
-        <tr>
-          <th>Blocks</th>
-          <td>{{statistics.blocks}}</td>
-        </tr>
-        <tr>
-          <th>Timespan</th>
-          <td>{{statistics.beginning | timeSpan:statistics.end}}</td>
-        </tr>
-        <tr>
-          <th>Accounts</th>
-          <td>{{statistics.accounts}}</td>
-        </tr>
-      </table>
+      <div class="table-responsive">
+        <table class="table">
+          <tr>
+            <th>Txs</th>
+            <td>{{statistics.txs}}</td>
+          </tr>
+          <tr>
+            <th>Volume</th>
+            <td>{{statistics.volume}} <span class="text-muted">XCR</span></td>
+          </tr>
+          <tr>
+            <th>Blocks</th>
+            <td>{{statistics.blocks}}</td>
+          </tr>
+          <tr>
+            <th>Timespan</th>
+            <td>{{statistics.beginning | timeSpan:statistics.end}}</td>
+          </tr>
+          <tr>
+            <th>Accounts</th>
+            <td>{{statistics.accounts}}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 </div>
