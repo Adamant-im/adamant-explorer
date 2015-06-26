@@ -18,7 +18,7 @@ angular.module('cryptichain.system').controller('IndexController',
 
       $scope.blocksInterval = $interval(function () {
           $scope.getLastBlocks();
-      }, 10000);
+      }, 30000);
 
       $scope.getLastBlocks();
 
@@ -38,7 +38,7 @@ angular.module('cryptichain.system').controller('IndexController',
 
       $scope.transactionsInterval = $interval(function () {
           $scope.getLastTransactions();
-      }, 10000);
+      }, 30000);
 
       $scope.getLastTransactions();
   });
