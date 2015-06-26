@@ -27,7 +27,6 @@
         "grunt-contrib-uglify": "~0.3.2",
         "grunt-contrib-copy": "~0.8.0",
         "grunt-contrib-watch": "*",
-        "grunt-macreload": "*",
         "grunt-css": "~0.5.4",
         "grunt-markdown": "~0.5.0",
         "grunt-angular-gettext": "^0.2.15"

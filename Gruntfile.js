@@ -9,7 +9,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-css');
     grunt.loadNpmTasks('grunt-markdown');
-    grunt.loadNpmTasks('grunt-macreload');
     grunt.loadNpmTasks('grunt-angular-gettext');
 
     // Project Configuration
@@ -102,12 +101,6 @@ module.exports = function (grunt) {
                         ext: '.html'
                     }
                 ]
-            }
-        },
-        macreload: {
-            chrome: {
-                browser: 'chrome',
-                editor: 'macvim'
             }
         },
         watch: {
