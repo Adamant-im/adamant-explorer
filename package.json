@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
+    "body-parser": "^1.13.2",
     "express": "^3.17.1",
     "hiredis": "^0.1.17",
     "method-override": "^2.3.3",

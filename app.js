@@ -32,7 +32,11 @@ app.use(express.compress());
 var methodOverride = require("method-override");
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-app.use(express.bodyParser());
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 if (process.env.NODE_ENV == "production") {
     app.set("host", production.host);
