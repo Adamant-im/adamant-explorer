@@ -28,7 +28,10 @@ app.use(function (req, res, next) {
 app.use(express.logger());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.compress());
-app.use(express.methodOverride());
+
+var methodOverride = require("method-override");
+app.use(methodOverride('X-HTTP-Method-Override'));
+
 app.use(express.bodyParser());
 
 if (process.env.NODE_ENV == "production") {
