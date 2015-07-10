@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.compress());
 
 var methodOverride = require("method-override");
-app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(methodOverride("X-HTTP-Method-Override"));
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
