@@ -14,37 +14,30 @@ app.exchange = new utils.exchange(config),
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 
-app.configure(function () {
-    app.set("version", "0.3");
+app.set("version", "0.3");
+app.set("strict routing", true);
+app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
+app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
+app.set("fixed point", config.fixedPoint);
 
-    app.set("strict routing", true);
-
-    app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
-    app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
-
-    app.set("fixed point", config.fixedPoint);
-
-    app.use(function (req, res, next) {
-        req.redis = client;
-        return next();
-    });
-
-    app.use(express.logger());
-    app.use(express.static(path.join(__dirname, "public")));
-    app.use(express.compress());
-    app.use(express.methodOverride());
-    app.use(express.bodyParser());
+app.use(function (req, res, next) {
+    req.redis = client;
+    return next();
 });
 
-app.configure("development", function () {
-    app.set("host", development.host);
-    app.set("port", development.port);
-});
+app.use(express.logger());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.compress());
+app.use(express.methodOverride());
+app.use(express.bodyParser());
 
-app.configure("production", function () {
+if (process.env.NODE_ENV == "production") {
     app.set("host", production.host);
     app.set("port", production.port);
-});
+} else {
+    app.set("host", development.host);
+    app.set("port", development.port);
+}
 
 app.use(function (req, res, next) {
     if (req.originalUrl.split("/")[1] != "api") {
