@@ -69,7 +69,7 @@ module.exports = function (app, connectionHandler, socket) {
     var emitLastBlock = function () {
         getLastBlock(function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else if (newLastBlock(res)) {
                 data = res;
             }

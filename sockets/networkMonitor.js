@@ -15,7 +15,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 data.lastBlock = res[0];
                 data.blocks    = res[1];
@@ -87,7 +87,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 thisData.lastBlock = data.lastBlock = res[0];
 
@@ -105,7 +105,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 thisData.blocks = data.blocks = res[0];
 
@@ -123,7 +123,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 thisData.peers = data.peers = res[0];
 

@@ -16,7 +16,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 data.active        = res[0];
                 data.lastBlock     = res[1];
@@ -89,7 +89,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error in retrieving data for: ' + err);
+                log('Error retrieving: ' + err);
             } else {
                 thisData.active        = res[0];
                 thisData.lastBlock     = res[1];
