@@ -70,11 +70,13 @@ angular.module('cryptichain.tools').factory('delegateMonitor',
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {
-              delegateMonitor.updateActive(res.active);
-              delegateMonitor.updateTotals(res.active);
-              delegateMonitor.updateLastBlock(res.lastBlock);
-              delegateMonitor.updateRegistrations(res.registrations);
-              delegateMonitor.updateVotes(res.votes);
+              if (res.active) {
+                  delegateMonitor.updateActive(res.active);
+                  delegateMonitor.updateTotals(res.active);
+              }
+              if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
+              if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
+              if (res.votes) { delegateMonitor.updateVotes(res.votes); }
           });
 
           $scope.$on('$destroy', function (event) {

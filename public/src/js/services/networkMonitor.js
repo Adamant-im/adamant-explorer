@@ -220,21 +220,27 @@ angular.module('cryptichain.tools').factory('networkMonitor',
               ns = $socket('/networkMonitor');
 
           ns.on('data', function (res) {
-              networkMonitor.updatePeers(res.peers);
-              networkMonitor.updateLastBlock(res.lastBlock);
-              networkMonitor.updateBlocks(res.blocks);
+              if (res.peers) { networkMonitor.updatePeers(res.peers); }
+              if (res.lastBlock) { networkMonitor.updateLastBlock(res.lastBlock); }
+              if (res.blocks) { networkMonitor.updateBlocks(res.blocks); }
           });
 
           ns.on('data1', function (res) {
-              networkMonitor.updateLastBlock(res.lastBlock);
+              if (res.lastBlock) {
+                  networkMonitor.updateLastBlock(res.lastBlock);
+              }
           });
 
           ns.on('data2', function (res) {
-              networkMonitor.updateBlocks(res.blocks);
+              if (res.blocks) {
+                  networkMonitor.updateBlocks(res.blocks);
+              }
           });
 
           ns.on('data3', function (res) {
-              networkMonitor.updatePeers(res.peers);
+              if (res.peers) {
+                  networkMonitor.updatePeers(res.peers);
+              }
           });
 
           $scope.$on('$destroy', function (event) {
