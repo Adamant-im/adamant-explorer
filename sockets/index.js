@@ -1,11 +1,13 @@
 module.exports = function (app, io) {
     var ns = {
+        header          : io.of('/header'),
         activityGraph   : io.of('/activityGraph'),
         delegateMonitor : io.of('/delegateMonitor'),
         networkMonitor  : io.of('/networkMonitor')
     }
 
-    var activityGraph   = require('./activityGraph'),
+    var header          = require('./header'),
+        activityGraph   = require('./activityGraph'),
         delegateMonitor = require('./delegateMonitor');
         networkMonitor  = require('./networkMonitor');
 
@@ -36,6 +38,7 @@ module.exports = function (app, io) {
         }
     }
 
+    new header(app, connectionHandler, ns.header);
     new activityGraph(app, connectionHandler, ns.activityGraph);
     new delegateMonitor(app, connectionHandler, ns.delegateMonitor);
     new networkMonitor(app, connectionHandler, ns.networkMonitor);
