@@ -14,8 +14,10 @@ module.exports = function (app) {
     });
 
     app.get("/api/getXCRCourse", function (req, res, next) {
-        var data = common.getXCRCourse();
-        return res.json(data);
+        common.getXCRCourse(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
     });
 
     app.get("/api/search", function (req, res, next) {
