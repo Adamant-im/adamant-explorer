@@ -21,10 +21,10 @@ var Header = function ($scope) {
 
     this.updateXCRCourse = function (res) {
         if (res.success) {
-            this.$scope.xcr = res.xcr;
-            this.$scope.usd = res.usd;
+            this.$scope.xcrBtc = res.xcr;
+            this.$scope.xcrUsd = res.usd;
         } else {
-            this.$scope.xcr = this.$scope.usd = 0.0;
+            this.$scope.xcrBtc = this.$scope.xcrUsd = 0.0;
         }
     }
 }
