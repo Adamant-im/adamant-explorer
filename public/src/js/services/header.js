@@ -45,10 +45,6 @@ angular.module('cryptichain.system').factory('header',
               ns.removeAllListeners();
           });
 
-          $scope.$on('$locationChangeStart', function (event, next, current) {
-              ns.emit('forceDisconnect');
-          });
-
           return header;
       }
   });
