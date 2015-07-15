@@ -8,6 +8,12 @@ module.exports = function (app, connectionHandler, socket) {
         interval   = null,
         data       = {};
 
+    var running = {
+        'getBlocksCount' : false,
+        'getFee'         : false,
+        'getXCRCourse'   : false
+    };
+
     this.onInit = function () {
         async.parallel([
             getBlocksCount,
@@ -50,23 +56,35 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     var getBlocksCount = function (cb) {
+        if (running.getBlocksCount) {
+            return cb('getBlocksCount (already running)');
+        }
+        running.getBlocksCount = true;
         blocks.getBlocksCount(
-            function (res) { cb('BlocksCount') },
-            function (res) { cb(null, res) }
+            function (res) { running.getBlocksCount = false; cb('BlocksCount') },
+            function (res) { running.getBlocksCount = false; cb(null, res) }
         );
     }
 
     var getFee = function (cb) {
+        if (running.getFee) {
+            return cb('getFee (already running)');
+        }
+        running.getFee = true;
         common.getFee(
-            function (res) { cb('Fee') },
-            function (res) { cb(null, res) }
+            function (res) { running.getFee = false; cb('Fee') },
+            function (res) { running.getFee = false; cb(null, res) }
         );
     }
 
     var getXCRCourse = function (cb) {
+        if (running.getXCRCourse) {
+            return cb('getXCRCourse (already running)');
+        }
+        running.getXCRCourse = true;
         common.getXCRCourse(
-            function (res) { cb('XCRCourse') },
-            function (res) { cb(null, res) }
+            function (res) { running.getXCRCourse = false; cb('XCRCourse') },
+            function (res) { running.getXCRCourse = false; cb(null, res) }
         );
     }
 

@@ -7,6 +7,12 @@ module.exports = function (app, connectionHandler, socket) {
         intervals  = [],
         data       = {};
 
+    var running = {
+        'getlastBlock' : false,
+        'getBlocks'    : false,
+        'getPeers'     : false
+    };
+
     this.onInit = function () {
         async.parallel([
             getLastBlock,
@@ -59,23 +65,35 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     var getLastBlock = function (cb) {
+        if (running.getLastBlock) {
+            return cb('getLastBlock (already running)');
+        }
+        running.getLastBlock = true;
         statistics.getLastBlock(
-            function (res) { cb('LastBlock') },
-            function (res) { cb(null, res) }
+            function (res) { running.getLastBlock = false; cb('LastBlock') },
+            function (res) { running.getLastBlock = false; cb(null, res) }
         );
     }
 
     var getBlocks = function (cb) {
+        if (running.getBlocks) {
+            return cb('getBlocks (already running)');
+        }
+        running.getBlocks = true;
         statistics.getBlocks(
-            function (res) { cb('Blocks') },
-            function (res) { cb(null, res) }
+            function (res) { running.getBlocks = false; cb('Blocks') },
+            function (res) { running.getBlocks = false; cb(null, res) }
         );
     }
 
     var getPeers = function (cb) {
+        if (running.getPeers) {
+            return cb('getPeers (already running)');
+        }
+        running.getPeers = true;
         statistics.getPeers(
-            function (res) { cb('Peers') },
-            function (res) { cb(null, res) }
+            function (res) { running.getPeers = false; cb('Peers') },
+            function (res) { running.getPeers = false; cb(null, res) }
         );
     }
 

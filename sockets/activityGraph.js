@@ -4,6 +4,7 @@ module.exports = function (app, connectionHandler, socket) {
     var statistics   = new api.statistics(app),
         transactions = new api.transactions(app),
         connection   = new connectionHandler('Activity Graph:', socket, this),
+        running      = { 'getlastBlock' : false },
         interval     = null,
         data         = {};
 
@@ -33,12 +34,17 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     var getLastBlock = function (cb) {
+        if (running.getLastBlock) {
+            return cb('getLastBlock (already running)');
+        }
+        running.getLastBlock = true;
         statistics.getLastBlock(
-            function (res) { cb('LastBlock') },
+            function (res) { running.getLastBlock = false; cb('LastBlock') },
             function (res) {
                 if (res.success && res.block.numberOfTransactions > 0) {
                     getBlockTransactions(res, cb);
                 } else {
+                    running.getLastBlock = false;
                     cb(null, res);
                 }
             }
@@ -48,13 +54,17 @@ module.exports = function (app, connectionHandler, socket) {
     var getBlockTransactions = function (resBlock, cb) {
         transactions.getTransactionsByBlock(
             resBlock.block.id,
-            function (res) { cb('BlockTransactions') },
+            function (res) {
+                running.getLastBlock = false;
+                cb('BlockTransactions');
+            },
             function (res) {
                 if (res.success) {
                     resBlock.block.transactions = res.transactions;
                 } else {
                     resBlock.block.transactions = [];
                 }
+                running.getLastBlock = false;
                 cb(null, resBlock);
             }
         );

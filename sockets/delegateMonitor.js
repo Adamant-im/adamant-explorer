@@ -7,6 +7,13 @@ module.exports = function (app, connectionHandler, socket) {
         interval   = null,
         data       = {};
 
+    var running = {
+        'getActive'        : false,
+        'getLastBlock'     : false,
+        'getRegistrations' : false,
+        'getVotes'         : false
+    };
+
     this.onInit = function () {
         async.parallel([
             getActive,
@@ -51,30 +58,46 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     var getActive = function (cb) {
+        if (running.getActive) {
+            return cb('getActive (already running)');
+        }
+        running.getActive = true;
         delegates.getActive(
-            function (res) { cb('Active') },
-            function (res) { cb(null, res) }
+            function (res) { running.getActive = false; cb('Active') },
+            function (res) { running.getActive = false; cb(null, res) }
         );
     }
 
     var getLastBlock = function (cb) {
+        if (running.getLastBlock) {
+            return cb('getLastBlock (already running)');
+        }
+        running.getLastBlock = true;
         delegates.getLastBlock(
-            function (res) { cb('LastBlock') },
-            function (res) { cb(null, res) }
+            function (res) { running.getLastBlock = false; cb('LastBlock') },
+            function (res) { running.getLastBlock = false; cb(null, res) }
         );
     }
 
     var getRegistrations = function (cb) {
+        if (running.getRegistrations) {
+            return cb('getRegistrations (already running)');
+        }
+        running.getRegistrations = true;
         delegates.getLatestRegistrations(
-            function (res) { cb('Registrations') },
-            function (res) { cb(null, res) }
+            function (res) { running.getRegistrations = false; cb('Registrations') },
+            function (res) { running.getRegistrations = false; cb(null, res) }
         );
     }
 
     var getVotes = function (cb) {
+        if (running.getVotes) {
+            return cb('getVotes (already running)');
+        }
+        running.getVotes = true;
         delegates.getLatestVotes(
-            function (res) { cb('Votes') },
-            function (res) { cb(null, res) }
+            function (res) { running.getVotes = false; cb('Votes') },
+            function (res) { running.getVotes = false; cb(null, res) }
         );
     }
 
