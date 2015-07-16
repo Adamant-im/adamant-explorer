@@ -6,7 +6,6 @@ angular.module('cryptichain',[
     'ngRoute',
     'ngProgress',
     'ui.bootstrap',
-    'ui.route',
     'gettext',
     'cryptichain.system',
     'cryptichain.socket',

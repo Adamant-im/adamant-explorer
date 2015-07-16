@@ -42,7 +42,6 @@ module.exports = function (grunt) {
                       'bower_components/angular-animate/angular-animate.min.js',
                       'bower_components/angular-bootstrap/ui-bootstrap.js',
                       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-                      'bower_components/angular-ui-utils/ui-utils.min.js',
                       'bower_components/ngprogress/build/ngProgress.min.js',
                       'bower_components/angular-gettext/dist/angular-gettext.min.js'],
                 dest: 'public/js/angularjs-all.js'
