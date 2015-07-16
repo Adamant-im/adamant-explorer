@@ -192,7 +192,7 @@
             </tr>
           </tbody>
           <tbody data-ng-repeat='(key, value) in peers'>
-            <tr class="fader" data-ng-repeat='p in value track by p.ip'>
+            <tr class="fader" data-ng-repeat='p in value track by $index'>
               <td><span class="text-muted">{{p.ip}}</span></td>
               <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
               <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
