@@ -12,7 +12,7 @@
         "font-awesome": "~4.3.0",
         "leaflet": "~0.7.3",
         "leaflet.markercluster": "~0.4.0",
-        "momentjs": "~2.5.1",
+        "momentjs": "~2.10.3",
         "ngprogress": "~1.0.5",
         "sigma": "https://github.com/karmacoma/sigma-bower.git",
         "underscore": "~1.7.0",
