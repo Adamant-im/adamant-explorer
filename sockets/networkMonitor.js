@@ -14,6 +14,8 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     this.onInit = function () {
+        this.onConnect();
+
         async.parallel([
             getLastBlock,
             getBlocks,
@@ -47,7 +49,6 @@ module.exports = function (app, connectionHandler, socket) {
             clearInterval(intervals[i]);
         }
         intervals = [];
-        data      = {};
     }
 
     // Private
