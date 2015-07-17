@@ -111,7 +111,7 @@ module.exports = function (config) {
             } else if (type == 'XCRBTC') {
                 return requestTicker(type, config.xcrbtcExchange, cb);
             } else {
-                return cb(util.format('Unrecognized '%s' ticker type!', type));
+                return cb(util.format('Unrecognized \'%s\' ticker type!', type));
             }
         }
     }
