@@ -1,24 +1,24 @@
-var express = require("express"),
-    config = require("./config.json").configuration,
-    client = require("./redis")(config),
+var express = require('express'),
+    config = require('./config.json').configuration,
+    client = require('./redis')(config),
     development = config.development,
     production = config.production,
-    routes = require("./api"),
-    path = require("path"),
-    cache = require("./cache")
-    async = require("async");
+    routes = require('./api'),
+    path = require('path'),
+    cache = require('./cache')
+    async = require('async');
 
-var app = express(), utils = require("./utils");
+var app = express(), utils = require('./utils');
 
 app.exchange = new utils.exchange(config),
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 
-app.set("version", "0.3");
-app.set("strict routing", true);
-app.set("crypti address", "http://" + config.crypti.host + ":" + config.crypti.port);
-app.set("freegeoip address", "http://" + config.freegeoip.host + ":" + config.freegeoip.port);
-app.set("fixed point", config.fixedPoint);
+app.set('version', '0.3');
+app.set('strict routing', true);
+app.set('crypti address', 'http://' + config.crypti.host + ':' + config.crypti.port);
+app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
+app.set('fixed point', config.fixedPoint);
 
 app.use(function (req, res, next) {
     req.redis = client;
@@ -26,28 +26,28 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.logger());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.compress());
 
-var methodOverride = require("method-override");
-app.use(methodOverride("X-HTTP-Method-Override"));
+var methodOverride = require('method-override');
+app.use(methodOverride('X-HTTP-Method-Override'));
 
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-if (process.env.NODE_ENV == "production") {
-    app.set("host", production.host);
-    app.set("port", production.port);
+if (process.env.NODE_ENV == 'production') {
+    app.set('host', production.host);
+    app.set('port', production.port);
 } else {
-    app.set("host", development.host);
-    app.set("port", development.port);
+    app.set('host', development.host);
+    app.set('port', development.port);
 }
 
 app.use(function (req, res, next) {
-    if (req.originalUrl.split("/")[1] != "api") {
+    if (req.originalUrl.split('/')[1] != 'api') {
         return next();
     }
 
@@ -79,16 +79,16 @@ app.use(function (req, res, next) {
     }
 });
 
-console.log("Loading routes...");
+console.log('Loading routes...');
 
 routes(app);
 
-console.log("Routes loaded");
+console.log('Routes loaded');
 
 app.use(function (req, res, next) {
-    console.log(req.originalUrl.split("/")[1]);
+    console.log(req.originalUrl.split('/')[1]);
 
-    if (req.originalUrl.split("/")[1] != "api") {
+    if (req.originalUrl.split('/')[1] != 'api') {
         return next();
     }
 
@@ -105,7 +105,7 @@ app.use(function (req, res, next) {
             } else {
                 var ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
 
-                req.redis.send_command("EXPIRE", [req.originalUrl, ttl], function (err) {
+                req.redis.send_command('EXPIRE', [req.originalUrl, ttl], function (err) {
                     if (err) {
                         console.log(err);
                     }
@@ -117,9 +117,9 @@ app.use(function (req, res, next) {
     }
 });
 
-app.get("*", function (req, res, next) {
-    if (req.url.indexOf("api") != 1) {
-        return res.sendfile(path.join(__dirname, "public", "index.html"));
+app.get('*', function (req, res, next) {
+    if (req.url.indexOf('api') != 1) {
+        return res.sendfile(path.join(__dirname, 'public', 'index.html'));
     } else {
         return next();
     }
@@ -129,14 +129,14 @@ async.parallel([
     function (cb) { app.exchange.loadBTCUSD(cb) },
     function (cb) { app.exchange.loadXCRBTC(cb) }
 ], function (err) {
-    var server = app.listen(app.get("port"), app.get("host"), function (err) {
+    var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {
             console.log(err);
         } else {
-            console.log("Crypti started at " + app.get("host") + ":" + app.get("port"));
+            console.log('Crypti started at ' + app.get('host') + ':' + app.get('port'));
 
-            var io = require("socket.io").listen(server);
-            require("./sockets")(app, io);
+            var io = require('socket.io').listen(server);
+            require('./sockets')(app, io);
         }
     });
 });

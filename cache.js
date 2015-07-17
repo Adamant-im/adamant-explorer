@@ -1,7 +1,7 @@
 module.exports = {
-    "cacheIgnoreList" : [
+    'cacheIgnoreList' : [
     ],
-    "cacheTTLOverride" : {
-        "/api/getUnconfirmedTransactions" : 5
+    'cacheTTLOverride' : {
+        '/api/getUnconfirmedTransactions' : 5
     }
 }

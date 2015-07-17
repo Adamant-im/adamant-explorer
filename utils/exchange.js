@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (config) {
-    this.BTCUSD = this.XCRBTC = "~";
+    this.BTCUSD = this.XCRBTC = '~';
 
     this.loadRates = function () {
         async.parallel([
@@ -11,14 +11,14 @@ module.exports = function (config) {
     }
 
     this.loadBTCUSD = function (cb) {
-        console.log("Loading BTC/USD curs from exchange...");
+        console.log('Loading BTC/USD curs from exchange...');
         getBTCUSD(function (err, result) {
             if (err) {
-                console.log("Loading BTC/USD failed...");
-                console.log("Error:", err);
+                console.log('Loading BTC/USD failed...');
+                console.log('Error:', err);
             } else if (result != '~') {
                 this.BTCUSD = result;
-                console.log("BTC/USD loaded...", result);
+                console.log('BTC/USD loaded...', result);
             }
             if (cb) {
                 return cb(err, result);
@@ -27,14 +27,14 @@ module.exports = function (config) {
     }
 
     this.loadXCRBTC = function (cb) {
-        console.log("Loading XCR/BTC curs from exchange...");
+        console.log('Loading XCR/BTC curs from exchange...');
         getXCRBTC(function (err, result) {
             if (err) {
-                console.log("Loading BTC/XCR failed...");
-                console.log("Error:", err);
+                console.log('Loading BTC/XCR failed...');
+                console.log('Error:', err);
             } else if (result != '~') {
                 this.XCRBTC = result;
-                console.log("BTC/XCR loaded...", result);
+                console.log('BTC/XCR loaded...', result);
             }
             if (cb) {
                 return cb(err, result);
@@ -46,7 +46,7 @@ module.exports = function (config) {
         if (!isNaN(xcr)) {
             return (xcr * this.XCRBTC * this.BTCUSD).toFixed(3);
         } else {
-            return "~";
+            return '~';
         }
     }
 
@@ -67,8 +67,8 @@ module.exports = function (config) {
                 return cb(err, result);
             });
         } else {
-            console.log("Loading BTC/USD disabled...");
-            return cb(null, "~");
+            console.log('Loading BTC/USD disabled...');
+            return cb(null, '~');
         }
     }
 
@@ -78,8 +78,8 @@ module.exports = function (config) {
                 return cb(err, result);
             });
         } else {
-            console.log("Loading XCR/BTC disabled...");
-            return cb(null, "~");
+            console.log('Loading XCR/BTC disabled...');
+            return cb(null, '~');
         }
     }
 }

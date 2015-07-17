@@ -5,8 +5,8 @@ module.exports = function (config) {
     var exchanges = {
         BTCUSD : {
             bitfinex  : [
-                "Bitfinex",
-                "https://api.bitfinex.com/v1/pubticker/BTCUSD",
+                'Bitfinex',
+                'https://api.bitfinex.com/v1/pubticker/BTCUSD',
                 function (res, cb) {
                     if (res.message) {
                         return cb(res.message);
@@ -16,15 +16,15 @@ module.exports = function (config) {
                 }
             ],
             bitstamp  : [
-                "Bitstamp",
-                "https://www.bitstamp.net/api/ticker/",
+                'Bitstamp',
+                'https://www.bitstamp.net/api/ticker/',
                 function (res, cb) {
                     return cb(null, res.last);
                 }
             ],
             btce  : [
-                "Btc-e",
-                "https://btc-e.com/api/3/ticker/btc_usd",
+                'Btc-e',
+                'https://btc-e.com/api/3/ticker/btc_usd',
                 function (res, cb) {
                   if (res.error) {
                       return cb(res.error);
@@ -36,8 +36,8 @@ module.exports = function (config) {
         },
         XCRBTC : {
             bter : [
-                "Bter",
-                "http://data.bter.com/api/1/ticker/xcr_btc",
+                'Bter',
+                'http://data.bter.com/api/1/ticker/xcr_btc',
                 function (res, cb) {
                     if (res.message) {
                         return cb(res.message);
@@ -47,8 +47,8 @@ module.exports = function (config) {
                 }
             ],
             cryptsy : [
-                "Cryptsy",
-                "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=280",
+                'Cryptsy',
+                'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=280',
                 function (res, cb) {
                     if (res.error) {
                         return cb(res.error);
@@ -58,8 +58,8 @@ module.exports = function (config) {
                 }
             ],
             poloniex : [
-                "Poloniex",
-                "https://poloniex.com/public?command=returnTicker",
+                'Poloniex',
+                'https://poloniex.com/public?command=returnTicker',
                 function (res, cb) {
                     if (res.error) {
                         return cb(res.error);
@@ -73,19 +73,19 @@ module.exports = function (config) {
 
     if (exchanges.BTCUSD.hasOwnProperty(config.btcusdExchange)) {
         config.btcusdExchange = exchanges.BTCUSD[config.btcusdExchange];
-        console.log(util.format("Configured %s as BTC/USD exchange", config.btcusdExchange[0]));
+        console.log(util.format('Configured %s as BTC/USD exchange', config.btcusdExchange[0]));
     } else {
-        console.log("Warning: Unrecognized BTC/USD exchange!");
-        console.log("Defaulting to Bitfinex...");
+        console.log('Warning: Unrecognized BTC/USD exchange!');
+        console.log('Defaulting to Bitfinex...');
         config.btcusdExchange = exchanges.BTCUSD.bitfinex;
     }
 
     if (exchanges.XCRBTC.hasOwnProperty(config.xcrbtcExchange)) {
         config.xcrbtcExchange = exchanges.XCRBTC[config.xcrbtcExchange];
-        console.log(util.format("Configured %s as XCR/BTC exchange", config.xcrbtcExchange[0]));
+        console.log(util.format('Configured %s as XCR/BTC exchange', config.xcrbtcExchange[0]));
     } else {
-        console.log("Warning: Unrecognized XCR/BTC exchange!");
-        console.log("Defaulting to Poloniex...");
+        console.log('Warning: Unrecognized XCR/BTC exchange!');
+        console.log('Defaulting to Poloniex...');
         config.xcrbtcExchange = exchanges.XCRBTC.poloniex;
     }
 
@@ -97,7 +97,7 @@ module.exports = function (config) {
             if (err) {
                 return cb(err);
             } else if (response.statusCode != 200) {
-                return cb(util.format("Response code: %s!", response.statusCode));
+                return cb(util.format('Response code: %s!', response.statusCode));
             } else {
                 return options[2](body, cb);
             }
@@ -106,12 +106,12 @@ module.exports = function (config) {
 
     return {
         getTicker: function (type, cb) {
-            if (type == "BTCUSD") {
+            if (type == 'BTCUSD') {
                 return requestTicker(type, config.btcusdExchange, cb);
-            } else if (type == "XCRBTC") {
+            } else if (type == 'XCRBTC') {
                 return requestTicker(type, config.xcrbtcExchange, cb);
             } else {
-                return cb(util.format("Unrecognized '%s' ticker type!", type));
+                return cb(util.format('Unrecognized '%s' ticker type!', type));
             }
         }
     }
