@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-css');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-angular-gettext');
 
@@ -85,9 +85,14 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            css: {
-                src: 'public/css/main.css',
-                dest: 'public/css/main.min.css'
+            target: {
+                files: [{
+                    expand: true,
+                    cwd: 'public/css',
+                    src: ['*.css', '!*.min.css'],
+                    dest: 'public/css',
+                    ext: '.min.css'
+                }]
             }
         },
         markdown: {
