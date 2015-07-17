@@ -58,8 +58,8 @@ module.exports = function (grunt) {
                 dest: 'public/js/main.js'
             },
             css: {
-                src: ['bower_components/bootstrap/dist/css/bootstrap.min.css',
-                      'bower_components/font-awesome/css/font-awesome.min.css',
+                src: ['bower_components/bootstrap/dist/css/bootstrap.css',
+                      'bower_components/font-awesome/css/font-awesome.css',
                       'bower_components/leaflet/dist/leaflet.css',
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
                       'public/src/css/**/*.css'],
