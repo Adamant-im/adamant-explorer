@@ -10,7 +10,7 @@ module.exports = function (app) {
         );
     });
 
-    app.get('/api/lastBlocks', function (req, res, next) {
+    app.get('/api/getLastBlocks', function (req, res, next) {
         api.lastBlocks(
             req.query.n,
             function (data) { res.json(data); },
