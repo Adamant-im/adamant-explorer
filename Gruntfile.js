@@ -28,16 +28,6 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            vendors: {
-                src: ['bower_components/momentjs/min/moment.min.js',
-                      'bower_components/leaflet/dist/leaflet.js',
-                      'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
-                      'bower_components/sigma/sigma.min.js',
-                      'bower_components/sigma/plugins/*.min.js',
-                      'bower_components/underscore/underscore-min.js',
-                      'bower_components/zeroclipboard/ZeroClipboard.min.js'],
-                dest: 'public/js/vendors.js'
-            },
             angular: {
                 src: ['bower_components/angular/angular.min.js',
                       'bower_components/angular-resource/angular-resource.min.js',
@@ -60,8 +50,22 @@ module.exports = function (grunt) {
                       'public/src/js/translations.js'],
                 dest: 'public/js/main.js'
             },
+            vendors: {
+                src: ['bower_components/amstockchart/amcharts/amcharts.js',
+                      'bower_components/amstockchart/amcharts/serial.js',
+                      'bower_components/amstockchart/amcharts/amstock.js',
+                      'bower_components/momentjs/min/moment.min.js',
+                      'bower_components/leaflet/dist/leaflet.js',
+                      'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
+                      'bower_components/sigma/sigma.min.js',
+                      'bower_components/sigma/plugins/*.min.js',
+                      'bower_components/underscore/underscore-min.js',
+                      'bower_components/zeroclipboard/ZeroClipboard.min.js'],
+                dest: 'public/js/vendors.js'
+            },
             css: {
-                src: ['bower_components/bootstrap/dist/css/bootstrap.css',
+                src: ['bower_components/amstockchart/amcharts/style.css',
+                      'bower_components/bootstrap/dist/css/bootstrap.css',
                       'bower_components/font-awesome/css/font-awesome.css',
                       'bower_components/leaflet/dist/leaflet.css',
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
@@ -74,10 +78,6 @@ module.exports = function (grunt) {
                 banner: '/*! <%= pkg.name %> <%= pkg.version %> */\n',
                 mangle: false
             },
-            vendors: {
-                src: 'public/js/vendors.js',
-                dest: 'public/js/vendors.min.js'
-            },
             angular: {
                 src: 'public/js/angularjs-all.js',
                 dest: 'public/js/angularjs-all.min.js'
@@ -85,6 +85,10 @@ module.exports = function (grunt) {
             main: {
                 src: 'public/js/main.js',
                 dest: 'public/js/main.min.js'
+            },
+            vendors: {
+                src: 'public/js/vendors.js',
+                dest: 'public/js/vendors.min.js'
             }
         },
         cssmin: {
@@ -123,6 +127,14 @@ module.exports = function (grunt) {
         copy: {
             dist: {
                 files: [
+                    {
+                        // Copy AmCharts images to public/img/amcharts.
+                        expand: true,
+                        dot: true,
+                        cwd: 'bower_components/amstockchart/amcharts/images',
+                        src: ['*.*'],
+                        dest: 'public/img/amcharts'
+                    },
                     {
                         // Copy Bootstrap fonts to public/fonts.
                         expand: true,

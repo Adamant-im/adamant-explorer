@@ -5,6 +5,7 @@ bower_components
 npm-debug.log
 .DS_Store
 public/css/*.css
+public/img/amcharts
 public/js/*.js
 po/*.pot
 Thumbs.db

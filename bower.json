@@ -1,21 +1,22 @@
 {
-    "name": "Cryptichain",
-    "version": "0.0.1",
-    "dependencies": {
-        "angular": "~1.4.3",
-        "angular-animate": "~1.4.3",
-        "angular-bootstrap": "~0.13.0",
-        "angular-gettext": "~2.1.0",
-        "angular-resource": "~1.4.3",
-        "angular-route": "~1.4.3",
-        "bootstrap": "~3.3.5",
-        "font-awesome": "~4.3.0",
-        "leaflet": "~0.7.3",
-        "leaflet.markercluster": "~0.4.0",
-        "momentjs": "~2.10.3",
-        "ngprogress": "~1.0.5",
-        "sigma": "https://github.com/karmacoma/sigma-bower.git",
-        "underscore": "~1.8.3",
-        "zeroclipboard": "~1.3.5"
-    }
+  "name": "Cryptichain",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "~1.4.3",
+    "angular-animate": "~1.4.3",
+    "angular-bootstrap": "~0.13.0",
+    "angular-gettext": "~2.1.0",
+    "angular-resource": "~1.4.3",
+    "angular-route": "~1.4.3",
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.3.0",
+    "leaflet": "~0.7.3",
+    "leaflet.markercluster": "~0.4.0",
+    "momentjs": "~2.10.3",
+    "ngprogress": "~1.0.5",
+    "sigma": "https://github.com/karmacoma/sigma-bower.git",
+    "underscore": "~1.8.3",
+    "zeroclipboard": "~1.3.5",
+    "amstockchart": "https://github.com/karmacoma/amstockcharts.git"
+  }
 }
