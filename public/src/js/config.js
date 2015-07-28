@@ -35,6 +35,10 @@ angular.module('cryptichain').config(function ($routeProvider) {
         templateUrl : "/views/delegateMonitor.html",
         title: "Delegate Monitor"
     })
+    .when("/marketWatcher", {
+        templateUrl : "/views/marketWatcher.html",
+        title: "Market Watcher"
+    })
     .when("/networkMonitor", {
         templateUrl : "/views/networkMonitor.html",
         title: "Network Monitor"
