@@ -20,6 +20,7 @@ app.set('crypti address', 'http://' + config.crypti.host + ':' + config.crypti.p
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 app.set('fixed point', config.fixedPoint);
 
+app.locals.redis = client;
 app.use(function (req, res, next) {
     req.redis = client;
     return next();

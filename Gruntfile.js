@@ -11,6 +11,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-angular-gettext');
 
+    // Load Custom Tasks
+    grunt.loadTasks('tasks');
+
     // Project Configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),

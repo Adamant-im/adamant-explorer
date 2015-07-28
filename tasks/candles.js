@@ -1,0 +1,80 @@
+var config = require('../config.json').configuration,
+    client = require('../redis')(config),
+    candles = require('../lib/candles'),
+    async = require('async');
+
+module.exports = function (grunt) {
+    grunt.registerTask('candles:rebuild', 'Rebuild exchange candle data.', function () {
+        var done = this.async();
+
+        async.series([
+            function (callback) {
+                var bter = new candles.bter(client);
+
+                bter.rebuildCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
+            },
+            function (callback) {
+                var poloniex = new candles.poloniex(client);
+
+                poloniex.rebuildCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
+            }
+        ],
+        function (err, results) {
+            if (err) {
+                grunt.log.error(err);
+                done(false);
+            } else {
+                done(true);
+            }
+        });
+    });
+
+    grunt.registerTask('candles:update', 'Update exchange candle data.', function () {
+        var done = this.async();
+
+        async.series([
+            function (callback) {
+                var bter = new candles.bter(client);
+
+                bter.updateCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
+            },
+            function (callback) {
+                var poloniex = new candles.poloniex(client);
+
+                poloniex.updateCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
+            }
+        ],
+        function (err, results) {
+            if (err) {
+                grunt.log.error(err);
+                done(false);
+            } else {
+                done(true);
+            }
+        });
+    });
+}
