@@ -1,5 +1,6 @@
 var accounts = require('./accounts.js'),
     blocks = require('./blocks.js'),
+    candles = require('./candles.js'),
     common = require('./common.js'),
     delegates = require('./delegates.js'),
     statistics = require('./statistics.js'),
@@ -8,6 +9,7 @@ var accounts = require('./accounts.js'),
 module.exports = function (app) {
     accounts(app);
     blocks(app);
+    candles(app);
     common(app);
     delegates(app);
     statistics(app);
