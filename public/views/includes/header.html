@@ -16,7 +16,7 @@
         </div>
         <div class="no_matching text-danger" data-ng-if="badQuery">No matching records found!</div>
       </form>
-      <div class="status" data-if-show="totalBlocks">
+      <div class="status" data-ng-show="totalBlocks">
         <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
         <span class="fee">&middot; <strong>Fee: </strong> {{fee | number:4}}%</span>
         <span class="xcr-btc">&middot; <strong>XCR/BTC: </strong> {{xcrBtc}}</span>
