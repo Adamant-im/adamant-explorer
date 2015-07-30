@@ -20,15 +20,15 @@ module.exports = function () {
 
         this.load = function () {
             try {
-                console.log('Loading known addresses...');
+                console.log('KnownAddresses:', 'Loading known addresses...');
                 this.addresses = require('../known.json');
             } catch (err) {
-                console.error('Error loading known.json:', err.message);
+                console.error('KnownAddresses:', 'Error loading known.json:', err.message);
                 this.addresses = {};
             }
 
             var length = Object.keys(this.addresses).length.toString();
-            console.log(length, 'known addresses loaded');
+            console.log('KnownAddresses:', length, 'known addresses loaded');
             return this.addresses;
         }
     }

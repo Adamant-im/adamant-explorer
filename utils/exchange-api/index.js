@@ -73,19 +73,19 @@ module.exports = function (config) {
 
     if (exchanges.BTCUSD.hasOwnProperty(config.btcusdExchange)) {
         config.btcusdExchange = exchanges.BTCUSD[config.btcusdExchange];
-        console.log(util.format('Configured %s as BTC/USD exchange', config.btcusdExchange[0]));
+        console.log('Exchange:', util.format('Configured %s as BTC/USD exchange', config.btcusdExchange[0]));
     } else {
-        console.log('Warning: Unrecognized BTC/USD exchange!');
-        console.log('Defaulting to Bitfinex...');
+        console.log('Exchange:', 'Warning: Unrecognized BTC/USD exchange!');
+        console.log('Exchange:', 'Defaulting to Bitfinex...');
         config.btcusdExchange = exchanges.BTCUSD.bitfinex;
     }
 
     if (exchanges.XCRBTC.hasOwnProperty(config.xcrbtcExchange)) {
         config.xcrbtcExchange = exchanges.XCRBTC[config.xcrbtcExchange];
-        console.log(util.format('Configured %s as XCR/BTC exchange', config.xcrbtcExchange[0]));
+        console.log('Exchange:', util.format('Configured %s as XCR/BTC exchange', config.xcrbtcExchange[0]));
     } else {
-        console.log('Warning: Unrecognized XCR/BTC exchange!');
-        console.log('Defaulting to Poloniex...');
+        console.log('Exchange:', 'Warning: Unrecognized XCR/BTC exchange!');
+        console.log('Exchange:', 'Defaulting to Poloniex...');
         config.xcrbtcExchange = exchanges.XCRBTC.poloniex;
     }
 

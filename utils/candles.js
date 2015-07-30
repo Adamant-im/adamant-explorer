@@ -27,7 +27,7 @@ module.exports = function (config, client) {
         ],
         function (err, results) {
             if (err) {
-                console.error('Error updating candles:', err);
+                console.error('Candles:', 'Error updating candles:', err);
             }
         });
     }
