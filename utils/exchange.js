@@ -1,5 +1,7 @@
 'use strict';
 
+var async = require('async');
+
 module.exports = function (config) {
     this.BTCUSD = this.XCRBTC = '~';
 
