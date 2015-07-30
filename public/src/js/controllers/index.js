@@ -3,7 +3,7 @@
 angular.module('cryptichain.system').controller('IndexController',
   function ($scope, $http, $interval) {
       $scope.getLastBlocks = function () {
-          $http.get("/api/lastBlocks").then(function (resp) {
+          $http.get("/api/getLastBlocks").then(function (resp) {
               if (resp.data.success) {
                   if ($scope.blocks && $scope.blocks.length > 0) {
                       if ($scope.blocks[0].id != resp.data.blocks[0].id) {

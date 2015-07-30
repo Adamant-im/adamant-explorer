@@ -11,7 +11,7 @@ angular.module('cryptichain.blocks').controller('BlocksController',
 
           $scope.loading = true;
 
-          $http.get("/api/lastBlocks?n=" + offset).then(function (resp) {
+          $http.get("/api/getLastBlocks?n=" + offset).then(function (resp) {
               if (resp.data.success) {
                   $scope.blocks = resp.data.blocks;
 

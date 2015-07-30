@@ -11,7 +11,7 @@ module.exports = function (app) {
     });
 
     app.get('/api/getLastBlocks', function (req, res, next) {
-        api.lastBlocks(
+        api.getLastBlocks(
             req.query.n,
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
