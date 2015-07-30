@@ -10,7 +10,8 @@ var express = require('express'),
 
 var app = express(), utils = require('./utils');
 
-app.exchange = new utils.exchange(config),
+app.candles = new utils.candles(config, client);
+app.exchange = new utils.exchange(config);
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 

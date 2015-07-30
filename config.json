@@ -23,6 +23,8 @@
         },
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
+        "enableCandles" : true,
+        "updateCandlesInterval" : 30000,
         "enableExchange" : true,
         "updateExchangeInterval" : 900000,
         "btcusdExchange" : "bitfinex",

@@ -73,6 +73,8 @@ Example:
 
    * `cacheTTL` - time to live cache in redis.
    * `fixedPoint` - fixed point number of Crypti (10^8).
+   * `enableCandles` - enable or disable updating of candlestick data.
+   * `updateCandlesInterval` - time to update candlestick data.
    * `enableExchange` - enable or disable exchange currency courses.
    * `updateExchangeInterval` - time to update exchange currency courses.
    * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
