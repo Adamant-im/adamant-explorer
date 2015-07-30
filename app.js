@@ -37,7 +37,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 
 if (process.env.NODE_ENV == 'production') {
