@@ -63,6 +63,8 @@ Example:
         },
         "cacheTTL" : 20,
         "fixedPoint" : 100000000,
+        "enableCandles" : true,
+        "updateCandlesInterval" : 30000,
         "enableExchange" : true,
         "updateExchangeInterval" : 900000,
         "btcusdExchange" : "bitfinex",
@@ -71,14 +73,14 @@ Example:
 }
 ```
 
-   * `cacheTTL` - time to live cache in redis.
-   * `fixedPoint` - fixed point number of Crypti (10^8).
-   * `enableCandles` - enable or disable updating of candlestick data.
-   * `updateCandlesInterval` - time to update candlestick data.
-   * `enableExchange` - enable or disable exchange currency courses.
-   * `updateExchangeInterval` - time to update exchange currency courses.
-   * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
-   * `xcrbtcExchange` - default is poloniex, alternatives are: bter & cryptsy.
+* `cacheTTL` - time to live cache in redis.
+* `fixedPoint` - fixed point number of Crypti (10^8).
+* `enableCandles` - enable or disable updating of candlestick data.
+* `updateCandlesInterval` - time to update candlestick data.
+* `enableExchange` - enable or disable exchange currency courses.
+* `updateExchangeInterval` - time to update exchange currency courses.
+* `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
+* `xcrbtcExchange` - default is poloniex, alternatives are: bter & cryptsy.
 
 # Build
 
@@ -96,6 +98,14 @@ grunt
 
 It will update css/js files as changes are made.
 
+# Benchmarks
+
+To run benchmark tests run:
+
+```
+node benchmark.js
+```
+
 # Launch
 
 Development:
@@ -104,7 +114,7 @@ Development:
 node app.js
 ```
 
-Open: [http://localhost:8080](http://localhost:8080)
+Open: [http://localhost:8040](http://localhost:8040)
 
 Production:
 
