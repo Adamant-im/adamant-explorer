@@ -638,15 +638,16 @@ a, a:hover, a:visited, a:focus {
   -moz-border-radius-bottomright: 2px;
   -webkit-border-bottom-left-radius: 2px;
   -webkit-border-bottom-right-radius: 2px;
-  background-color: white;
+  color: white;
+  background-color: #1E9ADD;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   border-top: none;
-  border: 1px solid #2B2F31;
+  border: 1px solid #1b89c4;
   padding: 10px 20px;
   position: absolute;
   text-align: center;
-  top: 45px;
+  top: 55px;
   width: 275px;
   z-index: 9999;
 }
