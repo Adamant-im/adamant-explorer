@@ -66,7 +66,7 @@ var StockChart = function ($http, $scope) {
                 useDataSetColors: false,
                 comparable: false,
                 showBalloon: true,
-                balloonText: 'Open:<b>[[open]]</b><br>Close:<b>[[close]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b>',
+                balloonText: 'Open: <b>[[open]]</b><br>Close: <b>[[close]]</b><br>Low: <b>[[low]]</b><br>High: <b>[[high]]</b>',
                 balloonColor: '#888888',
                 proCandlesticks: true
             }]
@@ -88,7 +88,7 @@ var StockChart = function ($http, $scope) {
                   valueField: 'btcVolume',
                   type: 'column',
                   showBalloon: true,
-                  balloonText: 'Volume:<b>[[value]]</b>',
+                  balloonText: 'Volume: <b>[[value]]</b>',
                   balloonColor: '#888888',
                   fillAlphas: 1,
                   colors: 'black',
