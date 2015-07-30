@@ -247,6 +247,7 @@ var StockChart = function ($http, $scope) {
     var updateStatistics = function (resp) {
         if (resp.data.success) {
             $scope.statistics = resp.data.statistics;
+            console.log('Statistics updated');
         }
     }
 
