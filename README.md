@@ -98,6 +98,22 @@ grunt
 
 It will update css/js files as changes are made.
 
+# Market Watcher
+
+To build candlestick data for each exchange run:
+
+```
+grunt candles:build
+```
+
+To update candlestick data manually run:
+
+```
+grunt candles:update
+```
+
+During runtime candlestick data is updated automatically.
+
 # Benchmarks
 
 To run benchmark tests run:
