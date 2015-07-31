@@ -4,14 +4,14 @@ var config = require('../config.json').configuration,
     async = require('async');
 
 module.exports = function (grunt) {
-    grunt.registerTask('candles:rebuild', 'Rebuild exchange candle data.', function () {
+    grunt.registerTask('candles:build', 'Build exchange candle data.', function () {
         var done = this.async();
 
         async.series([
             function (callback) {
                 var bter = new candles.bter(client);
 
-                bter.rebuildCandles(function (err, res) {
+                bter.buildCandles(function (err, res) {
                     if (err) {
                         callback(err);
                     } else {
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
             function (callback) {
                 var poloniex = new candles.poloniex(client);
 
-                poloniex.rebuildCandles(function (err, res) {
+                poloniex.buildCandles(function (err, res) {
                     if (err) {
                         callback(err);
                     } else {
