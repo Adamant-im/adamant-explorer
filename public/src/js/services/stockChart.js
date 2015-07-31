@@ -1,6 +1,6 @@
 'use strict';
 
-var StockChart = function ($http, $scope) {
+var StockChart = function ($http, $timeout, $scope) {
     var self = this;
 
     this.config = {
@@ -212,29 +212,32 @@ var StockChart = function ($http, $scope) {
 
         var updatePeriod = ($scope.newExchange || $scope.newDuration);
 
-        if (updatePeriod) {
-            console.log('Updating period selector...');
-            self.chart.categoryAxesSettings.minPeriod = self.dataSets[$scope.duration].minPeriod;
-            self.chart.periodSelector.periods = self.dataSets[$scope.duration].periods;
-            self.chart.validateNow();
-        }
+        $timeout(function () {
+            if (updatePeriod) {
+                console.log('Updating period selector...');
+                self.chart.categoryAxesSettings.minPeriod = self.dataSets[$scope.duration].minPeriod;
+                self.chart.periodSelector.periods = self.dataSets[$scope.duration].periods;
+                self.chart.validateNow();
+            }
 
-        if (_.size(resp.data.candles) > 0) {
-            console.log('Chart data updated');
-            self.chart.dataSets[0].dataProvider = resp.data.candles;
-            self.chart.validateData();
-        } else {
-            console.log('Chart data is empty');
-            self.chart.dataSets[0].dataProvider = [];
-            self.chart.validateNow();
-        }
+            if (_.size(resp.data.candles) > 0 && AmCharts.isReady) {
+                console.log('Chart data updated');
+                self.chart.dataSets[0].dataProvider = resp.data.candles;
+                self.chart.validateData();
+            } else {
+                console.log('Chart data is empty');
+                self.chart.dataSets[0].dataProvider = [];
+                self.chart.validateNow();
+            }
 
-        if (updatePeriod) {
-            console.log('Default period set');
-            self.chart.periodSelector.setDefaultPeriod();
-        }
+            if (updatePeriod) {
+                console.log('Default period set');
+                self.chart.periodSelector.setDefaultPeriod();
+            }
+        }, 0);
 
         $scope.newExchange = $scope.newDuration = false;
+
         return getStatistics();
     }
 
@@ -261,8 +264,8 @@ var StockChart = function ($http, $scope) {
 }
 
 angular.module('cryptichain.tools').factory('stockChart',
-  function ($http) {
+  function ($http, $timeout) {
       return function ($scope) {
-          return new StockChart($http, $scope);
+          return new StockChart($http, $timeout, $scope);
       }
   });
