@@ -110,7 +110,7 @@ a, a:hover, a:visited, a:focus {
   min-height: 100%;
   height: auto;
   /* Negative indent footer by its height */
-  margin: 20px auto -51px;
+  margin: 20px auto -48px;
   /* Pad bottom by footer height */
   padding: 0 0 75px;
 }
