@@ -23,25 +23,25 @@ angular.module('cryptichain').config(function ($routeProvider) {
         templateUrl: '/views/address.html',
         title: 'Address'
     })
-    .when("/activityGraph", {
-        templateUrl : "/views/activityGraph.html",
-        title: "Activity Graph"
+    .when('/activityGraph', {
+        templateUrl : '/views/activityGraph.html',
+        title: 'Activity Graph'
     })
-    .when("/topAccounts", {
-        templateUrl : "/views/topAccounts.html",
-        title: "Top Accounts"
+    .when('/topAccounts', {
+        templateUrl : '/views/topAccounts.html',
+        title: 'Top Accounts'
     })
-    .when("/delegateMonitor", {
-        templateUrl : "/views/delegateMonitor.html",
-        title: "Delegate Monitor"
+    .when('/delegateMonitor', {
+        templateUrl : '/views/delegateMonitor.html',
+        title: 'Delegate Monitor'
     })
-    .when("/marketWatcher", {
-        templateUrl : "/views/marketWatcher.html",
-        title: "Market Watcher"
+    .when('/marketWatcher', {
+        templateUrl : '/views/marketWatcher.html',
+        title: 'Market Watcher'
     })
-    .when("/networkMonitor", {
-        templateUrl : "/views/networkMonitor.html",
-        title: "Network Monitor"
+    .when('/networkMonitor', {
+        templateUrl : '/views/networkMonitor.html',
+        title: 'Network Monitor'
     })
     .otherwise({
         templateUrl: '/views/404.html',

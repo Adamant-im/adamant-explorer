@@ -13,7 +13,7 @@ angular.module('cryptichain.tools').controller('DelegateMonitor',
 
           $scope.standbyDelegates = null;
 
-          $http.get("/api/delegates/getStandby?n=" + offset).then(function (resp) {
+          $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
               if (resp.data.success) {
                   $scope.standbyDelegates = resp.data.delegates;
               }
@@ -21,7 +21,7 @@ angular.module('cryptichain.tools').controller('DelegateMonitor',
                   $scope.pagination = resp.data.pagination;
               }
           });
-      }
+      };
 
       $scope.getStandby(1);
   });

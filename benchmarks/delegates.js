@@ -14,7 +14,7 @@ module.exports = function (app, api) {
                 console.log('delegates.getActive ~>', data.delegates.length, 'delegates retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getStandby = function (deferred) {
         delegates.getStandby(
@@ -28,7 +28,7 @@ module.exports = function (app, api) {
                 console.log('delegates.getStandby ~>', data.delegates.length, 'delegates retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getLatestRegistrations = function (deferred) {
         delegates.getLatestRegistrations(
@@ -41,7 +41,7 @@ module.exports = function (app, api) {
                 console.log('delegates.getLatestRegistrations ~>', data.transactions.length, 'registrations retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getLatestVotes = function (deferred) {
         delegates.getLatestVotes(
@@ -54,7 +54,7 @@ module.exports = function (app, api) {
                 console.log('delegates.getLatestVotes ~>', data.transactions.length, 'votes retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getLastBlock = function (deferred) {
         delegates.getLastBlock(
@@ -67,5 +67,6 @@ module.exports = function (app, api) {
                 console.log('delegates.getLastBlock ~>', 'block retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
-}
+    };
+};
+

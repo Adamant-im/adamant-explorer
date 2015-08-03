@@ -30,7 +30,7 @@ module.exports = function (config, client) {
                 console.error('Candles:', 'Error updating candles:', err);
             }
         });
-    }
+    };
 
     // Interval
 
@@ -42,4 +42,4 @@ module.exports = function (config, client) {
 
     var bter = new candles.bter(client),
         poloniex = new candles.poloniex(client);
-}
+};

@@ -9,7 +9,7 @@ var Header = function ($scope) {
         } else {
             this.$scope.totalBlocks = 0;
         }
-    }
+    };
 
     this.updateFee = function (res) {
         if (res.success) {
@@ -17,7 +17,7 @@ var Header = function ($scope) {
         } else {
             this.$scope.fee = 0.0;
         }
-    }
+    };
 
     this.updateXCRCourse = function (res) {
         if (res.success) {
@@ -26,8 +26,8 @@ var Header = function ($scope) {
         } else {
             this.$scope.xcrBtc = this.$scope.xcrUsd = 0.0;
         }
-    }
-}
+    };
+};
 
 angular.module('cryptichain.system').factory('header',
   function ($socket) {
@@ -46,5 +46,5 @@ angular.module('cryptichain.system').factory('header',
           });
 
           return header;
-      }
+      };
   });

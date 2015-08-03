@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api'),
     async = require('async');
 
@@ -35,25 +37,25 @@ module.exports = function (app, connectionHandler, socket) {
                     interval = setInterval(emitData, 10000);
                 }
             }
-        }.bind(this))
-    }
+        }.bind(this));
+    };
 
     this.onConnect = function () {
         log('Emitting existing data');
         socket.emit('data', data);
-    }
+    };
 
     this.onDisconnect = function () {
         clearInterval(interval);
         interval = null;
         data     = {};
-    }
+    };
 
     // Private
 
     var log = function (msg) {
         console.log('Header:', msg);
-    }
+    };
 
     var getBlocksCount = function (cb) {
         if (running.getBlocksCount) {
@@ -61,10 +63,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getBlocksCount = true;
         blocks.getBlocksCount(
-            function (res) { running.getBlocksCount = false; cb('BlocksCount') },
-            function (res) { running.getBlocksCount = false; cb(null, res) }
+            function (res) { running.getBlocksCount = false; cb('BlocksCount'); },
+            function (res) { running.getBlocksCount = false; cb(null, res); }
         );
-    }
+    };
 
     var getFee = function (cb) {
         if (running.getFee) {
@@ -72,10 +74,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getFee = true;
         common.getFee(
-            function (res) { running.getFee = false; cb('Fee') },
-            function (res) { running.getFee = false; cb(null, res) }
+            function (res) { running.getFee = false; cb('Fee'); },
+            function (res) { running.getFee = false; cb(null, res); }
         );
-    }
+    };
 
     var getXCRCourse = function (cb) {
         if (running.getXCRCourse) {
@@ -83,10 +85,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getXCRCourse = true;
         common.getXCRCourse(
-            function (res) { running.getXCRCourse = false; cb('XCRCourse') },
-            function (res) { running.getXCRCourse = false; cb(null, res) }
+            function (res) { running.getXCRCourse = false; cb('XCRCourse'); },
+            function (res) { running.getXCRCourse = false; cb(null, res); }
         );
-    }
+    };
 
     var emitData = function () {
         var thisData = {};
@@ -109,5 +111,6 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data', thisData);
             }
         }.bind(this));
-    }
-}
+    };
+};
+

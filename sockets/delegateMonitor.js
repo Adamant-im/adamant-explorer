@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api'),
     async = require('async');
 
@@ -39,24 +41,24 @@ module.exports = function (app, connectionHandler, socket) {
                     interval = setInterval(emitData, 10000);
                 }
             }
-        }.bind(this))
-    }
+        }.bind(this));
+    };
 
     this.onConnect = function () {
         log('Emitting existing data');
         socket.emit('data', data);
-    }
+    };
 
     this.onDisconnect = function () {
         clearInterval(interval);
         interval = null;
-    }
+    };
 
     // Private
 
     var log = function (msg) {
         console.log('Delegate Monitor:', msg);
-    }
+    };
 
     var getActive = function (cb) {
         if (running.getActive) {
@@ -64,10 +66,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getActive = true;
         delegates.getActive(
-            function (res) { running.getActive = false; cb('Active') },
-            function (res) { running.getActive = false; cb(null, res) }
+            function (res) { running.getActive = false; cb('Active'); },
+            function (res) { running.getActive = false; cb(null, res); }
         );
-    }
+    };
 
     var getLastBlock = function (cb) {
         if (running.getLastBlock) {
@@ -75,10 +77,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getLastBlock = true;
         delegates.getLastBlock(
-            function (res) { running.getLastBlock = false; cb('LastBlock') },
-            function (res) { running.getLastBlock = false; cb(null, res) }
+            function (res) { running.getLastBlock = false; cb('LastBlock'); },
+            function (res) { running.getLastBlock = false; cb(null, res); }
         );
-    }
+    };
 
     var getRegistrations = function (cb) {
         if (running.getRegistrations) {
@@ -86,10 +88,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getRegistrations = true;
         delegates.getLatestRegistrations(
-            function (res) { running.getRegistrations = false; cb('Registrations') },
-            function (res) { running.getRegistrations = false; cb(null, res) }
+            function (res) { running.getRegistrations = false; cb('Registrations'); },
+            function (res) { running.getRegistrations = false; cb(null, res); }
         );
-    }
+    };
 
     var getVotes = function (cb) {
         if (running.getVotes) {
@@ -97,10 +99,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getVotes = true;
         delegates.getLatestVotes(
-            function (res) { running.getVotes = false; cb('Votes') },
-            function (res) { running.getVotes = false; cb(null, res) }
+            function (res) { running.getVotes = false; cb('Votes'); },
+            function (res) { running.getVotes = false; cb(null, res); }
         );
-    }
+    };
 
     var emitData = function () {
         var thisData = {};
@@ -125,5 +127,6 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data', thisData);
             }
         }.bind(this));
-    }
-}
+    };
+};
+

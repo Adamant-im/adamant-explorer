@@ -1,3 +1,5 @@
+'use strict';
+
 var blocks = require('../lib/api/blocks');
 
 module.exports = function (app) {
@@ -25,4 +27,5 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-}
+};
+

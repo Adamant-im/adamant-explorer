@@ -14,4 +14,5 @@ module.exports = function (app, api) {
     this.delegates    = new delegates(app, api);
     this.statistics   = new statistics(app, api);
     this.transactions = new transactions(app, api);
-}
+};
+

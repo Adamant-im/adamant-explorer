@@ -14,7 +14,7 @@ module.exports = function (app, api) {
                   console.log('statistics.getBlocks ~>', String(data.volume.blocks), 'blocks retrieved in', String(deferred.elapsed), 'seconds');
               }
         );
-    }
+    };
 
     this.getLastBlock = function (deferred) {
         statistics.getLastBlock(
@@ -27,7 +27,7 @@ module.exports = function (app, api) {
                   console.log('statistics.getLastBlock ~>', 'block retrieved in', String(deferred.elapsed), 'seconds');
               }
         );
-    }
+    };
 
     this.getPeers = function (deferred) {
         statistics.locator.disabled = true;
@@ -41,5 +41,6 @@ module.exports = function (app, api) {
                   console.log('statistics.getPeers ~>', (data.list.connected.length + data.list.disconnected.length), 'peers retrieved in', String(deferred.elapsed), 'seconds');
               }
         );
-    }
-}
+    };
+};
+

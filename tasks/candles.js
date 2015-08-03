@@ -1,3 +1,5 @@
+'use strict';
+
 var config = require('../config.json').configuration,
     client = require('../redis')(config),
     candles = require('../lib/candles'),
@@ -77,4 +79,4 @@ module.exports = function (grunt) {
             }
         });
     });
-}
+};

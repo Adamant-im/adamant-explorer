@@ -11,7 +11,7 @@ angular.module('cryptichain.blocks').controller('BlocksController',
 
           $scope.loading = true;
 
-          $http.get("/api/getLastBlocks?n=" + offset).then(function (resp) {
+          $http.get('/api/getLastBlocks?n=' + offset).then(function (resp) {
               if (resp.data.success) {
                   $scope.blocks = resp.data.blocks;
 
@@ -24,12 +24,12 @@ angular.module('cryptichain.blocks').controller('BlocksController',
 
               $scope.loading = false;
           });
-      }
+      };
 
       $scope.getBlock = function (blockId) {
           $scope.loading = true;
 
-          $http.get("/api/getBlock", {
+          $http.get('/api/getBlock', {
               params : {
                   blockId : blockId
               }
@@ -38,12 +38,12 @@ angular.module('cryptichain.blocks').controller('BlocksController',
                   $scope.block = resp.data.block;
                   $scope.loading = false;
               } else {
-                  throw 'Block was not found!'
+                  throw 'Block was not found!';
               }
           }).catch(function (error) {
-              $location.path("/");
+              $location.path('/');
           });
-      }
+      };
 
       if ($routeParams.blockId) {
           $scope.block = {

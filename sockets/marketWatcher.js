@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -7,17 +9,18 @@ module.exports = function (app, connectionHandler, socket) {
         data       = {};
 
     this.onInit = function () {
-    }
+    };
 
     this.onConnect = function () {
-    }
+    };
 
     this.onDisconnect = function () {
-    }
+    };
 
     // Private
 
     var log = function (msg) {
         console.log('Market Watcher:', msg);
-    }
-}
+    };
+};
+

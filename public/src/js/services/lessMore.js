@@ -21,15 +21,15 @@ var LessMore = function ($http, $q, params) {
     this.loading  = true;
     this.moreData = false;
     this.lessData = false;
-}
+};
 
 LessMore.prototype.disable = function () {
     this.moreData = this.lessData = false;
-}
+};
 
 LessMore.prototype.disabled = function () {
     return !this.moreData && !this.lessData;
-}
+};
 
 LessMore.prototype.getData = function (offset, limit, cb) {
     var params = angular.extend({ offset : offset, limit : limit }, this.params);
@@ -45,12 +45,11 @@ LessMore.prototype.getData = function (offset, limit, cb) {
             throw 'LessMore failed to get valid response data';
         }
     }.bind(this));
-}
+};
 
 LessMore.prototype.anyMore = function (length) {
-    return (this.limit <= 1 && (this.limit % length) == 1)
-        || (length > 1 && this.limit >= 1 && (length % this.limit) == 1);
-}
+    return (this.limit <= 1 && (this.limit % length) === 1) || (length > 1 && this.limit >= 1 && (length % this.limit) === 1);
+};
 
 LessMore.prototype.spliceData = function (data) {
     if (this.anyMore(angular.isArray(data) ? data.length : 0)) {
@@ -59,7 +58,7 @@ LessMore.prototype.spliceData = function (data) {
     } else {
         this.moreData = false;
     }
-}
+};
 
 LessMore.prototype.acceptData = function (data) {
     if (!angular.isArray(data)) { data = []; }
@@ -78,21 +77,21 @@ LessMore.prototype.acceptData = function (data) {
     this.lessData = this.anyLess(this.results.length);
     this.loading = false;
     this.nextOffset();
-}
+};
 
 LessMore.prototype.loadData = function () {
     this.getData(0, (this.limit + 1),
         function (data) {
             this.acceptData(data);
         }.bind(this));
-}
+};
 
 LessMore.prototype.loadMore = function () {
     this.getData(this.offset, (this.limit + 1),
         function (data) {
             this.acceptData(data);
         }.bind(this));
-}
+};
 
 LessMore.prototype.reloadMore = function () {
     var maxOffset = (this.offset + this.limit),
@@ -116,26 +115,26 @@ LessMore.prototype.reloadMore = function () {
             }
         });
     });
-}
+};
 
 LessMore.prototype.nextOffset = function () {
     return this.offset += this.limit;
-}
+};
 
 LessMore.prototype.prevOffset = function () {
     return this.offset -= this.limit;
-}
+};
 
 LessMore.prototype.anyLess = function (length) {
     if (length > this.limit) {
         var mod = length % this.limit;
-        this.splice = (mod == 0) ? this.limit : mod;
+        this.splice = (mod === 0) ? this.limit : mod;
         return true;
     } else {
         this.splice = 0;
         return false;
     }
-}
+};
 
 LessMore.prototype.loadLess = function () {
     this.lessData = false;
@@ -145,11 +144,11 @@ LessMore.prototype.loadLess = function () {
         this.lessData = this.anyLess(this.results.length);
     }
     this.prevOffset();
-}
+};
 
 angular.module('cryptichain.system').factory('lessMore',
   function ($http, $q) {
       return function (params) {
           return new LessMore($http, $q, params);
-      }
+      };
   });

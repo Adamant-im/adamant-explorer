@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api');
 
 module.exports = function (app) {
@@ -31,4 +33,5 @@ module.exports = function (app) {
     // Private
 
     var common = new api.common(app, api);
-}
+};
+

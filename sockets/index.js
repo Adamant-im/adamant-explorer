@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function (app, io) {
     var ns = {
         header          : io.of('/header'),
@@ -5,7 +7,7 @@ module.exports = function (app, io) {
         delegateMonitor : io.of('/delegateMonitor'),
         marketWatcher   : io.of('/marketWatcher'),
         networkMonitor  : io.of('/networkMonitor')
-    }
+    };
 
     var header          = require('./header'),
         activityGraph   = require('./activityGraph'),
@@ -37,12 +39,13 @@ module.exports = function (app, io) {
 
         var clients = function () {
             return Object.keys(ns.connected).length;
-        }
-    }
+        };
+    };
 
     new header(app, connectionHandler, ns.header);
     new activityGraph(app, connectionHandler, ns.activityGraph);
     new delegateMonitor(app, connectionHandler, ns.delegateMonitor);
     new marketWatcher(app, connectionHandler, ns.marketWatcher);
     new networkMonitor(app, connectionHandler, ns.networkMonitor);
-}
+};
+

@@ -182,27 +182,29 @@ var StockChart = function ($http, $timeout, $scope) {
     $scope.setExchange = function (exchange, duration) {
         $scope.oldExchange = $scope.exchange;
         $scope.exchange = (exchange || $scope.exchange || 'Bter');
-        if ($scope.newExchange = ($scope.exchange !== $scope.oldExchange)) {
+        $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
+        if ($scope.newExchange) {
             console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
         }
         return $scope.setDuration(duration);
-    }
+    };
 
     $scope.setDuration = function (duration) {
         $scope.oldDuration = $scope.duration;
         $scope.duration = (duration || $scope.duration || 'hour');
-        if ($scope.newDuration = ($scope.duration !== $scope.oldDuration)) {
+        $scope.newDuration = ($scope.duration !== $scope.oldDuration);
+        if ($scope.newDuration) {
             console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
         }
         return getCandles();
-    }
+    };
 
     var getCandles = function () {
         console.log('Retrieving candles...');
         $http.get(['/api/candles/getCandles',
                    '?e=', angular.lowercase($scope.exchange),
                    '&d=', $scope.duration].join('')).then(updateChart);
-    }
+    };
 
     var updateChart = function (resp) {
         if (!self.chart) {
@@ -239,20 +241,20 @@ var StockChart = function ($http, $timeout, $scope) {
         $scope.newExchange = $scope.newDuration = false;
 
         return getStatistics();
-    }
+    };
 
     var getStatistics = function () {
         console.log('Retrieving statistics...');
         $http.get(['/api/candles/getStatistics',
                    '?e=', angular.lowercase($scope.exchange)].join('')).then(updateStatistics);
-    }
+    };
 
     var updateStatistics = function (resp) {
         if (resp.data.success) {
             $scope.statistics = resp.data.statistics;
             console.log('Statistics updated');
         }
-    }
+    };
 
     $scope.setExchange();
 
@@ -261,11 +263,11 @@ var StockChart = function ($http, $timeout, $scope) {
     $scope.$on('$locationChangeStart', function (event, next, current) {
         clearInterval(interval);
     });
-}
+};
 
 angular.module('cryptichain.tools').factory('stockChart',
   function ($http, $timeout) {
       return function ($scope) {
           return new StockChart($http, $timeout, $scope);
-      }
+      };
   });

@@ -3,10 +3,10 @@
 angular.module('cryptichain.system').controller('IndexController',
   function ($scope, $http, $interval) {
       $scope.getLastBlocks = function () {
-          $http.get("/api/getLastBlocks").then(function (resp) {
+          $http.get('/api/getLastBlocks').then(function (resp) {
               if (resp.data.success) {
                   if ($scope.blocks && $scope.blocks.length > 0) {
-                      if ($scope.blocks[0].id != resp.data.blocks[0].id) {
+                      if ($scope.blocks[0].id !== resp.data.blocks[0].id) {
                           $scope.blocks = resp.data.blocks;
                       }
                   } else {
@@ -14,7 +14,7 @@ angular.module('cryptichain.system').controller('IndexController',
                   }
               }
           });
-      }
+      };
 
       $scope.blocksInterval = $interval(function () {
           $scope.getLastBlocks();
@@ -23,10 +23,10 @@ angular.module('cryptichain.system').controller('IndexController',
       $scope.getLastBlocks();
 
       $scope.getLastTransactions = function () {
-          $http.get("/api/getLastTransactions").then(function (resp) {
+          $http.get('/api/getLastTransactions').then(function (resp) {
               if (resp.data.success) {
                   if ($scope.txs && $scope.txs.length > 0) {
-                      if ($scope.txs[0] != resp.data.transactions[0]) {
+                      if ($scope.txs[0] !== resp.data.transactions[0]) {
                           $scope.txs = resp.data.transactions;
                       }
                   } else {
@@ -34,7 +34,7 @@ angular.module('cryptichain.system').controller('IndexController',
                   }
               }
           });
-      }
+      };
 
       $scope.transactionsInterval = $interval(function () {
           $scope.getLastTransactions();

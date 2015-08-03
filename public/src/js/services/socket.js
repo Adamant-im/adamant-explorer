@@ -37,6 +37,6 @@ angular.module('cryptichain.socket').factory('$socket',
                       });
                   });
               }
-          }
-      }
+          };
+      };
   });

@@ -3,7 +3,7 @@
 var MarketWatcher = function ($scope, stockChart) {
     this.$scope = $scope;
     this.chart  = stockChart($scope);
-}
+};
 
 angular.module('cryptichain.tools').factory('marketWatcher',
   function ($socket, stockChart) {
@@ -23,5 +23,5 @@ angular.module('cryptichain.tools').factory('marketWatcher',
           });
 
           return marketWatcher;
-      }
+      };
   });

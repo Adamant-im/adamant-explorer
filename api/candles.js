@@ -1,3 +1,5 @@
+'use strict';
+
 var candles = require('../lib/api/candles');
 
 module.exports = function (app) {
@@ -18,4 +20,5 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-}
+};
+

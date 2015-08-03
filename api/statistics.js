@@ -1,3 +1,5 @@
+'use strict';
+
 var statistics = require('../lib/api/statistics');
 
 module.exports = function (app) {
@@ -23,4 +25,5 @@ module.exports = function (app) {
             function (data) { res.json(data); }
         );
     });
-}
+};
+

@@ -1,3 +1,5 @@
+'use strict';
+
 var transactions = require('../lib/api/transactions');
 
 module.exports = function (app) {
@@ -44,4 +46,5 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-}
+};
+

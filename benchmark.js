@@ -1,3 +1,5 @@
+'use strict';
+
 var Benchmark = require('benchmark'),
     suite = new Benchmark.Suite('api');
 

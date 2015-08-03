@@ -7,17 +7,17 @@ var ActivityGraph = function () {
     this.indexes   = [];
 
     this.colors = {
-        account: "#3465a4", // Steel Blue
-        credit:  "#73d216", // Lawn Green
-        debit:   "#cc0000", // Red
-        block:   "#f57900", // Dark Orange
-        tx:      "#888a85"  // Grey
-    }
+        account: '#3465a4', // Steel Blue
+        credit:  '#73d216', // Lawn Green
+        debit:   '#cc0000', // Red
+        block:   '#f57900', // Dark Orange
+        tx:      '#888a85'  // Grey
+    };
 
     this.renderer = {
-        container: "sigma-canvas",
-        type: "canvas"
-    }
+        container: 'sigma-canvas',
+        type: 'canvas'
+    };
 
     this.settings = {
         sideMargin: 1,
@@ -25,8 +25,8 @@ var ActivityGraph = function () {
         minNodeSize: 0.5,
         maxNodeSize: 16,
         drawLabels: false,
-        defaultEdgeType: "arrow"
-    }
+        defaultEdgeType: 'arrow'
+    };
 
     this.sigma = new sigma({
         renderer: this.renderer,
@@ -35,7 +35,7 @@ var ActivityGraph = function () {
 
     function NodeSelect(sigma) {
         this.sigma = sigma;
-        this.color = "#5bc0de";
+        this.color = '#5bc0de';
 
         this.add = function (event) {
             this.remove(event);
@@ -43,7 +43,7 @@ var ActivityGraph = function () {
             this.prevColor  = this.node.color;
             this.node.color = this.color;
             this.sigma.refresh();
-        }
+        };
 
         this.remove = function (event) {
             if (this.node) {
@@ -52,11 +52,11 @@ var ActivityGraph = function () {
                 this.node       = undefined;
             }
             this.sigma.refresh();
-        }
+        };
 
         this.selected = function () {
             return this.node !== undefined;
-        }
+        };
 
         this.type = function () {
             if (this.selected()) {
@@ -64,20 +64,20 @@ var ActivityGraph = function () {
             } else {
                 return undefined;
             }
-        }
+        };
 
         this.href = function () {
             switch (this.type()) {
                 case 0:
-                return "/tx/" + this.node.id;
+                return '/tx/' + this.node.id;
                 case 1:
-                return "/block/" + this.node.id;
+                return '/block/' + this.node.id;
                 case 2:
-                return "/address/" + this.node.id;
+                return '/address/' + this.node.id;
                 default:
-                return "#";
+                return '#';
             }
-        }
+        };
     }
 
     this.nodeSelect = new NodeSelect(this.sigma);
@@ -89,7 +89,7 @@ var ActivityGraph = function () {
             if (this.camera) {
                 this.camera.goTo({ x: 0, y: 0, angle: 0, ratio: 1 });
             }
-        }
+        };
     }
 
     this.cameraMenu = new CameraMenu(this.sigma.camera);
@@ -109,13 +109,13 @@ var ActivityGraph = function () {
             this.beginning = minTime(blocks);
             this.end       = maxTime(blocks);
             this.accounts  = accounts.size().value();
-        }
+        };
 
         var txsVolume = function (chain) {
             return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
             }, 0).value() / Math.pow(10, 8);
-        }
+        };
 
         var minTime = function (chain) {
             return chain.min(function (block) {
@@ -123,7 +123,7 @@ var ActivityGraph = function () {
                     return block.timestamp;
                 }
             }).value().timestamp;
-        }
+        };
 
         var maxTime = function (chain) {
             return chain.max(function (block) {
@@ -131,11 +131,11 @@ var ActivityGraph = function () {
                     return block.timestamp;
                 }
             }).value().timestamp;
-        }
+        };
     }
 
     this.statistics = new Statistics(this);
-}
+};
 
 ActivityGraph.prototype.refresh = function (block) {
     if (block) {
@@ -150,7 +150,7 @@ ActivityGraph.prototype.refresh = function (block) {
         this.statistics.refresh();
         this.sigma.refresh();
     }
-}
+};
 
 ActivityGraph.prototype.clear = function () {
     this.blocks  = 0;
@@ -158,23 +158,23 @@ ActivityGraph.prototype.clear = function () {
     if (this.sigma) {
         this.sigma.graph.clear();
     }
-}
+};
 
 ActivityGraph.prototype.sizeNodes = function () {
     _.each(this.sigma.graph.nodes(), function (node) {
         var deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
-}
+};
 
 ActivityGraph.prototype.nodesByType = function (type) {
     return _.chain(this.sigma.graph.nodes()).filter(function (node) {
-        return node.type == type;
+        return node.type === type;
     });
-}
+};
 
 ActivityGraph.prototype.positionNodes = function () {
-    for (type = 0; type < 3; type++) {
+    for (var type = 0; type < 3; type++) {
         var nodes = this.nodesByType(type).value();
         var i, len = nodes.length, slice = 2 * Math.PI / len;
 
@@ -185,7 +185,7 @@ ActivityGraph.prototype.positionNodes = function () {
             graph.y = (type + 1) * Math.sin(angle);
         }
     }
-}
+};
 
 ActivityGraph.prototype.addNode = function (node) {
     if (!_.contains(this.indexes, node.id)) {
@@ -194,14 +194,14 @@ ActivityGraph.prototype.addNode = function (node) {
         this.indexes.push(node.id);
         this.sigma.graph.addNode(node);
     }
-}
+};
 
 ActivityGraph.prototype.addEdge = function (edge) {
     if (!_.contains(this.indexes, edge.id)) {
         this.indexes.push(edge.id);
         this.sigma.graph.addEdge(edge);
     }
-}
+};
 
 ActivityGraph.prototype.addTx = function (tx) {
     if (_.contains(this.indexes, tx.id)) { return; }
@@ -216,7 +216,7 @@ ActivityGraph.prototype.addTx = function (tx) {
     this.indexes.push(tx.id);
     this.addTxSender(tx);
     this.addTxRecipient(tx);
-}
+};
 
 ActivityGraph.prototype.addAccount = function (id) {
     this.addNode({
@@ -226,11 +226,11 @@ ActivityGraph.prototype.addAccount = function (id) {
         color: this.colors.account,
         size: 1
     });
-}
+};
 
 ActivityGraph.prototype.amount = function (tx, sign) {
-    return (sign + tx.amount / Math.pow(10, 8)) + " XCR";
-}
+    return (sign + tx.amount / Math.pow(10, 8)) + ' XCR';
+};
 
 ActivityGraph.prototype.addTxSender = function (tx) {
     this.addAccount(tx.senderId);
@@ -242,7 +242,7 @@ ActivityGraph.prototype.addTxSender = function (tx) {
         color: this.colors.debit,
         size: 1
     });
-}
+};
 
 ActivityGraph.prototype.addTxRecipient = function (tx) {
     if (!tx.recipientId) { return; }
@@ -255,7 +255,7 @@ ActivityGraph.prototype.addTxRecipient = function (tx) {
         color: this.colors.credit,
         size: 1
     });
-}
+};
 
 ActivityGraph.prototype.addBlock = function (block) {
     if (_.contains(this.indexes, block.id)) { return; }
@@ -272,7 +272,7 @@ ActivityGraph.prototype.addBlock = function (block) {
     this.indexes.push(block.id);
     this.addBlockGenerator(block);
     this.addBlockTxs(block);
-}
+};
 
 ActivityGraph.prototype.addBlockGenerator = function (block) {
     this.addAccount(block.generatorId);
@@ -283,8 +283,8 @@ ActivityGraph.prototype.addBlockGenerator = function (block) {
         target: block.id,
         color: this.colors.account,
         size: 1
-    })
-}
+    });
+};
 
 ActivityGraph.prototype.addBlockTxs = function (block) {
     if (!_.isEmpty(block.transactions)) {
@@ -296,10 +296,10 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
                 target: tx.id,
                 color: this.colors.block,
                 size: 1
-            })
+            });
         }, this);
     }
-}
+};
 
 angular.module('cryptichain.tools').factory('activityGraph',
   function ($socket) {
@@ -335,5 +335,5 @@ angular.module('cryptichain.tools').factory('activityGraph',
           });
 
           return activityGraph;
-      }
+      };
   });

@@ -8,15 +8,15 @@ module.exports = function () {
             tx.knownSender    = this.inAddress(tx.senderId);
             tx.knownRecipient = this.inAddress(tx.recipientId);
             return tx;
-        }
+        };
 
         this.inAddress = function (address) {
             return this.addresses[address] || null;
-        }
+        };
 
         this.inDelegate = function (delegate) {
             return (delegate) ? { owner : delegate.username } : null;
-        }
+        };
 
         this.load = function () {
             try {
@@ -30,8 +30,9 @@ module.exports = function () {
             var length = Object.keys(this.addresses).length.toString();
             console.log('KnownAddresses:', length, 'known addresses loaded');
             return this.addresses;
-        }
+        };
     }
 
     return new KnownAddresses();
-}
+};
+

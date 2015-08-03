@@ -3,7 +3,7 @@
 angular.module('cryptichain.address').controller('AddressController',
   function ($scope, $rootScope, $routeParams, $location, $http, addressTxs) {
       $scope.getAddress = function () {
-          $http.get("/api/getAccount", {
+          $http.get('/api/getAccount', {
               params : {
                   address : $routeParams.address
               }
@@ -11,12 +11,12 @@ angular.module('cryptichain.address').controller('AddressController',
               if (resp.data.success) {
                   $scope.address = resp.data;
               } else {
-                  throw 'Account was not found!'
+                  throw 'Account was not found!';
               }
           }).catch(function (error) {
-              $location.path("/");
+              $location.path('/');
           });
-      }
+      };
 
       $scope.address = {
           address : $routeParams.address

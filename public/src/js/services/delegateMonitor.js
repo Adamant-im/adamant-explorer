@@ -5,7 +5,7 @@ var DelegateMonitor = function ($scope) {
 
     this.updateActive = function (active) {
         this.$scope.activeDelegates = active.delegates;
-    }
+    };
 
     this.updateTotals = function (active) {
         this.$scope.totalDelegates = active.totalCount || 0;
@@ -21,19 +21,19 @@ var DelegateMonitor = function ($scope) {
         this.$scope.totalForged = totalForged(active.delegates);
         this.$scope.bestUptime  = bestUptime(active.delegates);
         this.$scope.worstUptime = worstUptime(active.delegates);
-    }
+    };
 
     this.updateLastBlock = function (lastBlock) {
         this.$scope.lastBlock = lastBlock.block;
-    }
+    };
 
     this.updateRegistrations = function (registrations) {
         this.$scope.registrations = registrations.transactions;
-    }
+    };
 
     this.updateVotes = function (votes) {
         this.$scope.votes = votes.transactions;
-    }
+    };
 
     // Private
 
@@ -41,27 +41,27 @@ var DelegateMonitor = function ($scope) {
         if (_.size(delegates) > 0) {
             return _.max(delegates, function (d) { return d.fees; });
         }
-    }
+    };
 
     var totalForged = function (delegates) {
         return _.chain(delegates)
                 .map(function (d) { return d.fees; })
                 .reduce(function (memo, num) { return memo + num; }, 0)
                 .value();
-    }
+    };
 
     var bestUptime = function (delegates) {
         if (_.size(delegates) > 0) {
             return _.max(delegates, function (d) { return parseFloat(d.productivity); });
         }
-    }
+    };
 
     var worstUptime = function (delegates) {
         if (_.size(delegates) > 0) {
             return _.min(delegates, function (d) { return parseFloat(d.productivity); });
         }
-    }
-}
+    };
+};
 
 angular.module('cryptichain.tools').factory('delegateMonitor',
   function ($socket) {
@@ -88,5 +88,5 @@ angular.module('cryptichain.tools').factory('delegateMonitor',
           });
 
           return delegateMonitor;
-      }
+      };
   });

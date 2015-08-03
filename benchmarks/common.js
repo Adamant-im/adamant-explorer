@@ -14,7 +14,7 @@ module.exports = function (app, api) {
                 console.log('common.getFee ~>', 'fee retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getXCRCourse = function (deferred) {
         common.getXCRCourse(
@@ -27,7 +27,7 @@ module.exports = function (app, api) {
                 console.log('common.getXCRCourse ~>', 'rates retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.search = function (deferred) {
         common.search(
@@ -41,5 +41,6 @@ module.exports = function (app, api) {
                 console.log('common.search ~>', 'search result retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
-}
+    };
+};
+

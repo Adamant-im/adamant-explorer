@@ -7,10 +7,10 @@ module.exports = function (config) {
 
     this.loadRates = function () {
         async.parallel([
-            function (cb) { exchange.loadBTCUSD(cb) },
-            function (cb) { exchange.loadXCRBTC(cb) }
+            function (cb) { exchange.loadBTCUSD(cb); },
+            function (cb) { exchange.loadXCRBTC(cb); }
         ]);
-    }
+    };
 
     this.loadBTCUSD = function (cb) {
         console.log('Exchange:', 'Loading BTC/USD curs from exchange...');
@@ -18,7 +18,7 @@ module.exports = function (config) {
             if (err) {
                 console.log('Exchange:', 'Loading BTC/USD failed...');
                 console.log('Error:', err);
-            } else if (result != '~') {
+            } else if (result !== '~') {
                 this.BTCUSD = result;
                 console.log('Exchange:', 'BTC/USD loaded...', result);
             }
@@ -26,7 +26,7 @@ module.exports = function (config) {
                 return cb(err, result);
             }
         }.bind(this));
-    }
+    };
 
     this.loadXCRBTC = function (cb) {
         console.log('Exchange:', 'Loading XCR/BTC curs from exchange...');
@@ -34,7 +34,7 @@ module.exports = function (config) {
             if (err) {
                 console.log('Exchange:', 'Loading BTC/XCR failed...');
                 console.log('Error:', err);
-            } else if (result != '~') {
+            } else if (result !== '~') {
                 this.XCRBTC = result;
                 console.log('Exchange:', 'BTC/XCR loaded...', result);
             }
@@ -42,7 +42,7 @@ module.exports = function (config) {
                 return cb(err, result);
             }
         }.bind(this));
-    }
+    };
 
     this.convertXCRTOUSD = function (xcr) {
         if (!isNaN(xcr)) {
@@ -50,7 +50,7 @@ module.exports = function (config) {
         } else {
             return '~';
         }
-    }
+    };
 
     // Interval
 
@@ -72,7 +72,7 @@ module.exports = function (config) {
             console.log('Exchange:', 'Loading BTC/USD disabled...');
             return cb(null, '~');
         }
-    }
+    };
 
     var getXCRBTC = function (cb) {
         if (config.enableExchange) {
@@ -83,5 +83,6 @@ module.exports = function (config) {
             console.log('Exchange:', 'Loading XCR/BTC disabled...');
             return cb(null, '~');
         }
-    }
-}
+    };
+};
+

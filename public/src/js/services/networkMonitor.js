@@ -12,7 +12,7 @@ var NetworkMonitor = function ($scope) {
             if (angular.isNumber(platform)) {
                 this.counter[parseInt(platform)]++;
             }
-        }
+        };
 
         this.detected = function () {
             return {
@@ -20,8 +20,8 @@ var NetworkMonitor = function ($scope) {
                 two:     { name: this.platforms[1], counter: this.counter[1] },
                 three:   { name: this.platforms[2], counter: this.counter[2] },
                 unknown: { name: null,              counter: this.counter[3] }
-            }
-        }
+            };
+        };
     }
 
     function Versions (peers) {
@@ -32,7 +32,7 @@ var NetworkMonitor = function ($scope) {
             } else {
                 return [];
             }
-        }
+        };
 
         this.counter  = [0,0,0,0];
         this.versions = inspect();
@@ -52,7 +52,7 @@ var NetworkMonitor = function ($scope) {
             if (detected == null) {
                 this.counter[3]++;
             }
-        }
+        };
 
         this.detected = function (version) {
             return {
@@ -60,8 +60,8 @@ var NetworkMonitor = function ($scope) {
                 two:     { num: this.versions[1], counter: this.counter[1] },
                 three:   { num: this.versions[2], counter: this.counter[2] },
                 unknown: { num: null,             counter: this.counter[3] }
-            }
-        }
+            };
+        };
     }
 
     this.counter = function (peers) {
@@ -80,24 +80,24 @@ var NetworkMonitor = function ($scope) {
             disconnected: peers.disconnected.length,
             total: peers.connected.length + peers.disconnected.length,
             platforms: platforms.detected(), versions: versions.detected()
-        }
-    }
+        };
+    };
 
     this.updatePeers = function (peers) {
         this.$scope.peers   = peers.list;
         this.$scope.counter = this.counter(peers.list);
         this.map.addConnected(peers.list);
-    }
+    };
 
     this.updateLastBlock = function (lastBlock) {
         this.$scope.lastBlock = lastBlock.block;
-    }
+    };
 
     this.updateBlocks = function (blocks) {
         this.$scope.bestBlock = blocks.best;
         this.$scope.volume    = blocks.volume;
-    }
-}
+    };
+};
 
 var NetworkMap = function () {
     this.markers = {};
@@ -123,7 +123,7 @@ var NetworkMap = function () {
         new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-mac.png' }),
         new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
         new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-windows.png' })
-    ]
+    ];
 
     this.addConnected = function (peers) {
         var connected = [];
@@ -149,7 +149,7 @@ var NetworkMap = function () {
 
         this.removeDisconnected(connected);
         this.map.addLayer(this.cluster);
-    }
+    };
 
     this.removeDisconnected = function (connected) {
         for (var ip in this.markers) {
@@ -161,15 +161,13 @@ var NetworkMap = function () {
                 delete this.markers[ip];
             }
         }
-    }
+    };
 
     // Private
 
     var validLocation = function (location) {
-        return location
-            && angular.isNumber(location.latitude)
-            && angular.isNumber(location.longitude);
-    }
+        return location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
+    };
 
     var popupContent = function (p) {
         var content = '<p class="ip">'.concat(p.ip, '</p>');
@@ -201,8 +199,8 @@ var NetworkMap = function () {
         }
 
         return content;
-    }
-}
+    };
+};
 
 angular.module('cryptichain.tools').factory('networkMonitor',
   function ($socket) {
@@ -243,5 +241,5 @@ angular.module('cryptichain.tools').factory('networkMonitor',
           });
 
           return networkMonitor;
-      }
+      };
   });

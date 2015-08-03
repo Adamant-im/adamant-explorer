@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api'),
     async = require('async');
 
@@ -37,33 +39,34 @@ module.exports = function (app, connectionHandler, socket) {
                 newInterval(2, 60000, emitData3);
             }
         }.bind(this));
-    }
+    };
 
     this.onConnect = function () {
         log('Emitting existing data');
         socket.emit('data', data);
-    }
+    };
 
     this.onDisconnect = function () {
         for (var i = 0; i < intervals.length; i++) {
             clearInterval(intervals[i]);
         }
         intervals = [];
-    }
+    };
 
     // Private
 
     var log = function (msg) {
         console.log('Network Monitor:', msg);
-    }
+    };
 
     var newInterval = function (i, delay, cb) {
         if (intervals[i] !== undefined) {
             return null;
         } else {
-            return intervals[i] = setInterval(cb, delay);
+            intervals[i] = setInterval(cb, delay);
+            return intervals[i];
         }
-    }
+    };
 
     var getLastBlock = function (cb) {
         if (running.getLastBlock) {
@@ -71,10 +74,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getLastBlock = true;
         statistics.getLastBlock(
-            function (res) { running.getLastBlock = false; cb('LastBlock') },
-            function (res) { running.getLastBlock = false; cb(null, res) }
+            function (res) { running.getLastBlock = false; cb('LastBlock'); },
+            function (res) { running.getLastBlock = false; cb(null, res); }
         );
-    }
+    };
 
     var getBlocks = function (cb) {
         if (running.getBlocks) {
@@ -82,10 +85,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getBlocks = true;
         statistics.getBlocks(
-            function (res) { running.getBlocks = false; cb('Blocks') },
-            function (res) { running.getBlocks = false; cb(null, res) }
+            function (res) { running.getBlocks = false; cb('Blocks'); },
+            function (res) { running.getBlocks = false; cb(null, res); }
         );
-    }
+    };
 
     var getPeers = function (cb) {
         if (running.getPeers) {
@@ -93,10 +96,10 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getPeers = true;
         statistics.getPeers(
-            function (res) { running.getPeers = false; cb('Peers') },
-            function (res) { running.getPeers = false; cb(null, res) }
+            function (res) { running.getPeers = false; cb('Peers'); },
+            function (res) { running.getPeers = false; cb(null, res); }
         );
-    }
+    };
 
     var emitData1 = function () {
         var thisData = {};
@@ -114,7 +117,7 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data1', thisData);
             }
         }.bind(this));
-    }
+    };
 
     var emitData2 = function () {
         var thisData = {};
@@ -132,7 +135,7 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data2', thisData);
             }
         }.bind(this));
-    }
+    };
 
     var emitData3 = function () {
         var thisData = {};
@@ -150,5 +153,6 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data3', thisData);
             }
         }.bind(this));
-    }
-}
+    };
+};
+

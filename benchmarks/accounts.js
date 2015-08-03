@@ -15,7 +15,7 @@ module.exports = function (app, api) {
                 console.log('accounts.getAccount ~>', 'account retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getTopAccounts = function (deferred) {
         accounts.getTopAccounts(
@@ -29,5 +29,6 @@ module.exports = function (app, api) {
                 console.log('accounts.getTopAccounts ~>', data.accounts.length, 'accounts retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
-}
+    };
+};
+

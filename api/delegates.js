@@ -1,3 +1,5 @@
+'use strict';
+
 var delegates = require('../lib/api/delegates');
 
 module.exports = function (app) {
@@ -38,4 +40,5 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-}
+};
+

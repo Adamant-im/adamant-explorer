@@ -1,3 +1,5 @@
+'use strict';
+
 var accounts = require('../lib/api/accounts');
 
 module.exports = function (app) {
@@ -19,4 +21,5 @@ module.exports = function (app) {
             function (data) { res.json(data); }
         );
     });
-}
+};
+

@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express'),
     config = require('./config.json').configuration,
     client = require('./redis')(config),
@@ -40,7 +42,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.set('host', production.host);
     app.set('port', production.port);
 } else {
@@ -49,7 +51,7 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 app.use(function (req, res, next) {
-    if (req.originalUrl.split('/')[1] != 'api') {
+    if (req.originalUrl.split('/')[1] !== 'api') {
         return next();
     }
 
@@ -77,7 +79,7 @@ app.use(function (req, res, next) {
             } else {
                 return next();
             }
-        })
+        });
     }
 });
 
@@ -90,7 +92,7 @@ console.log('Routes loaded');
 app.use(function (req, res, next) {
     console.log(req.originalUrl.split('/')[1]);
 
-    if (req.originalUrl.split('/')[1] != 'api') {
+    if (req.originalUrl.split('/')[1] !== 'api') {
         return next();
     }
 
@@ -120,7 +122,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('*', function (req, res, next) {
-    if (req.url.indexOf('api') != 1) {
+    if (req.url.indexOf('api') !== 1) {
         return res.sendfile(path.join(__dirname, 'public', 'index.html'));
     } else {
         return next();
@@ -128,8 +130,8 @@ app.get('*', function (req, res, next) {
 });
 
 async.parallel([
-    function (cb) { app.exchange.loadBTCUSD(cb) },
-    function (cb) { app.exchange.loadXCRBTC(cb) }
+    function (cb) { app.exchange.loadBTCUSD(cb); },
+    function (cb) { app.exchange.loadXCRBTC(cb); }
 ], function (err) {
     var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {

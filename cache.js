@@ -4,4 +4,4 @@ module.exports = {
     'cacheTTLOverride' : {
         '/api/getUnconfirmedTransactions' : 5
     }
-}
+};

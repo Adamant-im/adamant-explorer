@@ -5,32 +5,32 @@ angular.module('cryptichain')
       return function (input, start) {
           start = +start;
           return input.slice(start);
-      }
+      };
   })
   .filter('split', function () {
       return function (input, delimiter) {
-          var delimiter = delimiter || ',';
+          delimiter = delimiter || ',';
           return input.split(delimiter);
-      }
+      };
   })
   .filter('epochStamp', function () {
       return function (d) {
           return new Date(
               (((Date.UTC(2015, 3, 9, 0, 0, 0, 0) / 1000) + d) * 1000)
           );
-      }
+      };
   })
   .filter('timeAgo', function (epochStampFilter) {
       return function (timestamp) {
           return moment(epochStampFilter(timestamp)).fromNow();
-      }
+      };
   })
   .filter('timeSpan', function (epochStampFilter) {
       return function (a, b) {
           return moment.duration(
               epochStampFilter(a) - epochStampFilter(b)
           ).humanize();
-      }
+      };
   })
   .filter('timestamp', function (epochStampFilter) {
       return function (timestamp) {
@@ -38,13 +38,13 @@ angular.module('cryptichain')
           var month = d.getMonth() + 1;
 
           if (month < 10) {
-              month = "0" + month;
+              month = '0' + month;
           }
 
           var day = d.getDate();
 
           if (day < 10) {
-              day = "0" + day;
+              day = '0' + day;
           }
 
           var h = d.getHours();
@@ -52,24 +52,24 @@ angular.module('cryptichain')
           var s = d.getSeconds();
 
           if (h < 10) {
-              h = "0" + h;
+              h = '0' + h;
           }
 
           if (m < 10) {
-              m = "0" + m;
+              m = '0' + m;
           }
 
           if (s < 10) {
-              s = "0" + s;
+              s = '0' + s;
           }
 
-          return d.getFullYear() + "/" + month + "/" + day + " " + h + ":" + m + ":" + s;
-      }
+          return d.getFullYear() + '/' + month + '/' + day + ' ' + h + ':' + m + ':' + s;
+      };
   })
   .filter('fiat', function () {
       return function (amount) {
           return (parseInt(amount) / 100000000).toFixed(2);
-      }
+      };
   })
   .filter('xcr', function () {
       return function (amount) {
@@ -78,7 +78,7 @@ angular.module('cryptichain')
           } else {
               return (parseInt(amount) / 100000000);
           }
-      }
+      };
   })
   .filter('approval', function () {
       return function (votes) {
@@ -87,10 +87,10 @@ angular.module('cryptichain')
           } else {
               return ((parseInt(votes) / 10000000000000000) * 100).toFixed(2);
           }
-      }
+      };
   })
   .filter('supply', function (xcrFilter) {
       return function (amount) {
           return ((xcrFilter(amount) / 100000000) * 100).toFixed(2);
-      }
+      };
   });

@@ -4,9 +4,9 @@ angular.module('cryptichain.system').factory('addressTxs',
   function ($http, $q) {
       return function (address) {
           var lessMore = new LessMore($http, $q, {
-              url     : "/api/getTransactionsByAddress",
-              parent  : "address",
-              key     : "transactions",
+              url     : '/api/getTransactionsByAddress',
+              parent  : 'address',
+              key     : 'transactions',
               address : address
           });
 
@@ -15,7 +15,7 @@ angular.module('cryptichain.system').factory('addressTxs',
                   var changed = false;
 
                   if (this.results[0] && data[0]) {
-                      changed = (this.results[0].id != data[0].id);
+                      changed = (this.results[0].id !== data[0].id);
                   }
                   if (changed) {
                       this.reloadMore();
@@ -23,8 +23,8 @@ angular.module('cryptichain.system').factory('addressTxs',
                       LessMore.prototype.loadMore.call(this);
                   }
               }.bind(this));
-          }
+          };
 
           return lessMore;
-      }
+      };
   });

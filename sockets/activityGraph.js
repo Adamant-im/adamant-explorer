@@ -1,3 +1,5 @@
+'use strict';
+
 var api = require('../lib/api');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -14,24 +16,24 @@ module.exports = function (app, connectionHandler, socket) {
         if (interval == null) {
             interval = setInterval(emitLastBlock, 10000);
         }
-    }
+    };
 
     this.onConnect = function () {
         log('Emitting existing data');
         socket.emit('data', data);
-    }
+    };
 
     this.onDisconnect = function () {
         clearInterval(interval);
         interval = null;
         data     = {};
-    }
+    };
 
     // Private
 
     var log = function (msg) {
         console.log('Activity Graph:', msg);
-    }
+    };
 
     var getLastBlock = function (cb) {
         if (running.getLastBlock) {
@@ -39,7 +41,7 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getLastBlock = true;
         statistics.getLastBlock(
-            function (res) { running.getLastBlock = false; cb('LastBlock') },
+            function (res) { running.getLastBlock = false; cb('LastBlock'); },
             function (res) {
                 if (res.success && res.block.numberOfTransactions > 0) {
                     getBlockTransactions(res, cb);
@@ -49,7 +51,7 @@ module.exports = function (app, connectionHandler, socket) {
                 }
             }
         );
-    }
+    };
 
     var getBlockTransactions = function (resBlock, cb) {
         transactions.getTransactionsByBlock(
@@ -68,13 +70,11 @@ module.exports = function (app, connectionHandler, socket) {
                 cb(null, resBlock);
             }
         );
-    }
+    };
 
     var newLastBlock = function (res) {
-        return res.success
-            && (data.block == null)
-            || (res.block.height > data.block.height);
-    }
+        return res.success && (data.block == null) || (res.block.height > data.block.height);
+    };
 
     var emitLastBlock = function () {
         getLastBlock(function (err, res) {
@@ -86,5 +86,6 @@ module.exports = function (app, connectionHandler, socket) {
             log('Emitting new data');
             socket.emit('data', data);
         });
-    }
-}
+    };
+};
+

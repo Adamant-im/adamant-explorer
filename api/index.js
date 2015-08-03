@@ -1,3 +1,5 @@
+'use strict';
+
 var accounts = require('./accounts.js'),
     blocks = require('./blocks.js'),
     candles = require('./candles.js'),
@@ -14,4 +16,5 @@ module.exports = function (app) {
     delegates(app);
     statistics(app);
     transactions(app);
-}
+};
+

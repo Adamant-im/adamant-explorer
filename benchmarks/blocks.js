@@ -14,7 +14,7 @@ module.exports = function (app, api) {
                 console.log('blocks.getBlocksCount ~>', 'count retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getLastBlocks = function (deferred) {
         blocks.getLastBlocks(
@@ -28,7 +28,7 @@ module.exports = function (app, api) {
                 console.log('blocks.getLastBlocks ~>', data.blocks.length, 'blocks retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getBlock = function (deferred) {
         blocks.getBlock(
@@ -42,5 +42,6 @@ module.exports = function (app, api) {
                 console.log('blocks.getBlock ~>', 'block retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
-}
+    };
+};
+

@@ -15,7 +15,7 @@ module.exports = function (app, api) {
                 console.log('transactions.getTransaction ~>', 'transaction retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getUnconfirmedTransactions = function (deferred) {
         transactions.getUnconfirmedTransactions(
@@ -28,7 +28,7 @@ module.exports = function (app, api) {
                 console.log('transactions.getUnconfirmedTransactions ~>', data.transactions.length, 'transactions retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getLastTransactions = function (deferred) {
         transactions.getLastTransactions(
@@ -41,7 +41,7 @@ module.exports = function (app, api) {
                 console.log('transactions.getLastTransactions ~>', data.transactions.length, 'transactions retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getTransactionsByAddress = function (deferred) {
         transactions.getTransactionsByAddress(
@@ -57,7 +57,7 @@ module.exports = function (app, api) {
                 console.log('transactions.getTransactionsByAddress ~>', data.transactions.length, 'transactions retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
+    };
 
     this.getTransactionsByBlock = function (deferred) {
         transactions.getTransactionsByBlock(
@@ -73,5 +73,6 @@ module.exports = function (app, api) {
                 console.log('transactions.getTransactionsByBlock ~>', data.transactions.length, 'transactions retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
-    }
-}
+    };
+};
+
