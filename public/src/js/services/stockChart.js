@@ -207,7 +207,10 @@ var StockChart = function ($http, $timeout, $scope) {
     };
 
     var updateChart = function (resp) {
+        var delay = 0;
+
         if (!self.chart) {
+            delay = 1000;
             self.chart = AmCharts.makeChart('stockChart', self.config);
             self.chart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
         }
@@ -236,7 +239,7 @@ var StockChart = function ($http, $timeout, $scope) {
                 console.log('Default period set');
                 self.chart.periodSelector.setDefaultPeriod();
             }
-        }, 1000);
+        }, delay);
 
         $scope.newExchange = $scope.newDuration = false;
 
