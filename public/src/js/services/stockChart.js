@@ -222,7 +222,7 @@ var StockChart = function ($http, $timeout, $scope) {
                 self.chart.validateNow();
             }
 
-            if (_.size(resp.data.candles) > 0 && AmCharts.isReady) {
+            if (_.size(resp.data.candles) > 0) {
                 console.log('Chart data updated');
                 self.chart.dataSets[0].dataProvider = resp.data.candles;
                 self.chart.validateData();
