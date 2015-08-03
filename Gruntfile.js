@@ -8,6 +8,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-angular-gettext');
 
@@ -101,6 +102,23 @@ module.exports = function (grunt) {
                     ext: '.min.css'
                 }]
             }
+        },
+        jshint: {
+            options: {
+              jshintrc: '.jshintrc'
+            },
+            all: ['api/**/*.js',
+                  'app.js',
+                  'benchmark.js',
+                  'benchmarks/**/*.js',
+                  'cache.js',
+                  'Gruntfile.js',
+                  'lib/**/*.js',
+                  'public/src/js/**/*.js',
+                  'redis.js',
+                  'sockets/**/*.js',
+                  'tasks/**/*.js',
+                  'utils**/*.js']
         },
         markdown: {
             all: {
