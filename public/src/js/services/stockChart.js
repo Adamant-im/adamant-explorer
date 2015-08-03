@@ -236,7 +236,7 @@ var StockChart = function ($http, $timeout, $scope) {
                 console.log('Default period set');
                 self.chart.periodSelector.setDefaultPeriod();
             }
-        }, 0);
+        }, 1000);
 
         $scope.newExchange = $scope.newDuration = false;
 
