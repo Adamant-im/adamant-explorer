@@ -178,12 +178,12 @@
         <table class="table table-hover table-striped peers">
           <thead>
             <tr>
-              <th>IP Address</th>
-              <th class="hidden-xs">Hostname</th>
-              <th class="hidden-xs">Country</th>
+              <th><a href="" ng-click="tables.peers.order('ip')" class="sort-order">IP Address <span ng-show="tables.peers.predicate === 'ip'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th class="hidden-xs"><a href="" ng-click="tables.peers.order('location.hostname')" class="sort-order">Hostname <span ng-show="tables.peers.predicate === 'location.hostname'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th class="hidden-xs"><a href="" ng-click="tables.peers.order('location.country_name')" class="sort-order">Country <span ng-show="tables.peers.predicate === 'location.country_name'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
               <th>Status</th>
-              <th>Version</th>
-              <th>Platform</th>
+              <th><a href="" ng-click="tables.peers.order('version')" class="sort-order">Version <span ng-show="tables.peers.predicate === 'version'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th><a href="" ng-click="tables.peers.order('os')" class="sort-order">Platform <span ng-show="tables.peers.predicate === 'os'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
             </tr>
           </thead>
           <tbody>
@@ -192,7 +192,7 @@
             </tr>
           </tbody>
           <tbody data-ng-repeat='(key, value) in peers'>
-            <tr class="fader" data-ng-repeat='p in value track by $index'>
+            <tr class="fader" data-ng-repeat='p in value | orderBy:tables.peers.predicate:tables.peers.reverse track by p.ip'>
               <td><span class="text-muted">{{p.ip}}</span></td>
               <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
               <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>

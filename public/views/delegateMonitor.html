@@ -205,12 +205,12 @@
             <table class="table table-hover table-striped">
               <thead>
                 <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th class="hidden-xs">Address</th>
-                  <th class="hidden-xs hidden-sm">Forged</th>
-                  <th class="hidden-xs">Uptime</th>
-                  <th class="hidden-xs">Approval</th>
+                  <th><a href="" ng-click="tables.standby.order('rate')" class="sort-order">Rank <span ng-show="tables.standby.predicate === 'rate'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th><a href="" ng-click="tables.standby.order('username')" class="sort-order">Name <span ng-show="tables.standby.predicate === 'username'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('address')" class="sort-order">Address <span ng-show="tables.standby.predicate === 'address'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs hidden-sm"><a href="" ng-click="tables.standby.order('fees')" class="sort-order">Forged <span ng-show="tables.standby.predicate === 'fees'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('productivity')" class="sort-order">Uptime <span ng-show="tables.standby.predicate === 'productivity'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('vote')" class="sort-order">Approval <span ng-show="tables.standby.predicate === 'vote'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
                 </tr>
               </thead>
               <tbody>
@@ -219,7 +219,7 @@
                 </tr>
               </tbody>
               <tbody>
-                <tr class="fader" data-ng-repeat='d in activeDelegates track by d.rate'>
+                <tr class="fader" ng-repeat='d in activeDelegates | orderBy:tables.standby.predicate:tables.standby.reverse track by d.rate'>
                   <td>{{d.rate}}</td>
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
@@ -238,11 +238,11 @@
             <table class="table table-hover table-striped">
               <thead>
                 <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th class="hidden-xs">Address</th>
-                  <th class="hidden-xs">Uptime</th>
-                  <th class="hidden-xs">Approval</th>
+                  <th><a href="" ng-click="tables.standby.order('rate')" class="sort-order">Rank <span ng-show="tables.standby.predicate === 'rate'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th><a href="" ng-click="tables.standby.order('username')" class="sort-order">Name <span ng-show="tables.standby.predicate === 'username'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('address')" class="sort-order">Address <span ng-show="tables.standby.predicate === 'address'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('productivity')" class="sort-order">Uptime <span ng-show="tables.standby.predicate === 'productivity'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" ng-click="tables.standby.order('vote')" class="sort-order">Approval <span ng-show="tables.standby.predicate === 'vote'" ng-class="{reverse:tables.standby.reverse}"></span></a></th>
                 </tr>
               </thead>
               <tbody>
@@ -251,7 +251,7 @@
                 </tr>
               </tbody>
               <tbody>
-                <tr class="fader" data-ng-repeat='d in standbyDelegates track by d.rate'>
+                <tr class="fader" data-ng-repeat='d in standbyDelegates | orderBy:tables.standby.predicate:tables.standby.reverse track by d.rate'>
                   <td>{{d.rate}}</td>
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>

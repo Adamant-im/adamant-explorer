@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cryptichain.tools').controller('DelegateMonitor',
-  function (delegateMonitor, $scope, $http) {
+  function (delegateMonitor, orderBy, $scope, $http) {
       delegateMonitor($scope);
 
       $scope.getStandby = function (n) {
@@ -24,4 +24,9 @@ angular.module('cryptichain.tools').controller('DelegateMonitor',
       };
 
       $scope.getStandby(1);
+
+      $scope.tables = {
+          active : orderBy('rate'),
+          standby : orderBy('rate')
+      };
   });

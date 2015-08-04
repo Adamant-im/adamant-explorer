@@ -937,3 +937,25 @@ a.v_highlight_more {
 @-moz-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @-o-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Sort Order */
+
+a.sort-order {
+  color: #343844;
+}
+
+a.sort-order:focus, .sort-order:hover {
+  text-decoration: none;
+}
+
+a.sort-order span {
+  color: #1F9BDE;
+}
+
+a.sort-order span:after {
+  content: '\25b2';
+}
+
+a.sort-order span.reverse:after {
+  content: '\25bc';
+}
