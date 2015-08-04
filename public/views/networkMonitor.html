@@ -178,12 +178,12 @@
         <table class="table table-hover table-striped peers">
           <thead>
             <tr>
-              <th><a href="" ng-click="tables.peers.order('ip')" class="sort-order">IP Address <span ng-show="tables.peers.predicate === 'ip'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
-              <th class="hidden-xs"><a href="" ng-click="tables.peers.order('location.hostname')" class="sort-order">Hostname <span ng-show="tables.peers.predicate === 'location.hostname'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
-              <th class="hidden-xs"><a href="" ng-click="tables.peers.order('location.country_name')" class="sort-order">Country <span ng-show="tables.peers.predicate === 'location.country_name'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th><a href="" data-ng-click="tables.peers.order('ip')" class="sort-order">IP Address <span data-ng-show="tables.peers.predicate === 'ip'" data-ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th class="hidden-xs"><a href="" data-ng-click="tables.peers.order('location.hostname')" class="sort-order">Hostname <span data-ng-show="tables.peers.predicate === 'location.hostname'" data-ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th class="hidden-xs"><a href="" data-ng-click="tables.peers.order('location.country_name')" class="sort-order">Country <span data-ng-show="tables.peers.predicate === 'location.country_name'" data-ng-class="{reverse:tables.peers.reverse}"></span></a></th>
               <th>Status</th>
-              <th><a href="" ng-click="tables.peers.order('version')" class="sort-order">Version <span ng-show="tables.peers.predicate === 'version'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
-              <th><a href="" ng-click="tables.peers.order('os')" class="sort-order">Platform <span ng-show="tables.peers.predicate === 'os'" ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th><a href="" data-ng-click="tables.peers.order('version')" class="sort-order">Version <span data-ng-show="tables.peers.predicate === 'version'" data-ng-class="{reverse:tables.peers.reverse}"></span></a></th>
+              <th><a href="" data-ng-click="tables.peers.order('os')" class="sort-order">Platform <span data-ng-show="tables.peers.predicate === 'os'" data-ng-class="{reverse:tables.peers.reverse}"></span></a></th>
             </tr>
           </thead>
           <tbody>
