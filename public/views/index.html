@@ -20,7 +20,7 @@
           </thead>
           <tbody>
           <tr data-ng-if="!txs.length"><td colspan="4">Waiting for transactions...</td></tr>
-          <tr class="fader" data-ng-repeat='tx in txs track by tx.id'>
+          <tr data-ng-repeat='tx in txs track by tx.id'>
             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
             <td class="text-right hidden-xs">{{ tx.timestamp | timestamp }}</td>
             <td class="text-right"><span class="ellipsis">{{tx.amount | xcr}}</span></td>
@@ -47,7 +47,7 @@
           </thead>
           <tbody>
             <tr data-ng-if="!blocks.length"><td colspan="7">Waiting for blocks...</td></tr>
-            <tr class="fader" data-ng-repeat='b in blocks track by b.id'>
+            <tr data-ng-repeat='b in blocks track by b.id'>
               <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
               <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
               <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
