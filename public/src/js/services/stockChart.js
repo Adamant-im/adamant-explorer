@@ -210,7 +210,7 @@ var StockChart = function ($http, $timeout, $scope) {
         var delay = 0;
 
         if (!self.chart) {
-            delay = 1000;
+            delay = 500;
             self.chart = AmCharts.makeChart('stockChart', self.config);
             self.chart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
         }
