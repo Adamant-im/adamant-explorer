@@ -218,12 +218,12 @@ angular.module('cryptichain')
                       console.log('Chart data updated');
                       scope.stockChart.dataSets[0].dataProvider = newData;
                       scope.stockChart.validateData();
-                      elm.contents().css('visibility', 'visible');
+                      elm.contents().css('display', 'block');
                   } else {
                       console.log('Chart data is empty');
                       scope.stockChart.dataSets[0].dataProvider = [];
                       scope.stockChart.validateNow();
-                      elm.contents().css('visibility', 'hidden');
+                      elm.contents().css('display', 'none');
                       elm.prepend('<p class="amChartsEmpty"><i class="fa fa-exclamation-circle"></i> No Data</p>');
                   }
 
