@@ -33,3 +33,14 @@
   background-color: #1E9ADD;
   border-color: #1E9ADD;
 }
+
+#stockChart .amChartsEmpty {
+  width: 100%;
+  line-height: 500px;
+  text-align: center;
+  opacity: 0.5;
+  font-size: 24px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
