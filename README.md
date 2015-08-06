@@ -65,6 +65,8 @@ Example:
         "fixedPoint" : 100000000,
         "enableCandles" : true,
         "updateCandlesInterval" : 30000,
+        "enableOrders" : true,
+        "updateOrdersInterval" : 30000,
         "enableExchange" : true,
         "updateExchangeInterval" : 900000,
         "btcusdExchange" : "bitfinex",
@@ -77,6 +79,8 @@ Example:
 * `fixedPoint` - fixed point number of Crypti (10^8).
 * `enableCandles` - enable or disable updating of candlestick data.
 * `updateCandlesInterval` - time to update candlestick data.
+* `enableOrders` - enable or disable updating of order book data.
+* `updateOrdersInterval` - time to update order book data.
 * `enableExchange` - enable or disable exchange currency courses.
 * `updateExchangeInterval` - time to update exchange currency courses.
 * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
