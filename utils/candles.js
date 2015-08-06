@@ -5,6 +5,12 @@ var candles = require('../lib/candles'),
 
 module.exports = function (config, client) {
     this.updateCandles = function () {
+        if (running) {
+            console.error('Candles:', 'Update already in progress');
+            return;
+        } else {
+            running = true;
+        }
         async.series([
             function (callback) {
                 bter.updateCandles(function (err, res) {
@@ -29,6 +35,7 @@ module.exports = function (config, client) {
             if (err) {
                 console.error('Candles:', 'Error updating candles:', err);
             }
+            running = false;
         });
     };
 
@@ -42,4 +49,6 @@ module.exports = function (config, client) {
 
     var bter = new candles.bter(client),
         poloniex = new candles.poloniex(client);
+
+    var running = false;
 };
