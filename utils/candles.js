@@ -34,6 +34,8 @@ module.exports = function (config, client) {
         function (err, results) {
             if (err) {
                 console.error('Candles:', 'Error updating candles:', err);
+            } else {
+                console.log('Candles:', 'Updated successfully');
             }
             running = false;
         });
