@@ -31,8 +31,9 @@ module.exports = function () {
             console.log('KnownAddresses:', length, 'known addresses loaded');
             return this.addresses;
         };
+
+        this.load(); // Load on initialization
     }
 
     return new KnownAddresses();
 };
-
