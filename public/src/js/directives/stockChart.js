@@ -215,12 +215,12 @@ angular.module('cryptichain')
                   var newPeriod = self.updatePeriod(scope);
 
                   if (_.size(newData) > 0) {
-                      console.log('Chart data updated');
+                      console.log('Stock chart data updated');
                       scope.stockChart.dataSets[0].dataProvider = newData;
                       scope.stockChart.validateData();
                       elm.contents().css('display', 'block');
                   } else {
-                      console.log('Chart data is empty');
+                      console.log('Stock chart data is empty');
                       scope.stockChart.dataSets[0].dataProvider = [];
                       scope.stockChart.validateNow();
                       elm.contents().css('display', 'none');
