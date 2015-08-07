@@ -20,17 +20,24 @@ var MarketWatcher = function ($q, $http, $scope) {
         if ($scope.newDuration) {
             console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
         }
+        $scope.updateAll = $scope.newExchange || (!$scope.newExchange && !$scope.newDuration);
         return getData();
     };
 
     var getData = function () {
         $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
-            $scope.candles = results[0].data.candles;
-            console.log('Candles updated');
-            $scope.statistics = results[1].data.statistics;
-            console.log('Statistics updated');
-            $scope.orders = results[2].data.orders;
-            console.log('Orders updated');
+            if (results[0] && results[0].data) {
+                $scope.candles = results[0].data.candles;
+                console.log('Candles updated');
+            }
+            if (results[1] && results[1].data) {
+                $scope.statistics = results[1].data.statistics;
+                console.log('Statistics updated');
+            }
+            if (results[2] && results[2].data) {
+                $scope.orders = results[2].data.orders;
+                console.log('Orders updated');
+            }
         });
     };
 
@@ -42,15 +49,17 @@ var MarketWatcher = function ($q, $http, $scope) {
     };
 
     var getStatistics = function () {
+        if (!$scope.updateAll) { return; }
         console.log('Retrieving statistics...');
         return $http.get(['/api/candles/getStatistics',
-                   '?e=', angular.lowercase($scope.exchange)].join(''));
+                          '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     var getOrders = function () {
+        if (!$scope.updateAll) { return; }
         console.log('Retrieving orders...');
         return $http.get(['/api/orders/getOrders',
-                  '?e=', angular.lowercase($scope.exchange)].join(''));
+                          '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     $scope.setExchange();
