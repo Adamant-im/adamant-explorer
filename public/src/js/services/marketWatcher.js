@@ -29,6 +29,8 @@ var MarketWatcher = function ($q, $http, $scope) {
             console.log('Candles updated');
             $scope.statistics = results[1].data.statistics;
             console.log('Statistics updated');
+            $scope.orders = results[2].data.orders;
+            console.log('Orders updated');
         });
     };
 
@@ -43,6 +45,12 @@ var MarketWatcher = function ($q, $http, $scope) {
         console.log('Retrieving statistics...');
         return $http.get(['/api/candles/getStatistics',
                    '?e=', angular.lowercase($scope.exchange)].join(''));
+    };
+
+    var getOrders = function () {
+        console.log('Retrieving orders...');
+        return $http.get(['/api/orders/getOrders',
+                  '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     $scope.setExchange();
