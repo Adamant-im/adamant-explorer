@@ -1,6 +1,6 @@
 'use strict';
 
-var MarketWatcher = function ($http, $scope) {
+var MarketWatcher = function ($q, $http, $scope) {
     var self = this;
 
     $scope.setExchange = function (exchange, duration) {
@@ -20,41 +20,34 @@ var MarketWatcher = function ($http, $scope) {
         if ($scope.newDuration) {
             console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
         }
-        return getCandles();
+        return getData();
+    };
+
+    var getData = function () {
+        $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
+            $scope.candles = results[0].data.candles;
+            console.log('Candles updated');
+            $scope.statistics = results[1].data.statistics;
+            console.log('Statistics updated');
+        });
     };
 
     var getCandles = function () {
         console.log('Retrieving candles...');
-        $http.get(['/api/candles/getCandles',
+        return $http.get(['/api/candles/getCandles',
                    '?e=', angular.lowercase($scope.exchange),
-                   '&d=', $scope.duration].join('')).then(updateCandles);
-    };
-
-    var updateCandles = function (resp) {
-        if (resp.data.success) {
-            $scope.candles = resp.data.candles;
-            console.log('Candles updated');
-        }
-
-        return getStatistics();
+                   '&d=', $scope.duration].join(''));
     };
 
     var getStatistics = function () {
         console.log('Retrieving statistics...');
-        $http.get(['/api/candles/getStatistics',
-                   '?e=', angular.lowercase($scope.exchange)].join('')).then(updateStatistics);
-    };
-
-    var updateStatistics = function (resp) {
-        if (resp.data.success) {
-            $scope.statistics = resp.data.statistics;
-            console.log('Statistics updated');
-        }
+        return $http.get(['/api/candles/getStatistics',
+                   '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     $scope.setExchange();
 
-    var interval = setInterval(getCandles, 30000);
+    var interval = setInterval(getData, 30000);
 
     $scope.$on('$locationChangeStart', function (event, next, current) {
         clearInterval(interval);
@@ -62,9 +55,9 @@ var MarketWatcher = function ($http, $scope) {
 };
 
 angular.module('cryptichain.tools').factory('marketWatcher',
-  function ($http, $socket) {
+  function ($q, $http, $socket) {
       return function ($scope) {
-          var marketWatcher = new MarketWatcher($http, $scope),
+          var marketWatcher = new MarketWatcher($q, $http, $scope),
               ns = $socket('/marketWatcher');
 
           ns.on('data', function (res) {
