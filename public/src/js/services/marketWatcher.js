@@ -70,6 +70,7 @@ var MarketWatcher = function ($q, $http, $scope) {
                           '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
+    $scope.isCollapsed = false;
     $scope.setExchange();
 
     var interval = setInterval(getData, 30000);

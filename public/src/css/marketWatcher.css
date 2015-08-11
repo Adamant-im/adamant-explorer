@@ -23,6 +23,10 @@
   margin-top: 1em;
 }
 
+.sections.collapsed {
+  padding-top: 1em;
+}
+
 .statistics .big-info {
   padding-bottom: 0;
 }
