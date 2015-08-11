@@ -9,6 +9,7 @@ var MarketWatcher = function ($q, $http, $scope) {
         $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
         if ($scope.newExchange) {
             console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
+            $scope.updateAll = updateAll();
         }
         return $scope.setDuration(duration);
     };
@@ -19,23 +20,30 @@ var MarketWatcher = function ($q, $http, $scope) {
         $scope.newDuration = ($scope.duration !== $scope.oldDuration);
         if ($scope.newDuration) {
             console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
+            $scope.updateAll = updateAll();
         }
-        $scope.updateAll = $scope.newExchange || (!$scope.newExchange && !$scope.newDuration);
         return getData();
+    };
+
+    var updateAll = function () {
+        return $scope.newExchange || (!$scope.newExchange && !$scope.newDuration);
     };
 
     var getData = function () {
         $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
             if (results[0] && results[0].data) {
                 $scope.candles = results[0].data.candles;
+                $scope.$broadcast('$candlesUpdated');
                 console.log('Candles updated');
             }
             if (results[1] && results[1].data) {
                 $scope.statistics = results[1].data.statistics;
+                $scope.$broadcast('$statisticsUpdated');
                 console.log('Statistics updated');
             }
             if (results[2] && results[2].data) {
                 $scope.orders = results[2].data.orders;
+                $scope.$broadcast('$ordersUpdated');
                 console.log('Orders updated');
             }
         });
@@ -68,6 +76,10 @@ var MarketWatcher = function ($q, $http, $scope) {
 
     $scope.$on('$locationChangeStart', function (event, next, current) {
         clearInterval(interval);
+    });
+
+    $scope.$on('$stockChartUpdated', function (event, next, current) {
+        $scope.newExchange = $scope.newDuration = false;
     });
 };
 

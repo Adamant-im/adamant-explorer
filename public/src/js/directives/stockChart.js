@@ -199,10 +199,8 @@ angular.module('cryptichain')
               return newPeriod;
           };
 
-          this.updateCandles = function (newData, oldData) {
+          this.updateCandles = function () {
               var delay = 0;
-
-              if (!newData) { return; }
 
               if (!scope.stockChart) {
                   delay = 500;
@@ -214,9 +212,9 @@ angular.module('cryptichain')
               $timeout(function () {
                   var newPeriod = self.updatePeriod(scope);
 
-                  if (_.size(newData) > 0) {
+                  if (_.size(scope.candles) > 0) {
                       console.log('Stock chart data updated');
-                      scope.stockChart.dataSets[0].dataProvider = newData;
+                      scope.stockChart.dataSets[0].dataProvider = scope.candles;
                       scope.stockChart.validateData();
                       elm.contents().css('display', 'block');
                   } else {
@@ -232,7 +230,7 @@ angular.module('cryptichain')
                       console.log('Default period set');
                   }
 
-                  scope.newExchange = scope.newDuration = false;
+                  scope.$emit('$stockChartUpdated');
               }, delay);
           };
 
@@ -246,7 +244,7 @@ angular.module('cryptichain')
           template: '<div id="stockChart"></div>',
           link: function (scope, elm, attr) {
               var stockChart = new StockChart(scope, elm, attr);
-              scope.$watch('candles', stockChart.updateCandles, false);
+              scope.$on('$candlesUpdated', stockChart.updateCandles);
           }
       };
   });
