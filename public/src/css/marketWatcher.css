@@ -27,12 +27,12 @@
   padding-top: 1em;
 }
 
-.statistics .big-info {
-  padding-bottom: 0;
-}
-
 .statistics {
   margin-bottom: 1em;
+}
+
+.statistics .big-info {
+  padding-bottom: 0;
 }
 
 #stockChart {
