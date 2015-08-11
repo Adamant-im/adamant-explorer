@@ -11,6 +11,18 @@
   background-color: #1E9ADD;
 }
 
+.sections .table-responsive {
+  height: 500px;
+  max-height: 500px;
+  overflow-y: scroll;
+  margin-top: 1em;
+  padding: 0.5em;
+}
+
+.sections .order {
+  margin-top: 1em;
+}
+
 .statistics .big-info {
   padding-bottom: 0;
 }
