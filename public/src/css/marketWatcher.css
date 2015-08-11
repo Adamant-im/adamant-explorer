@@ -2,6 +2,10 @@
   padding: 0;
 }
 
+.btn-collapse {
+  margin-top: 10px;
+}
+
 .sections .nav-tabs>li>a {
   color: #343844;
 }
