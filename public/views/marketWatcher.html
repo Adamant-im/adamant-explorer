@@ -96,14 +96,26 @@
             </div>
           </div>
         </div>
-        <div class="btn-group btn-group-justified btn-durations">
-            <label class="btn btn-default" data-ng-model="duration" btn-radio="'minute'" data-ng-click="setDuration('minute')">Minutes</label>
-            <label class="btn btn-default" data-ng-model="duration" btn-radio="'hour'" data-ng-click="setDuration('hour')">Hours</label>
-            <label class="btn btn-default" data-ng-model="duration" btn-radio="'day'" data-ng-click="setDuration('day')">Days</label>
-        </div>
       </div>
-
-      <stock-chart></stock-chart>
+      <tabset justified="true" class="sections">
+        <tab>
+          <tab-heading>
+            <i class="fa fa-bar-chart"></i> Stock Chart
+          </tab-heading>
+          <div class="btn-group btn-group-justified btn-durations" data-ng-if="stockChart">
+              <label class="btn btn-default" data-ng-model="duration" btn-radio="'minute'" data-ng-click="setDuration('minute')">Minutes</label>
+              <label class="btn btn-default" data-ng-model="duration" btn-radio="'hour'" data-ng-click="setDuration('hour')">Hours</label>
+              <label class="btn btn-default" data-ng-model="duration" btn-radio="'day'" data-ng-click="setDuration('day')">Days</label>
+          </div>
+          <stock-chart></stock-chart>
+        </tab>
+        <tab>
+          <tab-heading>
+            <i class="fa fa-area-chart"></i> Depth Chart
+          </tab-heading>
+          <depth-chart></depth-chart>
+        </tab>
+      </tabset>
     </div>
   </div>
 </div>

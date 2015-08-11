@@ -1,9 +1,22 @@
-.exchanges .tab-content {
+.exchanges .tab-content, .sections .tab-content {
   padding: 0;
+}
+
+.sections .nav-tabs>li>a {
+  color: #343844;
+}
+
+.sections .nav-tabs>li.active>a {
+  color: white;
+  background-color: #1E9ADD;
 }
 
 .statistics .big-info {
   padding-bottom: 0;
+}
+
+.statistics {
+  margin-bottom: 1em;
 }
 
 .btn-durations {
@@ -34,7 +47,8 @@
   border-color: #1E9ADD;
 }
 
-#stockChart .amChartsEmpty {
+#stockChart .amChartsEmpty,
+#depthChart .amChartsEmpty {
   width: 100%;
   line-height: 500px;
   text-align: center;

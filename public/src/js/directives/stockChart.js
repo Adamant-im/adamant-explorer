@@ -69,7 +69,7 @@ angular.module('cryptichain')
                       fillColors: '#38B449',
                       negativeLineColor: '#990000',
                       negativeFillColors: '#CC0000',
-                      fillAlphas: 1,
+                      fillAlphas: 0.7,
                       useDataSetColors: false,
                       comparable: false,
                       showBalloon: true,
