@@ -35,25 +35,6 @@
   margin-bottom: 1em;
 }
 
-.btn-durations {
-  margin-top: 1em;
-}
-
-.btn-durations .active {
-  color: white;
-  background-color: #1E9ADD;
-}
-
-.btn-durations .active:hover {
-  color: white;
-  background-color: #23adf7;
-}
-
-.btn-durations .active:focus {
-  color: white;
-  background-color: #1b89c4;
-}
-
 #stockChart {
   margin-top: 1em;
 }
@@ -73,4 +54,23 @@
   border: 1px solid #ddd;
   border-radius: 2px;
   text-transform: uppercase;
+}
+
+.btn-durations {
+  margin-top: 1em;
+}
+
+.btn-durations .active {
+  color: white;
+  background-color: #1E9ADD;
+}
+
+.btn-durations .active:hover {
+  color: white;
+  background-color: #23adf7;
+}
+
+.btn-durations .active:focus {
+  color: white;
+  background-color: #1b89c4;
 }
