@@ -3,7 +3,7 @@
 angular.module('cryptichain.tools')
   .directive('peers', function (orderBy) {
       return {
-          restrict: 'A',
+          restrict: 'E',
           scope: { peers: '=' },
           templateUrl: '/views/networkMonitor/peers.html',
           replace: true,
