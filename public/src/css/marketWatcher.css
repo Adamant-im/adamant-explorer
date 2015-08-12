@@ -2,6 +2,13 @@
   padding: 0;
 }
 
+.exchanges .nav-tabs.nav-justified>.active>a,
+.exchanges .nav-tabs.nav-justified>.active>a:hover,
+.exchanges .nav-tabs.nav-justified>.active>a:focus {
+  color: #1E9ADD;
+  background-color: white;
+}
+
 .btn-collapse {
   margin-top: 10px;
 }
