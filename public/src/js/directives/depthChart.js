@@ -35,7 +35,6 @@ angular.module('cryptichain.tools')
               }],
               marginTop: 15,
               chartCursor: {
-                  cursorAlpha: 0,
                   fullWidth: true,
                   cursorAlpha: 0.1,
                   valueBalloonsEnabled: true,
