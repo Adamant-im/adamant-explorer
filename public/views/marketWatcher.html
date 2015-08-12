@@ -134,50 +134,10 @@
           </tab-heading>
           <div class="row orders">
             <div class="col-sm-12 col-md-6">
-              <div class="table-responsive">
-                <table class="table table-hover table-striped bids">
-                  <thead>
-                    <tr>
-                      <th>Bid <span class="text-muted">(BTC)</span></th>
-                      <th>Amount <span class="text-muted">(XCR)</span></th>
-                      <th>Total <span class="text-muted">(BTC)</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-if="!orders.bids">
-                      <td colspan="6">Waiting for bids <i class="fa fa-spinner fa-spin"></i></td>
-                    </tr>
-                    <tr data-ng-repeat='o in orders.bids track by $index'>
-                      <td>{{o[0] | number:8}}</td>
-                      <td>{{o[1] | number:8}}</td>
-                      <td>{{o[0] * o[1] | number:8}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <orders orders="orders.bids" heading="Bid" name="bids"></orders>
             </div>
             <div class="col-sm-12 col-md-6">
-              <div class="table-responsive">
-                <table class="table table-hover table-striped asks">
-                  <thead>
-                    <tr>
-                      <th>Ask <span class="text-muted">(BTC)</span></th>
-                      <th>Amount <span class="text-muted">(XCR)</span></th>
-                      <th>Total <span class="text-muted">(BTC)</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr data-ng-if="!orders.asks">
-                      <td colspan="6">Waiting for asks <i class="fa fa-spinner fa-spin"></i></td>
-                    </tr>
-                    <tr data-ng-repeat='o in orders.asks track by $index'>
-                      <td>{{o[0] | number:8}}</td>
-                      <td>{{o[1] | number:8}}</td>
-                      <td>{{o[0] * o[1] | number:8}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <orders orders="orders.asks" heading="Ask" name="asks"></orders>
             </div>
           </div>
         </tab>
