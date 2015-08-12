@@ -270,6 +270,21 @@ a, a:hover, a:visited, a:focus {
   }
 }
 
+.nav-tabs>li>a {
+  color: #343844;
+}
+
+.nav-tabs.nav-justified>.active>a,
+.nav-tabs.nav-justified>.active>a:focus {
+  color: white;
+  background-color: #1E9ADD;
+}
+
+.nav-tabs.nav-justified>.active>a:hover {
+  color: white;
+  background-color: #23adf7;
+}
+
 .nav-tabs.nav-justified>li>a:hover {
   cursor: pointer;
 }
