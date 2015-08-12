@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain')
+angular.module('cryptichain.tools')
   .directive('depthChart', function ($timeout) {
       function DepthChart (scope, elm, attr) {
           var self = this;
