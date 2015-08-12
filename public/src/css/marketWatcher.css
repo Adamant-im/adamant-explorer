@@ -13,15 +13,6 @@
   margin-top: 10px;
 }
 
-.sections .nav-tabs>li>a {
-  color: #343844;
-}
-
-.sections .nav-tabs>li.active>a {
-  color: white;
-  background-color: #1E9ADD;
-}
-
 .sections .table-responsive {
   height: 500px;
   max-height: 500px;
