@@ -116,15 +116,15 @@ div.versions span.counter {
   }
 }
 
-table.peers td {
+.peers td {
   overflow: hidden;
 }
 
-table.peers td .hostname {
+.peers td .hostname {
   max-width: 300px;
 }
 
-table.peers td .os-icon {
+.peers td .os-icon {
   width: 24px;
   height: 24px;
   line-height: 24px;
@@ -132,17 +132,17 @@ table.peers td .os-icon {
   background-size: 24px 24px;
 }
 
-table.peers .peer-state:before {
+.peers .peer-state:before {
   font-size: 22px;
   font-family: "Glyphicons Halflings";
 }
 
-table.peers .state-2:before {
+.peers .state-2:before {
   content: "\E084";
   color: #73D216;
 }
 
-table.peers .state-1:before {
+.peers .state-1:before {
   content: "\E083";
   color: #888A85;
 }
