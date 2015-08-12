@@ -116,6 +116,10 @@ div.versions span.counter {
   }
 }
 
+.peers .tab-content {
+  padding-top: 1em;
+}
+
 .peers td {
   overflow: hidden;
 }
