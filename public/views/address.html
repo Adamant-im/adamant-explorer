@@ -1,6 +1,6 @@
 <section data-ng-controller="AddressController">
   <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="address.balance >= 0">
-    <div class="container" data-ng-hide="!address.balance">
+    <div class="container">
       <div class="col-md-8 text-left">
         <h3>Address</h3> {{address.address}}
         <span class="btn-copy" clip-copy="address.address"></span>
@@ -27,7 +27,7 @@
       <span class="btn-copy" clip-copy="address.address"></span>
     </div>
     <h2>Summary <small>confirmed</small></h2>
-    <div class="row" data-ng-hide="!address.address">
+    <div class="row">
       <div class="col-md-12">
         <div class="table-responsive">
           <table class="table">
