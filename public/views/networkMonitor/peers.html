@@ -16,7 +16,7 @@
       </tr>
     </tbody>
     <tbody>
-      <tr data-ng-repeat='p in peers | orderBy:table.predicate:table.reverse track by p.ip'>
+      <tr data-ng-repeat='p in peers | orderBy:table.predicate:table.reverse track by $index + p.ip'>
         <td><span class="text-muted">{{p.ip}}</span></td>
         <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
         <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
