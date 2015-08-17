@@ -126,6 +126,7 @@ angular.module('cryptichain.tools')
           this.dataSets = {
               minute: {
                   minPeriod: 'mm',
+                  groupToPeriods: ['hh', 'DD', 'WW', 'MM', 'YYYY'],
                   periods: [{
                       period: 'MAX',
                       label: 'MAX',
@@ -146,6 +147,7 @@ angular.module('cryptichain.tools')
               },
               hour: {
                   minPeriod: 'hh',
+                  groupToPeriods: ['DD', 'WW', 'MM', 'YYYY'],
                   periods: [{
                       period: 'MAX',
                       label: 'MAX',
@@ -166,6 +168,7 @@ angular.module('cryptichain.tools')
               },
               day: {
                   minPeriod: 'DD',
+                  groupToPeriods: ['WW', 'MM', 'YYYY'],
                   periods: [{
                       period: 'MAX',
                       label: 'MAX',
