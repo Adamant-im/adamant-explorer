@@ -83,10 +83,10 @@ angular.module('cryptichain.tools')
                     percentHeight: 30,
                     marginTop: 1,
                     showCategoryAxis: true,
-                    valueAxes: [ {
+                    valueAxes: [{
                         dashLength: 5,
                         precision: 8
-                    } ],
+                    }],
                     categoryAxis: {
                         dashLength: 5,
                         parseDates: true
