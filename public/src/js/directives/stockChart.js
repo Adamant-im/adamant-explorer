@@ -93,6 +93,7 @@ angular.module('cryptichain.tools')
                     },
                     stockGraphs: [{
                         valueField: 'btcVolume',
+                        periodValue: 'Sum',
                         type: 'column',
                         showBalloon: true,
                         balloonText: 'Volume: <b>[[value]]</b>',
