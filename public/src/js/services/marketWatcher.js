@@ -3,6 +3,20 @@
 var MarketWatcher = function ($q, $http, $scope) {
     var self = this;
 
+    $scope.setTab = function (tab) {
+        $scope.tab = tab;
+        console.log('Switch to', tab, 'tab');
+
+        switch (tab) {
+            case 'stockChart':
+                $scope.$emit('$candlesUpdated');
+                break;
+            case 'depthChart':
+                $scope.$emit('$ordersUpdated');
+                break;
+        }
+    };
+
     $scope.setExchange = function (exchange, duration) {
         $scope.oldExchange = $scope.exchange;
         $scope.exchange = (exchange || $scope.exchange || 'Bter');

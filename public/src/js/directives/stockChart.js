@@ -214,6 +214,10 @@ angular.module('cryptichain.tools')
               }
 
               $timeout(function () {
+                  if (scope.tab !== 'stockChart') {
+                      return;
+                  }
+
                   var newPeriod = self.updatePeriod(scope);
 
                   if (_.size(scope.candles) > 0) {

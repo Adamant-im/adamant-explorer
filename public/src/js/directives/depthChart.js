@@ -65,6 +65,10 @@ angular.module('cryptichain.tools')
               }
 
               $timeout(function () {
+                  if (scope.tab !== 'depthChart') {
+                      return;
+                  }
+
                   if (_.size(scope.orders.depth) > 0) {
                       scope.depthChart.dataProvider = scope.orders.depth;
                       scope.depthChart.validateData();

@@ -111,7 +111,7 @@
   <div class="row">
     <div class="col-xs-12">
       <tabset justified="true" class="sections" data-ng-class="{'collapsed': isCollapsed}">
-        <tab>
+        <tab select="setTab('stockChart')">
           <tab-heading>
             <i class="fa fa-bar-chart"></i> Stock Chart
           </tab-heading>
@@ -122,13 +122,13 @@
           </div>
           <stock-chart></stock-chart>
         </tab>
-        <tab>
+        <tab select="setTab('depthChart')">
           <tab-heading>
             <i class="fa fa-area-chart"></i> Depth Chart
           </tab-heading>
           <depth-chart></depth-chart>
         </tab>
-        <tab>
+        <tab select="setTab('orderBook')">
           <tab-heading>
             <i class="fa fa-book"></i> Order Book
           </tab-heading>
