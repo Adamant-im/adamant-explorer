@@ -9,7 +9,6 @@ var MarketWatcher = function ($q, $http, $scope) {
         $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
         if ($scope.newExchange) {
             console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
-            $scope.updateAll = updateAll();
         }
         return $scope.setDuration(duration);
     };
@@ -20,7 +19,6 @@ var MarketWatcher = function ($q, $http, $scope) {
         $scope.newDuration = ($scope.duration !== $scope.oldDuration);
         if ($scope.newDuration) {
             console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
-            $scope.updateAll = updateAll();
         }
         return getData();
     };
@@ -57,14 +55,14 @@ var MarketWatcher = function ($q, $http, $scope) {
     };
 
     var getStatistics = function () {
-        if (!$scope.updateAll) { return; }
+        if (!updateAll()) { return; }
         console.log('Retrieving statistics...');
         return $http.get(['/api/candles/getStatistics',
                           '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     var getOrders = function () {
-        if (!$scope.updateAll) { return; }
+        if (!updateAll()) { return; }
         console.log('Retrieving orders...');
         return $http.get(['/api/orders/getOrders',
                           '?e=', angular.lowercase($scope.exchange)].join(''));
