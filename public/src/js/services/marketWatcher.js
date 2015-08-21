@@ -4,15 +4,22 @@ var MarketWatcher = function ($q, $http, $scope) {
     var self = this;
 
     $scope.setTab = function (tab) {
-        $scope.tab = tab;
-        console.log('Switch to', tab, 'tab');
+        $scope.oldTab = $scope.tab;
+        $scope.tab    = tab;
 
+        if ($scope.oldTab) {
+            console.log('Switched tab from', $scope.oldTab, 'to', $scope.tab);
+        }
         switch (tab) {
             case 'stockChart':
-                $scope.$broadcast('$candlesUpdated');
+                if ($scope.oldTab !== 'stockChart') {
+                    $scope.$broadcast('$candlesUpdated');
+                }
                 break;
             case 'depthChart':
-                $scope.$broadcast('$ordersUpdated');
+                if ($scope.oldTab !== 'depthChart') {
+                    $scope.$broadcast('$ordersUpdated');
+                }
                 break;
         }
     };
