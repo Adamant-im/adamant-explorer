@@ -28,6 +28,10 @@ var MarketWatcher = function ($q, $http, $scope) {
     };
 
     var getData = function () {
+        console.log('New exchange:', $scope.newExchange);
+        console.log('New duration:', $scope.newDuration);
+        console.log('Updating all:', updateAll());
+
         $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
             if (results[0] && results[0].data) {
                 $scope.candles = results[0].data.candles;
