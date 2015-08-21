@@ -9,10 +9,10 @@ var MarketWatcher = function ($q, $http, $scope) {
 
         switch (tab) {
             case 'stockChart':
-                $scope.$emit('$candlesUpdated');
+                $scope.$broadcast('$candlesUpdated');
                 break;
             case 'depthChart':
-                $scope.$emit('$ordersUpdated');
+                $scope.$broadcast('$ordersUpdated');
                 break;
         }
     };
