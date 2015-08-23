@@ -7,9 +7,9 @@ var MarketWatcher = function ($q, $http, $scope) {
         $scope.oldTab = $scope.tab;
         $scope.tab    = tab;
 
-        if ($scope.oldTab) {
-            console.log('Switched tab from', $scope.oldTab, 'to', $scope.tab);
-        }
+        if (!$scope.oldTab) { return; }
+        console.log('Switched tab from', $scope.oldTab, 'to', $scope.tab);
+
         switch (tab) {
             case 'stockChart':
                 if ($scope.oldTab !== 'stockChart') {
