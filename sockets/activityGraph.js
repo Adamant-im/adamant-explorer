@@ -55,7 +55,9 @@ module.exports = function (app, connectionHandler, socket) {
 
     var getBlockTransactions = function (resBlock, cb) {
         transactions.getTransactionsByBlock(
-            resBlock.block.id,
+            { blockId : resBlock.block.id,
+              offset  : 0,
+              limit   : 100 },
             function (res) {
                 running.getLastBlock = false;
                 cb('BlockTransactions');
@@ -88,4 +90,3 @@ module.exports = function (app, connectionHandler, socket) {
         });
     };
 };
-
