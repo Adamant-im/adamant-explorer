@@ -26,7 +26,7 @@ var MarketWatcher = function ($q, $http, $scope) {
 
     $scope.setExchange = function (exchange, duration) {
         $scope.oldExchange = $scope.exchange;
-        $scope.exchange = (exchange || $scope.exchange || 'Bter');
+        $scope.exchange = (exchange || $scope.exchange || 'Poloniex');
         $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
         if ($scope.newExchange) {
             console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
