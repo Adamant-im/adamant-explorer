@@ -14,12 +14,18 @@ angular.module('cryptichain.tools')
   })
   .directive('osIcon', function () {
       return {
-          restric: 'A',
+          restrict: 'A',
+          scope: {
+              os: '=os',
+              brand: '=brand'
+          },
+          template: '<span></span>',
           replace: true,
-          template: '<span class="os-icon os-"></span>',
-          link: function (scope, elm, attr) {
-              elm[0].alt = elm[0].title = attr.os;
-              elm[0].className = elm[0].className + attr.brand;
+          link: function (scope, element, attr) {
+              var el = element[0];
+
+              el.alt = el.title = scope.os;
+              el.className += (' os-icon os-' + scope.brand);
           }
       };
   });
