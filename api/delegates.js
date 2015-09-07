@@ -40,5 +40,13 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-};
 
+    app.get('/api/delegates/getLastBlocks', function (req, res, next) {
+        api.getLastBlocks(
+            { publicKey : req.query.publicKey,
+              limit : req.query.limit },
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
+};
