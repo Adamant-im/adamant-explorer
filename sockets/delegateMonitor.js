@@ -1,6 +1,8 @@
 'use strict';
 
 var api = require('../lib/api'),
+    moment = require('moment'),
+    _ = require('underscore'),
     async = require('async');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -13,7 +15,8 @@ module.exports = function (app, connectionHandler, socket) {
         'getActive'        : false,
         'getLastBlock'     : false,
         'getRegistrations' : false,
-        'getVotes'         : false
+        'getVotes'         : false,
+        'getLastBlocks'    : false
     };
 
     this.onInit = function () {
@@ -29,7 +32,7 @@ module.exports = function (app, connectionHandler, socket) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                data.active        = res[0];
+                data.active        = updateActive(res[0]);
                 data.lastBlock     = res[1];
                 data.registrations = res[2];
                 data.votes         = res[3];
@@ -71,6 +74,29 @@ module.exports = function (app, connectionHandler, socket) {
         );
     };
 
+    var findActive = function (delegate) {
+        return _.find(data.active.delegates, function (d) {
+            return d.publicKey === delegate.publicKey;
+        });
+    };
+
+    var updateActive = function (results) {
+        if (!data.active || !data.active.delegates) {
+            return results;
+        } else {
+            _.each(results.delegates, function (delegate) {
+                var existing = findActive(delegate);
+
+                if (existing && existing.blocks && existing.blocksAt) {
+                    delegate.blocks = existing.blocks;
+                    delegate.blocksAt = existing.blocksAt;
+                }
+            });
+
+            return results;
+        }
+    };
+
     var getLastBlock = function (cb) {
         if (running.getLastBlock) {
             return cb('getLastBlock (already running)');
@@ -104,6 +130,58 @@ module.exports = function (app, connectionHandler, socket) {
         );
     };
 
+    var getLastBlocks = function (results) {
+        if (running.getLastBlocks) {
+            return log('getLastBlocks (already running)');
+        }
+        running.getLastBlocks = true;
+        async.eachSeries(results.delegates, function (delegate, callback) {
+            if (delegate.blocksAt) {
+                var minutesAgo = moment().diff(delegate.blocksAt, 'minutes');
+
+                if (minutesAgo <= 9) {
+                    log('Skipping last blocks for: ' + delegateName(delegate));
+                    log('Checked ' + minutesAgo + ' minutes ago...');
+                    return callback(null);
+                }
+            }
+            delegates.getLastBlocks(
+                { publicKey : delegate.publicKey,
+                  limit : 1 },
+                function (res) {
+                    log('Error retrieving last blocks for: ' + delegateName(delegate));
+                    callback(res.error);
+                },
+                function (res) {
+                    var existing = findActive(delegate);
+
+                    if (existing) {
+                        existing.blocks = res.blocks;
+                        existing.blocksAt = moment();
+                    }
+
+                    log('Emitting last blocks for: ' + delegateName(delegate));
+                    socket.emit('delegate', delegate);
+
+                    if (interval) {
+                        callback(null);
+                    } else {
+                        callback('Monitor closed');
+                    }
+                }
+            );
+        }, function (err) {
+            if (err) {
+                log('Error retrieving LastBlocks: ' + err);
+            }
+            running.getLastBlocks = false;
+        });
+    };
+
+    var delegateName = function (delegate) {
+        return delegate.username + '[' + delegate.rate + ']';
+    };
+
     var emitData = function () {
         var thisData = {};
 
@@ -117,7 +195,7 @@ module.exports = function (app, connectionHandler, socket) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                thisData.active        = res[0];
+                thisData.active        = updateActive(res[0]);
                 thisData.lastBlock     = res[1];
                 thisData.registrations = res[2];
                 thisData.votes         = res[3];
@@ -125,8 +203,8 @@ module.exports = function (app, connectionHandler, socket) {
                 data = thisData;
                 log('Emitting data');
                 socket.emit('data', thisData);
+                getLastBlocks(thisData.active);
             }
         }.bind(this));
     };
 };
-
