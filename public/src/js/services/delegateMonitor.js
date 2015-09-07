@@ -1,9 +1,12 @@
 'use strict';
 
-var DelegateMonitor = function ($scope) {
+var DelegateMonitor = function ($scope, epochStampFilter) {
     this.$scope = $scope;
 
     this.updateActive = function (active) {
+        _.each(active.delegates, function (d) {
+            d.forgingStatus = forgingStatus(d);
+        });
         this.$scope.activeDelegates = active.delegates;
     };
 
@@ -35,6 +38,17 @@ var DelegateMonitor = function ($scope) {
         this.$scope.votes = votes.transactions;
     };
 
+    this.updateLastBlocks = function (delegate) {
+        var existing = _.find(this.$scope.activeDelegates, function (d) {
+            return d.publicKey === delegate.publicKey;
+        });
+        if (existing) {
+            existing.blocksAt = delegate.blocksAt
+            existing.blocks = delegate.blocks
+            existing.forgingStatus = forgingStatus(delegate);
+        }
+    };
+
     // Private
 
     var bestForger = function (delegates) {
@@ -61,12 +75,32 @@ var DelegateMonitor = function ($scope) {
             return _.min(delegates, function (d) { return parseFloat(d.productivity); });
         }
     };
+
+    var forgingStatus = function (delegate) {
+        if (!delegate.blocksAt || _.size(delegate.blocks) <= 0) {
+            return 4; // No Status
+        }
+
+        var statusAge = moment().diff(delegate.blocksAt, 'minutes'),
+            timestamp = epochStampFilter(_.first(delegate.blocks).timestamp),
+            blockAge = moment().diff(timestamp, 'minutes');
+
+        if (statusAge > 10) {
+            return 3; // Stale Status
+        } else if (blockAge <= 30) {
+            return 0; // Forging
+        } else if (blockAge <= 60) {
+            return 1; // Missed Cycles
+        } else {
+            return 2; // Not Forging
+        }
+    };
 };
 
 angular.module('cryptichain.tools').factory('delegateMonitor',
-  function ($socket) {
+  function ($socket, epochStampFilter) {
       return function ($scope) {
-          var delegateMonitor = new DelegateMonitor($scope),
+          var delegateMonitor = new DelegateMonitor($scope, epochStampFilter),
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {
@@ -77,6 +111,12 @@ angular.module('cryptichain.tools').factory('delegateMonitor',
               if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
               if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
               if (res.votes) { delegateMonitor.updateVotes(res.votes); }
+          });
+
+          ns.on('delegate', function (res) {
+              if (res.publicKey) {
+                  delegateMonitor.updateLastBlocks(res);
+              }
           });
 
           $scope.$on('$destroy', function (event) {
