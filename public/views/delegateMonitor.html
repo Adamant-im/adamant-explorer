@@ -209,6 +209,7 @@
                   <th><a href="" data-ng-click="tables.active.order('username')" class="sort-order">Name <span data-ng-show="tables.active.predicate === 'username'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('address')" class="sort-order">Address <span data-ng-show="tables.active.predicate === 'address'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs hidden-sm"><a href="" data-ng-click="tables.active.order('fees')" class="sort-order">Forged <span data-ng-show="tables.active.predicate === 'fees'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('forgingStatus')" class="sort-order">Status <span data-ng-show="tables.active.predicate === 'forgingStatus'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('productivity')" class="sort-order">Uptime <span data-ng-show="tables.active.predicate === 'productivity'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('vote')" class="sort-order">Approval <span data-ng-show="tables.active.predicate === 'vote'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                 </tr>
@@ -224,6 +225,7 @@
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                   <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">XCR</span></td>
+                  <td class="hidden-xs"><i forging-status="d.forgingStatus"></i></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
                   <td class="hidden-xs">{{d.vote | approval }}%</td>
                 </tr>
