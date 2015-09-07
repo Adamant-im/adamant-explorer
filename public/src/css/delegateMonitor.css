@@ -19,3 +19,20 @@
 .big-details span.total-delegates {
   font-weight: 700;
 }
+
+.forging-status {
+  font-size: 18px;
+  color: #888a85;
+}
+
+.forging-status.green {
+  color: #73d216;
+}
+
+.forging-status.orange {
+  color: #f57900;
+}
+
+.forging-status.red {
+  color: #cc0000;
+}
