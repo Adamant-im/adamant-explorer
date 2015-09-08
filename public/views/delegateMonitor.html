@@ -205,12 +205,12 @@
             <table class="table table-hover table-striped">
               <thead>
                 <tr>
-                  <th><a href="" data-ng-click="tables.standby.order('rate')" class="sort-order">Rank <span data-ng-show="tables.standby.predicate === 'rate'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
-                  <th><a href="" data-ng-click="tables.standby.order('username')" class="sort-order">Name <span data-ng-show="tables.standby.predicate === 'username'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
-                  <th class="hidden-xs"><a href="" data-ng-click="tables.standby.order('address')" class="sort-order">Address <span data-ng-show="tables.standby.predicate === 'address'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
-                  <th class="hidden-xs hidden-sm"><a href="" data-ng-click="tables.standby.order('fees')" class="sort-order">Forged <span data-ng-show="tables.standby.predicate === 'fees'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
-                  <th class="hidden-xs"><a href="" data-ng-click="tables.standby.order('productivity')" class="sort-order">Uptime <span data-ng-show="tables.standby.predicate === 'productivity'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
-                  <th class="hidden-xs"><a href="" data-ng-click="tables.standby.order('vote')" class="sort-order">Approval <span data-ng-show="tables.standby.predicate === 'vote'" data-ng-class="{reverse:tables.standby.reverse}"></span></a></th>
+                  <th><a href="" data-ng-click="tables.active.order('rate')" class="sort-order">Rank <span data-ng-show="tables.active.predicate === 'rate'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th><a href="" data-ng-click="tables.active.order('username')" class="sort-order">Name <span data-ng-show="tables.active.predicate === 'username'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('address')" class="sort-order">Address <span data-ng-show="tables.active.predicate === 'address'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs hidden-sm"><a href="" data-ng-click="tables.active.order('fees')" class="sort-order">Forged <span data-ng-show="tables.active.predicate === 'fees'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('productivity')" class="sort-order">Uptime <span data-ng-show="tables.active.predicate === 'productivity'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('vote')" class="sort-order">Approval <span data-ng-show="tables.active.predicate === 'vote'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                 </tr>
               </thead>
               <tbody>
@@ -219,7 +219,7 @@
                 </tr>
               </tbody>
               <tbody>
-                <tr data-ng-repeat='d in activeDelegates | orderBy:tables.standby.predicate:tables.standby.reverse track by d.rate'>
+                <tr data-ng-repeat='d in activeDelegates | orderBy:tables.active.predicate:tables.active.reverse track by d.rate'>
                   <td>{{d.rate}}</td>
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
