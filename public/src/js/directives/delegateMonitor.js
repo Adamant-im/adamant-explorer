@@ -34,6 +34,7 @@ angular.module('cryptichain.tools')
                           break;
                       default: // No Status
                           element.removeClass('fa-circle red orange green').addClass('fa-circle-o');
+                          element.attr('title', '');
                   }
               };
 
