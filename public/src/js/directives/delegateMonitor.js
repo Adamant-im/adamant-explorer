@@ -15,7 +15,7 @@ angular.module('cryptichain.tools')
               var updateStatus = function () {
                   element.removeClass('fa-circle-o').addClass('fa-circle');
 
-                  switch (scope.forgingStatus) {
+                  switch (scope.forgingStatus.code) {
                       case 3: // Stale Status
                           element.removeClass('red orange green');
                           element.attr('title', 'Stale Status');
