@@ -81,10 +81,11 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
 
         if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
             status.updatedAt = delegate.blocksAt;
-            status.lastBlock = _.first(delegate.blocks);
+            status.lastBlock = _.first(delegate.blocks),
+            status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
 
             var statusAge = moment().diff(delegate.blocksAt, 'minutes'),
-                blockAge  = moment().diff(epochStampFilter(status.lastBlock.timestamp), 'minutes');
+                blockAge  = moment().diff(status.blockAt, 'minutes');
         } else {
             status.updatedAt = status.lastBlock = null;
         }
