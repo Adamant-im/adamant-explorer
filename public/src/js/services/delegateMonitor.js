@@ -80,22 +80,25 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         var status = {};
 
         if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
-            status.blocksAt  = delegate.blocksAt;
-            status.timestamp = _.first(delegate.blocks).timestamp;
-            status.statusAge = moment().diff(delegate.blocksAt, 'minutes');
-            status.blockAge  = moment().diff(epochStampFilter(status.timestamp), 'minutes');
+            status.updatedAt = delegate.blocksAt;
+            status.lastBlock = _.first(delegate.blocks);
+
+            var statusAge = moment().diff(delegate.blocksAt, 'minutes'),
+                blockAge  = moment().diff(epochStampFilter(status.lastBlock.timestamp), 'minutes');
+        } else {
+            status.updatedAt = status.lastBlock = null;
         }
 
-        if (!status.blocksAt) {
+        if (!status.updatedAt) {
             // No Status
             status.code = 4;
-        } else if (status.statusAge > 10) {
+        } else if (statusAge > 10) {
             // Stale Status
             status.code = 3;
-        } else if (status.blockAge <= 30) {
+        } else if (blockAge <= 30) {
             // Forging
             status.code = 0;
-        } else if (status.blockAge <= 60) {
+        } else if (blockAge <= 60) {
             // Missed Cycles
             status.code = 1;
         } else {
