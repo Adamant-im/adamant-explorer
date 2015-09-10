@@ -1,41 +1,55 @@
 'use strict';
 
 angular.module('cryptichain.tools')
-  .directive('forgingStatus', function () {
+  .directive('forgingStatus', function ($sce) {
       return {
           restrict: 'A',
           scope: {
               forgingStatus: '=forgingStatus'
           },
-          template: '<i class="forging-status fa"></i>',
+          templateUrl: '/views/delegateMonitor/forgingStatus.html',
           replace: true,
+          transclude: true,
           link: function (scope, element, attr) {
               var el = element[0];
 
               var updateStatus = function () {
                   element.removeClass('fa-circle-o').addClass('fa-circle');
+                  scope.tooltip = {};
 
                   switch (scope.forgingStatus.code) {
                       case 3: // Stale Status
                           element.removeClass('red orange green');
-                          element.attr('title', 'Stale Status');
+                          scope.tooltip.html = '<span class="stale-status">Stale Status</span>';
+                          scope.tooltip.class = 'tooltip-grey';
                           break;
                       case 0: // Forging
                           element.removeClass('red orange').addClass('green');
-                          element.attr('title', 'Forging');
+                          scope.tooltip.html = '<span class="forging">Forging</span>';
+                          scope.tooltip.class = 'tooltip-green';
                           break;
                       case 1: // Missed Cycles
                           element.removeClass('red green').addClass('orange');
-                          element.attr('title', 'Missed Cycles');
+                          scope.tooltip.html = '<span class="missed-cycles">Missed Cycles</span>';
+                          scope.tooltip.class = 'tooltip-orange';
                           break;
                       case 2: // Not Forging
                           element.removeClass('orange green').addClass('red');
-                          element.attr('title', 'Not Forging');
+                          scope.tooltip.html = '<span class="not-forging">Not Forging</span>';
+                          scope.tooltip.class = 'tooltip-red';
                           break;
                       default: // No Status
                           element.removeClass('fa-circle red orange green').addClass('fa-circle-o');
-                          element.attr('title', '');
+                          scope.tooltip.html = '<span class="no-status">No Status</span>';
+                          scope.tooltip.class = 'tooltip-grey';
                   }
+
+                  if (scope.forgingStatus.code < 3) {
+                      scope.tooltip.html += '<br> Last block forged ' + '@ ' + scope.forgingStatus.lastBlock.height + '<br>';
+                      scope.tooltip.html +=  moment(scope.forgingStatus.blockAt).fromNow();
+                  }
+
+                  scope.tooltip.html = $sce.trustAsHtml(scope.tooltip.html);
               };
 
               scope.$watch('forgingStatus', updateStatus, true);
