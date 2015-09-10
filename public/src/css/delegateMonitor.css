@@ -23,6 +23,7 @@
 .forging-status {
   font-size: 18px;
   color: #888a85;
+  cursor: help;
 }
 
 .tooltip span {
