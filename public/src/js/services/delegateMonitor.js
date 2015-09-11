@@ -113,10 +113,10 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         } else if (statusAge > 10) {
             // Stale Status
             status.code = 3;
-        } else if (blockAge <= 30) {
+        } else if (blockAge <= 34) {
             // Forging
             status.code = 0;
-        } else if (blockAge <= 60) {
+        } else if (blockAge <= 68) {
             // Missed Cycles
             status.code = 1;
         } else {
