@@ -38,9 +38,9 @@ angular.module('cryptichain.tools')
                           scope.tooltip.html = '<span class="not-forging">Not Forging</span>';
                           scope.tooltip.class = 'tooltip-red';
                           break;
-                      default: // No Status
+                      default: // Awaiting Status
                           element.removeClass('fa-circle red orange green').addClass('fa-circle-o');
-                          scope.tooltip.html = '<span class="no-status">No Status</span>';
+                          scope.tooltip.html = '<span class="awaiting-status">Awaiting Status</span>';
                           scope.tooltip.class = 'tooltip-grey';
                   }
 

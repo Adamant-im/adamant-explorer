@@ -61,7 +61,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
                 case 2:
                     return 'notForging';
                 default:
-                    return 'noStatus';
+                    return 'awaitingStatus';
             }
         });
     };
