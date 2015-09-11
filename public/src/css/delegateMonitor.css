@@ -20,6 +20,35 @@
   font-weight: 700;
 }
 
+.forging-totals {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.forging-total {
+  color: white;
+  padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
+.forging-total.grey {
+  background-color: #888a85;
+}
+
+.forging-total.green {
+  background-color: #73d216;
+}
+
+.forging-total.orange {
+  background-color: #f57900;
+}
+
+.forging-total.red {
+  background-color: #cc0000;
+}
+
 .forging-status {
   font-size: 18px;
   color: #d3d7cf;

@@ -8,6 +8,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             d.forgingStatus = forgingStatus(d);
         });
         this.$scope.activeDelegates = active.delegates;
+        this.updateForgingTotals(active.delegates);
     };
 
     this.updateTotals = function (active) {
@@ -46,7 +47,23 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             existing.blocksAt = delegate.blocksAt
             existing.blocks = delegate.blocks
             existing.forgingStatus = forgingStatus(delegate);
+            this.updateForgingTotals(this.$scope.activeDelegates);
         }
+    };
+
+    this.updateForgingTotals = function (delegates) {
+        this.$scope.forgingTotals = _.countBy(delegates, function (d) {
+            switch (d.forgingStatus.code) {
+                case 0:
+                    return 'forging';
+                case 1:
+                    return 'missedCycles';
+                case 2:
+                    return 'notForging';
+                default:
+                    return 'noStatus';
+            }
+        });
     };
 
     // Private

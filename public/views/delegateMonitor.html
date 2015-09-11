@@ -201,6 +201,21 @@
         <tab heading="Active Delegates">
           <p class="small-title">Active Delegates</p>
 
+          <div class="row forging-totals">
+            <div class="col-xs-12 col-sm-3">
+              <div class="forging-total green"><p class="big-details">{{forgingTotals.forging || 0}}</p> Forging</div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="forging-total orange"><p class="big-details">{{forgingTotals.missedCycles || 0}}</p> Missed Cycles</div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="forging-total red"><p class="big-details">{{forgingTotals.notForging || 0}}</p> Not Forging</div>
+            </div>
+            <div class="col-xs-12 col-sm-3">
+              <div class="forging-total grey"><p class="big-details">{{forgingTotals.noStatus || 0}}</p> No Status</div>
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table class="table table-hover table-striped">
               <thead>
