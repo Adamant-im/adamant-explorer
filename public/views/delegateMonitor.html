@@ -135,7 +135,7 @@
                       </tr>
                     </tbody>
                     <tbody>
-                      <tr data-ng-repeat='v in votes track by v.id'>
+                      <tr data-ng-repeat='v in votes'>
                         <td class="voter">
                           <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.senderId}}</a>
                         </td>
@@ -174,7 +174,7 @@
                       </tr>
                     </tbody>
                     <tbody>
-                      <tr data-ng-repeat='r in registrations track by r.id'>
+                      <tr data-ng-repeat='r in registrations'>
                         <td class="delegate">
                           <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
                         </td>
