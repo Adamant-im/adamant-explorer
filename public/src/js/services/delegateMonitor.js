@@ -9,6 +9,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         });
         this.$scope.activeDelegates = active.delegates;
         this.updateForgingTotals(active.delegates);
+        this.updateForgingProgress(this.$scope.forgingTotals);
     };
 
     this.updateTotals = function (active) {
@@ -48,6 +49,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             existing.blocks = delegate.blocks
             existing.forgingStatus = forgingStatus(delegate);
             this.updateForgingTotals(this.$scope.activeDelegates);
+            this.updateForgingProgress(this.$scope.forgingTotals);
         }
     };
 
@@ -68,6 +70,21 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
                     return 'unprocessed';
             }
         });
+    };
+
+    this.updateForgingProgress = function (totals) {
+        var unprocessed  = totals.unprocessed || 0;
+            unprocessed += totals.staleStatus || 0;
+
+        if (unprocessed > 0) {
+            this.$scope.forgingTotals.processed = (101 - unprocessed);
+        } else {
+            this.$scope.forgingTotals.processed = 101;
+        }
+
+        if (this.$scope.forgingTotals.processed > 0) {
+            this.$scope.forgingProgress = true;
+        }
     };
 
     // Private

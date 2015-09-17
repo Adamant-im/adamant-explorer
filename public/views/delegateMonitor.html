@@ -203,16 +203,40 @@
 
           <div class="row forging-totals">
             <div class="col-xs-12 col-sm-3">
-              <div class="forging-total green"><p class="big-details">{{forgingTotals.forging || 0}}</p> Forging</div>
+              <div class="forging-total green">
+                <p class="big-details">{{forgingTotals.forging || 0}}</p>
+                <span>Forging</span>
+              </div>
             </div>
             <div class="col-xs-12 col-sm-3">
-              <div class="forging-total orange"><p class="big-details">{{forgingTotals.missedCycles || 0}}</p> Missed Cycles</div>
+              <div class="forging-total orange">
+                <p class="big-details">{{forgingTotals.missedCycles || 0}}</p>
+                <span>Missed Cycles</span>
+              </div>
             </div>
             <div class="col-xs-12 col-sm-3">
-              <div class="forging-total red"><p class="big-details">{{forgingTotals.notForging || 0}}</p> Not Forging</div>
+              <div class="forging-total red">
+                <p class="big-details">{{forgingTotals.notForging || 0}}</p>
+                <span>Not Forging</span>
+              </div>
             </div>
             <div class="col-xs-12 col-sm-3">
-              <div class="forging-total grey"><p class="big-details">{{forgingTotals.awaitingStatus || 0}}</p> Awaiting Status</div>
+              <div class="forging-total grey">
+                <p class="big-details">{{forgingTotals.awaitingStatus || 0}}</p>
+                <span>Awaiting Status</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row forging-progress" data-ng-if="forgingProgress">
+            <div class="col-xs-12">
+              <progressbar max="101" type="forging" value="forgingTotals.processed" data-ng-class="{'progress-striped active': forgingTotals.processed < 101,'inactive': forgingTotals.processed == 101}">
+                <p data-ng-if="forgingTotals.processed > 5">
+                  <span>{{forgingTotals.processed || 0}} / 101</span>
+                  <span data-ng-if="forgingTotals.processed < 101"><i class="fa fa-cog"></i> Updated</span>
+                  <span data-ng-if="forgingTotals.processed == 101"><i class="fa fa-check-square"></i> Update-to-date</span>
+                </p>
+              </progressbar>
             </div>
           </div>
 

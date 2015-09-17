@@ -49,6 +49,10 @@
   background-color: #cc0000;
 }
 
+.progress-bar-forging {
+  background-color: #1F9BDE;
+}
+
 .forging-status {
   font-size: 18px;
   color: #d3d7cf;
