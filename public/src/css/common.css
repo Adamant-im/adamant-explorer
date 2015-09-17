@@ -571,7 +571,7 @@ a, a:hover, a:visited, a:focus {
   font-weight: normal;
 }
 
-.progress-bar-info { background-color: #38AF49; }
+.progress-bar-loading { background-color: #38AF49; }
 
 /* Set the fixed height of the footer here */
 #footer {
