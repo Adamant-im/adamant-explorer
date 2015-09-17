@@ -60,8 +60,12 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
                     return 'missedCycles';
                 case 2:
                     return 'notForging';
-                default:
+                case 3:
+                    return 'staleStatus';
+                case 4:
                     return 'awaitingStatus';
+                default:
+                    return 'unprocessed';
             }
         });
     };
@@ -94,20 +98,22 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
     };
 
     var forgingStatus = function (delegate) {
-        var status = {};
+        var status = { updatedAt: delegate.blocksAt };
 
         if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
-            status.updatedAt = delegate.blocksAt;
             status.lastBlock = _.first(delegate.blocks),
             status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
 
             var statusAge = moment().diff(delegate.blocksAt, 'minutes'),
                 blockAge  = moment().diff(status.blockAt, 'minutes');
         } else {
-            status.updatedAt = status.lastBlock = null;
+            status.lastBlock = null;
         }
 
         if (!status.updatedAt) {
+            // Unprocessed
+            status.code = 5;
+        } else if (!status.blockAt) {
             // No Status
             status.code = 4;
         } else if (statusAge > 10) {
