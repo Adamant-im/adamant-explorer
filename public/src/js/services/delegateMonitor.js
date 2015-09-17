@@ -79,14 +79,15 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
     };
 
     var forgingStatus = function (delegate) {
-        var status = { updatedAt: delegate.blocksAt };
+        var status = { updatedAt: delegate.blocksAt },
+            statusAge = 0, blockAge = 0;
 
         if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
             status.lastBlock = _.first(delegate.blocks);
             status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
 
-            var statusAge = moment().diff(delegate.blocksAt, 'minutes'),
-                blockAge  = moment().diff(status.blockAt, 'minutes');
+            statusAge = moment().diff(delegate.blocksAt, 'minutes');
+            blockAge  = moment().diff(status.blockAt, 'minutes');
         } else {
             status.lastBlock = null;
         }
