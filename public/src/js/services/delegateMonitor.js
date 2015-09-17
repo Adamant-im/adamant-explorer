@@ -131,7 +131,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             // Unprocessed
             status.code = 5;
         } else if (!status.blockAt) {
-            // No Status
+            // Awaiting Status
             status.code = 4;
         } else if (statusAge > 10) {
             // Stale Status
