@@ -6,8 +6,8 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             d.forgingStatus = forgingStatus(d);
         });
         $scope.activeDelegates = active.delegates;
-        this.updateForgingTotals(active.delegates);
-        this.updateForgingProgress($scope.forgingTotals);
+        updateForgingTotals(active.delegates);
+        updateForgingProgress($scope.forgingTotals);
     };
 
     this.updateTotals = function (active) {
@@ -46,42 +46,8 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             existing.blocksAt = delegate.blocksAt
             existing.blocks = delegate.blocks
             existing.forgingStatus = forgingStatus(delegate);
-            this.updateForgingTotals($scope.activeDelegates);
-            this.updateForgingProgress($scope.forgingTotals);
-        }
-    };
-
-    this.updateForgingTotals = function (delegates) {
-        $scope.forgingTotals = _.countBy(delegates, function (d) {
-            switch (d.forgingStatus.code) {
-                case 0:
-                    return 'forging';
-                case 1:
-                    return 'missedCycles';
-                case 2:
-                    return 'notForging';
-                case 3:
-                    return 'staleStatus';
-                case 4:
-                    return 'awaitingStatus';
-                default:
-                    return 'unprocessed';
-            }
-        });
-    };
-
-    this.updateForgingProgress = function (totals) {
-        var unprocessed  = totals.unprocessed || 0;
-            unprocessed += totals.staleStatus || 0;
-
-        if (unprocessed > 0) {
-            $scope.forgingTotals.processed = (101 - unprocessed);
-        } else {
-            $scope.forgingTotals.processed = 101;
-        }
-
-        if ($scope.forgingTotals.processed > 0) {
-            $scope.forgingProgress = true;
+            updateForgingTotals($scope.activeDelegates);
+            updateForgingProgress($scope.forgingTotals);
         }
     };
 
@@ -147,6 +113,40 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
 
         status.rating = status.code + (Math.pow(10, 3) + ~~delegate.rate).toString().substring(1);
         return status;
+    };
+
+    var updateForgingTotals = function (delegates) {
+        $scope.forgingTotals = _.countBy(delegates, function (d) {
+            switch (d.forgingStatus.code) {
+                case 0:
+                    return 'forging';
+                case 1:
+                    return 'missedCycles';
+                case 2:
+                    return 'notForging';
+                case 3:
+                    return 'staleStatus';
+                case 4:
+                    return 'awaitingStatus';
+                default:
+                    return 'unprocessed';
+            }
+        });
+    };
+
+    var updateForgingProgress = function (totals) {
+        var unprocessed  = totals.unprocessed || 0;
+            unprocessed += totals.staleStatus || 0;
+
+        if (unprocessed > 0) {
+            $scope.forgingTotals.processed = (101 - unprocessed);
+        } else {
+            $scope.forgingTotals.processed = 101;
+        }
+
+        if ($scope.forgingTotals.processed > 0) {
+            $scope.forgingProgress = true;
+        }
     };
 };
 
