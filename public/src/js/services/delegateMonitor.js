@@ -131,7 +131,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         } else if (!status.blockAt) {
             // Awaiting Status
             status.code = 4;
-        } else if (statusAge > 10) {
+        } else if (statusAge > 9) {
             // Stale Status
             status.code = 3;
         } else if (blockAge <= 34) {
