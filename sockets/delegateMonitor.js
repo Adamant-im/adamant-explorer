@@ -142,6 +142,7 @@ module.exports = function (app, connectionHandler, socket) {
                 if (minutesAgo <= 9) {
                     log('Skipping last blocks for: ' + delegateName(delegate));
                     log('Checked ' + minutesAgo + ' minutes ago...');
+                    emitDelegate(delegate);
                     return callback(null);
                 }
             }
@@ -160,8 +161,7 @@ module.exports = function (app, connectionHandler, socket) {
                         existing.blocksAt = moment();
                     }
 
-                    log('Emitting last blocks for: ' + delegateName(delegate));
-                    socket.emit('delegate', delegate);
+                    emitDelegate(delegate);
 
                     if (interval) {
                         callback(null);
@@ -206,5 +206,10 @@ module.exports = function (app, connectionHandler, socket) {
                 getLastBlocks(thisData.active);
             }
         }.bind(this));
+    };
+
+    var emitDelegate = function (delegate) {
+        log('Emitting last blocks for: ' + delegateName(delegate));
+        socket.emit('delegate', delegate);
     };
 };
