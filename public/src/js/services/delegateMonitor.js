@@ -43,8 +43,8 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             return d.publicKey === delegate.publicKey;
         });
         if (existing) {
-            existing.blocksAt = delegate.blocksAt
-            existing.blocks = delegate.blocks
+            existing.blocksAt = delegate.blocksAt;
+            existing.blocks = delegate.blocks;
             existing.forgingStatus = forgingStatus(delegate);
             updateForgingTotals($scope.activeDelegates);
             updateForgingProgress($scope.forgingTotals);
