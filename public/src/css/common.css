@@ -644,6 +644,14 @@ a, a:hover, a:visited, a:focus {
     padding-left: 15px;
     padding-right: 15px;
   }
+
+  #footer .col-left {
+    padding-left: 15px;
+  }
+
+  #footer .col-right {
+    padding-right: 15px;
+  }
 }
 
 .code { font-size: 80%; }
