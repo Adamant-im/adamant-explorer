@@ -1,8 +1,7 @@
 'use strict';
 
 var NetworkMonitor = function ($scope) {
-    this.$scope = $scope;
-    this.map    = new NetworkMap();
+    this.map = new NetworkMap();
 
     function Platforms () {
         this.counter   = [0,0,0,0];
@@ -84,18 +83,18 @@ var NetworkMonitor = function ($scope) {
     };
 
     this.updatePeers = function (peers) {
-        this.$scope.peers   = peers.list;
-        this.$scope.counter = this.counter(peers.list);
+        $scope.peers   = peers.list;
+        $scope.counter = this.counter(peers.list);
         this.map.addConnected(peers.list);
     };
 
     this.updateLastBlock = function (lastBlock) {
-        this.$scope.lastBlock = lastBlock.block;
+        $scope.lastBlock = lastBlock.block;
     };
 
     this.updateBlocks = function (blocks) {
-        this.$scope.bestBlock = blocks.best;
-        this.$scope.volume    = blocks.volume;
+        $scope.bestBlock = blocks.best;
+        $scope.volume    = blocks.volume;
     };
 };
 

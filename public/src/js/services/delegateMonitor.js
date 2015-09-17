@@ -1,60 +1,58 @@
 'use strict';
 
 var DelegateMonitor = function ($scope, epochStampFilter) {
-    this.$scope = $scope;
-
     this.updateActive = function (active) {
         _.each(active.delegates, function (d) {
             d.forgingStatus = forgingStatus(d);
         });
-        this.$scope.activeDelegates = active.delegates;
+        $scope.activeDelegates = active.delegates;
         this.updateForgingTotals(active.delegates);
-        this.updateForgingProgress(this.$scope.forgingTotals);
+        this.updateForgingProgress($scope.forgingTotals);
     };
 
     this.updateTotals = function (active) {
-        this.$scope.totalDelegates = active.totalCount || 0;
-        this.$scope.totalActive    = 101;
+        $scope.totalDelegates = active.totalCount || 0;
+        $scope.totalActive    = 101;
 
-        if (this.$scope.totalDelegates > this.$scope.totalActive) {
-            this.$scope.totalStandby = (this.$scope.totalDelegates - this.$scope.totalActive);
+        if ($scope.totalDelegates > $scope.totalActive) {
+            $scope.totalStandby = ($scope.totalDelegates - $scope.totalActive);
         } else {
-            this.$scope.totalStandby = 0;
+            $scope.totalStandby = 0;
         }
 
-        this.$scope.bestForger  = bestForger(active.delegates);
-        this.$scope.totalForged = totalForged(active.delegates);
-        this.$scope.bestUptime  = bestUptime(active.delegates);
-        this.$scope.worstUptime = worstUptime(active.delegates);
+        $scope.bestForger  = bestForger(active.delegates);
+        $scope.totalForged = totalForged(active.delegates);
+        $scope.bestUptime  = bestUptime(active.delegates);
+        $scope.worstUptime = worstUptime(active.delegates);
     };
 
     this.updateLastBlock = function (lastBlock) {
-        this.$scope.lastBlock = lastBlock.block;
+        $scope.lastBlock = lastBlock.block;
     };
 
     this.updateRegistrations = function (registrations) {
-        this.$scope.registrations = registrations.transactions;
+        $scope.registrations = registrations.transactions;
     };
 
     this.updateVotes = function (votes) {
-        this.$scope.votes = votes.transactions;
+        $scope.votes = votes.transactions;
     };
 
     this.updateLastBlocks = function (delegate) {
-        var existing = _.find(this.$scope.activeDelegates, function (d) {
+        var existing = _.find($scope.activeDelegates, function (d) {
             return d.publicKey === delegate.publicKey;
         });
         if (existing) {
             existing.blocksAt = delegate.blocksAt
             existing.blocks = delegate.blocks
             existing.forgingStatus = forgingStatus(delegate);
-            this.updateForgingTotals(this.$scope.activeDelegates);
-            this.updateForgingProgress(this.$scope.forgingTotals);
+            this.updateForgingTotals($scope.activeDelegates);
+            this.updateForgingProgress($scope.forgingTotals);
         }
     };
 
     this.updateForgingTotals = function (delegates) {
-        this.$scope.forgingTotals = _.countBy(delegates, function (d) {
+        $scope.forgingTotals = _.countBy(delegates, function (d) {
             switch (d.forgingStatus.code) {
                 case 0:
                     return 'forging';
@@ -77,13 +75,13 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
             unprocessed += totals.staleStatus || 0;
 
         if (unprocessed > 0) {
-            this.$scope.forgingTotals.processed = (101 - unprocessed);
+            $scope.forgingTotals.processed = (101 - unprocessed);
         } else {
-            this.$scope.forgingTotals.processed = 101;
+            $scope.forgingTotals.processed = 101;
         }
 
-        if (this.$scope.forgingTotals.processed > 0) {
-            this.$scope.forgingProgress = true;
+        if ($scope.forgingTotals.processed > 0) {
+            $scope.forgingProgress = true;
         }
     };
 

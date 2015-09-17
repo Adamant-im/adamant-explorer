@@ -1,30 +1,28 @@
 'use strict';
 
 var Header = function ($scope) {
-    this.$scope = $scope;
-
     this.updateBlocksCount = function (res) {
         if (res.success) {
-            this.$scope.totalBlocks = res.count;
+            $scope.totalBlocks = res.count;
         } else {
-            this.$scope.totalBlocks = 0;
+            $scope.totalBlocks = 0;
         }
     };
 
     this.updateFee = function (res) {
         if (res.success) {
-            this.$scope.fee = res.feePercent;
+            $scope.fee = res.feePercent;
         } else {
-            this.$scope.fee = 0.0;
+            $scope.fee = 0.0;
         }
     };
 
     this.updateXCRCourse = function (res) {
         if (res.success) {
-            this.$scope.xcrBtc = res.xcr;
-            this.$scope.xcrUsd = res.usd;
+            $scope.xcrBtc = res.xcr;
+            $scope.xcrUsd = res.usd;
         } else {
-            this.$scope.xcrBtc = this.$scope.xcrUsd = 0.0;
+            $scope.xcrBtc = $scope.xcrUsd = 0.0;
         }
     };
 };
