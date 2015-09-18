@@ -1,9 +1,9 @@
 'use strict';
 
-var DelegateMonitor = function ($scope, epochStampFilter) {
+var DelegateMonitor = function ($scope, forgingMonitor) {
     this.updateActive = function (active) {
         _.each(active.delegates, function (d) {
-            d.forgingStatus = forgingStatus(d);
+            d.forgingStatus = forgingMonitor.getStatus(d);
         });
         $scope.activeDelegates = active.delegates;
         updateForgingTotals(active.delegates);
@@ -45,7 +45,7 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         if (existing) {
             existing.blocksAt = delegate.blocksAt;
             existing.blocks = delegate.blocks;
-            existing.forgingStatus = forgingStatus(delegate);
+            existing.forgingStatus = forgingMonitor.getStatus(delegate);
             updateForgingTotals($scope.activeDelegates);
             updateForgingProgress($scope.forgingTotals);
         }
@@ -78,83 +78,23 @@ var DelegateMonitor = function ($scope, epochStampFilter) {
         }
     };
 
-    var forgingStatus = function (delegate) {
-        var status = { updatedAt: delegate.blocksAt },
-            statusAge = 0, blockAge = 0;
-
-        if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
-            status.lastBlock = _.first(delegate.blocks);
-            status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
-
-            statusAge = moment().diff(delegate.blocksAt, 'minutes');
-            blockAge  = moment().diff(status.blockAt, 'minutes');
-        } else {
-            status.lastBlock = null;
-        }
-
-        if (!status.updatedAt) {
-            // Unprocessed
-            status.code = 5;
-        } else if (!status.blockAt) {
-            // Awaiting Status
-            status.code = 4;
-        } else if (statusAge > 9) {
-            // Stale Status
-            status.code = 3;
-        } else if (blockAge <= 34) {
-            // Forging
-            status.code = 0;
-        } else if (blockAge <= 68) {
-            // Missed Cycles
-            status.code = 1;
-        } else {
-            // Not Forging
-            status.code = 2;
-        }
-
-        status.rating = status.code + (Math.pow(10, 3) + ~~delegate.rate).toString().substring(1);
-        return status;
-    };
-
     var updateForgingTotals = function (delegates) {
-        $scope.forgingTotals = _.countBy(delegates, function (d) {
-            switch (d.forgingStatus.code) {
-                case 0:
-                    return 'forging';
-                case 1:
-                    return 'missedCycles';
-                case 2:
-                    return 'notForging';
-                case 3:
-                    return 'staleStatus';
-                case 4:
-                    return 'awaitingStatus';
-                default:
-                    return 'unprocessed';
-            }
-        });
+        $scope.forgingTotals = forgingMonitor.getforgingTotals(delegates);
     };
 
     var updateForgingProgress = function (totals) {
-        var unprocessed  = totals.unprocessed || 0;
-            unprocessed += totals.staleStatus || 0;
+        totals.processed = forgingMonitor.getForgingProgress(totals);
 
-        if (unprocessed > 0) {
-            $scope.forgingTotals.processed = (101 - unprocessed);
-        } else {
-            $scope.forgingTotals.processed = 101;
-        }
-
-        if ($scope.forgingTotals.processed > 0) {
+        if (totals.processed > 0) {
             $scope.forgingProgress = true;
         }
     };
 };
 
 angular.module('cryptichain.tools').factory('delegateMonitor',
-  function ($socket, epochStampFilter) {
+  function ($socket, forgingMonitor) {
       return function ($scope) {
-          var delegateMonitor = new DelegateMonitor($scope, epochStampFilter),
+          var delegateMonitor = new DelegateMonitor($scope, forgingMonitor),
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {
