@@ -38,8 +38,8 @@
           <tr>
             <td><strong>Sender</strong></td>
             <td class="text-right">
-              <a href="/address/{{tx.senderId}}">{{tx.senderId}}</a>
-              <div data-ng-if="tx.knownSender">
+              <a href="/address/{{tx.senderId}}">{{tx | txSender}}</a>
+              <div data-ng-if="!tx.senderUsername && tx.knownSender">
                 <span class="owner-name">{{tx.knownSender.owner}}</span>
                 <span class="owner-desc text-muted">{{tx.knownSender.description}}</span>
               </div>
@@ -48,8 +48,8 @@
           <tr data-ng-if="tx.recipientId">
             <td><strong>Recipient</strong></td>
             <td class="text-right">
-              <a href="/address/{{tx.recipientId}}">{{tx.recipientId}}</a>
-              <div data-ng-if="tx.knownRecipient">
+              <a href="/address/{{tx.recipientId}}">{{tx | txRecipient}}</a>
+              <div data-ng-if="!tx.recipientUsername && tx.knownRecipient">
                 <span class="owner-name">{{tx.knownRecipient.owner}}</span>
                 <span class="owner-desc text-muted">{{tx.knownRecipient.description}}</span>
               </div>
