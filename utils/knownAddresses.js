@@ -5,8 +5,16 @@ module.exports = function () {
         this.addresses = {};
 
         this.inTx = function (tx) {
-            tx.knownSender    = this.inAddress(tx.senderId);
-            tx.knownRecipient = this.inAddress(tx.recipientId);
+            if (tx.senderUsername) {
+                tx.knownSender = { owner : tx.senderUsername };
+            } else {
+                tx.knownSender = this.inAddress(tx.senderId);
+            }
+            if (tx.recipientUsername) {
+                tx.knownRecipient = { owner : tx.recipientUsername };
+            } else {
+                tx.knownRecipient = this.inAddress(tx.recipientId);
+            }
             return tx;
         };
 
