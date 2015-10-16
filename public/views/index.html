@@ -14,6 +14,8 @@
             <tr>
               <th>Id</th>
               <th class="text-right hidden-xs">Timestamp</th>
+              <th class="text-right hidden-xs">Sender</th>
+              <th class="text-right hidden-xs">Recipient</th>
               <th class="text-right">Amount (XCR)</th>
               <th class="text-right hidden-xs">Fee (XCR)</th>
             </tr>
@@ -23,6 +25,8 @@
           <tr data-ng-repeat='tx in txs track by tx.id'>
             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
             <td class="text-right hidden-xs">{{ tx.timestamp | timestamp }}</td>
+            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.senderUsername || tx.senderId}}</span></td>
+            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.recipientUsername || tx.recipientId}}</span></td>
             <td class="text-right"><span class="ellipsis">{{tx.amount | xcr}}</span></td>
             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee | xcr}}</span></td>
           </tr>
