@@ -93,4 +93,19 @@ angular.module('cryptichain')
       return function (amount) {
           return ((xcrFilter(amount) / 100000000) * 100).toFixed(2);
       };
+  })
+  .filter('txSender', function () {
+      return function (tx) {
+          return (tx.senderUsername || tx.senderId);
+      };
+  })
+  .filter('txRecipient', function (txTypes) {
+      return function (tx) {
+          return (tx.recipientUsername || tx.recipientId || txTypes[parseInt(tx.type)]);
+      };
+  })
+  .filter('txType', function (txTypes) {
+      return function (tx) {
+          return txTypes[parseInt(tx.type)];
+      };
   });
