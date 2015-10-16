@@ -10,6 +10,14 @@ module.exports = function () {
             return tx;
         };
 
+        this.inAccount = function (account) {
+            if (account.username) {
+                return { owner : account.username };
+            } else {
+                return this.inAddress(account.address);
+            }
+        };
+
         this.inAddress = function (address) {
             return this.addresses[address] || null;
         };
