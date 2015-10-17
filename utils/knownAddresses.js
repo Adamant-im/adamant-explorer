@@ -10,6 +10,9 @@ module.exports = function () {
             } else {
                 tx.knownSender = self.inAddress(tx.senderId);
             }
+            if (tx.senderId === tx.recipientId) {
+                tx.recipientUsername = tx.senderUsername;
+            }
             if (tx.recipientUsername) {
                 tx.knownRecipient = { owner : tx.recipientUsername };
             } else {
