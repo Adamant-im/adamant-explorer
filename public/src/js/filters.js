@@ -101,7 +101,11 @@ angular.module('cryptichain')
   })
   .filter('txRecipient', function (txTypes) {
       return function (tx) {
-          return (tx.recipientUsername || (tx.knownRecipient && tx.knownRecipient.owner) || tx.recipientId || txTypes[parseInt(tx.type)]);
+          if (tx.type === 0) {
+              return (tx.recipientUsername || (tx.knownRecipient && tx.knownRecipient.owner) || tx.recipientId);
+          } else {
+              return (txTypes[parseInt(tx.type)]);
+          }
       };
   })
   .filter('txType', function (txTypes) {
