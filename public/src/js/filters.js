@@ -96,12 +96,12 @@ angular.module('cryptichain')
   })
   .filter('txSender', function () {
       return function (tx) {
-          return (tx.senderUsername || tx.senderId);
+          return (tx.senderUsername || (tx.knownSender && tx.knownSender.owner) || tx.senderId);
       };
   })
   .filter('txRecipient', function (txTypes) {
       return function (tx) {
-          return (tx.recipientUsername || tx.recipientId || txTypes[parseInt(tx.type)]);
+          return (tx.recipientUsername || (tx.knownRecipient && tx.knownRecipient.owner) || tx.recipientId || txTypes[parseInt(tx.type)]);
       };
   })
   .filter('txType', function (txTypes) {
