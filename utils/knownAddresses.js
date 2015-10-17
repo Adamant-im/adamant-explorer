@@ -8,12 +8,12 @@ module.exports = function () {
             if (tx.senderUsername) {
                 tx.knownSender = { owner : tx.senderUsername };
             } else {
-                tx.knownSender = this.inAddress(tx.senderId);
+                tx.knownSender = self.inAddress(tx.senderId);
             }
             if (tx.recipientUsername) {
                 tx.knownRecipient = { owner : tx.recipientUsername };
             } else {
-                tx.knownRecipient = this.inAddress(tx.recipientId);
+                tx.knownRecipient = self.inAddress(tx.recipientId);
             }
             return tx;
         };
@@ -22,12 +22,12 @@ module.exports = function () {
             if (account.username) {
                 return { owner : account.username };
             } else {
-                return this.inAddress(account.address);
+                return self.inAddress(account.address);
             }
         };
 
         this.inAddress = function (address) {
-            return this.addresses[address] || null;
+            return self.addresses[address] || null;
         };
 
         this.inDelegate = function (delegate) {
@@ -37,16 +37,20 @@ module.exports = function () {
         this.load = function () {
             try {
                 console.log('KnownAddresses:', 'Loading known addresses...');
-                this.addresses = require('../known.json');
+                self.addresses = require('../known.json');
             } catch (err) {
                 console.error('KnownAddresses:', 'Error loading known.json:', err.message);
-                this.addresses = {};
+                self.addresses = {};
             }
 
-            var length = Object.keys(this.addresses).length.toString();
+            var length = Object.keys(self.addresses).length.toString();
             console.log('KnownAddresses:', length, 'known addresses loaded');
-            return this.addresses;
+            return self.addresses;
         };
+
+        // Private
+
+        var self = this;
 
         this.load(); // Load on initialization
     }
