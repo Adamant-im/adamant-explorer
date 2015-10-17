@@ -21,7 +21,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr data-ng-if="!txs.length"><td colspan="4">Waiting for transactions...</td></tr>
+          <tr data-ng-if="!txs.length"><td colspan="6">Waiting for transactions...</td></tr>
           <tr data-ng-repeat='tx in txs track by tx.id'>
             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}<span></td>
