@@ -19,7 +19,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-ng-repeat="address in topAccounts.results track by address.address">
+              <tr data-ng-repeat="address in topAccounts.results track by $index">
                 <td>{{$index + 1}}</td>
                 <td class="text-right">
                   <a href="/address/{{ address.address }}">{{address.address}}</a>
