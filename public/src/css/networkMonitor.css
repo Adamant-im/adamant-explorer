@@ -7,20 +7,24 @@
   vertical-align: middle;
 }
 
-.os-0 {
-  background-image: url(/img/os/0.png);
+.os-darwin {
+  background-image: url(/img/os/darwin.png);
 }
 
-.os-1 {
-  background-image: url(/img/os/1.png);
+.os-linux {
+  background-image: url(/img/os/linux.png);
 }
 
-.os-2 {
-  background-image: url(/img/os/2.png);
+.os-win {
+  background-image: url(/img/os/win.png);
 }
 
-.os-3 {
-  background-image: url(/img/os/3.png);
+.os-freebsd {
+  background-image: url(/img/os/freebsd.png);
+}
+
+.os-unknown {
+  background-image: url(/img/os/unknown.png);
 }
 
 #map {

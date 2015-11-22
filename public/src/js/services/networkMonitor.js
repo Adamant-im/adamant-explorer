@@ -5,20 +5,20 @@ var NetworkMonitor = function ($scope) {
 
     function Platforms () {
         this.counter   = [0,0,0,0];
-        this.platforms = ['Mac', 'Linux', 'Windows', null];
+        this.platforms = ['Darwin', 'Linux', 'Windows', null];
 
         this.detect = function (platform) {
-            if (angular.isNumber(platform)) {
-                this.counter[parseInt(platform)]++;
+            if (angular.isNumber(platform.group)) {
+                this.counter[parseInt(platform.group)]++;
             }
         };
 
         this.detected = function () {
             return {
-                one:     { name: this.platforms[0], counter: this.counter[0] },
-                two:     { name: this.platforms[1], counter: this.counter[1] },
-                three:   { name: this.platforms[2], counter: this.counter[2] },
-                unknown: { name: null,              counter: this.counter[3] }
+                one:   { name: this.platforms[0], counter: this.counter[0] },
+                two:   { name: this.platforms[1], counter: this.counter[1] },
+                three: { name: this.platforms[2], counter: this.counter[2] },
+                other: { name: null,              counter: this.counter[3] }
             };
         };
     }
@@ -55,10 +55,10 @@ var NetworkMonitor = function ($scope) {
 
         this.detected = function (version) {
             return {
-                one:     { num: this.versions[0], counter: this.counter[0] },
-                two:     { num: this.versions[1], counter: this.counter[1] },
-                three:   { num: this.versions[2], counter: this.counter[2] },
-                unknown: { num: null,             counter: this.counter[3] }
+                one:   { num: this.versions[0], counter: this.counter[0] },
+                two:   { num: this.versions[1], counter: this.counter[1] },
+                three: { num: this.versions[2], counter: this.counter[2] },
+                other: { num: null,             counter: this.counter[3] }
             };
         };
     }
@@ -118,11 +118,13 @@ var NetworkMap = function () {
         }
     });
 
-    var platformIcons = [
-        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-mac.png' }),
-        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
-        new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-windows.png' })
-    ];
+    var platformIcons = {
+        darwin:  new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-darwin.png' }),
+        linux:   new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
+        win:     new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-win.png' }),
+        freebsd: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-freebsd.png' }),
+        unknown: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-unknown.png' })
+    };
 
     this.addConnected = function (peers) {
         var connected = [];
@@ -139,7 +141,7 @@ var NetworkMap = function () {
                 this.cluster.addLayer(
                     this.markers[p.ip] = L.marker(
                         [p.location.latitude, p.location.longitude],
-                        { title: p.ipString, icon: platformIcons[p.osBrand] }
+                        { title: p.ipString, icon: platformIcons[p.osBrand.name] }
                     ).addTo(this.map).bindPopup(popupContent(p))
                 );
             }

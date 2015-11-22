@@ -25,7 +25,7 @@ angular.module('cryptichain.tools')
               var el = element[0];
 
               el.alt = el.title = scope.os;
-              el.className += (' os-icon os-' + scope.brand);
+              el.className += (' os-icon os-' + scope.brand.name);
           }
       };
   });

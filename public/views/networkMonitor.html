@@ -110,7 +110,7 @@
         <div class="col-xs-4">
           <div class="platform">
             <p class="big-details">
-              <img os-icon os="Mac" brand="0">
+              <img os-icon os="'Darwin'" brand="{ name: 'darwin' }">
               <span class="counter mac-counter">{{counter.platforms.one.counter || 0}}</span>
             </p>
           </div>
@@ -118,7 +118,7 @@
         <div class="col-xs-4">
           <div class="platform">
             <p class="big-details">
-              <img os-icon os="Linux" brand="1">
+              <img os-icon os="'Linux'" brand="{ name: 'linux' }">
               <span class="counter linux-counter">{{counter.platforms.two.counter || 0}}</span>
             </p>
           </div>
@@ -126,7 +126,7 @@
         <div class="col-xs-4">
           <div class="platform">
             <p class="big-details">
-              <img os-icon os="Windows" brand="2">
+              <img os-icon os="'Windows'" brand="{ name: 'win' }">
               <span class="counter windows-counter">{{counter.platforms.three.counter || 0}}</span>
             </p>
           </div>
@@ -134,7 +134,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <p class="text-muted text-center">{{counter.platforms.unknown.counter || 0}} connected peers running on unknown platforms.</p>
+          <p class="text-muted text-center">{{counter.platforms.other.counter || 0}} connected peers running on other platforms.</p>
         </div>
       </div>
     </div>
@@ -165,7 +165,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <p class="text-muted text-center">{{counter.versions.unknown.counter || 0}} connected peers running with other versions.</p>
+          <p class="text-muted text-center">{{counter.versions.other.counter || 0}} connected peers running with other versions.</p>
         </div>
       </div>
     </div>
