@@ -17,7 +17,7 @@ var Header = function ($scope) {
         }
     };
 
-    this.updateXCRCourse = function (res) {
+    this.updateLISKCourse = function (res) {
         if (res.success) {
             $scope.xcrBtc = res.xcr;
             $scope.xcrUsd = res.usd;
@@ -36,7 +36,7 @@ angular.module('lisk_explorer.system').factory('header',
           ns.on('data', function (res) {
               if (res.blocks) { header.updateBlocksCount(res.blocks); }
               if (res.fee)    { header.updateFee(res.fee); }
-              if (res.course) { header.updateXCRCourse(res.course); }
+              if (res.course) { header.updateLISKCourse(res.course); }
           });
 
           $scope.$on('$destroy', function (event) {

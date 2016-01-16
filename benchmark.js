@@ -31,7 +31,7 @@ suite.add('blocks.getBlocksCount', tests.blocks.getBlocksCount, { defer : true }
      .add('blocks.getBlock', tests.blocks.getBlock, { defer : true });
 
 suite.add('common.getFee', tests.common.getFee, { defer : true })
-     .add('common.getXCRCourse', tests.common.getXCRCourse, { defer : true })
+     .add('common.getLISKCourse', tests.common.getLISKCourse, { defer : true })
      .add('common.search', tests.common.search, { defer : true });
 
 suite.add('delegates.getActive', tests.delegates.getActive, { defer : true })

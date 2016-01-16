@@ -131,7 +131,7 @@ app.get('*', function (req, res, next) {
 
 async.parallel([
     function (cb) { app.exchange.loadBTCUSD(cb); },
-    function (cb) { app.exchange.loadXCRBTC(cb); }
+    function (cb) { app.exchange.loadLISKBTC(cb); }
 ], function (err) {
     var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {

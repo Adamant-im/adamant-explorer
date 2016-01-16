@@ -15,8 +15,8 @@ module.exports = function (app) {
         );
     });
 
-    app.get('/api/getXCRCourse', function (req, res, next) {
-        common.getXCRCourse(
+    app.get('/api/getLISKCourse', function (req, res, next) {
+        common.getLISKCourse(
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
         );

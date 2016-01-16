@@ -16,15 +16,15 @@ module.exports = function (app, api) {
         );
     };
 
-    this.getXCRCourse = function (deferred) {
-        common.getXCRCourse(
+    this.getLISKCourse = function (deferred) {
+        common.getLISKCourse(
             function (data) {
                 deferred.resolve();
-                console.log('common.getXCRCourse ~>', 'Error retrieving rates:', data.error);
+                console.log('common.getLISKCourse ~>', 'Error retrieving rates:', data.error);
             },
             function (data) {
                 deferred.resolve();
-                console.log('common.getXCRCourse ~>', 'rates retrieved in', String(deferred.elapsed), 'seconds');
+                console.log('common.getLISKCourse ~>', 'rates retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
     };
