@@ -1,16 +1,16 @@
 {
-  "name": "Cryptichain",
+  "name": "Lisk Explorer",
   "version": "0.3.0",
-  "description": "Crypti Blockchain Explorer",
+  "description": "Lisk Blockchain Explorer",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Boris Povod",
+  "author": "Boris Povod <boris@crypti.me>, Olivier Beddows <olivier@lisk.io>",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git@github.com:karmacoma/cryptichain.git"
+    "url": "git@github.com:LiskHQ/lisk-explorer.git"
   },
   "dependencies": {
     "async": "^0.9.2",

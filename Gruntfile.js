@@ -182,7 +182,7 @@ module.exports = function (grunt) {
         nggettext_compile: {
             all: {
                 options: {
-                    module: 'cryptichain'
+                    module: 'lisk_explorer'
                 },
                 files: {
                     'public/src/js/translations.js': ['po/*.po']
