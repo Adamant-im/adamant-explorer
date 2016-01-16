@@ -13,14 +13,14 @@ module.exports = function (app, connectionHandler, socket) {
     var running = {
         'getBlocksCount' : false,
         'getFee'         : false,
-        'getXCRCourse'   : false
+        'getLISKCourse'   : false
     };
 
     this.onInit = function () {
         async.parallel([
             getBlocksCount,
             getFee,
-            getXCRCourse
+            getLISKCourse
         ],
         function (err, res) {
             if (err) {
@@ -79,14 +79,14 @@ module.exports = function (app, connectionHandler, socket) {
         );
     };
 
-    var getXCRCourse = function (cb) {
-        if (running.getXCRCourse) {
-            return cb('getXCRCourse (already running)');
+    var getLISKCourse = function (cb) {
+        if (running.getLISKCourse) {
+            return cb('getLISKCourse (already running)');
         }
-        running.getXCRCourse = true;
-        common.getXCRCourse(
-            function (res) { running.getXCRCourse = false; cb('XCRCourse'); },
-            function (res) { running.getXCRCourse = false; cb(null, res); }
+        running.getLISKCourse = true;
+        common.getLISKCourse(
+            function (res) { running.getLISKCourse = false; cb('LISKCourse'); },
+            function (res) { running.getLISKCourse = false; cb(null, res); }
         );
     };
 
@@ -96,7 +96,7 @@ module.exports = function (app, connectionHandler, socket) {
         async.parallel([
             getBlocksCount,
             getFee,
-            getXCRCourse
+            getLISKCourse
         ],
         function (err, res) {
             if (err) {

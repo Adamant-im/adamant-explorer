@@ -3,12 +3,12 @@
 var async = require('async');
 
 module.exports = function (config) {
-    this.BTCUSD = this.XCRBTC = '~';
+    this.BTCUSD = this.LISKBTC = '~';
 
     this.loadRates = function () {
         async.parallel([
             function (cb) { exchange.loadBTCUSD(cb); },
-            function (cb) { exchange.loadXCRBTC(cb); }
+            function (cb) { exchange.loadLISKBTC(cb); }
         ]);
     };
 
@@ -28,15 +28,15 @@ module.exports = function (config) {
         }.bind(this));
     };
 
-    this.loadXCRBTC = function (cb) {
-        console.log('Exchange:', 'Loading XCR/BTC curs from exchange...');
-        getXCRBTC(function (err, result) {
+    this.loadLISKBTC = function (cb) {
+        console.log('Exchange:', 'Loading LISK/BTC curs from exchange...');
+        getLISKBTC(function (err, result) {
             if (err) {
-                console.log('Exchange:', 'Loading BTC/XCR failed...');
+                console.log('Exchange:', 'Loading BTC/LISK failed...');
                 console.log('Error:', err);
             } else if (result !== '~') {
-                this.XCRBTC = result;
-                console.log('Exchange:', 'BTC/XCR loaded...', result);
+                this.LISKBTC = result;
+                console.log('Exchange:', 'BTC/LISK loaded...', result);
             }
             if (cb) {
                 return cb(err, result);
@@ -44,9 +44,9 @@ module.exports = function (config) {
         }.bind(this));
     };
 
-    this.convertXCRTOUSD = function (xcr) {
+    this.convertLISKTOUSD = function (xcr) {
         if (!isNaN(xcr)) {
-            return (xcr * this.XCRBTC * this.BTCUSD).toFixed(3);
+            return (xcr * this.LISKBTC * this.BTCUSD).toFixed(3);
         } else {
             return '~';
         }
@@ -74,13 +74,13 @@ module.exports = function (config) {
         }
     };
 
-    var getXCRBTC = function (cb) {
+    var getLISKBTC = function (cb) {
         if (config.enableExchange) {
-            api.getTicker('XCRBTC', function (err, result) {
+            api.getTicker('LISKBTC', function (err, result) {
                 return cb(err, result);
             });
         } else {
-            console.log('Exchange:', 'Loading XCR/BTC disabled...');
+            console.log('Exchange:', 'Loading LISK/BTC disabled...');
             return cb(null, '~');
         }
     };

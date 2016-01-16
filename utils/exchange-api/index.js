@@ -34,7 +34,7 @@ module.exports = function (config) {
                 }
             ]
         },
-        XCRBTC : {
+        LISKBTC : {
             bter : [
                 'Bter',
                 'http://data.bter.com/api/1/ticker/xcr_btc',
@@ -53,7 +53,7 @@ module.exports = function (config) {
                     if (res.error) {
                         return cb(res.error);
                     } else {
-                        return cb(null, res.return.markets.XCR.lasttradeprice);
+                        return cb(null, res.return.markets.LISK.lasttradeprice);
                     }
                 }
             ],
@@ -64,7 +64,7 @@ module.exports = function (config) {
                     if (res.error) {
                         return cb(res.error);
                     } else {
-                        return cb(null, res.BTC_XCR.last);
+                        return cb(null, res.BTC_LISK.last);
                     }
                 }
             ]
@@ -80,13 +80,13 @@ module.exports = function (config) {
         config.btcusdExchange = exchanges.BTCUSD.bitfinex;
     }
 
-    if (exchanges.XCRBTC.hasOwnProperty(config.xcrbtcExchange)) {
-        config.xcrbtcExchange = exchanges.XCRBTC[config.xcrbtcExchange];
-        console.log('Exchange:', util.format('Configured %s as XCR/BTC exchange', config.xcrbtcExchange[0]));
+    if (exchanges.LISKBTC.hasOwnProperty(config.xcrbtcExchange)) {
+        config.xcrbtcExchange = exchanges.LISKBTC[config.xcrbtcExchange];
+        console.log('Exchange:', util.format('Configured %s as LISK/BTC exchange', config.xcrbtcExchange[0]));
     } else {
-        console.log('Exchange:', 'Warning: Unrecognized XCR/BTC exchange!');
+        console.log('Exchange:', 'Warning: Unrecognized LISK/BTC exchange!');
         console.log('Exchange:', 'Defaulting to Poloniex...');
-        config.xcrbtcExchange = exchanges.XCRBTC.poloniex;
+        config.xcrbtcExchange = exchanges.LISKBTC.poloniex;
     }
 
     var requestTicker = function (type, options, cb) {
@@ -108,7 +108,7 @@ module.exports = function (config) {
         getTicker: function (type, cb) {
             if (type == 'BTCUSD') {
                 return requestTicker(type, config.btcusdExchange, cb);
-            } else if (type == 'XCRBTC') {
+            } else if (type == 'LISKBTC') {
                 return requestTicker(type, config.xcrbtcExchange, cb);
             } else {
                 return cb(util.format('Unrecognized \'%s\' ticker type!', type));
