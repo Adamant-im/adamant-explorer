@@ -70,7 +70,7 @@ Example:
         "enableExchange" : true,
         "updateExchangeInterval" : 900000,
         "btcusdExchange" : "bitfinex",
-        "xcrbtcExchange" : "poloniex"
+        "liskbtcExchange" : "poloniex"
     }
 }
 ```
@@ -84,7 +84,7 @@ Example:
 * `enableExchange` - enable or disable exchange currency courses.
 * `updateExchangeInterval` - time to update exchange currency courses.
 * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
-* `xcrbtcExchange` - default is poloniex, alternatives are: bter & cryptsy.
+* `liskbtcExchange` - default is poloniex, alternatives are: bter & cryptsy.
 
 # Build
 
