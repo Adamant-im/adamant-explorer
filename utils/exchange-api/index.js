@@ -37,7 +37,7 @@ module.exports = function (config) {
         LISKBTC : {
             bter : [
                 'Bter',
-                'http://data.bter.com/api/1/ticker/xcr_btc',
+                'http://data.bter.com/api/1/ticker/lisk_btc',
                 function (res, cb) {
                     if (res.message) {
                         return cb(res.message);
@@ -80,13 +80,13 @@ module.exports = function (config) {
         config.btcusdExchange = exchanges.BTCUSD.bitfinex;
     }
 
-    if (exchanges.LISKBTC.hasOwnProperty(config.xcrbtcExchange)) {
-        config.xcrbtcExchange = exchanges.LISKBTC[config.xcrbtcExchange];
-        console.log('Exchange:', util.format('Configured %s as LISK/BTC exchange', config.xcrbtcExchange[0]));
+    if (exchanges.LISKBTC.hasOwnProperty(config.liskbtcExchange)) {
+        config.liskbtcExchange = exchanges.LISKBTC[config.liskbtcExchange];
+        console.log('Exchange:', util.format('Configured %s as LISK/BTC exchange', config.liskbtcExchange[0]));
     } else {
         console.log('Exchange:', 'Warning: Unrecognized LISK/BTC exchange!');
         console.log('Exchange:', 'Defaulting to Poloniex...');
-        config.xcrbtcExchange = exchanges.LISKBTC.poloniex;
+        config.liskbtcExchange = exchanges.LISKBTC.poloniex;
     }
 
     var requestTicker = function (type, options, cb) {
@@ -109,7 +109,7 @@ module.exports = function (config) {
             if (type == 'BTCUSD') {
                 return requestTicker(type, config.btcusdExchange, cb);
             } else if (type == 'LISKBTC') {
-                return requestTicker(type, config.xcrbtcExchange, cb);
+                return requestTicker(type, config.liskbtcExchange, cb);
             } else {
                 return cb(util.format('Unrecognized \'%s\' ticker type!', type));
             }

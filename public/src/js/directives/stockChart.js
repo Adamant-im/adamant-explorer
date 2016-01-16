@@ -34,8 +34,8 @@ angular.module('lisk_explorer.tools')
                       fromField: 'btcVolume',
                       toField: 'btcVolume'
                   }, {
-                      fromField: 'xcrVolume',
-                      toField: 'xcrVolume'
+                      fromField: 'liskVolume',
+                      toField: 'liskVolume'
                   }, {
                       fromField: 'numTrades',
                       toField: 'numTrades'

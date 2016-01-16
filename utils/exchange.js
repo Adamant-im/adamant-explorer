@@ -44,9 +44,9 @@ module.exports = function (config) {
         }.bind(this));
     };
 
-    this.convertLISKTOUSD = function (xcr) {
-        if (!isNaN(xcr)) {
-            return (xcr * this.LISKBTC * this.BTCUSD).toFixed(3);
+    this.convertLISKTOUSD = function (lisk) {
+        if (!isNaN(lisk)) {
+            return (lisk * this.LISKBTC * this.BTCUSD).toFixed(3);
         } else {
             return '~';
         }

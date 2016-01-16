@@ -71,7 +71,7 @@ angular.module('lisk_explorer')
           return (parseInt(amount) / 100000000).toFixed(2);
       };
   })
-  .filter('xcr', function () {
+  .filter('lisk', function () {
       return function (amount) {
           if (isNaN(amount)) {
               return amount;
@@ -89,9 +89,9 @@ angular.module('lisk_explorer')
           }
       };
   })
-  .filter('supply', function (xcrFilter) {
+  .filter('supply', function (liskFilter) {
       return function (amount) {
-          return ((xcrFilter(amount) / 100000000) * 100).toFixed(2);
+          return ((liskFilter(amount) / 100000000) * 100).toFixed(2);
       };
   })
   .filter('txSender', function () {

@@ -30,6 +30,6 @@
         "enableExchange" : true,
         "updateExchangeInterval" : 900000,
         "btcusdExchange" : "bitfinex",
-        "xcrbtcExchange" : "poloniex"
+        "liskbtcExchange" : "poloniex"
     }
 }

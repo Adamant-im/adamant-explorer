@@ -19,10 +19,10 @@ var Header = function ($scope) {
 
     this.updateLISKCourse = function (res) {
         if (res.success) {
-            $scope.xcrBtc = res.xcr;
-            $scope.xcrUsd = res.usd;
+            $scope.liskBtc = res.lisk;
+            $scope.liskUsd = res.usd;
         } else {
-            $scope.xcrBtc = $scope.xcrUsd = 0.0;
+            $scope.liskBtc = $scope.liskUsd = 0.0;
         }
     };
 };
