@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.system').factory('addressTxs',
+angular.module('lisk_explorer.system').factory('addressTxs',
   function ($http, $q) {
       return function (address) {
           var lessMore = new LessMore($http, $q, {

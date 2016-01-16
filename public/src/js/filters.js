@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain')
+angular.module('lisk_explorer')
   .filter('startFrom', function () {
       return function (input, start) {
           start = +start;

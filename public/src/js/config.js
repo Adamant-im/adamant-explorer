@@ -1,7 +1,7 @@
 'use strict';
 
 // Setting up routes
-angular.module('cryptichain').config(function ($routeProvider) {
+angular.module('lisk_explorer').config(function ($routeProvider) {
     $routeProvider.
     when('/', {
         templateUrl: '/views/index.html',
@@ -50,7 +50,7 @@ angular.module('cryptichain').config(function ($routeProvider) {
 });
 
 // Setting HTML5 location mode
-angular.module('cryptichain')
+angular.module('lisk_explorer')
   .config(function ($locationProvider) {
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');

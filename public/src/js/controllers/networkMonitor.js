@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.tools').controller('NetworkMonitor',
+angular.module('lisk_explorer.tools').controller('NetworkMonitor',
   function (networkMonitor, $scope) {
       networkMonitor($scope);
   });

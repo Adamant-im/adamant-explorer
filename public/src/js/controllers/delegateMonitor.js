@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.tools').controller('DelegateMonitor',
+angular.module('lisk_explorer.tools').controller('DelegateMonitor',
   function (delegateMonitor, orderBy, $scope, $http) {
       delegateMonitor($scope);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.system').factory('blockTxs',
+angular.module('lisk_explorer.system').factory('blockTxs',
   function ($http, $q) {
       return function (blockId) {
           var lessMore = new LessMore($http, $q, {

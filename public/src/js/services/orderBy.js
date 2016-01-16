@@ -10,7 +10,7 @@ var OrderBy = function (predicate) {
     };
 };
 
-angular.module('cryptichain.system').factory('orderBy',
+angular.module('lisk_explorer.system').factory('orderBy',
   function () {
       return function (predicate) {
           return new OrderBy(predicate);

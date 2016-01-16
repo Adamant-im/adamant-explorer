@@ -27,7 +27,7 @@ var Header = function ($scope) {
     };
 };
 
-angular.module('cryptichain.system').factory('header',
+angular.module('lisk_explorer.system').factory('header',
   function ($socket) {
       return function ($scope) {
           var header = new Header($scope),

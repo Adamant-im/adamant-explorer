@@ -36,7 +36,7 @@ var ForgingMonitor = function (forgingStatus) {
     };
 };
 
-angular.module('cryptichain.tools').service('forgingMonitor',
+angular.module('lisk_explorer.tools').service('forgingMonitor',
   function (forgingStatus) {
       return new ForgingMonitor(forgingStatus);
   });

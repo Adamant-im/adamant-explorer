@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain')
+angular.module('lisk_explorer')
   .directive('whenScrolled', function ($window) {
       return {
           restric: 'A',

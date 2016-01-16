@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.tools')
+angular.module('lisk_explorer.tools')
   .directive('orders', function () {
       return {
           restrict: 'E',

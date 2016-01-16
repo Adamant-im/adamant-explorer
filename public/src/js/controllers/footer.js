@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.system').controller('FooterController',
+angular.module('lisk_explorer.system').controller('FooterController',
   function ($scope) {
 
   });

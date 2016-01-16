@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.transactions').controller('TransactionsController',
+angular.module('lisk_explorer.transactions').controller('TransactionsController',
   function ($scope, $rootScope, $routeParams, $location, $http) {
       $scope.getTransaction = function () {
           $http.get('/api/getTransaction', {

@@ -19,7 +19,7 @@ app.orders = new utils.orders(config, client);
 
 app.set('version', '0.3');
 app.set('strict routing', true);
-app.set('crypti address', 'http://' + config.crypti.host + ':' + config.crypti.port);
+app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 app.set('fixed point', config.fixedPoint);
 
@@ -137,7 +137,7 @@ async.parallel([
         if (err) {
             console.log(err);
         } else {
-            console.log('Crypti started at ' + app.get('host') + ':' + app.get('port'));
+            console.log('Lisk started at ' + app.get('host') + ':' + app.get('port'));
 
             var io = require('socket.io').listen(server);
             require('./sockets')(app, io);

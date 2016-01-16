@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.system').controller('IndexController',
+angular.module('lisk_explorer.system').controller('IndexController',
   function ($scope, $http, $interval) {
       $scope.getLastBlocks = function () {
           $http.get('/api/getLastBlocks').then(function (resp) {

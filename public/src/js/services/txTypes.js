@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.system').value('txTypes', {
+angular.module('lisk_explorer.system').value('txTypes', {
     0 : 'Normal transaction',
     1 : 'Second signature creation',
     2 : 'Delegate registration',

@@ -16,7 +16,7 @@ app.exchange = new utils.exchange(config);
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 
-app.set('crypti address', 'http://' + config.crypti.host + ':' + config.crypti.port);
+app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 
 ////////////////////////////////////////////////////////////////////////////////

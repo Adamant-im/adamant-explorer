@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cryptichain.search').controller('SearchController',
+angular.module('lisk_explorer.search').controller('SearchController',
   function ($scope, $routeParams, $location, $timeout, Global, $http) {
       $scope.loading = false;
       $scope.badQuery = false;

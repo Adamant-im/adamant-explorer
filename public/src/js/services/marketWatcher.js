@@ -107,7 +107,7 @@ var MarketWatcher = function ($q, $http, $scope) {
     });
 };
 
-angular.module('cryptichain.tools').factory('marketWatcher',
+angular.module('lisk_explorer.tools').factory('marketWatcher',
   function ($q, $http, $socket) {
       return function ($scope) {
           var marketWatcher = new MarketWatcher($q, $http, $scope),

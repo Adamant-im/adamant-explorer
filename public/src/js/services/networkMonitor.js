@@ -203,7 +203,7 @@ var NetworkMap = function () {
     };
 };
 
-angular.module('cryptichain.tools').factory('networkMonitor',
+angular.module('lisk_explorer.tools').factory('networkMonitor',
   function ($socket) {
       return function ($scope) {
           var networkMonitor = new NetworkMonitor($scope),
