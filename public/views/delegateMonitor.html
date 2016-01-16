@@ -37,7 +37,7 @@
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
                 <p class="text-muted">
-                  <span class="xcr">{{lastBlock.totalFee || 0 | xcr}} LISK forged</span>
+                  <span class="lisk">{{lastBlock.totalFee || 0 | lisk}} LISK forged</span>
                   <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
                 </p>
               </div>
@@ -53,7 +53,7 @@
                   <a data-ng-href="/address/{{bestForger.address}}" data-ng-switch-when="true" target="_new">{{bestForger.username}}</a>
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
-                <p class="text-muted xcr">{{bestForger.fees || 0 | xcr}} LISK forged</p>
+                <p class="text-muted lisk">{{bestForger.fees || 0 | lisk}} LISK forged</p>
                 <p class="text-muted time-since">since registration</p>
               </div>
             </div>
@@ -71,7 +71,7 @@
               <div class="pull-left total-forged">
                 <p class="small-title">Total Forged <span class="text-muted">(LISK)</span></p>
                 <p class="big-details">
-                  <span class="xcr">{{totalForged || 0 | xcr}}</span>
+                  <span class="lisk">{{totalForged || 0 | lisk}}</span>
                 </p>
                 <p class="text-muted total-active">between {{totalActive || 0 }} active delegates</p>
               </div>
@@ -263,7 +263,7 @@
                   <td>{{d.rate}}</td>
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
-                  <td class="hidden-xs hidden-sm">{{d.fees | xcr}} <span class="text-muted">LISK</span></td>
+                  <td class="hidden-xs hidden-sm">{{d.fees | lisk}} <span class="text-muted">LISK</span></td>
                   <td class="hidden-xs"><i forging-status="d.forgingStatus"></i></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
                   <td class="hidden-xs">{{d.vote | approval }}%</td>

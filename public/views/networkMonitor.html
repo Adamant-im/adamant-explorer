@@ -41,7 +41,7 @@
                     <a data-ng-href="/block/{{lastBlock.id}}" target="_new">{{lastBlock.id}}</a>
                   </p>
                   <p class="text-muted">
-                    <span class="xcr">{{lastBlock.totalAmount + lastBlock.totalFee || 0 | xcr}} LISK</span>
+                    <span class="lisk">{{lastBlock.totalAmount + lastBlock.totalFee || 0 | lisk}} LISK</span>
                     <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
                   </p>
                   <p class="text-muted">{{lastBlock.timestamp | timeAgo}}</p>
@@ -67,7 +67,7 @@
                     <a data-ng-href="/block/{{bestBlock.id}}" target="_new">{{bestBlock.id}}</a>
                   </p>
                   <p class="text-muted">
-                    <span class="xcr">{{bestBlock.totalAmount + bestBlock.totalFee || 0 | xcr}} LISK</span>
+                    <span class="lisk">{{bestBlock.totalAmount + bestBlock.totalFee || 0 | lisk}} LISK</span>
                     <span class="num-trans">from {{bestBlock.numberOfTransactions || 0}} transactions</span>
                   </p>
                   <p class="text-muted">{{bestBlock.timestamp | timeAgo}}</p>
@@ -83,7 +83,7 @@
                 <p class="small-title">Volume <span class="text-muted">(LISK)</span></p>
 
                 <p class="big-details">
-                  <span class="volume-amount">{{volume.amount || 0 | xcr}}</span>
+                  <span class="volume-amount">{{volume.amount || 0 | lisk}}</span>
                 </p>
                 <div data-ng-if="!volume.amount">
                   <p class="text-muted">waiting for transactions <i class="fa fa-spinner fa-spin"></i></p>

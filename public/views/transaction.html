@@ -11,7 +11,7 @@
       <div class="col-md-6 col-lg-5 text-right">
         <span data-ng-if="tx.confirmations" class="txvalues txvalues-success">{{tx.confirmations}} Confirmations</span>
         <span data-ng-if="!tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
-        <span class="txvalues txvalues-primary">{{tx.amount | xcr}} LISK</span>
+        <span class="txvalues txvalues-primary">{{tx.amount | lisk}} LISK</span>
       </div>
     </div>
     <div class="hide_snavbar">
@@ -64,11 +64,11 @@
           </tr>
           <tr>
             <td><strong>Amount</strong></td>
-            <td class="text-right">{{tx.amount | xcr}} <span class="text-muted">LISK</span></td>
+            <td class="text-right">{{tx.amount | lisk}} <span class="text-muted">LISK</span></td>
           </tr>
           <tr>
             <td><strong>Fee</strong></td>
-            <td class="text-right">{{tx.fee | xcr}} <span class="text-muted">LISK</span></td>
+            <td class="text-right">{{tx.fee | lisk}} <span class="text-muted">LISK</span></td>
           </tr>
           <tr>
             <td><strong>USD equivalent</strong></td>
