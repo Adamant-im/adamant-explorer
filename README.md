@@ -1,7 +1,7 @@
-Crypti Blockchain Explorer
-==========================
+Lisk Blockchain Explorer
+========================
 
-Crypti blockchain explorer version 0.3. Works with Crypti wallet API. Uses Redis for caching data and Freegeoip for IP geo-location.
+Lisk blockchain explorer version 0.3. Works with Lisk wallet API. Uses Redis for caching data and Freegeoip for IP geo-location.
 
 # Required Components
 
@@ -48,7 +48,7 @@ Example:
             "host": "0.0.0.0",
             "port": 80
         },
-        "crypti" : {
+        "lisk" : {
             "host" : "127.0.0.1",
             "port" : 6040
         },
@@ -76,7 +76,7 @@ Example:
 ```
 
 * `cacheTTL` - time to live cache in redis.
-* `fixedPoint` - fixed point number of Crypti (10^8).
+* `fixedPoint` - fixed point number of Lisk (10^8).
 * `enableCandles` - enable or disable updating of candlestick data.
 * `updateCandlesInterval` - time to update candlestick data.
 * `enableOrders` - enable or disable updating of order book data.
@@ -148,7 +148,7 @@ Ports for both mode can be found in `config.json`
 
 # Top Accounts
 
-To enable Top Accounts functionality, start your crypti node _(not the explorer)_ using the following command:
+To enable Top Accounts functionality, start your lisk node _(not the explorer)_ using the following command:
 
 ```
 TOP=true node app.js
