@@ -42,7 +42,7 @@ Example:
     "configuration" : {
         "development": {
             "host": "0.0.0.0",
-            "port": 8040
+            "port": 6000
         },
         "production": {
             "host": "0.0.0.0",
@@ -50,7 +50,7 @@ Example:
         },
         "lisk" : {
             "host" : "127.0.0.1",
-            "port" : 6040
+            "port" : 8000
         },
         "freegeoip" : {
             "host" : "127.0.0.1",
@@ -134,7 +134,7 @@ Development:
 node app.js
 ```
 
-Open: [http://localhost:8040](http://localhost:8040)
+Open: [http://localhost:6000](http://localhost:6000)
 
 Production:
 
