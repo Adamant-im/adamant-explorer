@@ -22,6 +22,8 @@ app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 app.set('fixed point', config.fixedPoint);
+app.set('exchange enabled', config.exchangeEnabled);
+app.set('candles enabled', config.candlesEnabled);
 
 app.locals.redis = client;
 app.use(function (req, res, next) {
