@@ -68,13 +68,17 @@ angular.module('lisk_explorer')
   })
   .filter('fiat', function () {
       return function (amount) {
-          return (parseInt(amount) / 100000000).toFixed(2);
+          if (isNaN(amount)) {
+              return (0).toFixed(2);
+          } else {
+              return (parseInt(amount) / 100000000).toFixed(2);
+          }
       };
   })
   .filter('lisk', function () {
       return function (amount) {
           if (isNaN(amount)) {
-              return amount;
+              return (0).toFixed(8);
           } else {
               return (parseInt(amount) / 100000000);
           }
