@@ -24,6 +24,7 @@ app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.fr
 app.set('fixed point', config.fixedPoint);
 app.set('exchange enabled', config.exchangeEnabled);
 app.set('candles enabled', config.candlesEnabled);
+app.set('orders enabled', config.ordersEnabled);
 
 app.locals.redis = client;
 app.use(function (req, res, next) {
