@@ -45,10 +45,10 @@ module.exports = function (config) {
     };
 
     this.convertLISKTOUSD = function (lisk) {
-        if (!isNaN(lisk)) {
-            return (lisk * this.LISKBTC * this.BTCUSD).toFixed(3);
+        if (lisk && this.LISKBTC !== '~' && this.BTCUSD !== '~') {
+            return (parseFloat(lisk) * parseFloat(this.LISKBTC) * parseFloat(this.BTCUSD)).toFixed(3);
         } else {
-            return '~';
+            return 0;
         }
     };
 
@@ -85,4 +85,3 @@ module.exports = function (config) {
         }
     };
 };
-
