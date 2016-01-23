@@ -37,7 +37,7 @@
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
                 <p class="text-muted">
-                  <span class="lisk">{{lastBlock.totalFee || 0 | lisk}} LISK forged</span>
+                  <span class="lisk">{{lastBlock.totalForged|| 0 | lisk}} LISK forged</span>
                   <span class="num-trans">from {{lastBlock.numberOfTransactions || 0}} transactions</span>
                 </p>
               </div>
@@ -53,7 +53,7 @@
                   <a data-ng-href="/address/{{bestForger.address}}" data-ng-switch-when="true" target="_new">{{bestForger.username}}</a>
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
-                <p class="text-muted lisk">{{bestForger.fees || 0 | lisk}} LISK forged</p>
+                <p class="text-muted lisk">{{bestForger.forged || 0 | lisk}} LISK forged</p>
                 <p class="text-muted time-since">since registration</p>
               </div>
             </div>
@@ -247,7 +247,7 @@
                   <th><a href="" data-ng-click="tables.active.order('rate')" class="sort-order">Rank <span data-ng-show="tables.active.predicate === 'rate'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th><a href="" data-ng-click="tables.active.order('username')" class="sort-order">Name <span data-ng-show="tables.active.predicate === 'username'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('address')" class="sort-order">Address <span data-ng-show="tables.active.predicate === 'address'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
-                  <th class="hidden-xs hidden-sm"><a href="" data-ng-click="tables.active.order('fees')" class="sort-order">Forged <span data-ng-show="tables.active.predicate === 'fees'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
+                  <th class="hidden-xs hidden-sm"><a href="" data-ng-click="tables.active.order('forged')" class="sort-order">Forged <span data-ng-show="tables.active.predicate === 'forged'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('forgingStatus.rating')" class="sort-order">Status <span data-ng-show="tables.active.predicate === 'forgingStatus.rating'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('productivity')" class="sort-order">Uptime <span data-ng-show="tables.active.predicate === 'productivity'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
                   <th class="hidden-xs"><a href="" data-ng-click="tables.active.order('vote')" class="sort-order">Approval <span data-ng-show="tables.active.predicate === 'vote'" data-ng-class="{reverse:tables.active.reverse}"></span></a></th>
@@ -263,7 +263,7 @@
                   <td>{{d.rate}}</td>
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
-                  <td class="hidden-xs hidden-sm">{{d.fees | lisk}} <span class="text-muted">LISK</span></td>
+                  <td class="hidden-xs hidden-sm">{{d.forged | lisk}} <span class="text-muted">LISK</span></td>
                   <td class="hidden-xs"><i forging-status="d.forgingStatus"></i></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
                   <td class="hidden-xs">{{d.vote | approval }}%</td>
