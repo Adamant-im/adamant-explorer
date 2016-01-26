@@ -16,8 +16,9 @@
         </div>
         <div class="no_matching text-danger" data-ng-if="badQuery">No matching records found!</div>
       </form>
-      <div class="status" data-ng-show="totalBlocks">
-        <span class="height"><strong>Height: </strong> {{totalBlocks}}</span>
+      <div class="status" data-ng-show="blockStatus">
+        <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>
+        <span class="supply">&middot; <strong>Supply: </strong> {{blockStatus.supply | lisk | number:0}}</span>
         <span class="lisk-btc">&middot; <strong>LISK/BTC: </strong> {{liskBtc}}</span>
       </div>
       <ul class="nav navbar-nav navbar-right">

@@ -1,28 +1,23 @@
 'use strict';
 
 var Header = function ($scope) {
-    this.updateBlocksCount = function (res) {
+    this.updateBlockStatus = function (res) {
         if (res.success) {
-            $scope.totalBlocks = res.count;
-        } else {
-            $scope.totalBlocks = 0;
-        }
-    };
-
-    this.updateFee = function (res) {
-        if (res.success) {
-            $scope.fee = res.feePercent;
-        } else {
-            $scope.fee = 0.0;
+            $scope.blockStatus = {
+                height:    res.height,
+                fee:       res.fee,
+                milestone: res.milestone,
+                reward:    res.reward,
+                supply:    res.supply
+            };
         }
     };
 
     this.updateLISKCourse = function (res) {
         if (res.success) {
             $scope.liskBtc = res.lisk;
-            $scope.liskUsd = res.usd;
         } else {
-            $scope.liskBtc = $scope.liskUsd = 0.0;
+            $scope.liskBtc = 0.0;
         }
     };
 };
@@ -34,8 +29,7 @@ angular.module('lisk_explorer.system').factory('header',
               ns = $socket('/header');
 
           ns.on('data', function (res) {
-              if (res.blocks) { header.updateBlocksCount(res.blocks); }
-              if (res.fee)    { header.updateFee(res.fee); }
+              if (res.status) { header.updateBlockStatus(res.status); }
               if (res.course) { header.updateLISKCourse(res.course); }
           });
 
