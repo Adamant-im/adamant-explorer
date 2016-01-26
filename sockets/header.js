@@ -11,24 +11,21 @@ module.exports = function (app, connectionHandler, socket) {
         data       = {};
 
     var running = {
-        'getBlocksCount' : false,
-        'getFee'         : false,
-        'getLISKCourse'   : false
+        'getBlockStatus' : false,
+        'getLISKCourse'  : false
     };
 
     this.onInit = function () {
         async.parallel([
-            getBlocksCount,
-            getFee,
+            getBlockStatus,
             getLISKCourse
         ],
         function (err, res) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                data.blocks = res[0];
-                data.fee    = res[1];
-                data.course = res[2];
+                data.status = res[0];
+                data.course = res[1];
 
                 log('Emitting new data');
                 socket.emit('data', data);
@@ -57,25 +54,14 @@ module.exports = function (app, connectionHandler, socket) {
         console.log('Header:', msg);
     };
 
-    var getBlocksCount = function (cb) {
-        if (running.getBlocksCount) {
-            return cb('getBlocksCount (already running)');
+    var getBlockStatus = function (cb) {
+        if (running.getBlockStatus) {
+            return cb('getBlockStatus (already running)');
         }
-        running.getBlocksCount = true;
-        blocks.getBlocksCount(
-            function (res) { running.getBlocksCount = false; cb('BlocksCount'); },
-            function (res) { running.getBlocksCount = false; cb(null, res); }
-        );
-    };
-
-    var getFee = function (cb) {
-        if (running.getFee) {
-            return cb('getFee (already running)');
-        }
-        running.getFee = true;
-        common.getFee(
-            function (res) { running.getFee = false; cb('Fee'); },
-            function (res) { running.getFee = false; cb(null, res); }
+        running.getBlockStatus = true;
+        blocks.getBlockStatus(
+            function (res) { running.getBlockStatus = false; cb('Status'); },
+            function (res) { running.getBlockStatus = false; cb(null, res); }
         );
     };
 
@@ -94,17 +80,15 @@ module.exports = function (app, connectionHandler, socket) {
         var thisData = {};
 
         async.parallel([
-            getBlocksCount,
-            getFee,
+            getBlockStatus,
             getLISKCourse
         ],
         function (err, res) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                thisData.blocks = res[0];
-                thisData.fee    = res[1];
-                thisData.course = res[2];
+                thisData.status = res[0];
+                thisData.course = res[1];
 
                 data = thisData;
                 log('Emitting data');
@@ -113,4 +97,3 @@ module.exports = function (app, connectionHandler, socket) {
         }.bind(this));
     };
 };
-

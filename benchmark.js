@@ -26,12 +26,11 @@ var tests = new benchmarks(app, api);
 suite.add('accounts.getAccount', tests.accounts.getAccount, { defer : true })
      .add('accounts.getTopAccounts', tests.accounts.getTopAccounts, { defer : true });
 
-suite.add('blocks.getBlocksCount', tests.blocks.getBlocksCount, { defer : true })
-     .add('blocks.getLastBlocks', tests.blocks.getLastBlocks, { defer : true })
-     .add('blocks.getBlock', tests.blocks.getBlock, { defer : true });
+suite.add('blocks.getLastBlocks', tests.blocks.getLastBlocks, { defer : true })
+     .add('blocks.getBlock', tests.blocks.getBlock, { defer : true })
+     .add('blocks.getBlockStatus', tests.blocks.getBlockStatus, { defer : true });
 
-suite.add('common.getFee', tests.common.getFee, { defer : true })
-     .add('common.getLISKCourse', tests.common.getLISKCourse, { defer : true })
+suite.add('common.getLISKCourse', tests.common.getLISKCourse, { defer : true })
      .add('common.search', tests.common.search, { defer : true });
 
 suite.add('delegates.getActive', tests.delegates.getActive, { defer : true })

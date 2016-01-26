@@ -5,13 +5,6 @@ var blocks = require('../lib/api/blocks');
 module.exports = function (app) {
     var api = new blocks(app);
 
-    app.get('/api/getBlocksCount', function (req, res, next) {
-        api.getBlocksCount(
-            function (data) { res.json(data); },
-            function (data) { req.json = data; return next(); }
-        );
-    });
-
     app.get('/api/getLastBlocks', function (req, res, next) {
         api.getLastBlocks(
             req.query.n,
@@ -27,5 +20,11 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
-};
 
+    app.get('/api/getBlockStatus', function (req, res, next) {
+        api.getBlockStatus(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
+};

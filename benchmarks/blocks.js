@@ -3,19 +3,6 @@
 module.exports = function (app, api) {
     var blocks = new api.blocks(app);
 
-    this.getBlocksCount = function (deferred) {
-        blocks.getBlocksCount(
-            function (data) {
-                deferred.resolve();
-                console.log('blocks.getBlocksCount ~>', 'Error retrieving count:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('blocks.getBlocksCount ~>', 'count retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
-
     this.getLastBlocks = function (deferred) {
         blocks.getLastBlocks(
             1,
@@ -43,5 +30,17 @@ module.exports = function (app, api) {
             }
         );
     };
-};
 
+    this.getBlockStatus = function (deferred) {
+        blocks.getBlockStatus(
+            function (data) {
+                deferred.resolve();
+                console.log('blocks.getBlockStatus ~>', 'Error retrieving status:', data.error);
+            },
+            function (data) {
+                deferred.resolve();
+                console.log('blocks.getBlockStatus ~>', 'status retrieved in', String(deferred.elapsed), 'seconds');
+            }
+        );
+    };
+};

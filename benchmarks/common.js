@@ -3,19 +3,6 @@
 module.exports = function (app, api) {
     var common = new api.common(app, api);
 
-    this.getFee = function (deferred) {
-        common.getFee(
-            function (data) {
-                deferred.resolve();
-                console.log('common.getFee ~>', 'Error retrieving fee:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('common.getFee ~>', 'fee retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
-
     this.getLISKCourse = function (deferred) {
         common.getLISKCourse(
             function (data) {
@@ -43,4 +30,3 @@ module.exports = function (app, api) {
         );
     };
 };
-

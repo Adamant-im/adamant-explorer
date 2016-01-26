@@ -8,13 +8,6 @@ module.exports = function (app) {
         return res.json(data);
     });
 
-    app.get('/api/getFee', function (req, res, next) {
-        common.getFee(
-            function (data) { res.json(data); },
-            function (data) { req.json = data; return next(); }
-        );
-    });
-
     app.get('/api/getLISKCourse', function (req, res, next) {
         common.getLISKCourse(
             function (data) { res.json(data); },
@@ -34,4 +27,3 @@ module.exports = function (app) {
 
     var common = new api.common(app, api);
 };
-
