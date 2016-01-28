@@ -1,16 +1,15 @@
-Lisk Blockchain Explorer
-========================
+# Lisk Blockchain Explorer
 
 Lisk blockchain explorer version 0.3. Works with Lisk wallet API. Uses Redis for caching data and Freegeoip for IP geo-location.
 
-# Prerequisites
+## Prerequisites
 
  * Redis (http://redis.io)
  * Freegeoip (https://github.com/fiorix/freegeoip)
  * Bower (http://bower.io/)
  * Grunt.js (http://gruntjs.com/)
 
-# Installation
+## Installation
 
 To install run:
 
@@ -19,7 +18,7 @@ npm install
 bower install
 ```
 
-# Freegeoip
+## Freegeoip
 
 Freegeoip is used by the Network Monitor for IP address geo-location.
 
@@ -31,9 +30,9 @@ Then start the server in the background, using the following command:
 ./freegeoip > /dev/null 2>&1 &
 ```
 
-# Configuration
+## Configuration
 
-`config.json` file contains configuation settings.
+`config.json` file contains configuration settings.
 
 Example:
 
@@ -86,7 +85,7 @@ Example:
 * `btcusdExchange` - default is bitfinex, alternatives are: bitstamp & btce.
 * `liskbtcExchange` - default is poloniex, alternatives are: bter & cryptsy.
 
-# Build
+## Build
 
 Frontend must be built with grunt:
 
@@ -102,7 +101,7 @@ grunt
 
 It will update css/js files as changes are made.
 
-# Market Watcher
+## Market Watcher
 
 To build candlestick data for each exchange run:
 
@@ -118,7 +117,7 @@ grunt candles:update
 
 During runtime candlestick data is updated automatically.
 
-# Benchmarks
+## Benchmarks
 
 To run benchmark tests run:
 
@@ -126,7 +125,7 @@ To run benchmark tests run:
 node benchmark.js
 ```
 
-# Launch
+## Launch
 
 Development:
 
@@ -146,7 +145,7 @@ Open: [http://localhost](http://localhost)
 
 Ports for both mode can be found in `config.json`
 
-# Top Accounts
+## Top Accounts
 
 To enable Top Accounts functionality, start your lisk node _(not the explorer)_ using the following command:
 
@@ -155,14 +154,14 @@ TOP=true node app.js
 ```
 
 ## License
-  
-The MIT License (MIT)  
-  
-Copyright (c) 2016 Lisk  
-Copyright (c) 2015 Crypti  
-  
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  
-  
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Lisk
+Copyright (c) 2015 Crypti
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-  
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
