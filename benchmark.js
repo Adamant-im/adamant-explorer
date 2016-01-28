@@ -30,7 +30,7 @@ suite.add('blocks.getLastBlocks', tests.blocks.getLastBlocks, { defer : true })
      .add('blocks.getBlock', tests.blocks.getBlock, { defer : true })
      .add('blocks.getBlockStatus', tests.blocks.getBlockStatus, { defer : true });
 
-suite.add('common.getLISKCourse', tests.common.getLISKCourse, { defer : true })
+suite.add('common.getTicker', tests.common.getTicker, { defer : true })
      .add('common.search', tests.common.search, { defer : true });
 
 suite.add('delegates.getActive', tests.delegates.getActive, { defer : true })

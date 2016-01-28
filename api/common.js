@@ -8,8 +8,8 @@ module.exports = function (app) {
         return res.json(data);
     });
 
-    app.get('/api/getLISKCourse', function (req, res, next) {
-        common.getLISKCourse(
+    app.get('/api/getPriceTicker', function (req, res, next) {
+        common.getPriceTicker(
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
         );

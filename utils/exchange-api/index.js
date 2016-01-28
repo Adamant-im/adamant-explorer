@@ -105,7 +105,7 @@ module.exports = function (config) {
     }
 
     return {
-        getTicker: function (type, cb) {
+        getPriceTicker: function (type, cb) {
             if (type == 'BTCUSD') {
                 return requestTicker(type, config.btcusdExchange, cb);
             } else if (type == 'LISKBTC') {

@@ -65,7 +65,7 @@ module.exports = function (config) {
 
     var getBTCUSD = function (cb) {
         if (config.enableExchange) {
-            api.getTicker('BTCUSD', function (err, result) {
+            api.getPriceTicker('BTCUSD', function (err, result) {
                 return cb(err, result);
             });
         } else {
@@ -76,7 +76,7 @@ module.exports = function (config) {
 
     var getLISKBTC = function (cb) {
         if (config.enableExchange) {
-            api.getTicker('LISKBTC', function (err, result) {
+            api.getPriceTicker('LISKBTC', function (err, result) {
                 return cb(err, result);
             });
         } else {

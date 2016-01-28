@@ -12,13 +12,13 @@ module.exports = function (app, connectionHandler, socket) {
 
     var running = {
         'getBlockStatus' : false,
-        'getLISKCourse'  : false
+        'getPriceTicker'  : false
     };
 
     this.onInit = function () {
         async.parallel([
             getBlockStatus,
-            getLISKCourse
+            getPriceTicker
         ],
         function (err, res) {
             if (err) {
@@ -65,14 +65,14 @@ module.exports = function (app, connectionHandler, socket) {
         );
     };
 
-    var getLISKCourse = function (cb) {
-        if (running.getLISKCourse) {
-            return cb('getLISKCourse (already running)');
+    var getPriceTicker = function (cb) {
+        if (running.getPriceTicker) {
+            return cb('getPriceTicker (already running)');
         }
-        running.getLISKCourse = true;
-        common.getLISKCourse(
-            function (res) { running.getLISKCourse = false; cb('LISKCourse'); },
-            function (res) { running.getLISKCourse = false; cb(null, res); }
+        running.getPriceTicker = true;
+        common.getPriceTicker(
+            function (res) { running.getPriceTicker = false; cb('LISKCourse'); },
+            function (res) { running.getPriceTicker = false; cb(null, res); }
         );
     };
 
@@ -81,7 +81,7 @@ module.exports = function (app, connectionHandler, socket) {
 
         async.parallel([
             getBlockStatus,
-            getLISKCourse
+            getPriceTicker
         ],
         function (err, res) {
             if (err) {

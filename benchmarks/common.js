@@ -3,15 +3,15 @@
 module.exports = function (app, api) {
     var common = new api.common(app, api);
 
-    this.getLISKCourse = function (deferred) {
-        common.getLISKCourse(
+    this.getPriceTicker = function (deferred) {
+        common.getPriceTicker(
             function (data) {
                 deferred.resolve();
-                console.log('common.getLISKCourse ~>', 'Error retrieving rates:', data.error);
+                console.log('common.getPriceTicker ~>', 'Error retrieving price ticker:', data.error);
             },
             function (data) {
                 deferred.resolve();
-                console.log('common.getLISKCourse ~>', 'rates retrieved in', String(deferred.elapsed), 'seconds');
+                console.log('common.getPriceTicker ~>', 'price ticker retrieved in', String(deferred.elapsed), 'seconds');
             }
         );
     };
