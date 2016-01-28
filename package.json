@@ -1,16 +1,17 @@
 {
   "name": "lisk-explorer",
   "version": "0.3.0",
-  "description": "Lisk Blockchain Explorer",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Boris Povod <boris@crypti.me>, Olivier Beddows <olivier@lisk.io>",
-  "license": "ISC",
+  "description": "Lisk blockchain explorer",
   "repository": {
     "type": "git",
     "url": "git@github.com:LiskHQ/lisk-explorer.git"
+  },
+  "private": true,
+  "author": "Boris Povod <boris@crypti.me>, Olivier Beddows <olivier@lisk.io>",
+  "license": "MIT",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "async": "^0.9.2",
