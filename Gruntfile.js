@@ -93,7 +93,7 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            target: {
+            all: {
                 files: [{
                     expand: true,
                     cwd: 'public/css',
