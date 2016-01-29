@@ -302,11 +302,8 @@ a, a:hover, a:visited, a:focus {
 
 .navbar-brand .logo {
   background-image: url(/img/logo.png);
-  background-size: 250px 56px;
-  background-position: -125px 0px;
-  margin-top: 1px;
-  height: 56px;
-  width: 125px;
+  height: 55px;
+  width: 100px;
 }
 
 @media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
