@@ -8,7 +8,7 @@
     "angular-gettext": "~2.1.0",
     "angular-resource": "~1.4.3",
     "angular-route": "~1.4.3",
-    "bootstrap": "~3.3.5",
+    "bootstrap": "~3.3.6",
     "font-awesome": "~4.3.0",
     "leaflet": "~0.7.3",
     "leaflet.markercluster": "~0.4.0",
