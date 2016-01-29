@@ -486,12 +486,12 @@ a:hover {
 .block-tx {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  background-color: #F4F4F4;
+  background-color: #eceff1;
   border-radius: 2px;
   margin: 20px 0 10px;
   overflow: hidden;
   padding: 15px;
-  border: 1px solid #eee;
+  border: 1px solid #cfd8dc;
 }
 
 .btn {
