@@ -68,7 +68,7 @@ angular.module('lisk_explorer.tools')
                       lineColor: '#288234',
                       fillColors: '#38B449',
                       negativeLineColor: '#990000',
-                      negativeFillColors: '#CC0000',
+                      negativeFillColors: '#d32f2f',
                       fillAlphas: 0.7,
                       useDataSetColors: false,
                       comparable: false,

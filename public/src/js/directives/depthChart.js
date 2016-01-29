@@ -15,7 +15,7 @@ angular.module('lisk_explorer.tools')
               theme: 'light',
               pathToImages: '/img/amcharts/',
               precision: 8,
-              colors: ['#38B449', '#CC0000'],
+              colors: ['#38B449', '#d32f2f'],
               dataProvider: [{}],
               valueAxes: [{
                   stackType: 'regular',

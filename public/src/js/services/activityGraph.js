@@ -9,7 +9,7 @@ var ActivityGraph = function () {
     this.colors = {
         account: '#0288d1', // Steel Blue
         credit:  '#7CB342', // Lawn Green
-        debit:   '#cc0000', // Red
+        debit:   '#d32f2f', // Red
         block:   '#f57c00', // Dark Orange
         tx:      '#5f696e'  // Grey
     };

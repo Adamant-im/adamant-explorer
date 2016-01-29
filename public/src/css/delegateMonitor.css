@@ -46,7 +46,7 @@
 }
 
 .forging-total.red {
-  background-color: #cc0000;
+  background-color: #d32f2f;
 }
 
 .progress-bar-forging {
@@ -96,13 +96,13 @@
 }
 
 .forging-status.red {
-  color: #cc0000;
+  color: #d32f2f;
 }
 
 .tooltip-red .tooltip-inner {
-  background-color: #cc0000;
+  background-color: #d32f2f;
 }
 
 .tooltip-red.left .tooltip-arrow {
-  border-left-color:  #cc0000;
+  border-left-color:  #d32f2f;
 }
