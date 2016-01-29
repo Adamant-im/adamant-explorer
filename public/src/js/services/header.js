@@ -15,10 +15,11 @@ var Header = function ($scope) {
 
     this.updatePriceTicker = function (res) {
         if (res.success) {
-            $scope.liskBtc = res.lisk;
-            $scope.liskUsd = res.usd;
+            $scope.btc_usd  = res.btc_usd;
+            $scope.lisk_btc = res.lisk_btc;
+            $scope.lisk_usd = res.lisk_usd;
         } else {
-            $scope.liskBtc = $scope.liskUsd = 0.0;
+            $scope.btc_usd = $scope.lisk_btc = $scope.lisk_usd = 0.0;
         }
     };
 };
