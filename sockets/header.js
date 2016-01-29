@@ -12,7 +12,7 @@ module.exports = function (app, connectionHandler, socket) {
 
     var running = {
         'getBlockStatus' : false,
-        'getPriceTicker'  : false
+        'getPriceTicker' : false
     };
 
     this.onInit = function () {
