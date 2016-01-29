@@ -13,11 +13,12 @@ var Header = function ($scope) {
         }
     };
 
-    this.updateLISKCourse = function (res) {
+    this.updatePriceTicker = function (res) {
         if (res.success) {
             $scope.liskBtc = res.lisk;
+            $scope.liskUsd = res.usd;
         } else {
-            $scope.liskBtc = 0.0;
+            $scope.liskBtc = $scope.liskUsd = 0.0;
         }
     };
 };
@@ -30,7 +31,7 @@ angular.module('lisk_explorer.system').factory('header',
 
           ns.on('data', function (res) {
               if (res.status) { header.updateBlockStatus(res.status); }
-              if (res.course) { header.updateLISKCourse(res.course); }
+              if (res.ticker) { header.updatePriceTicker(res.ticker); }
           });
 
           $scope.$on('$destroy', function (event) {

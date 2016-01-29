@@ -25,7 +25,7 @@ module.exports = function (app, connectionHandler, socket) {
                 log('Error retrieving: ' + err);
             } else {
                 data.status = res[0];
-                data.course = res[1];
+                data.ticker = res[1];
 
                 log('Emitting new data');
                 socket.emit('data', data);
@@ -71,7 +71,7 @@ module.exports = function (app, connectionHandler, socket) {
         }
         running.getPriceTicker = true;
         common.getPriceTicker(
-            function (res) { running.getPriceTicker = false; cb('LISKCourse'); },
+            function (res) { running.getPriceTicker = false; cb('PriceTicker'); },
             function (res) { running.getPriceTicker = false; cb(null, res); }
         );
     };
@@ -88,7 +88,7 @@ module.exports = function (app, connectionHandler, socket) {
                 log('Error retrieving: ' + err);
             } else {
                 thisData.status = res[0];
-                thisData.course = res[1];
+                thisData.ticker = res[1];
 
                 data = thisData;
                 log('Emitting data');
