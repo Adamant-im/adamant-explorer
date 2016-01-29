@@ -4,7 +4,7 @@
   position: relative;
   margin-top: 12px;
   margin-bottom: 12px;
-  border: 1px solid #343844;
+  border: 1px solid #544835;
 }
 
 #sigma-canvas div.hud {
@@ -18,24 +18,24 @@
   top: 0px;
   right: 0px;
   text-align: center;
-  background-color: #343844;
+  background-color: #544835;
   opacity: 0.9;
 }
 
 span.label-account {
-  background-color: #3465a4;
+  background-color: #0288d1;
 }
 
 span.label-block {
-  background-color: #f57900;
+  background-color: #f57c00;
 }
 
 span.label-tx {
-  background-color: #888a85;
+  background-color: #5f696e;
 }
 
 span.label-credit {
-  background-color: #73d216;
+  background-color: #7CB342;
 }
 
 span.label-debit {

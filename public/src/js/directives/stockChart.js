@@ -112,7 +112,7 @@ angular.module('lisk_explorer.tools')
                   valueLineBalloonEnabled: true,
                   valueLineEnabled: true,
                   valueLineAlpha: 0.5,
-                  cursorColor: '#1E9ADD'
+                  cursorColor: '#0299eb'
               },
               chartScrollbarSettings: {
                   graph: 'g1',

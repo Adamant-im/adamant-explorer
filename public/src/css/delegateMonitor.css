@@ -2,13 +2,13 @@
 .nav-pills>li.active>a:hover,
 .nav-pills>li.active>a:focus {
   color: #fff;
-  background-color: #343844;
+  background-color: #544835;
 }
 
 .nav-pills>li>a,
 .nav-pills>li>a:hover,
 .nav-pills>li>a:focus {
-  color: #343844;
+  color: #544835;
   background-color: white;
 }
 
@@ -34,15 +34,15 @@
 }
 
 .forging-total.grey {
-  background-color: #888a85;
+  background-color: #5f696e;
 }
 
 .forging-total.green {
-  background-color: #73d216;
+  background-color: #7CB342;
 }
 
 .forging-total.orange {
-  background-color: #f57900;
+  background-color: #f57c00;
 }
 
 .forging-total.red {
@@ -50,7 +50,7 @@
 }
 
 .progress-bar-forging {
-  background-color: #1F9BDE;
+  background-color: #0288d1;
 }
 
 .forging-status {
@@ -64,35 +64,35 @@
 }
 
 .tooltip-grey .tooltip-inner {
-  background-color: #888a85;
+  background-color: #5f696e;
 }
 
 .tooltip-grey.left .tooltip-arrow {
-  border-left-color: #888a85;
+  border-left-color: #5f696e;
 }
 
 .forging-status.green {
-  color: #73d216;
+  color: #7CB342;
 }
 
 .tooltip-green .tooltip-inner {
-  background-color: #73d216;
+  background-color: #7CB342;
 }
 
 .tooltip-green.left .tooltip-arrow {
-  border-left-color: #73d216;
+  border-left-color: #7CB342;
 }
 
 .forging-status.orange {
-  color: #f57900;
+  color: #f57c00;
 }
 
 .tooltip-orange .tooltip-inner {
-  background-color: #f57900;
+  background-color: #f57c00;
 }
 
 .tooltip-orange.left .tooltip-arrow {
-  border-left-color:  #f57900;
+  border-left-color:  #f57c00;
 }
 
 .forging-status.red {
