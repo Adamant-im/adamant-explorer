@@ -316,6 +316,7 @@ a:hover {
        only screen and (min-device-pixel-ratio: 1.5) {
   .navbar-brand .logo {
     background-image: url(/img/logo2x.png);
+    background-size: 100%;
   }
 }
 
