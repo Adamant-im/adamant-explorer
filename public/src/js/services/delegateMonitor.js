@@ -22,8 +22,8 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 
         $scope.bestForger  = bestForger(active.delegates);
         $scope.totalForged = totalForged(active.delegates);
-        $scope.bestUptime  = bestUptime(active.delegates);
-        $scope.worstUptime = worstUptime(active.delegates);
+        $scope.bestProductivity  = bestProductivity(active.delegates);
+        $scope.worstProductivity = worstProductivity(active.delegates);
     };
 
     this.updateLastBlock = function (lastBlock) {
@@ -66,13 +66,13 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
                 .value();
     };
 
-    var bestUptime = function (delegates) {
+    var bestProductivity = function (delegates) {
         if (_.size(delegates) > 0) {
             return _.max(delegates, function (d) { return parseFloat(d.productivity); });
         }
     };
 
-    var worstUptime = function (delegates) {
+    var worstProductivity = function (delegates) {
         if (_.size(delegates) > 0) {
             return _.min(delegates, function (d) { return parseFloat(d.productivity); });
         }
