@@ -229,7 +229,7 @@ ActivityGraph.prototype.addAccount = function (id) {
 };
 
 ActivityGraph.prototype.amount = function (tx, sign) {
-    return (sign + tx.amount / Math.pow(10, 8)) + ' LISK';
+    return (sign + tx.amount / Math.pow(10, 8)) + ' LSK';
 };
 
 ActivityGraph.prototype.addTxSender = function (tx) {
