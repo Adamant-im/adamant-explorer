@@ -55,14 +55,14 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 
     var bestForger = function (delegates) {
         if (_.size(delegates) > 0) {
-            return _.max(delegates, function (d) { return d.forged; });
+            return _.max(delegates, function (d) { return parseInt(d.forged); });
         }
     };
 
     var totalForged = function (delegates) {
         return _.chain(delegates)
-                .map(function (d) { return d.forged; })
-                .reduce(function (memo, num) { return memo + num; }, 0)
+                .map(function (d) { return parseInt(d.forged); })
+                .reduce(function (memo, num) { return parseInt(memo) + parseInt(num); }, 0)
                 .value();
     };
 
