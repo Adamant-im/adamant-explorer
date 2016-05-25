@@ -13,15 +13,6 @@ module.exports = function (config, client) {
         }
         async.series([
             function (callback) {
-                bter.updateOrders(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
-            },
-            function (callback) {
                 poloniex.updateOrders(function (err, res) {
                     if (err) {
                         callback(err);
@@ -49,8 +40,7 @@ module.exports = function (config, client) {
 
     // Private
 
-    var bter = new orders.bter(client),
-        poloniex = new orders.poloniex(client);
+    var poloniex = new orders.poloniex(client);
 
     var running = false;
 };
