@@ -11,17 +11,6 @@ module.exports = function (grunt) {
 
         async.series([
             function (callback) {
-                var bter = new candles.bter(client);
-
-                bter.buildCandles(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
-            },
-            function (callback) {
                 var poloniex = new candles.poloniex(client);
 
                 poloniex.buildCandles(function (err, res) {
@@ -47,17 +36,6 @@ module.exports = function (grunt) {
         var done = this.async();
 
         async.series([
-            function (callback) {
-                var bter = new candles.bter(client);
-
-                bter.updateCandles(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
-            },
             function (callback) {
                 var poloniex = new candles.poloniex(client);
 
