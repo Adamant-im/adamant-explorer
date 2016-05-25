@@ -35,28 +35,6 @@ module.exports = function (config) {
             ]
         },
         LISKBTC : {
-            bter : [
-                'Bter',
-                'http://data.bter.com/api/1/ticker/lisk_btc',
-                function (res, cb) {
-                    if (res.message) {
-                        return cb(res.message);
-                    } else {
-                        return cb(null, res.last);
-                    }
-                }
-            ],
-            cryptsy : [
-                'Cryptsy',
-                'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=280',
-                function (res, cb) {
-                    if (res.error) {
-                        return cb(res.error);
-                    } else {
-                        return cb(null, res.return.markets.LISK.lasttradeprice);
-                    }
-                }
-            ],
             poloniex : [
                 'Poloniex',
                 'https://poloniex.com/public?command=returnTicker',
