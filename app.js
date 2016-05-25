@@ -22,9 +22,9 @@ app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 app.set('fixed point', config.fixedPoint);
-app.set('exchange enabled', config.exchangeEnabled);
-app.set('candles enabled', config.candlesEnabled);
-app.set('orders enabled', config.ordersEnabled);
+app.set('exchange enabled', config.enableExchange);
+app.set('candles enabled', config.enableCandles);
+app.set('orders enabled', config.enableOrders);
 
 app.locals.redis = client;
 app.use(function (req, res, next) {
