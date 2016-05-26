@@ -41,7 +41,7 @@ Example:
     "configuration" : {
         "development": {
             "host": "0.0.0.0",
-            "port": 6000
+            "port": 6040
         },
         "production": {
             "host": "0.0.0.0",
