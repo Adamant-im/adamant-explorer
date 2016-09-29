@@ -26,16 +26,18 @@ app.set('exchange enabled', config.enableExchange);
 app.set('candles enabled', config.enableCandles);
 app.set('orders enabled', config.enableOrders);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.locals.redis = client;
 app.use(function (req, res, next) {
     req.redis = client;
     return next();
 });
 
-app.use(express.logger());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.compress());
-
+var morgan = require('morgan');
+app.use(morgan('combined'));
+var compression = require('compression');
+app.use(compression());
 var methodOverride = require('method-override');
 app.use(methodOverride('X-HTTP-Method-Override'));
 
