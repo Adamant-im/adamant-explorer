@@ -18,6 +18,20 @@ npm install
 bower install
 ```
 
+## Redis - (Ubuntu Installation)
+
+Redis is used for caching parsed exchange data. To install Redis perfom the following:
+
+```
+sudo apt-get install redis-server
+```
+
+Once installation is complete, run the server using the following command:
+
+```
+nohup redis-server &
+```
+
 ## Freegeoip
 
 Freegeoip is used by the Network Monitor for IP address geo-location.
