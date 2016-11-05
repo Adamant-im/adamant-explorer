@@ -38,6 +38,11 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
         $scope.votes = votes.transactions;
     };
 
+    this.updateApproval = function (approval) {
+        $scope.approval = approval;
+    };
+
+
     this.updateLastBlocks = function (delegate) {
         var existing = _.find($scope.activeDelegates, function (d) {
             return d.publicKey === delegate.publicKey;
@@ -105,6 +110,7 @@ angular.module('lisk_explorer.tools').factory('delegateMonitor',
               if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
               if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
               if (res.votes) { delegateMonitor.updateVotes(res.votes); }
+              if (res.approval) { delegateMonitor.updateApproval(res.approval); }
           });
 
           ns.on('delegate', function (res) {

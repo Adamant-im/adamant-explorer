@@ -5,7 +5,7 @@ var NetworkMonitor = function ($scope) {
 
     function Platforms () {
         this.counter   = [0,0,0,0];
-        this.platforms = ['Darwin', 'Linux', 'Windows', null];
+        this.platforms = ['Darwin', 'Linux', 'FreeBSD', null];
 
         this.detect = function (platform) {
             if (angular.isNumber(platform.group)) {

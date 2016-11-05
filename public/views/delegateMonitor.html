@@ -266,7 +266,7 @@
                   <td class="hidden-xs hidden-sm">{{d.forged | lisk}} <span class="text-muted">LSK</span></td>
                   <td class="hidden-xs"><i forging-status="d.forgingStatus"></i></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
-                  <td class="hidden-xs">{{d.vote | approval }}%</td>
+                  <td class="hidden-xs">{{d.approval }}%</td>
                 </tr>
               </tbody>
             </table>
@@ -297,7 +297,7 @@
                   <td><a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
-                  <td class="hidden-xs">{{d.vote | approval }}%</td>
+                  <td class="hidden-xs">{{d.approval }}%</td>
                 </tr>
               </tbody>
             </table>
