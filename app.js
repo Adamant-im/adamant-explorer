@@ -136,7 +136,7 @@ app.use(function (req, res, next) {
 
 app.get('*', function (req, res, next) {
     if (req.url.indexOf('api') !== 1) {
-        return res.sendfile(path.join(__dirname, 'public', 'index.html'));
+        return res.sendFile(path.join(__dirname, 'public', 'index.html'));
     } else {
         return next();
     }
