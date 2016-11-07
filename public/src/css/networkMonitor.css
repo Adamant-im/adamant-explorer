@@ -77,6 +77,10 @@ div.platforms span.linux-counter {
   color: #EC2100;
 }
 
+div.platforms span.freebsd-counter {
+  color: #FF3300;
+}
+
 div.versions {
   text-align: center;
   min-height: 58px;
