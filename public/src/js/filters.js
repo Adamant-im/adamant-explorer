@@ -116,4 +116,13 @@ angular.module('lisk_explorer')
       return function (tx) {
           return txTypes[parseInt(tx.type)];
       };
+  })
+  .filter('round', function () {
+      return function (height) {
+          if (isNaN(height)) {
+              return 0;
+          } else {
+              return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
+          }
+      };
   });

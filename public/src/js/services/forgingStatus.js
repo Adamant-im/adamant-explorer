@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lisk_explorer.tools').service('forgingStatus',
-  function (epochStampFilter) {
+  function ($rootScope, epochStampFilter, roundFilter) {
       return function (delegate) {
           var status = { updatedAt: delegate.blocksAt },
               statusAge = 0, blockAge = 0;
@@ -9,6 +9,9 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
           if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
               status.lastBlock = _.first(delegate.blocks);
               status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
+              status.networkRound = roundFilter($rootScope.blockStatus.height);
+              status.delegateRound = roundFilter(status.lastBlock.height);
+              status.missedRounds = status.networkRound - status.delegateRound;
 
               statusAge = moment().diff(delegate.blocksAt, 'minutes');
               blockAge  = moment().diff(status.blockAt, 'minutes');
@@ -25,11 +28,10 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
           } else if (statusAge > 9) {
               // Stale Status
               status.code = 3;
-          } else if (blockAge <= 34) {
+          } else if (status.missedRounds <= 1) {
               // Forging
               status.code = 0;
-          } else if (blockAge <= 68) {
-              // Missed Cycles
+          } else if (status.missedRounds === 2) {
               status.code = 1;
           } else {
               // Not Forging

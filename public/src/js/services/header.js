@@ -1,9 +1,9 @@
 'use strict';
 
-var Header = function ($scope) {
+var Header = function ($rootScope) {
     this.updateBlockStatus = function (res) {
         if (res.success) {
-            $scope.blockStatus = {
+            $rootScope.blockStatus = {
                 height:    res.height,
                 fee:       res.fee,
                 milestone: res.milestone,
@@ -15,19 +15,19 @@ var Header = function ($scope) {
 
     this.updatePriceTicker = function (res) {
         if (res.success) {
-            $scope.btc_usd  = res.btc_usd;
-            $scope.lisk_btc = res.lisk_btc;
-            $scope.lisk_usd = res.lisk_usd;
+            $rootScope.btc_usd  = res.btc_usd;
+            $rootScope.lisk_btc = res.lisk_btc;
+            $rootScope.lisk_usd = res.lisk_usd;
         } else {
-            $scope.btc_usd = $scope.lisk_btc = $scope.lisk_usd = 0.0;
+            $rootScope.btc_usd = $rootScope.lisk_btc = $rootScope.lisk_usd = 0.0;
         }
     };
 };
 
 angular.module('lisk_explorer.system').factory('header',
-  function ($socket) {
+  function ($rootScope, $socket) {
       return function ($scope) {
-          var header = new Header($scope),
+          var header = new Header($rootScope),
               ns = $socket('/header');
 
           ns.on('data', function (res) {
