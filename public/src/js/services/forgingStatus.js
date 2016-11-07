@@ -32,6 +32,7 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
               // Forging
               status.code = 0;
           } else if (status.missedRounds === 2) {
+              // Missed Rounds
               status.code = 1;
           } else {
               // Not Forging
