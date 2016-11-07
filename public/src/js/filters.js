@@ -1,10 +1,47 @@
 'use strict';
 
 angular.module('lisk_explorer')
-  .filter('startFrom', function () {
-      return function (input, start) {
-          start = +start;
-          return input.slice(start);
+  .filter('approval', function () {
+      return function (votes) {
+          if (isNaN(votes)) {
+              return 0;
+          } else {
+              return ((parseInt(votes) / 10000000000000000) * 100).toFixed(2);
+          }
+      };
+  })
+  .filter('epochStamp', function () {
+      return function (d) {
+          return new Date(
+              (((Date.UTC(2016, 4, 24, 17, 0, 0, 0) / 1000) + d) * 1000)
+          );
+      };
+  })
+  .filter('fiat', function () {
+      return function (amount) {
+          if (isNaN(amount)) {
+              return (0).toFixed(2);
+          } else {
+              return (parseInt(amount) / 100000000).toFixed(2);
+          }
+      };
+  })
+  .filter('lisk', function () {
+      return function (amount) {
+          if (isNaN(amount)) {
+              return (0).toFixed(8);
+          } else {
+              return (parseInt(amount) / 100000000);
+          }
+      };
+  })
+  .filter('round', function () {
+      return function (height) {
+          if (isNaN(height)) {
+              return 0;
+          } else {
+              return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
+          }
       };
   })
   .filter('split', function () {
@@ -13,11 +50,15 @@ angular.module('lisk_explorer')
           return input.split(delimiter);
       };
   })
-  .filter('epochStamp', function () {
-      return function (d) {
-          return new Date(
-              (((Date.UTC(2016, 4, 24, 17, 0, 0, 0) / 1000) + d) * 1000)
-          );
+  .filter('startFrom', function () {
+      return function (input, start) {
+          start = +start;
+          return input.slice(start);
+      };
+  })
+  .filter('supply', function (liskFilter) {
+      return function (amount) {
+          return ((liskFilter(amount) / 100000000) * 100).toFixed(2);
       };
   })
   .filter('timeAgo', function (epochStampFilter) {
@@ -66,38 +107,6 @@ angular.module('lisk_explorer')
           return d.getFullYear() + '/' + month + '/' + day + ' ' + h + ':' + m + ':' + s;
       };
   })
-  .filter('fiat', function () {
-      return function (amount) {
-          if (isNaN(amount)) {
-              return (0).toFixed(2);
-          } else {
-              return (parseInt(amount) / 100000000).toFixed(2);
-          }
-      };
-  })
-  .filter('lisk', function () {
-      return function (amount) {
-          if (isNaN(amount)) {
-              return (0).toFixed(8);
-          } else {
-              return (parseInt(amount) / 100000000);
-          }
-      };
-  })
-  .filter('approval', function () {
-      return function (votes) {
-          if (isNaN(votes)) {
-              return 0;
-          } else {
-              return ((parseInt(votes) / 10000000000000000) * 100).toFixed(2);
-          }
-      };
-  })
-  .filter('supply', function (liskFilter) {
-      return function (amount) {
-          return ((liskFilter(amount) / 100000000) * 100).toFixed(2);
-      };
-  })
   .filter('txSender', function () {
       return function (tx) {
           return (tx.senderUsername || (tx.knownSender && tx.knownSender.owner) || tx.senderId);
@@ -115,14 +124,5 @@ angular.module('lisk_explorer')
   .filter('txType', function (txTypes) {
       return function (tx) {
           return txTypes[parseInt(tx.type)];
-      };
-  })
-  .filter('round', function () {
-      return function (height) {
-          if (isNaN(height)) {
-              return 0;
-          } else {
-              return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
-          }
       };
   });
