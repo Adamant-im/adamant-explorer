@@ -11,7 +11,7 @@ var ForgingMonitor = function (forgingStatus) {
                 case 0:
                     return 'forging';
                 case 1:
-                    return 'missedCycles';
+                    return 'missedRounds';
                 case 2:
                     return 'notForging';
                 case 3:
