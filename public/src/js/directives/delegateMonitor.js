@@ -28,9 +28,9 @@ angular.module('lisk_explorer.tools')
                           scope.tooltip.html = '<span class="forging">Forging</span>';
                           scope.tooltip.class = 'tooltip-green';
                           break;
-                      case 1: // Missed Rounds
+                      case 1: // Awaiting Slot
                           element.removeClass('red green').addClass('orange');
-                          scope.tooltip.html = '<span class="missed-rounds">Missed Rounds</span>';
+                          scope.tooltip.html = '<span class="awaiting-slot">Awaiting Slot</span>';
                           scope.tooltip.class = 'tooltip-orange';
                           break;
                       case 2: // Not Forging
