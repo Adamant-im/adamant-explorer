@@ -22,4 +22,4 @@ angular.module('lisk_explorer.blocks', []);
 angular.module('lisk_explorer.transactions', []);
 angular.module('lisk_explorer.address', []);
 angular.module('lisk_explorer.search', []);
-angular.module('lisk_explorer.tools', []);
+angular.module('lisk_explorer.tools', ['naturalSort']);

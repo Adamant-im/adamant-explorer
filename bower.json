@@ -8,6 +8,7 @@
     "angular-gettext": "~2.3.8",
     "angular-resource": "~1.5.8",
     "angular-route": "~1.5.8",
+    "angular-naturalsort": "https://github.com/isabello/angular-naturalsort.git",
     "bootstrap": "~3.3.7",
     "font-awesome": "~4.6.3",
     "leaflet": "~0.7.3",
