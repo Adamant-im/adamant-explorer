@@ -39,7 +39,7 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
               status.code = 2;
           }
 
-          status.rating = status.code + (Math.pow(10, 3) + ~~delegate.rate).toString().substring(1);
+          delegate.status = [status.code, delegate.rate].join(':');
           return status;
       };
   });
