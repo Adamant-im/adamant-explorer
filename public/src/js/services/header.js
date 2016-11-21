@@ -8,7 +8,8 @@ var Header = function ($rootScope) {
                 fee:       res.fee,
                 milestone: res.milestone,
                 reward:    res.reward,
-                supply:    res.supply
+                supply:    res.supply,
+                nethash:   res.nethash
             };
         }
     };
