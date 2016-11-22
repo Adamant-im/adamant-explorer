@@ -5,7 +5,7 @@ var NetworkMonitor = function ($scope) {
 
     function Platforms () {
         this.counter   = [0,0,0,0];
-        this.platforms = ['Darwin', 'Linux', 'FreeBSD', null];
+        this.platforms = ['Darwin', 'Linux', 'FreeBSD'];
 
         this.detect = function (platform) {
             if (angular.isNumber(platform.group)) {
@@ -15,10 +15,10 @@ var NetworkMonitor = function ($scope) {
 
         this.detected = function () {
             return {
-                one:   { name: this.platforms[0], counter: this.counter[0] },
-                two:   { name: this.platforms[1], counter: this.counter[1] },
-                three: { name: this.platforms[2], counter: this.counter[2] },
-                other: { name: null,              counter: this.counter[3] }
+                one:   { name: this.platforms[0], counter: this.counter[1] },
+                two:   { name: this.platforms[1], counter: this.counter[2] },
+                three: { name: this.platforms[2], counter: this.counter[3] },
+                other: { name: null,              counter: this.counter[0] }
             };
         };
     }
