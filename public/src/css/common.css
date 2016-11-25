@@ -366,7 +366,7 @@ a:hover {
 #search::-webkit-input-placeholder {
   color: #5f696e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
   font-weight: 100;
 }
@@ -374,7 +374,7 @@ a:hover {
 #search::-moz-placeholder {
   color: #5f696e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 100;
 }
 
