@@ -21,6 +21,14 @@ module.exports = function (app) {
         );
     });
 
+    app.get('/api/getHeight', function (req, res, next) {
+        api.getHeight(
+            req.query.height,
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
+
     app.get('/api/getBlockStatus', function (req, res, next) {
         api.getBlockStatus(
             function (data) { res.json(data); },
