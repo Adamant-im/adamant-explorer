@@ -1,27 +1,40 @@
 'use strict';
 
 var ForgingMonitor = function (forgingStatus) {
-    this.getStatus = function (delegate) {
-        return forgingStatus(delegate);
+    this.getStatus = function (delegate, forceNotForging) {
+        return forgingStatus(delegate, forceNotForging);
     };
 
     this.getforgingTotals = function (delegates) {
-        return _.countBy(delegates, function (d) {
+        var cnt1 = _.countBy(delegates, function (d) {
             switch (d.forgingStatus.code) {
                 case 0:
+                case 3:
                     return 'forging';
                 case 1:
-                    return 'awaitingSlot';
+                case 4:
+                    return 'missedBlock';
                 case 2:
                     return 'notForging';
                 case 3:
-                    return 'staleStatus';
                 case 4:
-                    return 'awaitingStatus';
+                    return 'awaitingSlot';
                 default:
                     return 'unprocessed';
             }
         });
+        var cnt2 = _.countBy(delegates, function (d) {
+            switch (d.forgingStatus.code) {
+                case 3:
+                case 4:
+                    return 'awaitingSlot';
+                default:
+                    return 'unprocessed';
+            }
+        });
+
+        cnt1.awaitingSlot = cnt2.awaitingSlot;
+        return cnt1;
     };
 
     this.getForgingProgress = function (totals) {

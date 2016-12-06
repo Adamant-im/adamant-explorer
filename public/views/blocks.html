@@ -13,6 +13,7 @@
               <th class="text-right hidden-xs">Timestamp</th>
               <th class="text-right hidden-xs">Transactions</th>
               <th class="text-right hidden-xs hidden-sm">Generator</th>
+              <th class="text-right hidden-xs hidden-sm">Delegate</th>
               <th class="text-right hidden-xs hidden-sm">Amount (LSK)</th>
               <th class="text-right hidden-xs hidden-sm">Forged (LSK)</th>
             </tr>
@@ -27,6 +28,7 @@
               <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
               <td class="text-right hidden-xs hidden-sm"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
+              <td class="text-right hidden-xs hidden-sm">{{b.delegate.username || 'N/A'}}</td>
               <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
               <td class="text-right hidden-xs hidden-sm">{{b.totalForged}}</td>
             </tr>
