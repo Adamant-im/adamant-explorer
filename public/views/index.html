@@ -59,7 +59,7 @@
               <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
               <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
               <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
-              <td class="text-right hidden-xs hidden-sm"><a href="/address/{{b.generator}}">{{b.generator}}</a></td>
+              <td class="text-right hidden-xs hidden-sm"><a href="/address/{{b.generator}}">{{b.delegate.username || 'N/A'}}</a></td>
               <td class="text-right hidden-xs hidden-sm">{{b.totalAmount}}</td>
               <td class="text-right hidden-xs hidden-sm">{{b.totalForged}}</td>
             </tr>

@@ -63,22 +63,76 @@ var NetworkMonitor = function ($scope) {
         };
     }
 
+    function Heights (peers) {
+        var inspect = function () {
+          function sortNumber(a,b) {
+            return b - a;
+          }
+          if (angular.isArray(peers)) {
+              return _.uniq(_.map(peers, function (p) { return p.height; })
+                      .sort(sortNumber), true).slice(0, 4);
+          } else {
+              return [];
+          }
+        };
+
+        this.counter = [0,0,0,0,0];
+        this.percent = [0,0,0,0,0];
+        this.heights = inspect();
+
+        this.detect = function (height) {
+            var detected = null;
+
+            if (height) {
+                for (var i = 0; i < this.heights.length; i++) {
+                    if (height === this.heights[i]) {
+                        detected = height;
+                        this.counter[i]++;
+                        break;
+                    }
+                }
+            }
+            if (detected == null) {
+                this.counter[4]++;
+            }
+        };
+
+        this.detected = function (height) {
+            return {
+                heights: this.heights,
+                counter: this.counter
+            };
+        };
+
+        this.calculatePercent = function (peers) {
+            for (var i = 0; i < this.counter.length; i++) {
+              this.percent[i] = Math.round((this.counter[i] / peers.length) * 100);
+            }
+            return this.percent;
+        };
+    }
+
     this.counter = function (peers) {
         var platforms = new Platforms(),
-            versions  = new Versions(peers.connected);
+            versions  = new Versions(peers.connected),
+            heights   = new Heights(peers.connected);
 
         for (var i = 0; i < peers.connected.length; i++) {
             var p = peers.connected[i];
 
             platforms.detect(p.osBrand);
             versions.detect(p.version);
+            heights.detect(p.height);
         }
 
         return {
             connected: peers.connected.length,
             disconnected: peers.disconnected.length,
             total: peers.connected.length + peers.disconnected.length,
-            platforms: platforms.detected(), versions: versions.detected()
+            platforms: platforms.detected(),
+            versions: versions.detected(),
+            heights: heights.detected(),
+            percents: heights.calculatePercent (peers.connected)
         };
     };
 
@@ -100,9 +154,9 @@ var NetworkMonitor = function ($scope) {
 
 var NetworkMap = function () {
     this.markers = {};
-    this.options = { center: [0, 0], zoom: 1, minZoom: 1, maxZoom: 10 };
+    this.options = { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 };
     this.map     = L.map('map', this.options);
-    this.cluster = L.markerClusterGroup({ maxClusterRadius: 80 });
+    this.cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
 
     L.Icon.Default.imagePath = '/img/leaflet';
 
@@ -133,7 +187,7 @@ var NetworkMap = function () {
             var p = peers.connected[i];
 
             if (!validLocation(p.location)) {
-                console.warn('Invalid geo-location data received for:', p.ip);
+                //console.warn('Invalid geo-location data received for:', p.ip);
                 continue;
             }
 
@@ -142,7 +196,7 @@ var NetworkMap = function () {
                     this.markers[p.ip] = L.marker(
                         [p.location.latitude, p.location.longitude],
                         { title: p.ipString, icon: platformIcons[p.osBrand.name] }
-                    ).addTo(this.map).bindPopup(popupContent(p))
+                    ).bindPopup(popupContent(p))
                 );
             }
             connected.push(p.ip);

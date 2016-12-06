@@ -17,6 +17,22 @@ angular.module('lisk_explorer')
           );
       };
   })
+  .filter('forgingTime', function () {
+      return function (seconds) {
+        if (seconds === 0) {
+          return 'Now!';
+        }
+        var minutes = Math.floor(seconds / 60);
+        var seconds = seconds - (minutes * 60);
+        if (minutes && seconds) {
+          return minutes + ' min ' + seconds + ' sec';
+        } else if (minutes) {
+          return minutes + ' min ';
+        } else {
+          return seconds + ' sec';
+        }
+      };
+  })
   .filter('fiat', function () {
       return function (amount) {
           if (isNaN(amount)) {
@@ -67,9 +83,12 @@ angular.module('lisk_explorer')
           return input.slice(start);
       };
   })
-  .filter('supply', function (liskFilter) {
-      return function (amount) {
-          return ((liskFilter(amount) / 100000000) * 100).toFixed(2);
+  .filter('supplyPercent', function () {
+      return function (amount, supply) {
+          if (isNaN(amount) || !(supply > 0)) {
+            return (0).toFixed(2);
+          }
+          return (amount / supply * 100).toFixed(2);
       };
   })
   .filter('timeAgo', function (epochStampFilter) {
@@ -120,13 +139,13 @@ angular.module('lisk_explorer')
   })
   .filter('txSender', function () {
       return function (tx) {
-          return (tx.senderUsername || (tx.knownSender && tx.knownSender.owner) || tx.senderId);
+          return ((tx.senderDelegate && tx.senderDelegate.username) || tx.senderUsername || (tx.knownSender && tx.knownSender.owner) || tx.senderId);
       };
   })
   .filter('txRecipient', function (txTypes) {
       return function (tx) {
           if (tx.type === 0) {
-              return (tx.recipientUsername || (tx.knownRecipient && tx.knownRecipient.owner) || tx.recipientId);
+              return ((tx.recipientDelegate && tx.recipientDelegate.username) || tx.recipientUsername || (tx.knownRecipient && tx.knownRecipient.owner) || tx.recipientId);
           } else {
               return (txTypes[parseInt(tx.type)]);
           }
@@ -135,5 +154,10 @@ angular.module('lisk_explorer')
   .filter('txType', function (txTypes) {
       return function (tx) {
           return txTypes[parseInt(tx.type)];
+      };
+  })
+  .filter('votes', function () {
+      return function (a) {
+          return (a.username || (a.knowledge && a.knowledge.owner) || a.address);
       };
   });

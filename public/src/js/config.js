@@ -68,7 +68,6 @@ angular.module('lisk_explorer')
           $rootScope.titleDetail = '';
           $rootScope.title = $route.current.title;
           $rootScope.isCollapsed = true;
-          $rootScope.currentAddr = null;
 
           $location.hash($routeParams.scrollTo);
           $anchorScroll();

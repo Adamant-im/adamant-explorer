@@ -170,6 +170,45 @@
       </div>
     </div>
   </div>
+  <div class="row" data-ng-if="peers" data-ng-cloak>
+    <div class="col-xs-12 col-sm-12 big-info">
+      <p class="small-title">Best heights</p>
+
+      <div class="row heights">
+        <div class="col-xs-12">
+          <div class="height" data-ng-if="counter.heights.heights[0]">
+            <p class="big-details">
+              <span class="height-num height-best">{{counter.heights.heights[0] || '~'}}</span>
+              <span class="counter height-counter">{{counter.heights.counter[0] || 0}} &bull; {{counter.percents[0] || 0}}%</span>
+            </p>
+          </div>
+          <div class="height" data-ng-if="counter.heights.heights[1]">
+            <p class="big-details">
+              <span class="height-num">{{counter.heights.heights[1] || '~'}}</span>
+              <span class="counter height-counter">{{counter.heights.counter[1] || 0}} &bull; {{counter.percents[1] || 0}}%</span>
+            </p>
+          </div>
+          <div class="height" data-ng-if="counter.heights.heights[2]">
+            <p class="big-details">
+              <span class="height-num">{{counter.heights.heights[2] || '~'}}</span>
+              <span class="counter height-counter">{{counter.heights.counter[2] || 0}} &bull; {{counter.percents[2] || 0}}%</span>
+            </p>
+          </div>
+          <div class="height" data-ng-if="counter.heights.heights[3]">
+            <p class="big-details">
+              <span class="height-num">{{counter.heights.heights[3] || '~'}}</span>
+              <span class="counter height-counter">{{counter.heights.counter[3] || 0}} &bull; {{counter.percents[3] || 0}}%</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="text-muted text-center">{{counter.heights.counter[4] || 0}} &bull; {{counter.percents[4] || 0}}% connected peers stucked on other height</p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-xs-12 big-info">
       <tabset justified="true" class="peers">

@@ -81,12 +81,14 @@ div.platforms span.freebsd-counter {
   color: #FF3300;
 }
 
-div.versions {
+div.versions,
+div.heights {
   text-align: center;
   min-height: 58px;
 }
 
-div.versions div.version {
+div.versions div.version,
+div.heights div.height {
   display: inline-block;
   padding-left: 30px;
   padding-right: 30px;
@@ -102,10 +104,25 @@ div.versions span.version-num {
   background-color: #35393B;
 }
 
-div.versions span.counter {
+div.versions span.counter,
+div.heights span.counter {
   padding: 3px;
   border-radius: 10px;
   background-color: #E8E8E9;
+}
+
+div.heights span.height-num {
+  background-color: #35393b;
+  border-radius: 10px;
+  color: #fff;
+  display: inline-block;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 3px;
+}
+
+div.heights span.height-best {
+  background-color: green;
 }
 
 @media (max-width: 1200px) {
@@ -115,11 +132,15 @@ div.versions span.counter {
   }
 
   div.platforms span.counter,
+  div.heights span.counter,
   div.versions span.counter {
     display: block;
   }
 
   div.versions span.version-num {
+    margin-bottom: 5px;
+  }
+  div.heights span.height-num {
     margin-bottom: 5px;
   }
 }
@@ -157,4 +178,8 @@ div.versions span.counter {
 .peers .state-1:before {
   content: "\E083";
   color: #5f696e;
+}
+
+.peers td .broadhash {
+  max-width: 355px;
 }

@@ -8,6 +8,8 @@
         <th>Status</th>
         <th><a href="" data-ng-click="table.order('version')" class="sort-order">Version <span data-ng-show="table.predicate === 'version'" data-ng-class="{reverse:table.reverse}"></span></a></th>
         <th><a href="" data-ng-click="table.order('os')" class="sort-order">Platform <span data-ng-show="table.predicate === 'os'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+        <th class="hidden-xs hidden-sm"><a href="" data-ng-click="table.order('height')" class="sort-order">Height <span data-ng-show="table.predicate === 'height'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+        <th class="hidden-xs hidden-sm hidden-md"><a href="" data-ng-click="table.order('broadhash')" class="sort-order">Broadhash <span data-ng-show="table.predicate === 'broadhash'" data-ng-class="{reverse:table.reverse}"></span></a></th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +25,10 @@
         <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
         <td><span class="text-muted">{{p.version}}</span></td>
         <td><span os-icon os="p.os" brand="p.osBrand"></span></td>
+        <td class="hidden-xs hidden-sm">{{p.height}}</td>
+        <td class="hidden-xs hidden-sm hidden-md">
+          <span class="text-muted ellipsis broadhash">{{p.broadhash}}</span>
+        </td>
       </tr>
     </tbody>
   </table>
