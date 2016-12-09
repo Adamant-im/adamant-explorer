@@ -2,7 +2,7 @@
 
 angular.module('lisk_explorer.tools').service('forgingStatus',
   function ($rootScope, epochStampFilter, roundFilter) {
-      return function (delegate, forceNotForging) {
+      return function (delegate) {
           var status = { updatedAt: delegate.blocksAt },
               statusAge = 0, blockAge = 0;
 
@@ -19,10 +19,10 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
               status.lastBlock = null;
           }
 
-          if (forceNotForging && status.awaitingSlot > 1) {
+          if (!delegate.isRoundDelegate && status.awaitingSlot > 1) {
               // Missed block in current and last round = not forging
               status.code = 2;
-          } else if (forceNotForging && status.awaitingSlot === 1) {
+          } else if (!delegate.isRoundDelegate && status.awaitingSlot === 1) {
               // Missed block in current round
               status.code = 1;
           // For delegates which not forged a signle block yet
