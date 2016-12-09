@@ -24,7 +24,7 @@ angular.module('lisk_explorer.tools')
                           scope.tooltip.class = 'tooltip-grey';
                           break;
                       case 4: // Awaiting slot, but missed block in last round
-                          element.removeClass('fa-circle green orange').addClass('fa-circle-o orange');
+                          element.removeClass('fa-circle green red').addClass('fa-circle-o orange');
                           scope.tooltip.html = '<span class="avaiting-slot">Awaiting slot</span>';
                           scope.tooltip.class = 'tooltip-grey';
                           break;
