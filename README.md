@@ -1,9 +1,10 @@
 # Lisk Blockchain Explorer
 
-Lisk blockchain explorer version 0.3. Works with Lisk wallet API. Uses Redis for caching data and Freegeoip for IP geo-location.
+Lisk blockchain explorer version 1.0.0 works in conjunction with the Lisk core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 ## Prerequisites
 
+ * Nodejs v4.0.0 or higher (https://nodejs.org/) 
  * Redis (http://redis.io)
  * Freegeoip (https://github.com/fiorix/freegeoip)
  * Bower (http://bower.io/)
