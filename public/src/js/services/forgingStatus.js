@@ -25,6 +25,18 @@ angular.module('lisk_explorer.tools').service('forgingStatus',
           } else if (forceNotForging && status.awaitingSlot === 1) {
               // Missed block in current round
               status.code = 1;
+          // For delegates which not forged a signle block yet
+          } else if (!status.blockAt && status.updatedAt) {
+            if (!delegate.isRoundDelegate && delegate.missedblocks === 1) {
+              // Missed block in current round
+              status.code = 1;
+            } else if (delegate.missedblocks === 1) {
+              // Missed block in previous round
+              status.code = 4;
+            } else if (delegate.missedblocks > 1) {
+              // Missed more than 1 block = not forging
+              status.code = 2;
+            }
           } else if (!status.blockAt || !status.updatedAt) {
               // Awaiting status or unprocessed
               status.code = 5;
