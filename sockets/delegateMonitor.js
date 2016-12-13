@@ -222,11 +222,11 @@ module.exports = function (app, connectionHandler, socket) {
                     json : true
                 }, function (err, response, body) {
                     if (err || response.statusCode !== 200) {
-                        return error({ success : false, error : (err || 'Response was unsuccessful') });
+                        return callback((err || 'Response was unsuccessful'));
                     } else if (body.success === true) {
                         return callback(null, { blocks: body.blocks });
                     } else {
-                        return error({ success : false, error : body.error });
+                        return callback(body.error);
                     }
                 });
             },
