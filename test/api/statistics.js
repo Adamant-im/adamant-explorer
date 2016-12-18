@@ -18,33 +18,57 @@ describe("Statistics API", function() {
         node.get('/api/statistics/getPeers', done);
     }
 
+    function checkPeersList(id) {
+        for (var i = 0; i < id.length; i++) {
+            if (id[i + 1]) {
+                node.expect(id[i]).to.have.any.keys(
+                    'ip',
+                    'port',
+                    'state',
+                    'os',
+                    "version",
+                    'broadhash',
+                    'height',
+                    'osBrand',
+                    'humanState',
+                    'location'
+                )
+            }
+        }
+    }
+
+    function checkBlock(id) {
+        node.expect(id).to.have.any.keys(
+            'totalForged',
+            'confirmations',
+            'blockSignature',
+            'generatorId',
+            'generatorPublicKey',
+            'payloadHash',
+            'payloadLength',
+            'reward',
+            'id',
+            'version',
+            'timestamp',
+            'height',
+            'previousBlock',
+            'numberOfTransactions',
+            'totalAmount',
+            'totalFee'
+        )
+    }
+
     /*Define api endpoints to test */
     describe("GET /api/statistics/getLastBlock", function() {
         it('should be ok', function(done) {
             getLastBlock(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('block');
-                node.expect(res.body.block).to.have.property('totalForged');
-                node.expect(res.body.block).to.have.property('confirmations');
-                node.expect(res.body.block).to.have.property('blockSignature');
-                node.expect(res.body.block).to.have.property('generatorId');
-                node.expect(res.body.block).to.have.property('generatorPublicKey');
-                node.expect(res.body.block).to.have.property('payloadHash');
-                node.expect(res.body.block).to.have.property('payloadLength');
-                node.expect(res.body.block).to.have.property('reward');
-                node.expect(res.body.block).to.have.property('id');
-                node.expect(res.body.block).to.have.property('version');
-                node.expect(res.body.block).to.have.property('timestamp');
-                node.expect(res.body.block).to.have.property('height');
-                node.expect(res.body.block).to.have.property('previousBlock');
-                node.expect(res.body.block).to.have.property('numberOfTransactions');
-                node.expect(res.body.block).to.have.property('totalAmount');
-                node.expect(res.body.block).to.have.property('totalFee');
+                checkBlock(res.body.block);
                 done();
             });
         });
     });
-
 
     describe("GET /api/statistics/getBlocks", function() {
         it('should be ok', function(done) {
@@ -58,34 +82,21 @@ describe("Statistics API", function() {
                 node.expect(res.body.volume).to.have.property('blocks');
                 node.expect(res.body.volume).to.have.property('amount');
                 node.expect(res.body).to.have.property('best');
-                node.expect(res.body.best).to.have.property('totalForged');
-                node.expect(res.body.best).to.have.property('confirmations');
-                node.expect(res.body.best).to.have.property('blockSignature');
-                node.expect(res.body.best).to.have.property('generatorId');
-                node.expect(res.body.best).to.have.property('generatorPublicKey');
-                node.expect(res.body.best).to.have.property('payloadHash');
-                node.expect(res.body.best).to.have.property('payloadLength');
-                node.expect(res.body.best).to.have.property('reward');
-                node.expect(res.body.best).to.have.property('id');
-                node.expect(res.body.best).to.have.property('version');
-                node.expect(res.body.best).to.have.property('timestamp');
-                node.expect(res.body.best).to.have.property('height');
-                node.expect(res.body.best).to.have.property('previousBlock');
-                node.expect(res.body.best).to.have.property('numberOfTransactions');
-                node.expect(res.body.best).to.have.property('totalAmount');
-                node.expect(res.body.best).to.have.property('totalFee');
+                checkBlock(res.body.best);
                 done();
             });
         }).timeout(60000);
     });
+
+
 
     describe("GET /api/statistics/getPeers", function() {
         it('should be ok', function(done) {
             getPeers(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('list');
-                node.expect(res.body.list).to.have.property('connected');
-                node.expect(res.body.list).to.have.property('disconnected');
+                checkPeersList(res.body.list.connected);
+                checkPeersList(res.body.list.disconnected);
                 done();
             });
         });
