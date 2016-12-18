@@ -11,7 +11,7 @@ var params = {
     limit: 100
 };
 
-describe("Accounts API", function() {
+describe("Transactions API", function() {
 
     /*Define functions for use within tests*/
     function getTransaction(id, done) {
