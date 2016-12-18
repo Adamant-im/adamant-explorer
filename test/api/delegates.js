@@ -2,6 +2,13 @@
 
 var node = require('./../node.js');
 
+var params = {
+    publicKey: 'a24416a05bef8874fb1c638105d892162f7d5736b7a2deda318e976fd80f64e9',
+    delegate: 'genesis_1',
+    address: '6307319849853921018L',
+    offset: 20
+}
+
 describe("Delegates API", function() {
 
     /*Define functions for use within tests*/
@@ -47,7 +54,7 @@ describe("Delegates API", function() {
     describe("GET /api/delegates/getStandby", function() {
 
         it('should be ok', function(done) {
-            getStandby('20', function(err, res) {
+            getStandby(params.offset, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
                 node.expect(res.body).to.have.property('pagination');
@@ -81,7 +88,7 @@ describe("Delegates API", function() {
     describe("GET /api/delegates/getLastBlocks", function() {
 
         it('should be ok', function(done) {
-            getLastBlocks('a24416a05bef8874fb1c638105d892162f7d5736b7a2deda318e976fd80f64e9', '10', function(err, res) {
+            getLastBlocks(params.publickKey, '10', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('blocks');
                 done();
@@ -92,9 +99,9 @@ describe("Delegates API", function() {
     describe("GET /api/getSearch", function() {
 
         it('should be ok', function(done) {
-            getSearch('genesis_1', function(err, res) {
+            getSearch(params.delegate, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
-                node.expect(res.body.address).to.have.equal('6307319849853921018L');
+                node.expect(res.body.address).to.have.equal(params.address);
                 done();
             });
         });
