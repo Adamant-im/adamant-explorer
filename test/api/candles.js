@@ -14,13 +14,35 @@ describe("Candles API", function() {
         node.get('/api/candles/getStatistics?e=' + e, done);
     }
 
+    function checkCandles(id) {
+        for (var i = 0; i < id.length; i++) {
+            if (id[i + 1]) {
+                node.expect(id[i]).to.have.all.keys(
+                    'timestamp',
+                    'date',
+                    'high',
+                    'low',
+                    'open',
+                    "close",
+                    'liskVolume',
+                    'btcVolume',
+                    'firstTrade',
+                    'lastTrade',
+                    'nextStart',
+                    'numTrades'
+                )
+            }
+        }
+    }
+
     /*Define api endpoints to test */
     describe("GET /api/candles/getCandles", function() {
 
         it('should be ok with no inputs', function(done) {
             getCandles('', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
-                node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
+                node.expect(res.body).to.have.property('exchange');
+                checkCandles(res.body.candles);
                 done();
             });
         });
@@ -29,14 +51,15 @@ describe("Candles API", function() {
             getCandles('poloniex', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
-                node.expect(res.body).to.have.property('candles');
+                checkCandles(res.body.candles);;
                 done();
             });
         });
 
-        it('should not be ok with bittrex', function(done) {
-            getCandles('bittrex', '', function(err, res) {
+        it('should not be ok with unknown_exchange', function(done) {
+            getCandles('unknown_exchange', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
                 done();
             });
         });
@@ -45,6 +68,7 @@ describe("Candles API", function() {
             getCandles('', 'minute', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('minute');
+                checkCandles(res.body.candles);
                 done();
             });
         });
@@ -53,6 +77,8 @@ describe("Candles API", function() {
             getCandles('', 'hour', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('hour');
+                node.expect(res.body).to.have.property('exchange');
+                checkCandles(res.body.candles);
                 done();
             });
         });
@@ -61,11 +87,11 @@ describe("Candles API", function() {
             getCandles('', 'day', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('day');
+                node.expect(res.body).to.have.property('exchange');
+                checkCandles(res.body.candles);
                 done();
             });
         });
-
-
     });
 
     /* -- if all fail, check lisk for topAccounts = true */
@@ -74,7 +100,7 @@ describe("Candles API", function() {
         it('should be ok with no input', function(done) {
             getStatistics('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
-                node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
+                node.expect(res.body).to.have.property('exchange');
                 done();
             });
         });
@@ -87,15 +113,12 @@ describe("Candles API", function() {
             });
         });
 
-        it('should not be ok bittrex', function(done) {
-            getStatistics('bittrex', function(err, res) {
+        it('should not be ok with unknown_exchange', function(done) {
+            getStatistics('unknown_exchange', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
                 done();
             });
         });
-
-
     });
-
-
 });
