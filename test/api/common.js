@@ -2,6 +2,13 @@
 
 var node = require('./../node.js');
 
+var params = {
+    blockId: '7807109686729042739',
+    address: '6307319849853921018L',
+    tx: '16733264093386669800',
+    username: 'genesis_1'
+}
+
 describe("Common API", function() {
 
     /*Define functions for use within tests*/
@@ -43,52 +50,61 @@ describe("Common API", function() {
 
     describe("GET /api/search", function() {
 
-        it('using known block be ok ', function(done) {
-            getSearch('7807109686729042739', function(err, res) {
+        it('using known block should be ok', function(done) {
+            getSearch(params.blockId, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.type).to.equal('block')
-                node.expect(res.body.id).to.equal('7807109686729042739');
+                node.expect(res.body.id).to.equal(params.blockId);
                 done();
             });
         });
 
-        it('using known height be ok ', function(done) {
+        it('using known height should be ok', function(done) {
             getSearch('1', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.type).to.equal('block')
-                node.expect(res.body.id).to.equal('7807109686729042739');
+                node.expect(res.body.id).to.equal(params.blockId);
                 done();
             });
         });
 
-        it('using known address', function(done) {
-            getSearch('6365926013346518016L', function(err, res) {
+        it('using known address should be ok', function(done) {
+            getSearch(params.address, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.type).to.equal('address')
-                node.expect(res.body.id).to.equal('6365926013346518016L');
+                node.expect(res.body.id).to.equal(params.address);
                 done();
             });
         });
 
-        it('using known transaction', function(done) {
-            getSearch('16733264093386669800', function(err, res) {
+        it('using known transaction should be ok', function(done) {
+            getSearch(params.tx, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.type).to.equal('tx')
-                node.expect(res.body.id).to.equal('16733264093386669800');
+                node.expect(res.body.id).to.equal(params.tx);
                 done();
             });
         });
 
-        it('using known delegate', function(done) {
-            getSearch('genesis_1', function(err, res) {
+        it('using known delegate should be ok', function(done) {
+            getSearch(params.username, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.type).to.equal('address')
-                node.expect(res.body.id).to.equal('6307319849853921018L');
+                node.expect(res.body.id).to.equal(params.address);
                 done();
             });
         });
 
-        it('using no Search should fail', function(done) {
+        it('using partial known delegate should be ok', function(done) {
+            getSearch('gene', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.ok;
+                node.expect(res.body.type).to.equal('address')
+                node.expect(res.body.id).to.equal(params.address);
+                done();
+            });
+        });
+
+        it('using no search should fail', function(done) {
             getSearch('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error').to.be.a('string');
