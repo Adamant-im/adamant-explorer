@@ -78,13 +78,13 @@ describe("Delegates API", function() {
     function checkDelegates(id) {
         for (var i = 0; i < id.length; i++) {
             if (id[i + 1]) {
-                checkDelegate(id[1]);
+                checkDelegate(id[i]);
             }
         }
     }
 
     function checkDelegate(id) {
-        node.expect(id).to.have.contain.all.keys(
+        node.expect(id).to.contain.all.keys(
             'productivity',
             'username',
             'address',
