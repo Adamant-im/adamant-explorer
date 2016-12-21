@@ -3,12 +3,7 @@
 var DelegateMonitor = function ($scope, forgingMonitor) {
     this.updateActive = function (active) {
         _.each(active.delegates, function (d) {
-            if (d.isRoundDelegate) {
-              d.forgingStatus = forgingMonitor.getStatus(d, false);
-            } else {
-              // Delegate already forged in current round, forceNotForging check
-              d.forgingStatus = forgingMonitor.getStatus(d, true);
-            }
+            d.forgingStatus = forgingMonitor.getStatus(d);
         });
         $scope.activeDelegates = active.delegates;
         updateForgingTotals(active.delegates);
@@ -53,9 +48,7 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 
     this.updateLastBlocks = function (delegate) {
         _.each($scope.activeDelegates, function (d) {
-            if (!d.isRoundDelegate) {
-              d.forgingStatus = forgingMonitor.getStatus(d, true);
-            }
+            d.forgingStatus = forgingMonitor.getStatus(d);
         });
 
         var existing = _.find($scope.activeDelegates, function (d) {
@@ -64,7 +57,7 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
         if (existing) {
             existing.blocksAt = delegate.blocksAt;
             existing.blocks = delegate.blocks;
-            existing.forgingStatus = forgingMonitor.getStatus(delegate, false);
+            existing.forgingStatus = forgingMonitor.getStatus(delegate);
         }
         updateForgingTotals($scope.activeDelegates);
         updateForgingProgress($scope.forgingTotals);

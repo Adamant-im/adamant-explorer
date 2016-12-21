@@ -1,8 +1,8 @@
 'use strict';
 
 var ForgingMonitor = function (forgingStatus) {
-    this.getStatus = function (delegate, forceNotForging) {
-        return forgingStatus(delegate, forceNotForging);
+    this.getStatus = function (delegate) {
+        return forgingStatus(delegate);
     };
 
     this.getforgingTotals = function (delegates) {
