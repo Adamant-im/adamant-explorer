@@ -19,7 +19,7 @@ describe('Blocks API', function() {
         node.get('/api/getLastBlocks?n=' + id, done);
     }
 
-		function getBlockStatus(done) {
+    function getBlockStatus(done) {
         node.get('/api/getBlockStatus', done);
     }
 
@@ -30,8 +30,6 @@ describe('Blocks API', function() {
     function getHeight(id, done) {
         node.get('/api/getHeight?height=' + id, done);
     }
-
-
 
     function checkPagination(id) {
         node.expect(id).to.have.property('currentPage');
@@ -132,7 +130,7 @@ describe('Blocks API', function() {
 
     describe('GET /api/getBlockStatus', function() {
         it('should be ok', function(done) {
-            getBlockStatus( function(err, res) {
+            getBlockStatus(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('broadhash').to.be.a('string');
                 node.expect(res.body).to.have.property('epoch').to.be.a('string');
@@ -189,7 +187,7 @@ describe('Blocks API', function() {
 
     describe('GET /api/getHeight', function() {
 
-        it('using known height be ok ', function(done) {
+        it('using known height be ok', function(done) {
             getHeight(params.height, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('block').to.be.a('object');
@@ -198,7 +196,7 @@ describe('Blocks API', function() {
             });
         });
 
-        it('using invalid heightshould fail', function(done) {
+        it('using invalid height should fail', function(done) {
             getHeight('-1', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error').to.be.a('string');

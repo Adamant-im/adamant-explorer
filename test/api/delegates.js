@@ -123,7 +123,7 @@ describe('Delegates API', function() {
     function checkTransactions(id) {
         for (var i = 0; i < id.length; i++) {
             if (id[i + 1]) {
-                node.expect(id[i]).to.have.any.keys(
+                node.expect(id[i]).to.contain.all.keys(
                     'asset',
                     'delegate',
                     'confirmations',

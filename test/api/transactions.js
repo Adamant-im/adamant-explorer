@@ -37,7 +37,7 @@ describe('Transactions API', function() {
     function checkTransactionsBody(id) {
         for (var i = 0; i < id.length; i++) {
             if (id[i + 1]) {
-                node.expect(id[i]).to.have.any.keys(
+                node.expect(id[i]).to.contain.all.keys(
                     'usd',
                     'recipientId',
                     'senderId',
@@ -70,7 +70,7 @@ describe('Transactions API', function() {
             getTransaction(params.transactionId, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('transaction');
-                node.expect(res.body.transaction).to.have.keys(
+                node.expect(res.body.transaction).to.contain.all.keys(
                     'usd',
                     'recipientId',
                     'senderId',

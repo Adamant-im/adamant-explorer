@@ -21,7 +21,7 @@ describe('Statistics API', function() {
     function checkPeersList(id) {
         for (var i = 0; i < id.length; i++) {
             if (id[i + 1]) {
-                node.expect(id[i]).to.have.any.keys(
+                node.expect(id[i]).to.contain.all.keys(
                     'ip',
                     'port',
                     'state',
@@ -38,7 +38,7 @@ describe('Statistics API', function() {
     }
 
     function checkBlock(id) {
-        node.expect(id).to.have.any.keys(
+        node.expect(id).to.contain.all.keys(
             'totalForged',
             'confirmations',
             'blockSignature',
