@@ -87,7 +87,8 @@ describe('Transactions API', function() {
                     'signatures',
                     'confirmations',
                     'asset',
-                    'knownRecipient'
+                    'knownRecipient',
+                    'recipientPublicKey'
                 );
                 done();
             });
