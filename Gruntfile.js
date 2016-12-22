@@ -119,6 +119,7 @@ module.exports = function (grunt) {
                   'redis.js',
                   'sockets/**/*.js',
                   'tasks/**/*.js',
+                  'test/**/*.js',
                   'utils**/*.js']
         },
         markdown: {
