@@ -40,7 +40,7 @@ describe("Accounts API", function() {
             'voters',
             'incoming_cnt',
             'outgoing_cnt'
-        )
+        );
     }
 
     function checkTopAccounts(id) {
@@ -58,7 +58,7 @@ describe("Accounts API", function() {
             'publicKey',
             'usd',
             'knowledge'
-        )
+        );
     }
 
     /*Define api endpoints to test */
@@ -103,7 +103,6 @@ describe("Accounts API", function() {
                 done();
             });
         });
-
     });
 
     /* -- if all fail, check lisk for topAccounts = true */
@@ -135,6 +134,7 @@ describe("Accounts API", function() {
                 done();
             });
         });
+
         it('should be ok with offset 0 and limit 0 and return 100', function(done) {
             getTopAccounts('0', '0', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
