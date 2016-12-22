@@ -3,7 +3,7 @@
 
 var node = require('./../node.js');
 
-describe("Candles API", function() {
+describe('Candles API', function() {
 
     /*Define functions for use within tests*/
     function getCandles(e, d, done) {
@@ -23,20 +23,20 @@ describe("Candles API", function() {
                     'high',
                     'low',
                     'open',
-                    "close",
+                    'close',
                     'liskVolume',
                     'btcVolume',
                     'firstTrade',
                     'lastTrade',
                     'nextStart',
                     'numTrades'
-                )
+                );
             }
         }
     }
 
     /*Define api endpoints to test */
-    describe("GET /api/candles/getCandles", function() {
+    describe('GET /api/candles/getCandles', function() {
 
         it('should be ok with no inputs', function(done) {
             getCandles('', '', function(err, res) {
@@ -51,7 +51,7 @@ describe("Candles API", function() {
             getCandles('poloniex', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
-                checkCandles(res.body.candles);;
+                checkCandles(res.body.candles);
                 done();
             });
         });
@@ -95,7 +95,7 @@ describe("Candles API", function() {
     });
 
     /* -- if all fail, check lisk for topAccounts = true */
-    describe("GET /api/candles/getStatistics", function() {
+    describe('GET /api/candles/getStatistics', function() {
 
         it('should be ok with no input', function(done) {
             getStatistics('', function(err, res) {

@@ -7,10 +7,10 @@ var params = {
     address: '16009998050678037905L',
     address_delegate: '6307319849853921018L',
     excessive_offset: '1000000'
-}
+};
 
 
-describe("Accounts API", function() {
+describe('Accounts API', function() {
 
     /*Define functions for use within tests*/
     function getAccount(id, done) {
@@ -62,7 +62,7 @@ describe("Accounts API", function() {
     }
 
     /*Define api endpoints to test */
-    describe("GET /api/getAccount", function() {
+    describe('GET /api/getAccount', function() {
 
         it('should be ok with Genesis address', function(done) {
             getAccount(params.address, function(err, res) {
@@ -106,7 +106,7 @@ describe("Accounts API", function() {
     });
 
     /* -- if all fail, check lisk for topAccounts = true */
-    describe("GET /api/getTopAccounts", function() {
+    describe('GET /api/getTopAccounts', function() {
 
         it('should be ok offset 0 and limit 100 and return 100', function(done) {
             getTopAccounts('0', '100', function(err, res) {

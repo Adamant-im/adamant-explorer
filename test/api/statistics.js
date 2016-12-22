@@ -3,7 +3,7 @@
 
 var node = require('./../node.js');
 
-describe("Statistics API", function() {
+describe('Statistics API', function() {
 
     /*Define functions for use within tests*/
     function getLastBlock(done) {
@@ -26,13 +26,13 @@ describe("Statistics API", function() {
                     'port',
                     'state',
                     'os',
-                    "version",
+                    'version',
                     'broadhash',
                     'height',
                     'osBrand',
                     'humanState',
                     'location'
-                )
+                );
             }
         }
     }
@@ -55,11 +55,11 @@ describe("Statistics API", function() {
             'numberOfTransactions',
             'totalAmount',
             'totalFee'
-        )
+        );
     }
 
     /*Define api endpoints to test */
-    describe("GET /api/statistics/getLastBlock", function() {
+    describe('GET /api/statistics/getLastBlock', function() {
         it('should be ok', function(done) {
             getLastBlock(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -70,7 +70,7 @@ describe("Statistics API", function() {
         });
     });
 
-    describe("GET /api/statistics/getBlocks", function() {
+    describe('GET /api/statistics/getBlocks', function() {
         it('should be ok', function(done) {
             getBlocks(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -90,7 +90,7 @@ describe("Statistics API", function() {
 
 
 
-    describe("GET /api/statistics/getPeers", function() {
+    describe('GET /api/statistics/getPeers', function() {
         it('should be ok', function(done) {
             getPeers(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;

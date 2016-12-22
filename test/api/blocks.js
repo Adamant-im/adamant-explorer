@@ -10,9 +10,9 @@ var params = {
     generatorPublicKey: '73ec4adbd8f99f0d46794aeda3c3d86b245bd9d27be2b282cdd38ad21988556b',
     totalAmount: 100000000,
     totalFee: 0,
-}
+};
 
-describe("Blocks API", function() {
+describe('Blocks API', function() {
 
     /*Define functions for use within tests*/
     function getLastBlocks(id, done) {
@@ -103,7 +103,7 @@ describe("Blocks API", function() {
     }
 
     /*Define api endpoints to test */
-    describe("GET /api/getLastBlocks", function() {
+    describe('GET /api/getLastBlocks', function() {
 
         it('should be ok', function(done) {
             getLastBlocks('0', function(err, res) {
@@ -130,7 +130,7 @@ describe("Blocks API", function() {
         });
     });
 
-    describe("GET /api/getBlockStatus", function() {
+    describe('GET /api/getBlockStatus', function() {
         it('should be ok', function(done) {
             getBlockStatus( function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -147,7 +147,7 @@ describe("Blocks API", function() {
         });
     });
 
-    describe("GET /api/getBlock", function() {
+    describe('GET /api/getBlock', function() {
 
         it('using known blockId should be ok', function(done) {
             getBlock(params.id, function(err, res) {
@@ -187,7 +187,7 @@ describe("Blocks API", function() {
         });
     });
 
-    describe("GET /api/getHeight", function() {
+    describe('GET /api/getHeight', function() {
 
         it('using known height be ok ', function(done) {
             getHeight(params.height, function(err, res) {

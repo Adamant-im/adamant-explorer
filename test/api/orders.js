@@ -2,7 +2,7 @@
 
 var node = require('./../node.js');
 
-describe("Orders API", function() {
+describe('Orders API', function() {
 
     /*Define functions for use within tests*/
     function getOrders(id, done) {
@@ -17,7 +17,7 @@ describe("Orders API", function() {
                     'bid',
                     'price',
                     'amount'
-                )
+                );
             }
         }
     }
@@ -33,10 +33,10 @@ describe("Orders API", function() {
 
 
     /*Define api endpoints to test */
-    describe("GET /api/orders/getOrders", function() {
+    describe('GET /api/orders/getOrders', function() {
 
         it('should be ok with poloniex', function(done) {
-            getOrders("poloniex", function(err, res) {
+            getOrders('poloniex', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('orders');
                 checkOrders(res.body.orders.depth);

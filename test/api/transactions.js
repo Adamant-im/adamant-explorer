@@ -11,7 +11,7 @@ var params = {
     limit: 100
 };
 
-describe("Transactions API", function() {
+describe('Transactions API', function() {
 
     /*Define functions for use within tests*/
     function getTransaction(id, done) {
@@ -42,7 +42,7 @@ describe("Transactions API", function() {
                     'recipientId',
                     'senderId',
                     'senderPublicKey',
-                    "senderDelegate",
+                    'senderDelegate',
                     'knownSender',
                     'timestamp',
                     'type',
@@ -58,13 +58,13 @@ describe("Transactions API", function() {
                     'recipientDelegate',
                     'knownRecipient',
                     'recipientPublicKey'
-                )
+                );
             }
         }
     }
 
     /*Define api endpoints to test */
-    describe("GET /api/getTransaction", function() {
+    describe('GET /api/getTransaction', function() {
 
         it('should be ok with Genesis transaction', function(done) {
             getTransaction(params.transactionId, function(err, res) {
@@ -88,7 +88,7 @@ describe("Transactions API", function() {
                     'confirmations',
                     'asset',
                     'knownRecipient'
-                )
+                );
                 done();
             });
         });
@@ -100,18 +100,10 @@ describe("Transactions API", function() {
                 done();
             });
         });
-
-        it('should be not be ok with double quotes', function(done) {
-            getTransaction('""', function(err, res) {
-                node.expect(res.body).to.have.property('success').to.be.not.ok;
-                node.expect(res.body).to.have.property('error');
-                done();
-            });
-        });
     });
 
     /* We are skipping this temporarily, theres a call back error that needs to be fixed */
-    describe("GET /api/getUnconfirmedTransactions", function() {
+    describe('GET /api/getUnconfirmedTransactions', function() {
 
         it.skip('should be ok', function(done) {
             getUnconfirmedTransactions(function(err, res) {
@@ -121,7 +113,7 @@ describe("Transactions API", function() {
         });
     });
 
-    describe("GET /api/getLastTransactions", function() {
+    describe('GET /api/getLastTransactions', function() {
         it('should be ok', function(done) {
             getLastTransactions(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -132,7 +124,7 @@ describe("Transactions API", function() {
         });
     });
 
-    describe("GET /api/getTransactionsByAddress", function() {
+    describe('GET /api/getTransactionsByAddress', function() {
         it('should be ok with Genesis address', function(done) {
             getTransactionsByAddress(params.address, '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -160,7 +152,7 @@ describe("Transactions API", function() {
         });
     });
 
-    describe("GET /api/getTransactionsByBlock", function() {
+    describe('GET /api/getTransactionsByBlock', function() {
         it('should be ok with Genesis block', function(done) {
             getTransactionsByBlock(params.blockId, '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
