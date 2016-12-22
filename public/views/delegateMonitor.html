@@ -290,7 +290,7 @@
               <tbody>
                 <tr data-ng-repeat="d in activeDelegates | orderBy:natural(tables.active.predicate):tables.active.reverse track by d.rate">
                   <td>{{d.rate}}</td>
-                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}">{{d.username}}</a></td>
+                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                   <td class="hidden-xs hidden-sm">{{d.forged | lisk}} <span class="text-muted">LSK</span></td>
                   <td class="hidden-xs hidden-sm">{{d.forgingTime | forgingTime}}</td>
@@ -324,7 +324,7 @@
               <tbody>
                 <tr data-ng-repeat='d in standbyDelegates | orderBy:natural(tables.standby.predicate):tables.standby.reverse track by d.rate'>
                   <td>{{d.rate}}</td>
-                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}">{{d.username}}</a></td>
+                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                   <td class="hidden-xs">{{d.productivity || 0}}%</td>
                   <td class="hidden-xs">{{d.approval}}%</td>

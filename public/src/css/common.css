@@ -258,7 +258,7 @@ a:hover {
 }
 
 .navbar-form {
-  margin-top: 20px;
+  margin-top: 23px;
 }
 
 @media (max-width: 1200px) {
@@ -302,24 +302,18 @@ a:hover {
 
 .navbar-default .navbar-brand {
   color: white;
-  padding: 10px;
+  padding: 13px;
   height: 76px;
 }
 
 .navbar-brand .logo {
-  background-image: url(/img/logo.png);
   height: 55px;
   width: 100px;
 }
 
-@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
-       only screen and (-moz-min-device-pixel-ratio: 1.5),
-       only screen and (-o-min-device-pixel-ratio: 3/2),
-       only screen and (min-device-pixel-ratio: 1.5) {
-  .navbar-brand .logo {
-    background-image: url(/img/logo2x.png);
-    background-size: 100%;
-  }
+.navbar-brand .logo img {
+  height: 100%;
+  width: 100%;
 }
 
 .navbar-form .form-control {
@@ -387,10 +381,9 @@ a:hover {
   background-color: #655740;
   border-radius: 3px;
   margin-left: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
   min-width: 389.375px;
   min-height: 29px;
-  padding: 2px 0px;
   font-size: 12px;
   color: #eee;
   text-align: center;
@@ -1046,4 +1039,8 @@ a.sort-order span.reverse:after {
     font-weight: 300;
     line-height: 1.2;
     margin-bottom: 20px;
+}
+.proposal-icon {
+    vertical-align: middle;
+    margin-top: -5px;
 }
