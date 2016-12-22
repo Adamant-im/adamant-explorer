@@ -129,7 +129,7 @@
                 <p class="big-details">{{worstProductivity.productivity || 0}}%</p>
                 <p data-ng-switch="!!worstProductivity">
                   <span class="text-muted">by</span>
-                  <a data-ng-href="/address/{{worstProductivity.address}}" data-ng-switch-when="true" target="_new">{{worstProductivity.username}}</a>
+                  <a data-ng-href="/address/{{worstProductivity.address}}" data-ng-switch-when="true">{{worstProductivity.username}}</a>
                   <span class="text-muted" data-ng-switch-when="false">N/A</span>
                 </p>
               </div>
@@ -165,10 +165,10 @@
                     <tbody>
                       <tr data-ng-repeat='v in votes track by $index'>
                         <td class="voter">
-                          <a data-ng-href="/address/{{v.senderId}}" target="_new">{{v.delegate.username || v.senderId}}</a>
+                          <a data-ng-href="/address/{{v.senderId}}">{{v.delegate.username || v.senderId}}</a>
                         </td>
                         <td class="tx hidden-xs">
-                          <a class="ellipsis" data-ng-href="/tx/{{v.id}}" target="_new">{{v.id}}</a>
+                          <a class="ellipsis" data-ng-href="/tx/{{v.id}}">{{v.id}}</a>
                         </td>
                         <td class="time-ago">
                           <span class="text-muted">{{v.timestamp | timeAgo}}</span>
@@ -204,10 +204,10 @@
                     <tbody>
                       <tr data-ng-repeat='r in registrations track by $index'>
                         <td class="delegate">
-                          <a data-ng-href="/address/{{r.senderId}}" target="_new">{{r.delegate.username}}</a>
+                          <a data-ng-href="/address/{{r.senderId}}">{{r.delegate.username}}</a>
                         </td>
                         <td class="tx hidden-xs">
-                          <a class="ellipsis" data-ng-href="/tx/{{r.id}}" target="_new">{{r.id}}</a>
+                          <a class="ellipsis" data-ng-href="/tx/{{r.id}}">{{r.id}}</a>
                         </td>
                         <td class="time-ago">
                           <span class="text-muted">{{r.timestamp | timeAgo}}</span>
@@ -290,7 +290,7 @@
               <tbody>
                 <tr data-ng-repeat="d in activeDelegates | orderBy:natural(tables.active.predicate):tables.active.reverse track by d.rate">
                   <td>{{d.rate}}</td>
-                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}" target="_new">{{d.username}}</a></td>
+                  <td><a data-ng-if="d.proposal" class="glyphicon glyphicon-user" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}" title="{{d.proposal.description}}" target="_new"></a> <a data-ng-href="/address/{{d.address}}">{{d.username}}</a></td>
                   <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                   <td class="hidden-xs hidden-sm">{{d.forged | lisk}} <span class="text-muted">LSK</span></td>
                   <td class="hidden-xs hidden-sm">{{d.forgingTime | forgingTime}}</td>

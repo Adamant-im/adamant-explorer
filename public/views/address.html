@@ -72,7 +72,7 @@
               <tbody>
                 <tr>
                   <td><strong>Name</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.username}}</td>
+                  <td class="ellipsis text-right" ng-bind-html="address.delegate.username | proposal:delegateProposals"></td>
                 </tr>
                 <tr>
                   <td><strong>Uptime</strong></td>
