@@ -94,7 +94,7 @@ describe('Transactions API', function() {
             });
         });
 
-        it('should be not be ok with no transaction', function(done) {
+        it('should be not ok with no transaction', function(done) {
             getTransaction('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
