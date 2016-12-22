@@ -1,11 +1,15 @@
 'use strict';
 
-var DelegateMonitor = function ($scope, forgingMonitor) {
+var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     this.updateActive = function (active) {
         _.each(active.delegates, function (d) {
             d.forgingStatus = forgingMonitor.getStatus(d);
+            d.proposal = _.find ($rootScope.delegateProposals, function (p) {
+              return p.name === d.username.toLowerCase ();
+            });
         });
         $scope.activeDelegates = active.delegates;
+
         updateForgingTotals(active.delegates);
         updateForgingProgress($scope.forgingTotals);
     };
@@ -104,9 +108,9 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 };
 
 angular.module('lisk_explorer.tools').factory('delegateMonitor',
-  function ($socket, forgingMonitor) {
+  function ($socket, $rootScope, forgingMonitor) {
       return function ($scope) {
-          var delegateMonitor = new DelegateMonitor($scope, forgingMonitor),
+          var delegateMonitor = new DelegateMonitor($scope, $rootScope, forgingMonitor),
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {

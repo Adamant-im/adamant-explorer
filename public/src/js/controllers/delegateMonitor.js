@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lisk_explorer.tools').controller('DelegateMonitor',
-  function (delegateMonitor, orderBy, $scope, $http) {
+  function (delegateMonitor, orderBy, $scope, $rootScope, $http) {
       delegateMonitor($scope);
 
       $scope.getStandby = function (n) {
@@ -15,6 +15,12 @@ angular.module('lisk_explorer.tools').controller('DelegateMonitor',
 
           $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
               if (resp.data.success) {
+                  _.each(resp.data.delegates, function (d) {
+                      d.proposal = _.find ($rootScope.delegateProposals, function (p) {
+                        return p.name === d.username.toLowerCase ();
+                      });
+                  });
+
                   $scope.standbyDelegates = resp.data.delegates;
               }
               if (resp.data.pagination) {

@@ -38,10 +38,12 @@ h1>small {
 
 a, a:visited, a:focus {
   color: #0288d1;
+  text-decoration: none;
 }
 
 a:hover {
   color: #f57c00;
+  text-decoration: none;
 }
 
 /* Bootstrap fix for ui.bootstrap */

@@ -38,7 +38,7 @@
                 </div>
                 <div data-ng-if="lastBlock">
                   <p class="big-details">
-                    <a data-ng-href="/block/{{lastBlock.id}}" target="_new">{{lastBlock.id}}</a>
+                    <a data-ng-href="/block/{{lastBlock.id}}">{{lastBlock.id}}</a>
                   </p>
                   <p class="text-muted">
                     <span class="lisk">{{lastBlock.totalAmount + lastBlock.totalFee || 0 | lisk}} LSK</span>
@@ -64,7 +64,7 @@
                 </div>
                 <div data-ng-if="bestBlock">
                   <p class="big-details">
-                    <a data-ng-href="/block/{{bestBlock.id}}" target="_new">{{bestBlock.id}}</a>
+                    <a data-ng-href="/block/{{bestBlock.id}}">{{bestBlock.id}}</a>
                   </p>
                   <p class="text-muted">
                     <span class="lisk">{{bestBlock.totalAmount + bestBlock.totalFee || 0 | lisk}} LSK</span>
