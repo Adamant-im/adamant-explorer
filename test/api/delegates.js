@@ -313,7 +313,7 @@ describe('Delegates API', function() {
         });
     });
 
-    describe('GET /api/getNextForgers', function() {
+    describe('GET /api/delegates/getNextForgers', function() {
 
         it('should be ok', function(done) {
             getNextForgers(function(err, res) {
