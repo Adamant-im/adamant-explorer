@@ -112,5 +112,4 @@ describe('Common API', function() {
             });
         });
     });
-
 });

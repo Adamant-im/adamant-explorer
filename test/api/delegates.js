@@ -281,7 +281,6 @@ describe('Delegates API', function() {
                 done();
             });
         });
-
     });
 
 
@@ -324,5 +323,4 @@ describe('Delegates API', function() {
             });
         });
     });
-
 });
