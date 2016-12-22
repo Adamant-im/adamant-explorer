@@ -43,6 +43,9 @@ describe('Delegates API', function() {
         node.get('/api/delegates/getNextForgers', done);
     }
 
+    function getDelegateProposals(done) {
+        node.get('/api/delegates/getDelegateProposals', done);
+    }
 
     /*Testing functions */
     function checkBlocks(id) {
@@ -54,25 +57,25 @@ describe('Delegates API', function() {
     }
 
     function checkBlock(id) {
-      node.expect(id).to.have.all.keys(
-          'delegate',
-          'totalForged',
-          'confirmations',
-          'blockSignature',
-          'generatorId',
-          'generatorPublicKey',
-          'payloadHash',
-          'payloadLength',
-          'reward',
-          'id',
-          'version',
-          'timestamp',
-          'height',
-          'previousBlock',
-          'numberOfTransactions',
-          'totalAmount',
-          'totalFee'
-      );
+        node.expect(id).to.have.all.keys(
+            'delegate',
+            'totalForged',
+            'confirmations',
+            'blockSignature',
+            'generatorId',
+            'generatorPublicKey',
+            'payloadHash',
+            'payloadLength',
+            'reward',
+            'id',
+            'version',
+            'timestamp',
+            'height',
+            'previousBlock',
+            'numberOfTransactions',
+            'totalAmount',
+            'totalFee'
+        );
     }
 
     function checkDelegates(id) {
@@ -95,6 +98,18 @@ describe('Delegates API', function() {
             'rate',
             'approval'
         );
+    }
+
+    function checkDelegateProposals(id) {
+        for (var i = 0; i < id.length; i++) {
+            if (id[i + 1]) {
+                node.expect(id[i]).to.contain.all.keys(
+                    'topic',
+                    'name',
+                    'description'
+                );
+            }
+        }
     }
 
     function checkPublicKeys(id) {
@@ -129,6 +144,8 @@ describe('Delegates API', function() {
             }
         }
     }
+
+
 
     /*Define api endpoints to test */
     describe('GET /api/delegates/getActive', function() {
@@ -319,6 +336,19 @@ describe('Delegates API', function() {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
                 checkPublicKeys(res.body.delegates);
+                done();
+            });
+        });
+    });
+
+    /* This is pending until getDelegateProposals is implemented */
+    describe('GET /api/delegates/getDelegateProposals', function() {
+        it.skip('should be ok', function(done) {
+            getDelegateProposals(function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.ok;
+                node.expect(res.body).to.have.property('proposals');
+                node.expect(res.body).to.have.property('count');
+                checkDelegateProposals(res.body.proposals);
                 done();
             });
         });
