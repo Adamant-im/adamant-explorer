@@ -22,9 +22,16 @@
   </div>
   <div data-ng-if="address.balance >= 0">
     <div class="well well-sm ellipsis">
-      <strong>Address</strong>
-      <span class="text-muted">{{address.address}}</span>
-      <span class="btn-copy" clip-copy="address.address"></span>
+      <div class="pull-left">
+        <strong>Address</strong>
+        <span class="text-muted">{{address.address}}</span>
+        <span class="btn-copy" clip-copy="address.address"></span>
+      </div>
+      <div class="pull-right hidden-xs hidden-sm">
+        <strong>Public key</strong>
+        <span class="text-muted">{{address.publicKey}}</span>
+        <span class="btn-copy" clip-copy="address.publicKey"></span>
+      </div>
     </div>
     <h2>Summary <small>confirmed</small></h2>
     <div class="row">
