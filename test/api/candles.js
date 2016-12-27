@@ -38,7 +38,7 @@ describe('Candles API', function() {
     /*Define api endpoints to test */
     describe('GET /api/candles/getCandles', function() {
 
-        it('should be ok with no inputs', function(done) {
+        it('using no inputs should be ok', function(done) {
             getCandles('', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange');
@@ -47,7 +47,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should be ok with poloniex', function(done) {
+        it('using poloniex should be ok', function(done) {
             getCandles('poloniex', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
@@ -56,7 +56,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should not be ok with unknown_exchange', function(done) {
+        it('using unknown_exchange should not be ok', function(done) {
             getCandles('unknown_exchange', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -64,7 +64,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should be ok with minute', function(done) {
+        it('using minute should be ok and return timeframe minute', function(done) {
             getCandles('', 'minute', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('minute');
@@ -73,7 +73,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should be ok with hour', function(done) {
+        it('using hour should be ok and return timeframe hour', function(done) {
             getCandles('', 'hour', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('hour');
@@ -83,7 +83,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should be ok with day', function(done) {
+        it('using day should be ok and return timeframe day', function(done) {
             getCandles('', 'day', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('timeframe').to.be.equal('day');
@@ -97,7 +97,7 @@ describe('Candles API', function() {
     /* -- if all fail, check lisk for topAccounts = true */
     describe('GET /api/candles/getStatistics', function() {
 
-        it('should be ok with no input', function(done) {
+        it('using no input should be ok', function(done) {
             getStatistics('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange');
@@ -105,7 +105,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should be ok with poloniex', function(done) {
+        it('using poloniex should be ok', function(done) {
             getStatistics('poloniex', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('exchange').to.be.equal('poloniex');
@@ -113,7 +113,7 @@ describe('Candles API', function() {
             });
         });
 
-        it('should not be ok with unknown_exchange', function(done) {
+        it('using unknown_exchange should not be ok', function(done) {
             getStatistics('unknown_exchange', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');

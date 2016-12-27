@@ -64,7 +64,7 @@ describe('Accounts API', function() {
     /*Define api endpoints to test */
     describe('GET /api/getAccount', function() {
 
-        it('should be ok with Genesis address', function(done) {
+        it('using known address should be ok', function(done) {
             getAccount(params.address, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 checkAccount(res.body);
@@ -72,15 +72,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with Delegate address', function(done) {
-            getAccount(params.address_delegate, function(err, res) {
-                node.expect(res.body).to.have.property('success').to.be.ok;
-                checkAccount(res.body);
-                done();
-            });
-        });
-
-        it('should be not be ok with invalid address', function(done) {
+        it('using invalid address should fail', function(done) {
             getAccount('L', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -88,7 +80,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be not be ok with unknown address', function(done) {
+        it('using unknown address should fail', function(done) {
             getAccount('999999999L', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -96,7 +88,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be not be ok with no address', function(done) {
+        it('using no address should fail', function(done) {
             getAccount('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -108,7 +100,7 @@ describe('Accounts API', function() {
     /* -- if all fail, check lisk for topAccounts = true */
     describe('GET /api/getTopAccounts', function() {
 
-        it('should be ok offset 0 and limit 100 and return 100', function(done) {
+        it('using offset 0 and limit 100 should return 100', function(done) {
             getTopAccounts('0', '100', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(100);
@@ -117,7 +109,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with offset 0 and limit 1 and return 1', function(done) {
+        it('using offset 0 and limit 1 should return 1', function(done) {
             getTopAccounts('0', '1', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(1);
@@ -126,7 +118,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with offset 100 and limit 50 and return 50', function(done) {
+        it('using offset 100 and limit 50 should return 50', function(done) {
             getTopAccounts('100', '50', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(50);
@@ -135,7 +127,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with offset 0 and limit 0 and return 100', function(done) {
+        it('using offset 0 and limit 0 should return 100', function(done) {
             getTopAccounts('0', '0', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(100);
@@ -144,7 +136,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with offset 0 and limit -1 and return 100', function(done) {
+        it('using offset 0 and limit -1 and return 100', function(done) {
             getTopAccounts('0', '-1', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(100);
@@ -153,7 +145,7 @@ describe('Accounts API', function() {
             });
         });
 
-        it('should be ok with excessive offset  and return 0', function(done) {
+        it('using offset 100000 and no limit should return 0', function(done) {
             getTopAccounts(params.excessive_offset, '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.accounts.length).to.equal(0);

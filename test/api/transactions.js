@@ -126,7 +126,7 @@ describe('Transactions API', function() {
     });
 
     describe('GET /api/getTransactionsByAddress', function() {
-        it('should be ok with Genesis address', function(done) {
+        it('using known address should be ok', function(done) {
             getTransactionsByAddress(params.address, '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('transactions').that.is.an('array');
@@ -135,7 +135,7 @@ describe('Transactions API', function() {
             });
         });
 
-        it('should be ok with Genesis address and offset 20', function(done) {
+        it('using known address and offset of 20 should be ok', function(done) {
             getTransactionsByAddress(params.address, params.offset, params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('transactions').that.is.an('array');
@@ -144,7 +144,7 @@ describe('Transactions API', function() {
             });
         });
 
-        it('should be not ok with invalid address', function(done) {
+        it('using invalid address should fail', function(done) {
             getTransactionsByAddress('', '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -154,7 +154,7 @@ describe('Transactions API', function() {
     });
 
     describe('GET /api/getTransactionsByBlock', function() {
-        it('should be ok with Genesis block', function(done) {
+        it('using known block should be ok', function(done) {
             getTransactionsByBlock(params.blockId, '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('transactions').that.is.an('array');
@@ -163,7 +163,7 @@ describe('Transactions API', function() {
             });
         });
 
-        it('should be ok with Genesis block and offset 20', function(done) {
+        it('using known block and offset of 20 should be ok', function(done) {
             getTransactionsByBlock(params.blockId, params.offset, params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('transactions');
@@ -172,7 +172,7 @@ describe('Transactions API', function() {
             });
         });
 
-        it('should be not ok with invalid block', function(done) {
+        it('using invalid block should fail', function(done) {
             getTransactionsByBlock('', '0', params.limit, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');

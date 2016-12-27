@@ -26,7 +26,6 @@ describe('Common API', function() {
 
     /*Define api endpoints to test */
     describe('GET /api/version', function() {
-
         it('should be ok', function(done) {
             getVersion(function(err, res) {
                 node.expect(res.body).to.have.property('version');
@@ -104,7 +103,7 @@ describe('Common API', function() {
             });
         });
 
-        it('using no search should fail', function(done) {
+        it('using no input search should fail', function(done) {
             getSearch('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error').to.be.a('string');

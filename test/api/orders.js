@@ -35,7 +35,7 @@ describe('Orders API', function() {
     /*Define api endpoints to test */
     describe('GET /api/orders/getOrders', function() {
 
-        it('should be ok with poloniex', function(done) {
+        it('using poloniex should be ok', function(done) {
             getOrders('poloniex', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('orders');
@@ -46,7 +46,7 @@ describe('Orders API', function() {
             });
         });
 
-        it('should be not ok with unknown_exchange', function(done) {
+        it('using unknown_exchange should fail', function(done) {
             getOrders('unknown_exchange', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');

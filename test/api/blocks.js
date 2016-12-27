@@ -115,7 +115,7 @@ describe('Blocks API', function() {
             });
         });
 
-        it('should be ok with offset of 20', function(done) {
+        it('using offset of 20 should be ok', function(done) {
             getLastBlocks('20', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('blocks').to.be.an('array');

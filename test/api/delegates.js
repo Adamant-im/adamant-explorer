@@ -57,8 +57,7 @@ describe('Delegates API', function() {
     }
 
     function checkBlock(id) {
-        node.expect(id).to.have.all.keys(
-            'delegate',
+        node.expect(id).to.contain.all.keys(
             'totalForged',
             'confirmations',
             'blockSignature',
@@ -163,7 +162,7 @@ describe('Delegates API', function() {
 
     describe('GET /api/delegates/getStandby', function() {
 
-        it('should be ok with no offset', function(done) {
+        it('using no offset should be ok', function(done) {
             getStandby('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
@@ -176,7 +175,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be ok with offset of 1', function(done) {
+        it('using offset of 1 should be ok', function(done) {
             getStandby('1', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
@@ -190,7 +189,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be ok with offset of 20', function(done) {
+        it('using offset of 20 should be ok', function(done) {
             getStandby(params.offset, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
@@ -206,7 +205,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be ok with excessive offset', function(done) {
+        it('using offset of 100000 should be ok', function(done) {
             getStandby(params.excessiveOffset, function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('delegates');
@@ -249,7 +248,7 @@ describe('Delegates API', function() {
     describe('GET /api/delegates/getLastBlocks', function() {
 
         it('should be ok', function(done) {
-            getLastBlocks(params.publickKey, '', function(err, res) {
+            getLastBlocks(params.publicKey, '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('blocks');
                 checkBlocks(res.body.blocks);
@@ -257,25 +256,28 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be ok with limit 10', function(done) {
-            getLastBlocks(params.publickKey, '10', function(err, res) {
+        it('using limit 10 should be ok', function(done) {
+            getLastBlocks(params.publicKey, '10', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
+                node.expect(res.body).to.have.property('blocks').to.be.an('array');
                 node.expect(res.body).to.have.property('blocks');
+                node.expect(res.body.blocks.length).to.equal(10);
                 checkBlocks(res.body.blocks);
                 done();
             });
         });
 
-        it('should be ok and return 20 with limit > 20', function(done) {
-            getLastBlocks(params.publickKey, '100', function(err, res) {
+        it('using limit 100 should be ok and return 20', function(done) {
+            getLastBlocks(params.publicKey, '100', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('blocks');
+                node.expect(res.body.blocks.length).to.equal(20);
                 checkBlocks(res.body.blocks);
                 done();
             });
         });
 
-        it('should be ok with Public Key without blocks', function(done) {
+        it('using publicKey with no blocks should be ok', function(done) {
             getLastBlocks(params.noBlocksKey, '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('blocks');
@@ -283,7 +285,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it.skip('should be not ok with invalidPublicKey', function(done) {
+        it.skip('using invalid publickey should fail', function(done) {
             getLastBlocks(params.invalidPublicKey, '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('blocks');
@@ -291,7 +293,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be not ok with no params', function(done) {
+        it('using no parameters should fail', function(done) {
             getLastBlocks('', '', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -299,8 +301,6 @@ describe('Delegates API', function() {
             });
         });
     });
-
-
 
     describe('GET /api/getSearch', function() {
 
@@ -312,7 +312,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should be not ok with no params', function(done) {
+        it('using no parameters should fail', function(done) {
             getSearch('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
@@ -320,7 +320,7 @@ describe('Delegates API', function() {
             });
         });
 
-        it('should autocomplete with partial name', function(done) {
+        it('using partial name should autocomplete', function(done) {
             getSearch('gene', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body.address).to.have.equal(params.address);

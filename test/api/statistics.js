@@ -30,9 +30,8 @@ describe('Statistics API', function() {
                     'broadhash',
                     'height',
                     'osBrand',
-                    'humanState',
-                    'location'
-                );
+                    'humanState'
+                ); //'location' doesnt always get populated so we have removed it from the check
             }
         }
     }
