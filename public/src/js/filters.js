@@ -23,7 +23,7 @@ angular.module('lisk_explorer')
           return 'Now!';
         }
         var minutes = Math.floor(seconds / 60);
-        var seconds = seconds - (minutes * 60);
+        seconds = seconds - (minutes * 60);
         if (minutes && seconds) {
           return minutes + ' min ' + seconds + ' sec';
         } else if (minutes) {
@@ -53,13 +53,13 @@ angular.module('lisk_explorer')
   })
   .filter('nethash', function () {
       return function (nethash) {
-          if (nethash == "da3ed6a45429278bac2666961289ca17ad86595d33b31037615d4b8e8f158bba") {
-              return network='Testnet';
-          } else if (nethash == "ed14889723f24ecc54871d058d98ce91ff2f973192075c0155ba2b7b70ad2511")  {
-	      return network='Mainnet';
+          if (nethash === 'da3ed6a45429278bac2666961289ca17ad86595d33b31037615d4b8e8f158bba') {
+              return 'Testnet';
+          } else if (nethash === 'ed14889723f24ecc54871d058d98ce91ff2f973192075c0155ba2b7b70ad2511')  {
+              return 'Mainnet';
           } else {
-	      return network='Local';
-	  }
+              return 'Local';
+          }
       };
   })
   .filter('round', function () {
@@ -85,7 +85,8 @@ angular.module('lisk_explorer')
   })
   .filter('supplyPercent', function () {
       return function (amount, supply) {
-          if (isNaN(amount) || !(supply > 0)) {
+        var supply_check = (supply > 0);
+          if (isNaN(amount) || !supply_check) {
             return (0).toFixed(2);
           }
           return (amount / supply * 100).toFixed(2);
@@ -159,5 +160,16 @@ angular.module('lisk_explorer')
   .filter('votes', function () {
       return function (a) {
           return (a.username || (a.knowledge && a.knowledge.owner) || a.address);
+      };
+  }).filter('proposal', function ($sce) {
+      return function (name, proposals) {
+          var p = _.find (proposals, function (p) {
+              return p.name === name.toLowerCase ();
+          });
+          if (p) {
+              return $sce.trustAsHtml('<a class="glyphicon glyphicon-user" href="https://forum.lisk.io/viewtopic.php?f=48&t=' + p.topic + '" title="' + _.escape (p.description) + '" target="_blank"></a> ' + name);
+          } else {
+              return $sce.trustAsHtml(name);
+          }
       };
   });

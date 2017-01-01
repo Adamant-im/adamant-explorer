@@ -9,8 +9,10 @@ var api = require('../lib/api'),
 module.exports = function (app, connectionHandler, socket) {
     var delegates  = new api.delegates(app),
         connection = new connectionHandler('Delegate Monitor:', socket, this),
-        interval   = null,
-        data       = {};
+        intervals  = [],
+        data       = {},
+        // Only used in various calculations, will not be emited directly
+        tmpData    = {};
 
     var running = {
         'getActive'        : false,
@@ -25,8 +27,9 @@ module.exports = function (app, connectionHandler, socket) {
         this.onConnect();
 
         async.parallel([
-            getActive,
+            // We only call getLastBlock on init, later data.lastBlock will be updated from getLastBlocks
             getLastBlock,
+            getActive,
             getRegistrations,
             getVotes,
             getNextForgers
@@ -35,25 +38,21 @@ module.exports = function (app, connectionHandler, socket) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                data.active         = updateActive(res[0], res[4], res[1]);
-                data.lastBlock      = res[1];
+                tmpData.nextForgers = res[4];
+
+                data.lastBlock      = res[0];
+                data.active         = updateActive(res[1]);
                 data.registrations  = res[2];
                 data.votes          = res[3];
-                data.nextForgers    = res[4].delegates.slice(0, 10);
-
-                _.each(data.nextForgers, function (publicKey, index) {
-                    var existing = findActiveByPublicKey(publicKey);
-                    data.nextForgers[index] = existing;
-                });
+                data.nextForgers    = cutNextForgers (10);
 
                 log('Emitting new data');
                 socket.emit('data', data);
 
                 getLastBlocks(data.active, true);
 
-                if (interval == null) {
-                    interval = setInterval(emitData, 5000);
-                }
+                newInterval(0, 5000, emitData);
+                newInterval(1, 1000, getLastBlocks);
             }
         }.bind(this));
     };
@@ -64,14 +63,36 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     this.onDisconnect = function () {
-        clearInterval(interval);
-        interval = null;
+        for (var i = 0; i < intervals.length; i++) {
+            clearInterval(intervals[i]);
+        }
+        intervals = [];
+    };
+
+    var newInterval = function (i, delay, cb) {
+        if (intervals[i] !== undefined) {
+            return null;
+        } else {
+            intervals[i] = setInterval(cb, delay);
+            return intervals[i];
+        }
     };
 
     // Private
 
     var log = function (msg) {
         console.log('Delegate Monitor:', msg);
+    };
+
+    var cutNextForgers = function (count) {
+        var data = tmpData.nextForgers.delegates.slice(0, 10);
+
+        _.each(data, function (publicKey, index) {
+            var existing = findActiveByPublicKey(publicKey);
+            data[index] = existing;
+        });
+
+        return data;
     };
 
     var getActive = function (cb) {
@@ -103,9 +124,24 @@ module.exports = function (app, connectionHandler, socket) {
         });
     };
 
-    var updateActive = function (results, nextForgers, lastBlock) {
+    var updateDelegate = function (delegate, updateForgingTime) {
+        // Update delegate with forging time
+        if (updateForgingTime) {
+            delegate.forgingTime = tmpData.nextForgers.delegates.indexOf(delegate.publicKey) * 10;
+        }
+
+        // Update delegate with info if should forge in current round
+        if (tmpData.roundDelegates.indexOf(delegate.publicKey) === -1) {
+            delegate.isRoundDelegate = false;
+        } else {
+            delegate.isRoundDelegate = true;
+        }
+        return delegate;
+    };
+
+    var updateActive = function (results) {
         // Calculate list of delegates that should forge in current round
-        var roundDelegates = getRoundDelegates(nextForgers.delegates, lastBlock.block.height)
+        tmpData.roundDelegates = getRoundDelegates(tmpData.nextForgers.delegates, data.lastBlock.block.height);
 
         if (!data.active || !data.active.delegates) {
             return results;
@@ -114,15 +150,7 @@ module.exports = function (app, connectionHandler, socket) {
                 var existing = findActive(delegate);
 
                 if (existing) {
-                    // Update delegate with forging time
-                    delegate.forgingTime = nextForgers.delegates.indexOf(existing.publicKey) * 10;
-
-                    // Update delegate with info if should forge in current round
-                    if (roundDelegates.indexOf(existing.publicKey) === -1) {
-                        delegate.isRoundDelegate = false;
-                    } else {
-                        delegate.isRoundDelegate = true;
-                    }
+                    delegate = updateDelegate (delegate, true);
                 }
 
                 if (existing && existing.blocks && existing.blocksAt) {
@@ -179,7 +207,7 @@ module.exports = function (app, connectionHandler, socket) {
         );
     };
 
-    var getLastBlocks = function (results, init) {
+    var getLastBlocks = function (init) {
         var limit = init ? 100 : 2;
 
         if (running.getLastBlocks) {
@@ -194,41 +222,50 @@ module.exports = function (app, connectionHandler, socket) {
                     json : true
                 }, function (err, response, body) {
                     if (err || response.statusCode !== 200) {
-                        return error({ success : false, error : (err || 'Response was unsuccessful') });
+                        return callback((err || 'Response was unsuccessful'));
                     } else if (body.success === true) {
                         return callback(null, { blocks: body.blocks });
                     } else {
-                        return error({ success : false, error : body.error });
+                        return callback(body.error);
                     }
                 });
             },
             function (result, callback) {
-                    async.eachSeries(result.blocks, function (b, cb) {
-                       var existing = findActiveByBlock(b);
+                // Set last block and his delegate (we will emit it later in emitData)
+                data.lastBlock.block = _.first (result.blocks);
+                var lb_delegate = findActiveByBlock(data.lastBlock.block);
+                data.lastBlock.block.delegate = {
+                    username: lb_delegate.username,
+                    address: lb_delegate.address,
+                };
 
-                        if (existing) {
-                            if (!existing.blocks || existing.blocks[0].timestamp < b.timestamp) {
-                                existing.blocks = [];
-                                existing.blocks.push(b);
-                                existing.blocksAt = moment();
-                                emitDelegate(existing);
-                            }
-                        }
+                async.eachSeries(result.blocks, function (b, cb) {
+                   var existing = findActiveByBlock(b);
 
-                        if (interval) {
-                            cb(null);
-                        } else {
-                            cb('Monitor closed');
+                    if (existing) {
+                        if (!existing.blocks || existing.blocks[0].timestamp < b.timestamp) {
+                            existing.blocks = [];
+                            existing.blocks.push(b);
+                            existing.blocksAt = moment();
+                            existing = updateDelegate (existing, false);
+                            emitDelegate(existing);
                         }
-                    }, function (err) {
-                        if (err) {
-                            cb (err, result);
-                        }
-                        callback (null, result);
-                    });
+                    }
+
+                    if (intervals[1]) {
+                        cb(null);
+                    } else {
+                        callback('Monitor closed');
+                    }
+                }, function (err) {
+                    if (err) {
+                        callback (err, result);
+                    }
+                    callback (null, result);
+                });
             },
             function (result, callback) {
-                async.eachSeries(results.delegates, function (delegate, cb) {
+                async.eachSeries(data.active.delegates, function (delegate, cb) {
                     if (delegate.blocks) {
                             return cb(null);
                     }
@@ -245,11 +282,11 @@ module.exports = function (app, connectionHandler, socket) {
                             if (existing) {
                                 existing.blocks = res.blocks;
                                 existing.blocksAt = moment();
+                                existing = updateDelegate (existing, false);
+                                emitDelegate(existing);
                             }
 
-                            emitDelegate(existing);
-
-                            if (interval) {
+                            if (intervals[1]) {
                                 cb(null);
                             } else {
                                 callback('Monitor closed');
@@ -258,7 +295,7 @@ module.exports = function (app, connectionHandler, socket) {
                     );
                 }, function (err) {
                     if (err) {
-                        cb (err, result);
+                        callback (err, result);
                     }
                     callback (null, result);
                 });
@@ -273,7 +310,7 @@ module.exports = function (app, connectionHandler, socket) {
 
     var getRound = function (height) {
         return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
-    }
+    };
 
     var getRoundDelegates = function (delegates, height) {
        var currentRound = getRound (height);
@@ -281,20 +318,17 @@ module.exports = function (app, connectionHandler, socket) {
        var filtered = delegates.filter(function (delegate, index) {
             return currentRound === getRound (height + index + 1);
        });
-       
+
        return filtered;
-    }
+    };
 
     var delegateName = function (delegate) {
         return delegate.username + '[' + delegate.rate + ']';
     };
 
     var emitData = function () {
-        var thisData = {};
-
         async.parallel([
             getActive,
-            getLastBlock,
             getRegistrations,
             getVotes,
             getNextForgers
@@ -303,21 +337,15 @@ module.exports = function (app, connectionHandler, socket) {
             if (err) {
                 log('Error retrieving: ' + err);
             } else {
-                thisData.active         = updateActive(res[0], res[4], res[1]);
-                thisData.lastBlock      = res[1];
-                thisData.registrations  = res[2];
-                thisData.votes          = res[3];
-                thisData.nextForgers    = res[4].delegates.slice(0, 10);
+                tmpData.nextForgers = res[3];
 
-                _.each(thisData.nextForgers, function (publicKey, index) {
-                    var existing = findActiveByPublicKey(publicKey);
-                    thisData.nextForgers[index] = existing;
-                });
+                data.active         = updateActive(res[0]);
+                data.registrations  = res[1];
+                data.votes          = res[2];
+                data.nextForgers    = cutNextForgers(10);
 
-                data = thisData;
                 log('Emitting data');
-                socket.emit('data', thisData);
-                getLastBlocks(thisData.active, false);
+                socket.emit('data', data);
             }
         }.bind(this));
     };

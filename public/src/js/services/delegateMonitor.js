@@ -1,16 +1,15 @@
 'use strict';
 
-var DelegateMonitor = function ($scope, forgingMonitor) {
+var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     this.updateActive = function (active) {
         _.each(active.delegates, function (d) {
-            if (d.isRoundDelegate) {
-              d.forgingStatus = forgingMonitor.getStatus(d, false);
-            } else {
-              // Delegate already forged in current round, forceNotForging check
-              d.forgingStatus = forgingMonitor.getStatus(d, true);
-            }
+            d.forgingStatus = forgingMonitor.getStatus(d);
+            d.proposal = _.find ($rootScope.delegateProposals, function (p) {
+              return p.name === d.username.toLowerCase ();
+            });
         });
         $scope.activeDelegates = active.delegates;
+
         updateForgingTotals(active.delegates);
         updateForgingProgress($scope.forgingTotals);
     };
@@ -53,9 +52,7 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 
     this.updateLastBlocks = function (delegate) {
         _.each($scope.activeDelegates, function (d) {
-            if (!d.isRoundDelegate) {
-              d.forgingStatus = forgingMonitor.getStatus(d, true);
-            }
+            d.forgingStatus = forgingMonitor.getStatus(d);
         });
 
         var existing = _.find($scope.activeDelegates, function (d) {
@@ -64,7 +61,7 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
         if (existing) {
             existing.blocksAt = delegate.blocksAt;
             existing.blocks = delegate.blocks;
-            existing.forgingStatus = forgingMonitor.getStatus(delegate, false);
+            existing.forgingStatus = forgingMonitor.getStatus(delegate);
         }
         updateForgingTotals($scope.activeDelegates);
         updateForgingProgress($scope.forgingTotals);
@@ -111,9 +108,9 @@ var DelegateMonitor = function ($scope, forgingMonitor) {
 };
 
 angular.module('lisk_explorer.tools').factory('delegateMonitor',
-  function ($socket, forgingMonitor) {
+  function ($socket, $rootScope, forgingMonitor) {
       return function ($scope) {
-          var delegateMonitor = new DelegateMonitor($scope, forgingMonitor),
+          var delegateMonitor = new DelegateMonitor($scope, $rootScope, forgingMonitor),
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {
