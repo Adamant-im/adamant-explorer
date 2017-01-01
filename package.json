@@ -11,7 +11,7 @@
   "license": "MIT",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -26,10 +26,12 @@
     "redis": "^2.6.2",
     "request": "^2.75.0",
     "socket.io": "^1.4.8",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "popsicle": "=8.2.0"
   },
   "devDependencies": {
     "bower": "^1.7.9",
+    "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-angular-gettext": "^2.2.3",
     "grunt-cli": "^1.2.0",
@@ -39,6 +41,8 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "*",
-    "grunt-markdown": "^0.7.0"
+    "grunt-markdown": "^0.7.0",
+    "mocha": "^3.2.0",
+    "supertest": "^2.0.1"
   }
 }

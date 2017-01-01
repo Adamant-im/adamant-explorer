@@ -1,0 +1,35 @@
+{
+    "configuration" : {
+        "development": {
+            "host": "0.0.0.0",
+            "port": 6040
+        },
+        "production": {
+            "host": "0.0.0.0",
+            "port": 80
+        },
+        "lisk" : {
+            "host" : "127.0.0.1",
+            "port" : 7000
+        },
+        "freegeoip" : {
+            "host" : "127.0.0.1",
+            "port" : 8080
+        },
+        "redis" : {
+            "host" : "127.0.0.1",
+            "port" : 6379,
+            "password" : ""
+        },
+        "cacheTTL" : 20,
+        "fixedPoint" : 100000000,
+        "enableCandles" : true,
+        "updateCandlesInterval" : 30000,
+        "enableOrders" : true,
+        "updateOrdersInterval" : 15000,
+        "enableExchange" : true,
+        "updateExchangeInterval" : 900000,
+        "btcusdExchange" : "bitfinex",
+        "liskbtcExchange" : "poloniex"
+    }
+}
