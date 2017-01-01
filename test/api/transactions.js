@@ -161,7 +161,7 @@ describe('Transactions API', function() {
                 checkTransactionsBody(res.body.transactions);
                 done();
             });
-        });
+        }).timeout(5000);
 
         it('using known block and offset of 20 should be ok', function(done) {
             getTransactionsByBlock(params.blockId, params.offset, params.limit, function(err, res) {
@@ -170,7 +170,7 @@ describe('Transactions API', function() {
                 checkTransactionsBody(res.body.transactions);
                 done();
             });
-        });
+        }).timeout(5000);
 
         it('using invalid block should fail', function(done) {
             getTransactionsByBlock('', '0', params.limit, function(err, res) {
