@@ -16,4 +16,5 @@ before_script:
   - tar -zxf lisk-Linux-x86_64.tar.gz
   - sudo service postgresql stop
   - cd lisk-Linux-x86_64; bash lisk.sh coldstart; cd ../
+  - cp test/config.json .
   - node app.js &> /dev/null &
