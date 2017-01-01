@@ -343,7 +343,7 @@ describe('Delegates API', function() {
 
     /* This is pending until getDelegateProposals is implemented */
     describe('GET /api/delegates/getDelegateProposals', function() {
-        it.skip('should be ok', function(done) {
+        it('should be ok', function(done) {
             getDelegateProposals(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
                 node.expect(res.body).to.have.property('proposals');
@@ -351,6 +351,6 @@ describe('Delegates API', function() {
                 checkDelegateProposals(res.body.proposals);
                 done();
             });
-        });
+        }).timeout(10000);
     });
 });
