@@ -19,3 +19,4 @@ before_script:
   - cd lisk-Linux-x86_64; bash lisk.sh coldstart; cd ../
   - cp test/config.json .
   - node app.js &> /dev/null &
+  - sleep 5

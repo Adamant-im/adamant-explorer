@@ -122,7 +122,7 @@ describe('Transactions API', function() {
                 checkTransactionsBody(res.body.transactions);
                 done();
             });
-        });
+        }).timeout(10000);
     });
 
     describe('GET /api/getTransactionsByAddress', function() {
