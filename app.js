@@ -30,7 +30,7 @@ app.use (function (req, res, next) {
     res.setHeader ('X-Frame-Options', 'DENY');
     res.setHeader ('X-Content-Type-Options', 'nosniff');
     res.setHeader ('X-XSS-Protection', '1; mode=block');
-    var ws_src = (req.protocol === 'http' ? 'ws://' : 'wss://') + req.get('host');
+    var ws_src = 'ws://' + req.get('host') + ' wss://' + req.get('host');
     res.setHeader ('Content-Security-Policy', 'frame-ancestors \'none\'; default-src \'self\'; connect-src \'self\' ' + ws_src + '; img-src \'self\' https://*.tile.openstreetmap.org; style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src \'self\' https://fonts.gstatic.com');
     return next();
 });
