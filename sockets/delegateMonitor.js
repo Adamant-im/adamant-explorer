@@ -93,7 +93,7 @@ module.exports = function (app, connectionHandler, socket) {
         });
 
         return data;
-    }
+    };
 
     var getActive = function (cb) {
         if (running.getActive) {
@@ -137,7 +137,7 @@ module.exports = function (app, connectionHandler, socket) {
             delegate.isRoundDelegate = true;
         }
         return delegate;
-    }
+    };
 
     var updateActive = function (results) {
         // Calculate list of delegates that should forge in current round
@@ -237,7 +237,7 @@ module.exports = function (app, connectionHandler, socket) {
                 data.lastBlock.block.delegate = {
                     username: lb_delegate.username,
                     address: lb_delegate.address,
-                }
+                };
 
                 async.eachSeries(result.blocks, function (b, cb) {
                    var existing = findActiveByBlock(b);
@@ -310,7 +310,7 @@ module.exports = function (app, connectionHandler, socket) {
 
     var getRound = function (height) {
         return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
-    }
+    };
 
     var getRoundDelegates = function (delegates, height) {
        var currentRound = getRound (height);
@@ -318,9 +318,9 @@ module.exports = function (app, connectionHandler, socket) {
        var filtered = delegates.filter(function (delegate, index) {
             return currentRound === getRound (height + index + 1);
        });
-       
+
        return filtered;
-    }
+    };
 
     var delegateName = function (delegate) {
         return delegate.username + '[' + delegate.rate + ']';
