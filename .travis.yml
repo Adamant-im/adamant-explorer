@@ -1,11 +1,10 @@
 dist: 'trusty'
 language: node_js
 node_js:
-  - '0.12'
+  - '4.0'
 services: 
   - redis-server
 before_script:
-  - npm install
   - bower install
   - grunt compile
   - grunt candles:build
@@ -13,6 +12,7 @@ before_script:
   - tar -zxvf freegeoip-3.1.5-linux-amd64.tar.gz
   - cd freegeoip-3.1.5-linux-amd64; ./freegeoip > /dev/null 2>&1 & cd ../
   - wget https://downloads.lisk.io/lisk/test/lisk-Linux-x86_64.tar.gz
-  - tar -zxvf lisk-Linux-x86_64.tar.gz
+  - tar -zxf lisk-Linux-x86_64.tar.gz
   - cd lisk-Linux-x86_64; bash lisk.sh coldstart; cd ../
+  - cp test/config.json .
   - node app.js &> /dev/null &
