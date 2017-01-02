@@ -21,8 +21,7 @@ app.set('version', '0.3');
 app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
-app.set('fixed point', config.fixedPoint);
-app.set('exchange enabled', config.enableExchange);
+app.set('exchange enabled', config.exchnageRates.enabled);
 app.set('candles enabled', config.enableCandles);
 app.set('orders enabled', config.enableOrders);
 
@@ -152,8 +151,7 @@ app.get('*', function (req, res, next) {
 });
 
 async.parallel([
-    function (cb) { app.exchange.loadBTCUSD(cb); },
-    function (cb) { app.exchange.loadLISKBTC(cb); }
+    function (cb) { app.exchange.loadRates (); cb (null); },
 ], function (err) {
     var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {

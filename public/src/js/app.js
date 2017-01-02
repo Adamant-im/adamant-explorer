@@ -14,7 +14,8 @@ angular.module('lisk_explorer',[
     'lisk_explorer.transactions',
     'lisk_explorer.address',
     'lisk_explorer.search',
-    'lisk_explorer.tools'
+    'lisk_explorer.tools',
+    'lisk_explorer.currency'
 ]);
 
 angular.module('lisk_explorer.system', []);
@@ -24,3 +25,4 @@ angular.module('lisk_explorer.transactions', []);
 angular.module('lisk_explorer.address', []);
 angular.module('lisk_explorer.search', []);
 angular.module('lisk_explorer.tools', ['naturalSort']);
+angular.module('lisk_explorer.currency', []);

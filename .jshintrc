@@ -17,6 +17,7 @@
     "LessMore": true,
     "moment": true,
     "sigma": true,
-    "window": true
+    "window": true,
+    "localStorage": true
   }
 }
