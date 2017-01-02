@@ -95,8 +95,7 @@ describe('Blocks API', function() {
             'previousBlock',
             'numberOfTransactions',
             'totalAmount',
-            'totalFee',
-            'usd'
+            'totalFee'
         );
     }
 
