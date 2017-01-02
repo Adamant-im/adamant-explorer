@@ -35,7 +35,7 @@
     </div>
     <h2>Summary <small>confirmed</small></h2>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-10">
         <div class="table-responsive">
           <table class="table">
             <tbody>
@@ -61,6 +61,9 @@
             </tbody>
           </table>
         </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <qrcode size="160" data="{{address.address}}"></qrcode>
       </div>
     </div>
     <div class="delegate" data-ng-if="address.delegate">

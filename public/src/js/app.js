@@ -7,6 +7,7 @@ angular.module('lisk_explorer',[
     'ngProgress',
     'ui.bootstrap',
     'gettext',
+    'monospaced.qrcode',
     'lisk_explorer.system',
     'lisk_explorer.socket',
     'lisk_explorer.blocks',
