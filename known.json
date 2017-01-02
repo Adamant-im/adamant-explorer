@@ -1,3 +1,13 @@
 {
-    "address" : { "owner" : "owner", "description" : "description" }
+    "address"               : { "owner" : "owner", "description" : "description" },
+    "9569486828221897676L"  : { "owner" : "ARK", "description" : "Token Exchange Campaign" },
+    "18278674964748191682L" : { "owner" : "Poloniex", "description" : "Hot Wallet" },
+    "2226471703256329822L"  : { "owner" : "Poloniex", "description" : "Cold Wallet" },
+    "11917631413532719541L" : { "owner" : "Oliver", "description" : "LiskHQ" },
+    "8201357239823655010L"  : { "owner" : "Max", "description" : "LiskHQ" },
+    "6687808873757044786L"  : { "owner" : "Bittrex", "description" : "Main Wallet" },
+    "13724180208900114961L" : { "owner" : "Yobit", "description" : "Main Wallet" },
+    "15434119221255134066L" : { "owner" : "Bounty Fund", "description" : "LiskHQ" },
+    "15434119221255134066L" : { "owner" : "Adviser Fund", "description" : "LiskHQ" },
+    "5726759782318848681L"  : { "owner" : "Lisk Foundation", "description" : "LiskHQ" }
 }
