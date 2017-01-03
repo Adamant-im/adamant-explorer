@@ -21,7 +21,7 @@
             "port" : 6379,
             "password" : ""
         },
-        "exchnageRates": {
+        "exchangeRates": {
             "enabled": true,
             "updateInterval": 300000,
             "exchanges": {

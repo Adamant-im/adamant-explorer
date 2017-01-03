@@ -5,7 +5,7 @@ var request = require('request'),
 
 module.exports = function (config) {
     // No need to init if exchange rates are disabled
-    if (!config.exchnageRates.enabled) {
+    if (!config.exchangeRates.enabled) {
         return false;
     }
 
@@ -81,23 +81,23 @@ module.exports = function (config) {
         }
     };
 
-    _.each(config.exchnageRates.exchanges, function (coin1, key1) {
+    _.each(config.exchangeRates.exchanges, function (coin1, key1) {
         _.each(coin1, function (exchange, key2) {
             var pair = key1 + key2;
             if (exchanges[pair].hasOwnProperty (exchange)) {
                 console.log('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
-                config.exchnageRates.exchanges[key1][key2] = exchanges[pair][exchange];
-                config.exchnageRates.exchanges[key1][key2].pair = pair;
+                config.exchangeRates.exchanges[key1][key2] = exchanges[pair][exchange];
+                config.exchangeRates.exchanges[key1][key2].pair = pair;
             } else if (exchanges[pair]) {
                 var ex_name = Object.keys(exchanges[pair])[0];
                 var ex = exchanges[pair][ex_name];
                 console.log('Exchange:', util.format('Unrecognized %s/%s exchange', key1, key2));
                 console.log('Exchange:', util.format('Defaulting to [%s]', ex_name));
-                config.exchnageRates.exchanges[key1][key2] = ex;
-                config.exchnageRates.exchanges[key1][key2].pair = pair;
+                config.exchangeRates.exchanges[key1][key2] = ex;
+                config.exchangeRates.exchanges[key1][key2].pair = pair;
             } else {
                 console.log('Exchange:', util.format('Unrecognized %s/%s pair, deleted', key1, key2));
-                remove (config.exchnageRates.exchanges[key1][key2]);
+                remove (config.exchangeRates.exchanges[key1][key2]);
             }
         });
     });
@@ -124,7 +124,7 @@ module.exports = function (config) {
                   return !isNaN (parseFloat (n)) && isFinite (n);
                 };
 
-            async.forEachOf(config.exchnageRates.exchanges, function (exchange, key1, seriesCb, result) {
+            async.forEachOf(config.exchangeRates.exchanges, function (exchange, key1, seriesCb, result) {
                 currency[key1] = {};
                 async.forEachOf(exchange, function (exchange2, key2, seriesCb2, result2) {
                     requestTicker(exchange2, function (err, result) {

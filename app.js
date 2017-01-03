@@ -21,7 +21,7 @@ app.set('version', '0.3');
 app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
-app.set('exchange enabled', config.exchnageRates.enabled);
+app.set('exchange enabled', config.exchangeRates.enabled);
 app.set('candles enabled', config.enableCandles);
 app.set('orders enabled', config.enableOrders);
 

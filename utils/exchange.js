@@ -7,7 +7,7 @@ module.exports = function (config) {
     this.tickers = {};
 
     this.loadRates = function () {
-        if (!config.exchnageRates.enabled) {
+        if (!config.exchangeRates.enabled) {
             return false;
         }
         api.getPriceTicker(function (err, result) {
@@ -21,8 +21,8 @@ module.exports = function (config) {
     };
 
     // Interval
-    if (config.exchnageRates.enabled) {
-        setInterval(this.loadRates, config.exchnageRates.updateInterval);
+    if (config.exchangeRates.enabled) {
+        setInterval(this.loadRates, config.exchangeRates.updateInterval);
     }
 
     // Private
