@@ -24,7 +24,8 @@ var Header = function ($rootScope) {
         }
 
         // When ticker for user-stored currency is not available - switch to LSK temporarly
-        if ($rootScope.currency.symbol !== 'LSK' && (!$rootScope.currency.tickers || !$rootScope.currency.tickers.indexOf ($rootScope.currency.symbol))) {
+        if ($rootScope.currency.symbol !== 'LSK' && (!$rootScope.currency.tickers || !$rootScope.currency.tickers.LSK || !$rootScope.currency.tickers.LSK[$rootScope.currency.symbol])) {
+            console.log ('Currency ' + $rootScope.currency.symbol + ' not available, fallback to LSK');
             $rootScope.currency.symbol = 'LSK';
         }
     };
