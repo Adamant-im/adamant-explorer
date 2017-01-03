@@ -23,6 +23,14 @@ var Header = function ($rootScope) {
             $rootScope.btc_usd = $rootScope.lisk_btc = $rootScope.lisk_usd = 0.0;
         }
     };
+
+    this.updateDelegateProposals = function (res) {
+        if (res.success) {
+            $rootScope.delegateProposals = res.proposals;
+        } else {
+            $rootScope.delegateProposals = [];
+        }
+    };
 };
 
 angular.module('lisk_explorer.system').factory('header',
@@ -35,6 +43,11 @@ angular.module('lisk_explorer.system').factory('header',
               if (res.status) { header.updateBlockStatus(res.status); }
               if (res.ticker) { header.updatePriceTicker(res.ticker); }
           });
+
+          ns.on('delegateProposals', function (res) {
+              if (res) { header.updateDelegateProposals(res); }
+          });
+
 
           $scope.$on('$destroy', function (event) {
               ns.removeAllListeners();
