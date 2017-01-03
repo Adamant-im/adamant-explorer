@@ -15,9 +15,9 @@ module.exports = function (config) {
                 _.each(result.BTC, function (ticker, key) {
                     result.LSK[key] = result.LSK.BTC * ticker;
                 });
-                this.tickers = result;
+                exchange.tickers = result;
             }
-        }.bind (this));
+        });
     };
 
     // Interval
@@ -26,5 +26,6 @@ module.exports = function (config) {
     }
 
     // Private
-    var api = require('./exchange-api')(config);
+    var api = require('./exchange-api')(config),
+        exchange = this;
 };
