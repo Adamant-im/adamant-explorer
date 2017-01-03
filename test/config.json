@@ -26,12 +26,12 @@
             "updateInterval": 300000,
             "exchanges": {
                 "LSK": {
-                    "BTC": "poloniex"
+                    "BTC": "poloniex",
+                    "CNY": "jubi"
                 },
                 "BTC": {
                     "USD": "bitfinex",
-                    "EUR": "bitstamp",
-                    "PLN": "bitmarket"
+                    "EUR": "bitstamp"
                 }
             }
         },

@@ -78,6 +78,19 @@ module.exports = function (config) {
                     }
                 }
             ]
+        },
+        'LSKCNY' : {
+            'jubi' : [
+                'Jubi',
+                'https://www.jubi.com/api/v1/ticker/lsk',
+                function (res, cb) {
+                    if (res.last) {
+                        return cb(null, res.last);
+                    } else {
+                        return cb('Unable to get last price');
+                    }
+                }
+            ]
         }
     };
 

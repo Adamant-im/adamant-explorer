@@ -41,10 +41,9 @@ describe('Common API', function() {
                 node.expect(res.body).to.have.deep.property('tickers.LSK.BTC').to.be.a.number;
                 node.expect(res.body).to.have.deep.property('tickers.LSK.EUR').to.be.a.number;
                 node.expect(res.body).to.have.deep.property('tickers.LSK.USD').to.be.a.number;
-                node.expect(res.body).to.have.deep.property('tickers.LSK.PLN').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.LSK.CNY').to.be.a.number;
                 node.expect(res.body).to.have.deep.property('tickers.BTC.USD').to.be.a.number;
                 node.expect(res.body).to.have.deep.property('tickers.BTC.EUR').to.be.a.number;
-                node.expect(res.body).to.have.deep.property('tickers.BTC.PLN').to.be.a.number;
                 done();
             });
         });
