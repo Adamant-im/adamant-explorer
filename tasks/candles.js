@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('../config.json').configuration,
+var config = require('../config.json'),
     client = require('../redis')(config),
     candles = require('../lib/candles'),
     async = require('async');
