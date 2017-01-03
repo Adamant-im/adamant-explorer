@@ -35,6 +35,17 @@ describe('Orders API', function() {
     /*Define api endpoints to test */
     describe('GET /api/orders/getOrders', function() {
 
+        it('using bittrex should be ok', function(done) {
+            getOrders('bittrex', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.ok;
+                node.expect(res.body).to.have.property('orders');
+                checkOrders(res.body.orders.depth);
+                checkValues(res.body.orders.asks);
+                checkValues(res.body.orders.bids);
+                done();
+            });
+        });
+
         it('using poloniex should be ok', function(done) {
             getOrders('poloniex', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
@@ -42,6 +53,14 @@ describe('Orders API', function() {
                 checkOrders(res.body.orders.depth);
                 checkValues(res.body.orders.asks);
                 checkValues(res.body.orders.bids);
+                done();
+            });
+        });
+
+        it('using no input should fail', function(done) {
+            getOrders('', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
                 done();
             });
         });

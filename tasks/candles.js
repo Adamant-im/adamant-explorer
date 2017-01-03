@@ -20,6 +20,17 @@ module.exports = function (grunt) {
                         callback(null, res);
                     }
                 });
+            },
+            function (callback) {
+                var bittrex = new candles.bittrex(client);
+
+                bittrex.buildCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
             }
         ],
         function (err, results) {
@@ -40,6 +51,17 @@ module.exports = function (grunt) {
                 var poloniex = new candles.poloniex(client);
 
                 poloniex.updateCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
+            },
+            function (callback) {
+                var bittrex = new candles.bittrex(client);
+
+                bittrex.updateCandles(function (err, res) {
                     if (err) {
                         callback(err);
                     } else {

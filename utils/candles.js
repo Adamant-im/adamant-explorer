@@ -20,6 +20,15 @@ module.exports = function (config, client) {
                         callback(null, res);
                     }
                 });
+            },
+            function (callback) {
+                bittrex.updateCandles(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
             }
         ],
         function (err, results) {
@@ -40,7 +49,7 @@ module.exports = function (config, client) {
 
     // Private
 
-    var poloniex = new candles.poloniex(client);
-
-    var running = false;
+    var poloniex = new candles.poloniex(client),
+        bittrex = new candles.bittrex(client),
+        running = false;
 };
