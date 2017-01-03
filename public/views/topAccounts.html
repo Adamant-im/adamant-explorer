@@ -2,10 +2,9 @@
   <h1>Top Accounts</h1>
 
   <hr />
-  <div data-ng-controller="HeaderController" data-ng-if="topAccounts.results.length">
-    <div class="row"  data-ng-hide="!topAccounts.results.length">
+  <div data-ng-if="topAccounts.results.length">
+    <div class="row" data-ng-hide="!topAccounts.results.length">
       <div class="col-md-12">
-
         <div class="table-responsive">
           <table class="table table-hover table-striped">
             <thead>
