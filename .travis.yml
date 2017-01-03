@@ -2,7 +2,7 @@ dist: 'trusty'
 language: node_js
 sudo: required
 node_js:
-  - '4.0'
+  - '6.9.2'
 services: 
   - redis-server
 before_script:
