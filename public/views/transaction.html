@@ -108,11 +108,11 @@
         <div class="col-md-12">
             <span data-ng-repeat='v in tx.votes.deleted'>
               <span data-ng-if="!$last">
-                <a href="/address/{{v.delegate.addres}}">{{v.delegate.username || v.delegate.address}}</a>
+                <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
                 <span class="text-muted">&bull;</span>
               </span>
               <span data-ng-if="$last">
-                <a href="/address/{{v.delegate.addres}}">{{v.delegate.username || v.delegate.address}}</a>
+                <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
               </span>
             </span>
         </div>
