@@ -122,6 +122,18 @@ module.exports = function (grunt) {
                   'test/**/*.js',
                   'utils**/*.js']
         },
+	mochaTest: {
+		test: {
+			options: {
+				reporter: 'spec',
+				quiet: false,
+				clearRequireCache: false,
+				noFail: false,
+				timeout: '250s'
+			},
+			src: ['test']
+		}
+	},
         markdown: {
             all: {
                 files: [
@@ -199,7 +211,10 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.registerTask('default', ['watch']);
 
-    // Compile task (concat + minify).
+    // Register Tasks for Travis
+    grunt.registerTask('travis', ['jshint', 'mochaTest']);
+
+    // Compile task (concat + minifye.
     grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy']);
 
     // Copy ZeroClipboard.swf to public/swf.
@@ -212,3 +227,4 @@ module.exports = function (grunt) {
     grunt.file.copy('bower_components/leaflet/dist/images/marker-icon-2x.png', 'public/img/leaflet/marker-icon-2x.png');
     grunt.file.copy('bower_components/leaflet/dist/images/marker-shadow.png', 'public/img/leaflet/marker-shadow.png');
 };
+
