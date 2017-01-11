@@ -27,7 +27,14 @@
         <span class="text-muted">{{address.address}}</span>
         <span class="btn-copy" clip-copy="address.address"></span>
       </div>
+      <!-- For normal devices -->
       <div class="pull-right hidden-xs hidden-sm">
+        <strong>Public key</strong>
+        <span class="text-muted">{{address.publicKey}}</span>
+        <span class="btn-copy" clip-copy="address.publicKey"></span>
+      </div>
+      <!-- For small devices -->
+      <div class="pull-left pk-mobile-display hidden-md hidden-lg hidden-xl">
         <strong>Public key</strong>
         <span class="text-muted">{{address.publicKey}}</span>
         <span class="btn-copy" clip-copy="address.publicKey"></span>

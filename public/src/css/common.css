@@ -714,6 +714,16 @@ a:hover {
   z-index: 9999;
 }
 
+/*Pubkey mobile display*/
+
+.pk-mobile-display {
+    display: inline;
+    white-space:normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
 /* Animations */
 .fader.ng-enter {
   opacity: 0;
