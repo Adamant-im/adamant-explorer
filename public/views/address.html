@@ -6,7 +6,7 @@
         <span class="btn-copy" clip-copy="address.address"></span>
       </div>
       <div class="col-md-4">
-        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | lisk}} LSK</span>
+        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | currency:currency}} {{currency.symbol}}</span>
       </div>
     </div>
     <div class="hide_snavbar">
@@ -16,7 +16,7 @@
       </a>
     </div>
   </div>
-  <h1>Address<small data-ng-if="address.balance >= 0">&nbsp;{{address.balance | lisk}} LSK</small></h1>
+  <h1>Address<small data-ng-if="address.balance >= 0">&nbsp;{{address.balance | currency:currency}} {{currency.symbol}}</small></h1>
   <div class="text-muted" data-ng-if="!(address.balance >= 0)">
     <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
   </div>
@@ -35,7 +35,7 @@
     </div>
     <h2>Summary <small>confirmed</small></h2>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-10">
         <div class="table-responsive">
           <table class="table">
             <tbody>
@@ -48,11 +48,7 @@
               </tr>
               <tr>
                 <td><strong>Total balance</strong></td>
-                <td class="ellipsis text-right">{{address.balance | lisk}} <span class="text-muted">LSK</span></td>
-              </tr>
-              <tr>
-                <td><strong>USD equivalent</strong></td>
-                <td class="ellipsis text-right">{{address.usd | fiat}} <span class="text-muted">USD</span></td>
+                <td class="ellipsis text-right">{{address.balance | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
               </tr>
               <tr>
                 <td><strong>Transactions</strong></td>
@@ -61,6 +57,9 @@
             </tbody>
           </table>
         </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <qrcode size="160" data="{{address.address}}"></qrcode>
       </div>
     </div>
     <div class="delegate" data-ng-if="address.delegate">
@@ -88,7 +87,7 @@
                 </tr>
                 <tr>
                   <td><strong>Forged</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.forged|| 0 | lisk}} <span class="text-muted">LSK</span></td>
+                  <td class="ellipsis text-right">{{address.delegate.forged || 0 | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
         		   </tr>
                 <tr>
                   <td><strong>Blocks</strong></td>

@@ -33,7 +33,6 @@ describe('Accounts API', function() {
             'unconfirmedBalance',
             'address',
             'u_multisignatures',
-            'usd',
             'knowledge',
             'delegate',
             'votes',
@@ -56,7 +55,6 @@ describe('Accounts API', function() {
             'address',
             'balance',
             'publicKey',
-            'usd',
             'knowledge'
         );
     }

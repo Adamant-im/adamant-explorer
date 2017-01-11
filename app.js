@@ -1,16 +1,34 @@
 'use strict';
 
 var express = require('express'),
-    config = require('./config.json').configuration,
-    client = require('./redis')(config),
-    development = config.development,
-    production = config.production,
-    routes = require('./api'),
-    path = require('path'),
-    cache = require('./cache'),
-    async = require('async');
+    config  = require('./config.json'),
+    routes  = require('./api'),
+    path    = require('path'),
+    cache   = require('./cache'),
+    program = require('commander'),
+    async   = require('async'),
+    packageJson = require('./package.json');
 
 var app = express(), utils = require('./utils');
+
+program
+    .version(packageJson.version)
+    .option('-c, --config <path>', 'config file path')
+    .option('-p, --port <port>', 'listening port number')
+    .option('-h, --host <ip>', 'listening host name or ip')
+    .option('-rp, --redisPort <port>', 'redis port')
+    .parse(process.argv);
+
+if (program.config) {
+    config = require(path.resolve(process.cwd(), program.config));
+}
+app.set ('host', program.host || config.host);
+app.set ('port', program.port || config.port);
+
+if (program.redisPort) {
+    config.redis.port = program.redisPort;
+}
+var client = require('./redis')(config);
 
 app.candles = new utils.candles(config, client);
 app.exchange = new utils.exchange(config);
@@ -21,8 +39,7 @@ app.set('version', '0.3');
 app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
-app.set('fixed point', config.fixedPoint);
-app.set('exchange enabled', config.enableExchange);
+app.set('exchange enabled', config.exchangeRates.enabled);
 app.set('candles enabled', config.enableCandles);
 app.set('orders enabled', config.enableOrders);
 
@@ -63,14 +80,6 @@ var allowCrossDomain = function(req, res, next) {
     next();
 };
 app.use(allowCrossDomain);
-
-if (process.env.NODE_ENV === 'production') {
-    app.set('host', production.host);
-    app.set('port', production.port);
-} else {
-    app.set('host', development.host);
-    app.set('port', development.port);
-}
 
 app.use(function (req, res, next) {
     if (req.originalUrl.split('/')[1] !== 'api') {
@@ -152,8 +161,7 @@ app.get('*', function (req, res, next) {
 });
 
 async.parallel([
-    function (cb) { app.exchange.loadBTCUSD(cb); },
-    function (cb) { app.exchange.loadLISKBTC(cb); }
+    function (cb) { app.exchange.loadRates (); cb (null); },
 ], function (err) {
     var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {

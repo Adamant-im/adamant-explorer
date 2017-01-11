@@ -20,6 +20,15 @@ module.exports = function (config, client) {
                         callback(null, res);
                     }
                 });
+            },
+            function (callback) {
+                bittrex.updateOrders(function (err, res) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        callback(null, res);
+                    }
+                });
             }
         ],
         function (err, results) {
@@ -40,7 +49,7 @@ module.exports = function (config, client) {
 
     // Private
 
-    var poloniex = new orders.poloniex(client);
-
-    var running = false;
+    var poloniex = new orders.poloniex(client),
+        bittrex = new orders.bittrex(client),
+        running = false;
 };

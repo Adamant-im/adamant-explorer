@@ -38,7 +38,8 @@ module.exports = function (grunt) {
                       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
                       'bower_components/ngprogress/build/ngProgress.min.js',
                       'bower_components/angular-gettext/dist/angular-gettext.min.js',
-                      'bower_components/angular-naturalsort/dist/naturalSortVersionDates.min.js'],
+                      'bower_components/angular-naturalsort/dist/naturalSortVersionDates.min.js',
+                      'bower_components/angular-qrcode/qrcode.js'],
                 dest: 'public/js/angularjs-all.js'
             },
             main: {
@@ -62,6 +63,7 @@ module.exports = function (grunt) {
                       'bower_components/sigma/sigma.min.js',
                       'bower_components/sigma/plugins/*.min.js',
                       'bower_components/underscore/underscore-min.js',
+                      'bower_components/qrcode-generator/js/qrcode.js',
                       'bower_components/zeroclipboard/ZeroClipboard.min.js'],
                 dest: 'public/js/vendors.js'
             },
