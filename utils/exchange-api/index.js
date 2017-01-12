@@ -82,10 +82,21 @@ module.exports = function (config) {
         'LSKCNY' : {
             'jubi' : [
                 'Jubi',
-                'https://www.jubi.com/api/v1/ticker/lsk',
+                'https://www.jubi.com/api/v1/ticker/?coin=lsk',
                 function (res, cb) {
                     if (res.last) {
                         return cb(null, res.last);
+                    } else {
+                        return cb('Unable to get last price');
+                    }
+                }
+            ],
+            'bitbays' : [
+                'Bitbays',
+                'https://bitbays.com/api/v1/ticker/?market=lsk_cny',
+                function (res, cb) {
+                    if (res.status === 200 && res.message === 'ok' && res.result.last) {
+                        return cb(null, res.result.last);
                     } else {
                         return cb('Unable to get last price');
                     }
