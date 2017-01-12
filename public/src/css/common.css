@@ -334,7 +334,10 @@ a:hover {
 
 #search-form { color: #5f696e; }
 
-#search-form #search { width: 275px; }
+#search-form #search { 
+  width: 275px;
+  line-height: normal;
+}
 
 #search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
