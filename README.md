@@ -1,6 +1,6 @@
 # Lisk Blockchain Explorer
 
-Lisk Explorer version 1.0.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Lisk Explorer version 1.1.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 
@@ -8,7 +8,7 @@ Lisk Explorer version 1.0.0 works in conjunction with the Lisk Core API. It uses
 
 These programs and resources are required to install and run Lisk Explorer
 
-- Nodejs v6.0.0 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
+- Nodejs v6.9.2 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
 
   ```
   curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
