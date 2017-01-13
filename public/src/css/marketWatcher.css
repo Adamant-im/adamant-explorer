@@ -61,12 +61,12 @@
 
 .btn-durations .active {
   color: white;
-  background-color: #0299eb;
+  background-color: #393C3E;
 }
 
 .btn-durations .active:hover {
   color: white;
-  background-color: #0288d1;
+  background-color: #27292A;
 }
 
 .btn-durations .active:focus {
