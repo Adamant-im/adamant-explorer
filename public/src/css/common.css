@@ -252,6 +252,9 @@ a:hover {
     background-color: #27292A;
     color: white;
   }
+  .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+    max-height: none;
+  }
 }
 
 .navbar-form .form-group {
