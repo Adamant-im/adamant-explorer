@@ -3,7 +3,6 @@
 var MarketWatcher = function ($q, $http, $scope) {
     var self = this,
         interval;
-    $scope.exchanges = [];
 
     $scope.setTab = function (tab) {
         $scope.oldTab = $scope.tab;
