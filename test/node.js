@@ -9,7 +9,6 @@ node.popsicle = require('popsicle');
 node.expect = require('chai').expect;
 node.chai = require('chai');
 node.chai.config.includeStack = true;
-node.config = require('./config.json');
 node.supertest = require('supertest');
 
 // Node configuration

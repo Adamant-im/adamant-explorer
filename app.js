@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express'),
-    config  = require('./config.json'),
+    config  = require('./config'),
     routes  = require('./api'),
     path    = require('path'),
     cache   = require('./cache'),

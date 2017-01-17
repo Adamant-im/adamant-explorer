@@ -79,56 +79,7 @@ To update candlestick data manually run after initialization:
 
 ## Configuration
 
-The default `config.json` file contains all of the configuration settings for Lisk Explorer. These options can be modified and have been documented below.
-
-Example:
-
-```
-{
-    "host": "0.0.0.0",
-    "port": 6040,
-    "lisk" : {
-        "host" : "127.0.0.1",
-        "port" : 8000
-    },
-    "freegeoip" : {
-        "host" : "127.0.0.1",
-        "port" : 8080
-    },
-    "redis" : {
-        "host" : "127.0.0.1",
-        "port" : 6379,
-        "password" : ""
-    },
-    "exchangeRates": {
-        "enabled": true,
-        "updateInterval": 30000,
-        "exchanges": {
-            "LSK": {
-                "BTC": "poloniex",
-                "CNY": "jubi"
-            },
-            "BTC": {
-                "USD": "bitfinex",
-                "EUR": "bitstamp"
-            }
-        }
-    },
-    "cacheTTL" : 20,
-    "enableCandles" : true,
-    "updateCandlesInterval" : 30000,
-    "enableOrders" : true,
-    "updateOrdersInterval" : 15000
-}
-```
-
-- `cacheTTL` - time to live cache in redis.
-- `fixedPoint` - fixed point number of Lisk (10^8).
-- `enableCandles` - enable or disable updating of candlestick data.
-- `updateCandlesInterval` - time to update candlestick data.
-- `enableOrders` - enable or disable updating of order book data.
-- `updateOrdersInterval` - time to update order book data.
-- `updateInterval` - time to update exchange currency courses.
+The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
 
 #### Top Accounts
 
