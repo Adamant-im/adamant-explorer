@@ -55,7 +55,7 @@ angular.module('lisk_explorer')
       $locationProvider.html5Mode(true);
       $locationProvider.hashPrefix('!');
   })
-  .run(function ($rootScope, $route, $location, $routeParams, $anchorScroll, ngProgress, gettextCatalog) {
+  .run(function ($rootScope, $route, $location, $routeParams, $anchorScroll, $http, ngProgress, gettextCatalog) {
       gettextCatalog.currentLanguage = 'en';
       $rootScope.$on('$routeChangeStart', function () {
           ngProgress.start();
@@ -68,6 +68,13 @@ angular.module('lisk_explorer')
           $rootScope.titleDetail = '';
           $rootScope.title = $route.current.title;
           $rootScope.isCollapsed = true;
+
+          // Market Watcher
+          $http.get('/api/exchanges').then (function (result) {
+              if (result.data.success && result.data.enabled) {
+                $rootScope.marketWatcher = true;
+              }
+          });
 
           $location.hash($routeParams.scrollTo);
           $anchorScroll();

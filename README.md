@@ -126,9 +126,9 @@ To stop Explorer after it has been started with `forever`, issue the following c
 
 Before running any tests, please ensure Lisk Explorer and Lisk Client are configured to run on the Lisk Testnet.
 
-Replace **config.json** with the corresponding file under the **test** directory:
+Replace **config.js** with **config.test** file from the **test** directory:
 
-`cp test/config.json  .`
+`cp test/config.test ./config.js`
 
 Replace the **config.json** for the Lisk Client the corresponding file under the **test** directory:
 

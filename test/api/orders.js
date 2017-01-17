@@ -6,7 +6,7 @@ describe('Orders API', function() {
 
     /*Define functions for use within tests*/
     function getOrders(id, done) {
-        node.get('/api/orders/getOrders?e=' + id, done);
+        node.get('/api/exchanges/getOrders?e=' + id, done);
     }
 
     function checkOrders(id) {
@@ -33,7 +33,7 @@ describe('Orders API', function() {
 
 
     /*Define api endpoints to test */
-    describe('GET /api/orders/getOrders', function() {
+    describe('GET /api/exchanges/getOrders', function() {
 
         it('using bittrex should be ok', function(done) {
             getOrders('bittrex', function(err, res) {

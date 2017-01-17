@@ -7,11 +7,11 @@ describe('Candles API', function() {
 
     /*Define functions for use within tests*/
     function getCandles(e, d, done) {
-        node.get('/api/candles/getCandles?e=' + e + '&d=' + d, done);
+        node.get('/api/exchanges/getCandles?e=' + e + '&d=' + d, done);
     }
 
     function getStatistics(e, done) {
-        node.get('/api/candles/getStatistics?e=' + e, done);
+        node.get('/api/exchanges/getStatistics?e=' + e, done);
     }
 
     function checkCandles(id) {
@@ -36,7 +36,7 @@ describe('Candles API', function() {
     }
 
     /*Define api endpoints to test */
-    describe('GET /api/candles/getCandles', function() {
+    describe('GET /api/exchanges/getCandles', function() {
 
         it('using no inputs should fail', function(done) {
             getCandles('', '', function(err, res) {
@@ -134,7 +134,7 @@ describe('Candles API', function() {
     });
 
     /* -- if all fail, check lisk for topAccounts = true */
-    describe('GET /api/candles/getStatistics', function() {
+    describe('GET /api/exchanges/getStatistics', function() {
 
         it('using no input should fail', function(done) {
             getStatistics('', function(err, res) {

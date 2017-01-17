@@ -13,22 +13,31 @@ module.exports = function (config, client) {
         }
         async.series([
             function (callback) {
-                poloniex.updateCandles(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
+                if (!config.marketWatcher.exchanges.poloniex) {
+                    callback(null);
+                } else {
+                    poloniex.updateCandles(function (err, res) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, res);
+                        }
+                    });
+                }
+
             },
             function (callback) {
-                bittrex.updateCandles(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
+                if (!config.marketWatcher.exchanges.bittrex) {
+                    callback(null);
+                } else {
+                    bittrex.updateCandles(function (err, res) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, res);
+                        }
+                    });
+                }
             }
         ],
         function (err, results) {
@@ -43,8 +52,8 @@ module.exports = function (config, client) {
 
     // Interval
 
-    if (config.enableCandles) {
-        setInterval(this.updateCandles, config.updateCandlesInterval);
+    if (config.marketWatcher.enabled) {
+        setInterval(this.updateCandles, config.marketWatcher.candles.updateInterval);
     }
 
     // Private
