@@ -39,6 +39,10 @@ config.updateCandlesInterval = 30000; // Interval in ms for updating candlestick
 config.enableOrders = true;           // Automatic update of order book data (true - enabled, false - disabled)
 config.updateOrdersInterval = 15000;  // Interval in ms for updating order book data (default: 15 seconds)
 
+// Delegate Proposals
+config.proposals.enabled = true; // Delegate proposals support (true - enabled, false - disabled)
+config.proposals.updateInterval = 600000; // Interval in ms for updating delegate proposals (default: 10 minutes)
+
 // =======================================================================================
 
 module.exports = config;
