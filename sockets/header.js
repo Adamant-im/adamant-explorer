@@ -1,6 +1,7 @@
 'use strict';
 
 var api = require('../lib/api'),
+    config = require('../config'),
     async = require('async');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -36,8 +37,8 @@ module.exports = function (app, connectionHandler, socket) {
                 socket.emit('data', data);
 
                 newInterval(0, 10000, emitData);
-                // Update and emit delegate proposals every 10 minutes
-                newInterval(1, 600000, emitDelegateProposals);
+                // Update and emit delegate proposals every 10 minutes by default
+                newInterval(1, config.proposals.updateInterval || 600000, emitDelegateProposals);
             }
         }.bind(this));
 
@@ -129,6 +130,10 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     var emitDelegateProposals = function () {
+        if (!config.proposals.enabled) {
+            return false;
+        }
+        
         async.parallel ([
             getDelegateProposals
         ],

@@ -108,6 +108,9 @@ module.exports = function (config) {
     _.each(config.exchangeRates.exchanges, function (coin1, key1) {
         _.each(coin1, function (exchange, key2) {
             var pair = key1 + key2;
+            if (!exchange) {
+                return;
+            }
             if (exchanges[pair].hasOwnProperty (exchange)) {
                 console.log('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
                 config.exchangeRates.exchanges[key1][key2] = exchanges[pair][exchange];

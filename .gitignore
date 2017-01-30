@@ -9,3 +9,4 @@ public/img/amcharts
 public/js/*.js
 po/*.pot
 Thumbs.db
+sftp-config.json
