@@ -20,10 +20,6 @@ describe('Common API', function() {
         node.get('/api/getPriceTicker', done);
     }
 
-    function getExchanges(done) {
-        node.get('/api/exchanges', done);
-    }
-
     function getSearch(id, done) {
         node.get('/api/search?id=' + id, done);
     }
@@ -33,18 +29,6 @@ describe('Common API', function() {
         it('should be ok', function(done) {
             getVersion(function(err, res) {
                 node.expect(res.body).to.have.property('version');
-                done();
-            });
-        });
-    });
-
-    describe('GET /api/exchanges', function() {
-        it('should be ok', function(done) {
-            getExchanges(function(err, res) {
-                node.expect(res.body).to.have.property('success').to.be.ok;
-                node.expect(res.body).to.have.property('enabled').to.be.ok;
-                node.expect(res.body).to.have.deep.property('exchanges.poloniex').to.be.ok;
-                node.expect(res.body).to.have.deep.property('exchanges.bittrex').to.be.ok;
                 done();
             });
         });
