@@ -114,7 +114,7 @@ var ActivityGraph = function () {
         var txsVolume = function (chain) {
             return chain.reduce(function (vol, tx) {
                 return vol += tx.amount;
-            }, 0).value() / Math.pow(10, 8);
+            }, 0).value();
         };
 
         var minTime = function (chain) {

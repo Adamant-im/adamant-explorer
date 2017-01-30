@@ -61,15 +61,19 @@
 
 .btn-durations .active {
   color: white;
-  background-color: #0299eb;
+  background-color: #393C3E;
 }
 
 .btn-durations .active:hover {
   color: white;
-  background-color: #0288d1;
+  background-color: #27292A;
 }
 
 .btn-durations .active:focus {
   color: white;
   background-color: #1b89c4;
+}
+
+.exchanges img {
+  height: 50px;
 }

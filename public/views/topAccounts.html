@@ -2,10 +2,9 @@
   <h1>Top Accounts</h1>
 
   <hr />
-  <div data-ng-controller="HeaderController" data-ng-if="topAccounts.results.length">
-    <div class="row"  data-ng-hide="!topAccounts.results.length">
+  <div data-ng-if="topAccounts.results.length">
+    <div class="row" data-ng-hide="!topAccounts.results.length">
       <div class="col-md-12">
-
         <div class="table-responsive">
           <table class="table table-hover table-striped">
             <thead>
@@ -13,7 +12,6 @@
                 <th width="5%">Rank</th>
                 <th class="text-right">Address</th>
                 <th class="text-right">~ Balance</th>
-                <th class="text-right hidden-xs">USD equivalent</th>
                 <th class="text-right hidden-xs">Supply</th>
                 <th class="text-right hidden-xs hidden-sm">Owner</th>
               </tr>
@@ -24,9 +22,8 @@
                 <td class="text-right">
                   <a href="/address/{{ address.address }}">{{address.address}}</a>
                 </td>
-                <td class="text-right hidden-sm hidden-md hidden-lg">{{address.balance | lisk | number:0}} <span class="text-muted">LSK</span></td>
-                <td class="text-right hidden-xs">{{address.balance | lisk | number:2}} <span class="text-muted">LSK</span></td>
-                <td class="text-right hidden-xs">{{address.usd | fiat | number:2}} <span class="text-muted">USD</span></td>
+                <td class="text-right hidden-sm hidden-md hidden-lg">{{address.balance | currency:currency:0}} <span class="text-muted">{{currency.symbol}}</span></td>
+                <td class="text-right hidden-xs">{{address.balance | currency:currency:2}} <span class="text-muted">{{currency.symbol}}</span></td>
                 <td class="text-right hidden-xs">{{address.balance | supplyPercent:blockStatus.supply}}%</td>
                 <td class="text-right hidden-xs hidden-sm">
                   <span class="owner-name">{{address.knowledge.owner}}</span>

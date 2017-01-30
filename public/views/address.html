@@ -1,12 +1,13 @@
 <section data-ng-controller="AddressController">
-  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="address.balance >= 0" data-ng-init="hideSNavbar=0">
+  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" 
+data-ng-if="address.balance >= 0" data-ng-init="hideSNavbar=0">
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-8 text-left">
         <h3>Address</h3> {{address.address}}
         <span class="btn-copy" clip-copy="address.address"></span>
       </div>
       <div class="col-md-4">
-        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | lisk}} LSK</span>
+        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | currency:currency}} {{currency.symbol}}</span>
       </div>
     </div>
     <div class="hide_snavbar">
@@ -16,83 +17,77 @@
       </a>
     </div>
   </div>
-  <h1>Address<small data-ng-if="address.balance >= 0">&nbsp;{{address.balance | lisk}} LSK</small></h1>
   <div class="text-muted" data-ng-if="!(address.balance >= 0)">
     <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
   </div>
-  <div data-ng-if="address.balance >= 0">
-    <div class="well well-sm ellipsis">
-      <div class="pull-left">
-        <strong>Address</strong>
-        <span class="text-muted">{{address.address}}</span>
-        <span class="btn-copy" clip-copy="address.address"></span>
-      </div>
-      <div class="pull-right hidden-xs hidden-sm">
-        <strong>Public key</strong>
-        <span class="text-muted">{{address.publicKey}}</span>
-        <span class="btn-copy" clip-copy="address.publicKey"></span>
-      </div>
-    </div>
-    <h2>Summary <small>confirmed</small></h2>
+  <h2>Address Summary</h2>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-10">
         <div class="table-responsive">
           <table class="table">
             <tbody>
               <tr data-ng-if="address.knowledge">
                 <td><strong>Owner</strong></td>
-                <td class="ellipsis text-right">
+                <td class="text-right">
                   <span class="owner-name">{{address.knowledge.owner}}</span>
                   <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
                 </td>
               </tr>
               <tr>
-                <td><strong>Total balance</strong></td>
-                <td class="ellipsis text-right">{{address.balance | lisk}} <span class="text-muted">LSK</span></td>
+                <td><strong>Address</strong></td>
+                <td class="text-right"></span>{{address.address}}&nbsp;<span class="btn-copy" clip-copy="address.address"></span></td>
+              </tr>
+              <tr class="hidden-xs">
+                <td><strong>Public Key</strong></td>
+                <td class="text-right">{{address.publicKey}}&nbsp;<span class="btn-copy" clip-copy="address.publicKey"></span></td>
               </tr>
               <tr>
-                <td><strong>USD equivalent</strong></td>
-                <td class="ellipsis text-right">{{address.usd | fiat}} <span class="text-muted">USD</span></td>
+                <td><strong>Total balance</strong></td>
+                <td class="text-right">{{address.balance | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
               </tr>
               <tr>
                 <td><strong>Transactions</strong></td>
-                <td class="ellipsis text-right"><span title="Incoming"><i class="fa fa-arrow-down text-muted"></i> {{address.incoming_cnt}}</span> / <span title="Outgoing"><i class="fa fa-arrow-up text-muted"></i> {{address.outgoing_cnt}}</span></td>
+                <td class="ellipsis text-right"><span title="Incoming"><i class="fa fa-arrow-down text-success"></i> {{address.incoming_cnt}}</span> / <span title="Outgoing"><i class="fa fa-arrow-up text-danger"></i> {{address.outgoing_cnt}}</span></td>
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
+     <div class="hidden-sm hidden-md hidden-lg hidden-xl pk-mobile-style">
+	<span class="pk-mobile-display"><strong>Public&nbsp;Key</strong>&nbsp;&nbsp;{{address.publicKey}}</span>
+     </div>
+    </div>
+  </div>
+     <div class="col-md-2 text-center">
+	 <qrcode size="160" data="{{address.address}}"></qrcode>
+	 <br>
+	(Scan for Address)     
+    </div>
     </div>
     <div class="delegate" data-ng-if="address.delegate">
-      <h2>Delegate</h2>
+      <h2>Delegate&nbsp;<small><span ng-bind-html="address.delegate.username | proposal:delegateProposals"></span></small></h2>
       <div class="row">
         <div class="col-md-12">
           <div class="table-responsive">
             <table class="table">
               <tbody>
                 <tr>
-                  <td><strong>Name</strong></td>
-                  <td class="ellipsis text-right" ng-bind-html="address.delegate.username | proposal:delegateProposals"></td>
-                </tr>
-                <tr>
                   <td><strong>Uptime</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.productivity || 0.00}}%</td>
+                  <td class="text-right">{{address.delegate.productivity || 0.00}}%</td>
                 </tr>
                 <tr>
                   <td><strong>Rank / Status</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
+                  <td class="text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
                 </tr>
                 <tr>
                   <td><strong>Approval</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.approval}}%</td>
+                  <td class="text-right">{{address.delegate.approval}}%</td>
                 </tr>
                 <tr>
                   <td><strong>Forged</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.forged|| 0 | lisk}} <span class="text-muted">LSK</span></td>
+                  <td class="text-right">{{address.delegate.forged || 0 | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
         		   </tr>
                 <tr>
                   <td><strong>Blocks</strong></td>
-                  <td class="ellipsis text-right">{{address.delegate.producedblocks}} <span class="text-muted">({{address.delegate.missedblocks}} missed)</span></td>
+                  <td class="text-right">{{address.delegate.producedblocks}} <span class="text-muted">({{address.delegate.missedblocks}} missed)</span></td>
                 </tr>
               </tbody>
             </table>
@@ -145,4 +140,4 @@
     <h2>Transactions</h2>
     <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
-</section>
+ </section>

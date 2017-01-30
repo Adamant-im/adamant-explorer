@@ -21,14 +21,14 @@
 }
 
 html, body {
-  color: #544835;
+  color: #393C3E;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  color: #544835;
+  color: #393C3E;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
 }
 
@@ -44,6 +44,7 @@ a, a:visited, a:focus {
 a:hover {
   color: #f57c00;
   text-decoration: none;
+  transition: color 0.3s ease 0s;
 }
 
 /* Bootstrap fix for ui.bootstrap */
@@ -55,7 +56,7 @@ a:hover {
 
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
   color: white;
-  background-color: #655740;
+  background-color: #27292A;
 }
 
 /* Styling for the ngProgress itself */
@@ -193,10 +194,10 @@ a:hover {
 
 .navbar-default .navbar-toggle .icon-bar { background-color: white; }
 
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #544835;}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #393C3E;}
 
 .navbar-default {
-  background-color: #544835;
+  background-color: #393C3E;
   margin: 0;
   border: 0;
 }
@@ -212,24 +213,24 @@ a:hover {
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
-  background-color: #3b3225;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>.active>a:hover {
-  background-color: #655740;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
-  background-color: #3b3225;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
-  background-color: #655740;
+  background-color: #27292A;
   color: white;
 }
 
@@ -244,12 +245,15 @@ a:hover {
     margin-bottom: 1px;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
-    background-color: #655740;
-    color: white;
+    background-color: white;
+    color: #333;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
-    background-color: #be9c77;
+    background-color: #27292A;
     color: white;
+  }
+  .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+    max-height: none;
   }
 }
 
@@ -277,18 +281,18 @@ a:hover {
 }
 
 .nav-tabs>li>a {
-  color: #544835;
+  color: #393C3E;
 }
 
 .nav-tabs.nav-justified>.active>a,
 .nav-tabs.nav-justified>.active>a:focus {
   color: white;
-  background-color: #0299eb;
+  background-color: #393C3E;
 }
 
 .nav-tabs.nav-justified>.active>a:hover {
   color: white;
-  background-color: #0288d1;
+  background-color: #27292A;
 }
 
 .nav-tabs.nav-justified>li>a:hover {
@@ -334,7 +338,10 @@ a:hover {
 
 #search-form { color: #5f696e; }
 
-#search-form #search { width: 275px; }
+#search-form #search { 
+  width: 275px;
+  line-height: normal;
+}
 
 #search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
@@ -378,7 +385,7 @@ a:hover {
   float: left;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  background-color: #655740;
+  background-color: #27292A;
   border-radius: 3px;
   margin-left: 10px;
   margin-top: 12px;
@@ -448,7 +455,7 @@ a:hover {
 }
 
 .block-id {
-  background-color: #544835;
+  background-color: #393C3E;
   border: 3px solid white;
   margin: 0 auto;
   width: 165px;
@@ -614,7 +621,7 @@ a:hover {
 
 /* Set the fixed height of the footer here */
 #footer {
-  background-color: #544835;
+  background-color: #393C3E;
   color: white;
   height: 48px;
   overflow: hidden;
@@ -636,7 +643,7 @@ a:hover {
 }
 
 #footer .col-right a {
-  color: #655740;
+  color: #27292A;
   margin-left: 10px;
 }
 
@@ -712,6 +719,21 @@ a:hover {
   top: 55px;
   width: 275px;
   z-index: 9999;
+}
+
+/*Pubkey mobile display*/
+
+.pk-mobile-display {
+    display: inline;
+    white-space:normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+.pk-mobile-style {
+    border: 1px solid #D3D3D3;
+    padding: 7px;
 }
 
 /* Animations */
@@ -835,7 +857,7 @@ a:hover {
 }
 
 .tx-id {
-  background-color: #544835;
+  background-color: #393C3E;
   border: 3px solid white;
   margin: 0 auto;
   width: 165px;
@@ -1009,7 +1031,7 @@ a.v_highlight_more {
 /* Sort Order */
 
 a.sort-order {
-  color: #544835;
+  color: #393C3E;
 }
 
 a.sort-order:focus, .sort-order:hover {

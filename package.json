@@ -1,6 +1,6 @@
 {
   "name": "lisk-explorer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Lisk blockchain explorer",
   "repository": {
     "type": "git",
@@ -11,12 +11,13 @@
   "license": "MIT",
   "main": "app.js",
   "scripts": {
-      "test": "./node_modules/.bin/grunt travis --verbose"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
     "async": "^2.0.1",
     "benchmark": "^2.1.1",
     "body-parser": "^1.13.2",
+    "commander": "=2.9.0",
     "compression": "^1.6.2",
     "express": "^4.14.0",
     "hiredis": "^0.5.0",
@@ -41,7 +42,6 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "*",
-    "grunt-mocha-test": "=0.13.2",
     "grunt-markdown": "^0.7.0",
     "mocha": "^3.2.0",
     "supertest": "^2.0.1"

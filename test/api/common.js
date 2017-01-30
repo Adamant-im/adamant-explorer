@@ -38,9 +38,12 @@ describe('Common API', function() {
         it('should be ok', function(done) {
             getPriceTicker(function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.ok;
-                node.expect(res.body).to.have.property('btc_usd');
-                node.expect(res.body).to.have.property('lisk_btc');
-                node.expect(res.body).to.have.property('lisk_usd');
+                node.expect(res.body).to.have.deep.property('tickers.LSK.BTC').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.LSK.EUR').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.LSK.USD').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.LSK.CNY').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.BTC.USD').to.be.a.number;
+                node.expect(res.body).to.have.deep.property('tickers.BTC.EUR').to.be.a.number;
                 done();
             });
         });

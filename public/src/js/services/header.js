@@ -1,6 +1,10 @@
 'use strict';
 
 var Header = function ($rootScope) {
+    $rootScope.currency = {
+      symbol: 'LSK'
+    };
+
     this.updateBlockStatus = function (res) {
         if (res.success) {
             $rootScope.blockStatus = {
@@ -16,11 +20,13 @@ var Header = function ($rootScope) {
 
     this.updatePriceTicker = function (res) {
         if (res.success) {
-            $rootScope.btc_usd  = res.btc_usd;
-            $rootScope.lisk_btc = res.lisk_btc;
-            $rootScope.lisk_usd = res.lisk_usd;
-        } else {
-            $rootScope.btc_usd = $rootScope.lisk_btc = $rootScope.lisk_usd = 0.0;
+            $rootScope.currency.tickers = res.tickers;
+        }
+
+        // When ticker for user-stored currency is not available - switch to LSK temporarly
+        if ($rootScope.currency.symbol !== 'LSK' && (!$rootScope.currency.tickers || !$rootScope.currency.tickers.LSK || !$rootScope.currency.tickers.LSK[$rootScope.currency.symbol])) {
+            console.log ('Currency ' + $rootScope.currency.symbol + ' not available, fallback to LSK');
+            $rootScope.currency.symbol = 'LSK';
         }
     };
 

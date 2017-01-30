@@ -11,7 +11,7 @@
       <div class="col-md-6 col-lg-5 text-right">
         <span data-ng-if="tx.confirmations" class="txvalues txvalues-success">{{tx.confirmations}} Confirmations</span>
         <span data-ng-if="!tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
-        <span class="txvalues txvalues-primary">{{tx.amount | lisk}} LSK</span>
+        <span class="txvalues txvalues-primary">{{tx.amount | currency:currency}} {{currency.symbol}}</span>
       </div>
     </div>
     <div class="hide_snavbar">
@@ -64,15 +64,11 @@
           </tr>
           <tr>
             <td><strong>Amount</strong></td>
-            <td class="text-right">{{tx.amount | lisk}} <span class="text-muted">LSK</span></td>
+            <td class="text-right">{{tx.amount | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
           </tr>
           <tr>
             <td><strong>Fee</strong></td>
-            <td class="text-right">{{tx.fee | lisk}} <span class="text-muted">LSK</span></td>
-          </tr>
-          <tr>
-            <td><strong>USD equivalent</strong></td>
-            <td class="text-right">{{tx.usd | fiat}} <span class="text-muted">USD</span></td>
+            <td class="text-right">{{tx.fee | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
           </tr>
           <tr>
             <td><strong>Timestamp</strong></td>
@@ -112,11 +108,11 @@
         <div class="col-md-12">
             <span data-ng-repeat='v in tx.votes.deleted'>
               <span data-ng-if="!$last">
-                <a href="/address/{{v.delegate.addres}}">{{v.delegate.username || v.delegate.address}}</a>
+                <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
                 <span class="text-muted">&bull;</span>
               </span>
               <span data-ng-if="$last">
-                <a href="/address/{{v.delegate.addres}}">{{v.delegate.username || v.delegate.address}}</a>
+                <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
               </span>
             </span>
         </div>

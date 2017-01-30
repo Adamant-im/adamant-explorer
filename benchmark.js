@@ -4,7 +4,7 @@ var Benchmark = require('benchmark'),
     suite = new Benchmark.Suite('api');
 
 var express = require('express'),
-    config = require('./config.json').configuration;
+    config = require('./config');
     config.enableExchange = false;
 
 var api = require('./lib/api'),
