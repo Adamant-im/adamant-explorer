@@ -252,6 +252,9 @@ a:hover {
     background-color: #27292A;
     color: white;
   }
+  .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+    max-height: none;
+  }
 }
 
 .navbar-form .form-group {
@@ -726,6 +729,11 @@ a:hover {
     word-wrap: break-word;
     overflow-wrap: break-word;
     width: 100%;
+}
+
+.pk-mobile-style {
+    border: 1px solid #D3D3D3;
+    padding: 7px;
 }
 
 /* Animations */
