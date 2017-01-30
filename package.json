@@ -11,7 +11,7 @@
   "license": "MIT",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+      "test": "./node_modules/.bin/grunt travis --verbose"
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -42,6 +42,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "*",
+    "grunt-mocha-test": "=0.13.2",
     "grunt-markdown": "^0.7.0",
     "mocha": "^3.2.0",
     "supertest": "^2.0.1"
