@@ -731,6 +731,11 @@ a:hover {
     width: 100%;
 }
 
+.pk-mobile-style {
+    border: 1px solid #D3D3D3;
+    padding: 7px;
+}
+
 /* Animations */
 .fader.ng-enter {
   opacity: 0;
