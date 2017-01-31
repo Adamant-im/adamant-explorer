@@ -109,7 +109,7 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-              jshintrc: '.jshintrc'
+                jshintrc: '.jshintrc'
             },
             all: ['api/**/*.js',
                   'app.js',
@@ -125,18 +125,18 @@ module.exports = function (grunt) {
                   'test/**/*.js',
                   'utils**/*.js']
         },
-	mochaTest: {
-		test: {
-			options: {
-				reporter: 'spec',
-				quiet: false,
-				clearRequireCache: false,
-				noFail: false,
-				timeout: '250s'
-			},
-			src: ['test']
-		}
-	},
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec',
+                    quiet: false,
+                    clearRequireCache: false,
+                    noFail: false,
+                    timeout: '250s'
+                },
+                src: ['test']
+            }
+        },
         markdown: {
             all: {
                 files: [
@@ -230,4 +230,3 @@ module.exports = function (grunt) {
     grunt.file.copy('bower_components/leaflet/dist/images/marker-icon-2x.png', 'public/img/leaflet/marker-icon-2x.png');
     grunt.file.copy('bower_components/leaflet/dist/images/marker-shadow.png', 'public/img/leaflet/marker-shadow.png');
 };
-
