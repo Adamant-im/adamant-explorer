@@ -11,7 +11,7 @@
   "license": "MIT",
   "main": "app.js",
   "scripts": {
-      "test": "./node_modules/.bin/grunt travis --verbose"
+    "test": "./node_modules/.bin/grunt travis --verbose"
   },
   "dependencies": {
     "async": "^2.0.1",
