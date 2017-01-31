@@ -214,10 +214,10 @@ module.exports = function (grunt) {
     // Default task(s).
     grunt.registerTask('default', ['watch']);
 
-    // Register Tasks for Travis
+    // Register tasks for travis.
     grunt.registerTask('travis', ['jshint', 'mochaTest']);
 
-    // Compile task (concat + minifye.
+    // Compile task (concat + minify).
     grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy']);
 
     // Copy ZeroClipboard.swf to public/swf.
