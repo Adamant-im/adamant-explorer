@@ -6,11 +6,14 @@
 	<td data-ng-show="tx.type == 0"><a href="/address/{{tx.recipientId}}">{{tx | txRecipient}}</a></td>
 	<td data-ng-show="tx.type >= 1">{{tx | txType}}</td>	
 	<td>{{tx.fee | currency:currency}}{{currency.symbol}}</td>
-	<td class="txvalues" style="display: table-cell;" data-ng-class="{
+	<td>
+		<div class="txvalues" style="width:100%" data-ng-class="{
       'txvalues-danger': tx.type == 0 && $parent.address.address == tx.senderId && tx.senderId != tx.recipientId,
       'txvalues-success': tx.type == 0 && $parent.address.address && tx.senderId != $parent.address.address,
       'txvalues-default': tx.type != 0
-    }">{{tx.amount | currency:currency}}{{currency.symbol}}</td>
+    }">{{tx.amount | currency:currency}}{{currency.symbol}}
+    	</div>
+    </td>
 	<td>
 		<span data-ng-if="!block.confirmations && !tx.confirmations" class="text-danger">Unconfirmed Transaction!</span>
 		<span data-ng-if="block.confirmations > 0 || tx.confirmations > 0" class="text-success">{{block.confirmations || tx.confirmations}}</span>
