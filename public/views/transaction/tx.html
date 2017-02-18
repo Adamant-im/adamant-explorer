@@ -18,4 +18,4 @@
 		<span data-ng-if="!block.confirmations && !tx.confirmations" class="text-danger">Unconfirmed Transaction!</span>
 		<span data-ng-if="block.confirmations > 0 || tx.confirmations > 0" class="text-success">{{block.confirmations || tx.confirmations}}</span>
 	</td>
-	<td data-title="Daye">{{tx.timestamp | timeAgo }}</td>
+	<td data-title="Day">{{tx.timestamp | timeAgo }}</td>
