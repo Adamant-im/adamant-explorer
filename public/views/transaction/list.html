@@ -1,13 +1,13 @@
 <div class="alert alert-warning" data-ng-if="!txs.loading && !txs.results.length">There are no transactions involving this {{txs.parent}}.</div>
-<div class="table-responsive">
+<div id="no-more-tables" class="table-responsive">
 	<table class="table">
 		<thead>
 		  <tr>
 			<th>Transaction ID</th>
 			<th>Sender</th>
 			<th>Recipient</th>
-			<th>Fee</th>
 			<th>Amount</th>
+			<th>Fee</th>
 			<th>Confirmations</th>
 			<th>Date</th>
 		  </tr>
