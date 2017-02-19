@@ -9,13 +9,13 @@
 		<div class="txvalues" style="width:100%" data-ng-class="{
       'txvalues-danger': tx.type == 0 && $parent.address.address == tx.senderId && tx.senderId != tx.recipientId,
       'txvalues-success': tx.type == 0 && $parent.address.address && tx.senderId != $parent.address.address,
-      'txvalues-default': tx.type != 0
-    }">{{tx.amount | currency:currency}}{{currency.symbol}}
+      'txvalues-default': tx.type != 0 || $parent.address.address === undefined
+    }">{{tx.amount | currency:currency}} {{currency.symbol}}
     	</div>
     </td>
-    <td data-title="Fee">{{tx.fee | currency:currency}}{{currency.symbol}}</td>
+    <td data-title="Fee">{{tx.fee | currency:currency}} {{currency.symbol}}</td>
 	<td data-title="Confirmations">
 		<span data-ng-if="!block.confirmations && !tx.confirmations" class="text-danger">Unconfirmed Transaction!</span>
 		<span data-ng-if="block.confirmations > 0 || tx.confirmations > 0" class="text-success">{{block.confirmations || tx.confirmations}}</span>
 	</td>
-	<td data-title="Day">{{tx.timestamp | timeAgo }}</td>
+	<td data-title="Date">{{tx.timestamp | timestamp }}</td>
