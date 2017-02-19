@@ -119,8 +119,24 @@
       </div>
     </div>
     <h2>Details</h2>
-    <div class="block-tx" data-ng-if="tx.id">
-      <div data-ng-include src="'/views/transaction/tx.html'"></div>
-    </div>
+	<div id="no-more-tables" class="table-responsive">
+		<table class="table">
+			<thead>
+			  <tr>
+				<th>Transaction ID</th>
+				<th>Sender</th>
+				<th>Recipient</th>
+				<th>Amount</th>
+				<th>Fee</th>
+				<th>Confirmations</th>
+				<th>Date</th>
+			  </tr>
+			</thead>
+			<tbody>
+			<tr data-ng-if="tx.id" data-ng-include="'/views/transaction/tx.html'">
+			</tr>
+			</tbody>
+		</table>
+	</div>
   </div>
 </section>
