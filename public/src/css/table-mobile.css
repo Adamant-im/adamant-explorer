@@ -23,7 +23,7 @@
  
 	#table-mobile tr { border: 1px solid #ccc; }
  
-	 td { 
+	#table-mobile td { 
 		/* Behave  like a "row" */
 		border: none;
 		border-bottom: 1px solid #eee; 
@@ -36,7 +36,6 @@
 	#table-mobile td:before { 
 		/* Now like a table header */
 		position: absolute;
-		/* Top/left values mimic padding */
 		top: 8px;
 		left: 6px;
 		width: 35%; 
@@ -46,12 +45,14 @@
 		font-weight: bold;
 	}
 	
+	#table-mobile td:first-child:before { 
+		top: 11px;
+	}
+	
 	#table-mobile .txvalues {
 		width: inherit;
 	}
  
-	/*
-	Label the data
-	*/
+	/* Label the data */
 	#table-mobile td:before { content: attr(data-title); }
 }
