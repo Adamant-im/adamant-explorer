@@ -1,5 +1,11 @@
 #table-mobile .txvalues {
 	width: 100%;
+	padding: .7em 0;
+}
+
+/* Override bootstrap settings at <=320px */
+#table-mobile td:first-of-type {
+    max-width: inherit;
 }
 
 @media only screen and (max-width: 768px) {
