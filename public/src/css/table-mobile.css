@@ -27,7 +27,14 @@
 		left: -9999px;
 	}
  
-	#table-mobile tr { border: 1px solid #ccc; }
+	#table-mobile tr:first-child { border-width: 1px 1px 3px 1px;}
+	
+	#table-mobile tr { 
+		border: solid #ccc; 
+		border-width: 3px 1px;
+	}
+	
+	#table-mobile tr:last-child { border-width:  3px 1px 1px 1px;}
  
 	#table-mobile td { 
 		/* Behave  like a "row" */
