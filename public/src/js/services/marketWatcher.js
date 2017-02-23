@@ -1,7 +1,8 @@
 'use strict';
 
 var MarketWatcher = function ($q, $http, $scope) {
-    var self = this;
+    var self = this,
+        interval;
 
     $scope.setTab = function (tab) {
         $scope.oldTab = $scope.tab;
@@ -26,7 +27,7 @@ var MarketWatcher = function ($q, $http, $scope) {
 
     $scope.setExchange = function (exchange, duration) {
         $scope.oldExchange = $scope.exchange;
-        $scope.exchange = (exchange || $scope.exchange || 'Poloniex');
+        $scope.exchange = (exchange || $scope.exchange || _.first ($scope.exchanges));
         $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
         if ($scope.newExchange) {
             console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
@@ -72,9 +73,26 @@ var MarketWatcher = function ($q, $http, $scope) {
         });
     };
 
+    var getExchanges = function () {
+        console.log ('Retrieving exchanges...');
+        $http.get('/api/exchanges').then (function (result) {
+            if (result.data.success) {
+                $scope.exchanges = _.keys (_.pick (result.data.exchanges, function (value, key) {
+                    return value ? key : false;
+                }));
+                if ($scope.exchanges.length > 0) {
+                    $scope.setExchange();
+                    interval = setInterval(getData, 30000);
+                }
+            } else {
+                $scope.exchanges = [];
+            }
+        });
+    };
+
     var getCandles = function () {
         console.log('Retrieving candles...');
-        return $http.get(['/api/candles/getCandles',
+        return $http.get(['/api/exchanges/getCandles',
                    '?e=', angular.lowercase($scope.exchange),
                    '&d=', $scope.duration].join(''));
     };
@@ -82,21 +100,19 @@ var MarketWatcher = function ($q, $http, $scope) {
     var getStatistics = function () {
         if (!updateAll()) { return; }
         console.log('Retrieving statistics...');
-        return $http.get(['/api/candles/getStatistics',
+        return $http.get(['/api/exchanges/getStatistics',
                           '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
     var getOrders = function () {
         if (!updateAll()) { return; }
         console.log('Retrieving orders...');
-        return $http.get(['/api/orders/getOrders',
+        return $http.get(['/api/exchanges/getOrders',
                           '?e=', angular.lowercase($scope.exchange)].join(''));
     };
 
+    getExchanges ();
     $scope.isCollapsed = false;
-    $scope.setExchange();
-
-    var interval = setInterval(getData, 30000);
 
     $scope.$on('$locationChangeStart', function (event, next, current) {
         clearInterval(interval);

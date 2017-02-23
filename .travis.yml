@@ -1,0 +1,24 @@
+dist: 'trusty'
+language: node_js
+sudo: required
+node_js:
+  - 'node'
+  - '6.9.2'
+  - '4.0'
+services: 
+  - redis-server
+before_script:
+  - bower install
+  - grunt compile
+  - grunt candles:build
+  - wget https://github.com/fiorix/freegeoip/releases/download/v3.1.5/freegeoip-3.1.5-linux-amd64.tar.gz
+  - tar -zxvf freegeoip-3.1.5-linux-amd64.tar.gz
+  - cd freegeoip-3.1.5-linux-amd64; ./freegeoip > /dev/null 2>&1 & cd ../
+  - wget https://downloads.lisk.io/lisk/test/lisk-Linux-x86_64.tar.gz
+  - tar -zxf lisk-Linux-x86_64.tar.gz
+  - sudo service postgresql stop
+  - cp test/config_lisk.json lisk-Linux-x86_64/config.json
+  - cd lisk-Linux-x86_64; bash lisk.sh coldstart; cd ../
+  - cp test/config.test ./config.js
+  - node app.js &> /dev/null &
+  - sleep 5

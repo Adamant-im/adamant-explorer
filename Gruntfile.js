@@ -11,6 +11,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-angular-gettext');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     // Load Custom Tasks
     grunt.loadTasks('tasks');
@@ -37,7 +38,9 @@ module.exports = function (grunt) {
                       'bower_components/angular-bootstrap/ui-bootstrap.js',
                       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
                       'bower_components/ngprogress/build/ngProgress.min.js',
-                      'bower_components/angular-gettext/dist/angular-gettext.min.js'],
+                      'bower_components/angular-gettext/dist/angular-gettext.min.js',
+                      'bower_components/angular-naturalsort/dist/naturalSortVersionDates.min.js',
+                      'bower_components/angular-qrcode/qrcode.js'],
                 dest: 'public/js/angularjs-all.js'
             },
             main: {
@@ -61,6 +64,7 @@ module.exports = function (grunt) {
                       'bower_components/sigma/sigma.min.js',
                       'bower_components/sigma/plugins/*.min.js',
                       'bower_components/underscore/underscore-min.js',
+                      'bower_components/qrcode-generator/js/qrcode.js',
                       'bower_components/zeroclipboard/ZeroClipboard.min.js'],
                 dest: 'public/js/vendors.js'
             },
@@ -105,7 +109,7 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-              jshintrc: '.jshintrc'
+                jshintrc: '.jshintrc'
             },
             all: ['api/**/*.js',
                   'app.js',
@@ -118,7 +122,20 @@ module.exports = function (grunt) {
                   'redis.js',
                   'sockets/**/*.js',
                   'tasks/**/*.js',
+                  'test/**/*.js',
                   'utils**/*.js']
+        },
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec',
+                    quiet: false,
+                    clearRequireCache: false,
+                    noFail: false,
+                    timeout: '250s'
+                },
+                src: ['test']
+            }
         },
         markdown: {
             all: {
@@ -196,6 +213,9 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['watch']);
+
+    // Register tasks for travis.
+    grunt.registerTask('travis', ['jshint', 'mochaTest']);
 
     // Compile task (concat + minify).
     grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy']);

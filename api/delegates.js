@@ -49,4 +49,26 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+
+    app.get('/api/getSearch', function (req, res, next) {
+        api.getSearch(
+            req.query.q,
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+	);
+    });
+
+    app.get('/api/delegates/getNextForgers', function (req, res, next) {
+        api.getNextForgers(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
+
+    app.get('/api/delegates/getDelegateProposals', function (req, res, next) {
+        api.getDelegateProposals(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
 };

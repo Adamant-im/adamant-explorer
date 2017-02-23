@@ -21,14 +21,14 @@
 }
 
 html, body {
-  color: #544835;
+  color: #393C3E;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   height: 100%;
   /* The html and body elements cannot have any padding or margin. */
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  color: #544835;
+  color: #393C3E;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
 }
 
@@ -38,10 +38,13 @@ h1>small {
 
 a, a:visited, a:focus {
   color: #0288d1;
+  text-decoration: none;
 }
 
 a:hover {
   color: #f57c00;
+  text-decoration: none;
+  transition: color 0.3s ease 0s;
 }
 
 /* Bootstrap fix for ui.bootstrap */
@@ -53,7 +56,7 @@ a:hover {
 
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
   color: white;
-  background-color: #655740;
+  background-color: #27292A;
 }
 
 /* Styling for the ngProgress itself */
@@ -191,10 +194,10 @@ a:hover {
 
 .navbar-default .navbar-toggle .icon-bar { background-color: white; }
 
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #544835;}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #393C3E;}
 
 .navbar-default {
-  background-color: #544835;
+  background-color: #393C3E;
   margin: 0;
   border: 0;
 }
@@ -210,24 +213,24 @@ a:hover {
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
-  background-color: #3b3225;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>.active>a:hover {
-  background-color: #655740;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
-  background-color: #3b3225;
+  background-color: #27292A;
   color: white;
 }
 
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
-  background-color: #655740;
+  background-color: #27292A;
   color: white;
 }
 
@@ -242,12 +245,15 @@ a:hover {
     margin-bottom: 1px;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
-    background-color: #655740;
-    color: white;
+    background-color: white;
+    color: #333;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
-    background-color: #be9c77;
+    background-color: #27292A;
     color: white;
+  }
+  .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+    max-height: none;
   }
 }
 
@@ -256,7 +262,7 @@ a:hover {
 }
 
 .navbar-form {
-  margin-top: 20px;
+  margin-top: 23px;
 }
 
 @media (max-width: 1200px) {
@@ -275,18 +281,18 @@ a:hover {
 }
 
 .nav-tabs>li>a {
-  color: #544835;
+  color: #393C3E;
 }
 
 .nav-tabs.nav-justified>.active>a,
 .nav-tabs.nav-justified>.active>a:focus {
   color: white;
-  background-color: #0299eb;
+  background-color: #393C3E;
 }
 
 .nav-tabs.nav-justified>.active>a:hover {
   color: white;
-  background-color: #0288d1;
+  background-color: #27292A;
 }
 
 .nav-tabs.nav-justified>li>a:hover {
@@ -300,24 +306,18 @@ a:hover {
 
 .navbar-default .navbar-brand {
   color: white;
-  padding: 10px;
+  padding: 13px;
   height: 76px;
 }
 
 .navbar-brand .logo {
-  background-image: url(/img/logo.png);
   height: 55px;
   width: 100px;
 }
 
-@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
-       only screen and (-moz-min-device-pixel-ratio: 1.5),
-       only screen and (-o-min-device-pixel-ratio: 3/2),
-       only screen and (min-device-pixel-ratio: 1.5) {
-  .navbar-brand .logo {
-    background-image: url(/img/logo2x.png);
-    background-size: 100%;
-  }
+.navbar-brand .logo img {
+  height: 100%;
+  width: 100%;
 }
 
 .navbar-form .form-control {
@@ -338,7 +338,10 @@ a:hover {
 
 #search-form { color: #5f696e; }
 
-#search-form #search { width: 275px; }
+#search-form #search { 
+  width: 275px;
+  line-height: normal;
+}
 
 #search { font-family: 'Roboto', 'Ubuntu', sans-serif; }
 
@@ -366,7 +369,7 @@ a:hover {
 #search::-webkit-input-placeholder {
   color: #5f696e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-style: italic;
   font-weight: 100;
 }
@@ -374,7 +377,7 @@ a:hover {
 #search::-moz-placeholder {
   color: #5f696e;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 100;
 }
 
@@ -382,16 +385,16 @@ a:hover {
   float: left;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  background-color: #655740;
+  background-color: #27292A;
   border-radius: 3px;
-  margin-top: 20px;
   margin-left: 10px;
+  margin-top: 12px;
   min-width: 389.375px;
-  min-height: 33px;
-  padding: 8px 10px;
+  min-height: 29px;
   font-size: 12px;
   color: #eee;
   text-align: center;
+  padding-top: 10px;
 }
 
 .col-gray {
@@ -452,7 +455,7 @@ a:hover {
 }
 
 .block-id {
-  background-color: #544835;
+  background-color: #393C3E;
   border: 3px solid white;
   margin: 0 auto;
   width: 165px;
@@ -618,7 +621,7 @@ a:hover {
 
 /* Set the fixed height of the footer here */
 #footer {
-  background-color: #544835;
+  background-color: #393C3E;
   color: white;
   height: 48px;
   overflow: hidden;
@@ -640,7 +643,7 @@ a:hover {
 }
 
 #footer .col-right a {
-  color: #655740;
+  color: #27292A;
   margin-left: 10px;
 }
 
@@ -716,6 +719,21 @@ a:hover {
   top: 55px;
   width: 275px;
   z-index: 9999;
+}
+
+/*Pubkey mobile display*/
+
+.pk-mobile-display {
+    display: inline;
+    white-space:normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+.pk-mobile-style {
+    border: 1px solid #D3D3D3;
+    padding: 7px;
 }
 
 /* Animations */
@@ -839,7 +857,7 @@ a:hover {
 }
 
 .tx-id {
-  background-color: #544835;
+  background-color: #393C3E;
   border: 3px solid white;
   margin: 0 auto;
   width: 165px;
@@ -1013,7 +1031,7 @@ a.v_highlight_more {
 /* Sort Order */
 
 a.sort-order {
-  color: #544835;
+  color: #393C3E;
 }
 
 a.sort-order:focus, .sort-order:hover {
@@ -1030,4 +1048,21 @@ a.sort-order span:after {
 
 a.sort-order span.reverse:after {
   content: '\25bc';
+}
+
+.delegate-vote {
+  margin-bottom: 40px;
+}
+
+.lead {
+    font-size: 30px;
+}
+.lead {
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+.proposal-icon {
+    vertical-align: middle;
+    margin-top: -5px;
 }
