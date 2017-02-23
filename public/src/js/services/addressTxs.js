@@ -3,7 +3,6 @@
 angular.module('lisk_explorer.system').factory('addressTxs',
   function ($http, $q) {
       return function (address, direction) {
-          var direction = direction || 0;
           var lessMore = new LessMore($http, $q, {
               url       : '/api/getTransactionsByAddress',
               parent    : 'address',
