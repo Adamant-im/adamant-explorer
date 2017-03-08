@@ -123,18 +123,17 @@
 		<table class="table">
 			<thead>
 			  <tr>
-				<th>Transaction ID</th>
-				<th>Sender</th>
-				<th>Recipient</th>
-				<th>Amount</th>
-				<th>Fee</th>
-				<th>Confirmations</th>
-				<th>Date</th>
+					<th>Transaction ID</th>
+					<th>Date</th>
+					<th>Sender</th>
+					<th>Recipient</th>
+					<th>Amount</th>
+					<th>Fee</th>
+					<th>Confirmations</th>
 			  </tr>
 			</thead>
 			<tbody>
-			<tr data-ng-if="tx.id" data-ng-include="'/views/transaction/tx.html'">
-			</tr>
+				<tr data-ng-if="tx.id" data-ng-include="'/views/transaction/tx.html'"></tr>
 			</tbody>
 		</table>
 	</div>

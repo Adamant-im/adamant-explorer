@@ -1,6 +1,5 @@
 #table-mobile .txvalues {
 	width: 100%;
-	padding: .7em 0;
 }
 
 /* Override bootstrap settings at <=320px */
@@ -8,7 +7,7 @@
     max-width: inherit;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 995px) {
     
     /* Force table to not be like tables anymore */
 	#table-mobile table, 
@@ -27,14 +26,18 @@
 		left: -9999px;
 	}
  
-	#table-mobile tr:first-child { border-width: 1px 1px 3px 1px;}
+	#table-mobile tr:first-child {
+		border-width: 1px 1px 3px 1px;
+	}
 	
 	#table-mobile tr { 
 		border: solid #ccc; 
 		border-width: 3px 1px;
 	}
 	
-	#table-mobile tr:last-child { border-width:  3px 1px 1px 1px;}
+	#table-mobile tr:last-child {
+		border-width:  3px 1px 1px 1px;
+	}
  
 	#table-mobile td { 
 		/* Behave  like a "row" */
@@ -67,5 +70,7 @@
 	}
  
 	/* Label the data */
-	#table-mobile td:before { content: attr(data-title); }
+	#table-mobile td:before {
+		content: attr(data-title);
+	}
 }
