@@ -1,5 +1,6 @@
 {
     "address"               : { "owner" : "owner", "description" : "description" },
+    "6566229458323231555L"  : { "owner" : "Genesis Account", "description" : "" },
     "9569486828221897676L"  : { "owner" : "ARK", "description" : "Token Exchange Campaign" },
     "18278674964748191682L" : { "owner" : "Poloniex", "description" : "Hot Wallet" },
     "2226471703256329822L"  : { "owner" : "Poloniex", "description" : "Cold Wallet" },

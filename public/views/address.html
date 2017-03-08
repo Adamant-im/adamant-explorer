@@ -1,6 +1,6 @@
 <section data-ng-controller="AddressController">
   <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" 
-data-ng-if="address.balance >= 0" data-ng-init="hideSNavbar=0">
+data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-8 text-left">
         <h3>Address</h3> {{address.address}}
@@ -17,7 +17,7 @@ data-ng-if="address.balance >= 0" data-ng-init="hideSNavbar=0">
       </a>
     </div>
   </div>
-  <div class="text-muted" data-ng-if="!(address.balance >= 0)">
+  <div class="text-muted" data-ng-if="!address.balance">
     <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
   </div>
   <h2>Address Summary</h2>
@@ -136,7 +136,7 @@ data-ng-if="address.balance >= 0" data-ng-init="hideSNavbar=0">
       </div>
     </div>
   </div>
-  <div data-ng-if="address.balance >= 0" data-ng-init="txs.loadData()">
+  <div data-ng-if="address.balance" data-ng-init="txs.loadData()">
     <h2>Transactions</h2>
     <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
