@@ -21,7 +21,17 @@ angular.module('lisk_explorer.address').controller('AddressController',
       $scope.address = {
           address : $routeParams.address
       };
+      
+      /**
+      * Sets the filter for which transactions to display
+	  *
+	  */
+      $scope.filterTxs = function(direction) {
+		  $scope.txs = addressTxs($routeParams.address, direction);
+		  $scope.direction = direction;
+	  };
 
       $scope.getAddress();
+      $scope.direction=0;
       $scope.txs = addressTxs($routeParams.address);
   });
