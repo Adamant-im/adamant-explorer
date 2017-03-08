@@ -140,13 +140,13 @@ data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
     <h2>Transactions</h2>
     <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
 	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="direction==0" data-ng-click="filterTxs(0);txs.loadData()">All</a>
+		<button class="btn btn-default" data-ng-disabled="!direction" data-ng-click="filterTxs();txs.loadData()">All</a>
 	  </div>
 	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="direction==1" data-ng-click="filterTxs(1);txs.loadData()">Sent</a>
+		<button class="btn btn-default" data-ng-disabled="direction==='sent'" data-ng-click="filterTxs('sent');txs.loadData()">Sent</a>
 	  </div>
 	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="direction==2" data-ng-click="filterTxs(2);txs.loadData()">Received</a>
+		<button class="btn btn-default" data-ng-disabled="direction==='received'" data-ng-click="filterTxs('received');txs.loadData()">Received</a>
 	  </div>
 	</div>
     <div data-ng-include src="'/views/transaction/list.html'"></div>
