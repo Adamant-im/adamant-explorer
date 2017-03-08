@@ -1,6 +1,22 @@
 <div class="alert alert-warning" data-ng-if="!txs.loading && !txs.results.length">There are no transactions involving this {{txs.parent}}.</div>
-<div class="block-tx" data-ng-if="txs.results[0].id" data-ng-repeat="tx in txs.results track by tx.id">
-  <div data-ng-include src="'/views/transaction/tx.html'"></div>
+<div id="table-mobile" class="table-responsive">
+	<table class="table">
+		<thead>
+		  <tr>
+			<th>Transaction ID</th>
+			<th>Sender</th>
+			<th>Recipient</th>
+			<th>Amount</th>
+			<th>Fee</th>
+			<th>Confirmations</th>
+			<th>Date</th>
+		  </tr>
+		</thead>
+		<tbody>
+		<tr data-ng-if="txs.results[0].id" data-ng-repeat="tx in txs.results track by tx.id" data-ng-include="'/views/transaction/tx.html'">
+		</tr>
+		</tbody>
+	</table>
 </div>
 <div class="progress progress-striped active" data-ng-if="txs.loading">
   <div class="progress-bar progress-bar-loading" style="width: 100%">
