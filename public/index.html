@@ -37,7 +37,10 @@
 <body data-ng-cloak class="ng-cloak">
   <div id="wrap">
     <div class="navbar navbar-default navbar-fixed-top" data-ng-include="'/views/index/header.html'" role='navigation'></div>
-    <section class="container" data-ng-view></section>
+    <section class="container">
+      <bread-crumb></bread-crumb>
+      <div data-ng-view></div>
+    </section>
   </div>
   <div id="footer" role="navigation">
     <div class="container" data-ng-controller="FooterController">
