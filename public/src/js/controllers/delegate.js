@@ -19,7 +19,7 @@ angular.module('lisk_explorer.address').controller('DelegateController',
         };
 
         $scope.address = {
-            address: $routeParams.address
+            address: $routeParams.delegateId
         };
 
         // Sets the filter for which transactions to display
