@@ -1,84 +1,91 @@
 <section data-ng-controller="AddressController">
-  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
-    <div class="container" data-ng-if="!hideSNavbar">
-      <div class="col-md-8 text-left">
-        <h3>Address</h3> {{address.address}}
-        <span class="btn-copy" clip-copy="address.address"></span>
-      </div>
-      <div class="col-md-4">
-        <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | currency:currency}} {{currency.symbol}}</span>
-      </div>
-    </div>
-    <div class="hide_snavbar">
-      <a href="#" data-ng-click="hideSNavbar=!hideSNavbar">
-        <span data-ng-if="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
-        <span data-ng-if="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
-      </a>
-    </div>
-  </div>
-  <div class="text-muted" data-ng-if="!address.balance">
-    <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
-  </div>
-  <h2>Address Summary</h2>
-    <div class="row">
-      <div class="col-md-10">
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr data-ng-if="address.knowledge">
-                <td><strong>Owner</strong></td>
-                <td class="text-right">
-                  <span class="owner-name">{{address.knowledge.owner}}</span>
-                  <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
-                </td>
-              </tr>
-              <tr>
-                <td><strong>Address</strong></td>
-                <td class="text-right"></span>{{address.address}}&nbsp;<span class="btn-copy" clip-copy="address.address"></span></td>
-              </tr>
-              <tr class="hidden-xs" data-ng-if="address.publicKey">
-                <td><strong>Public Key</strong></td>
-                <td class="text-right">{{address.publicKey}}&nbsp;<span class="btn-copy" clip-copy="address.publicKey"></span></td>
-              </tr>
-              <tr>
-                <td><strong>Total balance</strong></td>
-                <td class="text-right">{{address.balance | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
-              </tr>
-              <tr>
-                <td><strong>Transactions</strong></td>
-                <td class="ellipsis text-right"><span title="Incoming"><i class="fa fa-arrow-down text-success"></i> {{address.incoming_cnt}}</span> / <span title="Outgoing"><i class="fa fa-arrow-up text-danger"></i> {{address.outgoing_cnt}}</span></td>
-              </tr>
-              <tr ng-if="address.delegate || proposal">
-                <td><strong>Delegate</strong></td>
-                <td class="text-right"><a href="/delegate/{{address.delegate.address}}" data-ng-bind-html="address.delegate.username | proposal:delegateProposals" /></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="hidden-sm hidden-md hidden-lg hidden-xl pk-mobile-style" data-ng-if="address.publicKey">
-            <span class="pk-mobile-display"><strong>Public&nbsp;Key</strong>&nbsp;&nbsp;{{address.publicKey}}</span>
-          </div>
+    <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}"
+        data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
+        <div class="container" data-ng-if="!hideSNavbar">
+            <div class="col-md-8 text-left">
+                <h3>Address</h3> {{address.address}}
+                <span class="btn-copy" clip-copy="address.address"></span>
+            </div>
+            <div class="col-md-4">
+                <span class="txvalues txvalues-primary"><strong>Final Balance</strong> {{address.balance | currency:currency}} {{currency.symbol}}</span>
+            </div>
         </div>
-      </div>
-      <div class="col-md-2 text-center">
-        <qrcode size="160" data="{{address.address}}"></qrcode>
-        <br>
-        (Scan for Address)
-      </div>
+        <div class="hide_snavbar">
+            <a href="#" data-ng-click="hideSNavbar=!hideSNavbar">
+                <span data-ng-if="hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
+                <span data-ng-if="!hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
+            </a>
+        </div>
     </div>
-  </div>
-  <div data-ng-if="address.balance" data-ng-init="txs.loadData()">
-    <h2>Transactions</h2>
-    <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
-      <div class="btn-group" role="group">
-        <button class="btn btn-default" data-ng-disabled="!direction" data-ng-click="filterTxs();txs.loadData()">All</a>
-      </div>
-      <div class="btn-group" role="group">
-        <button class="btn btn-default" data-ng-disabled="direction==='sent'" data-ng-click="filterTxs('sent');txs.loadData()">Sent</a>
-      </div>
-      <div class="btn-group" role="group">
-        <button class="btn btn-default" data-ng-disabled="direction==='received'" data-ng-click="filterTxs('received');txs.loadData()">Received</a>
-      </div>
+    <div class="text-muted" data-ng-if="!address.balance">
+        <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
     </div>
-    <div data-ng-include src="'/views/transaction/list.html'"></div>
-  </div>
+    <h2>Address Summary</h2>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr data-ng-if="address.knowledge">
+                            <td><strong>Owner</strong></td>
+                            <td class="text-right">
+                                <span class="owner-name">{{address.knowledge.owner}}</span>
+                                <span class="owner-desc text-muted">{{address.knowledge.description}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address</strong></td>
+                            <td class="text-right">
+                                <span>{{address.address}}&nbsp;<span class="btn-copy" clip-copy="address.address"></span></span>
+                            </td>
+                        </tr>
+                        <tr class="hidden-xs" data-ng-if="address.publicKey">
+                            <td><strong>Public Key</strong></td>
+                            <td class="text-right">
+                                {{address.publicKey}}&nbsp;
+                                <span class="btn-copy" clip-copy="address.publicKey"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total balance</strong></td>
+                            <td class="text-right">{{address.balance | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transactions</strong></td>
+                            <td class="ellipsis text-right"><span title="Incoming"><i class="fa fa-arrow-down text-success"></i> {{address.incoming_cnt}}</span>                                / <span title="Outgoing"><i class="fa fa-arrow-up text-danger"></i> {{address.outgoing_cnt}}</span></td>
+                        </tr>
+                        <tr ng-if="address.delegate || proposal">
+                            <td><strong>Delegate</strong></td>
+                            <td class="text-right"><a href="/delegate/{{address.delegate.address}}" data-ng-bind-html="address.delegate.username | proposal:delegateProposals"
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="hidden-sm hidden-md hidden-lg hidden-xl pk-mobile-style" data-ng-if="address.publicKey">
+                    <span class="pk-mobile-display"><strong>Public&nbsp;Key</strong>&nbsp;&nbsp;{{address.publicKey}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-center">
+            <qrcode size="160" data="{{address.address}}"></qrcode>
+            <br> (Scan for Address)
+        </div>
+    </div>
+    </div>
+    <div data-ng-if="address.balance" data-ng-init="txs.loadData()">
+        <h2>Transactions</h2>
+        <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" data-ng-disabled="!direction" data-ng-click="filterTxs();txs.loadData()">All</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" data-ng-disabled="direction==='sent'" data-ng-click="filterTxs('sent');txs.loadData()">Sent</button>
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" data-ng-disabled="direction==='received'" data-ng-click="filterTxs('received');txs.loadData()">Received</button>
+            </div>
+        </div>
+        <div data-ng-include src="'/views/transaction/list.html'"></div>
+    </div>
  </section>
