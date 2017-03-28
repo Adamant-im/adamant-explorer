@@ -1,21 +1,21 @@
 <div class="table-responsive">
-  <table class="table table-hover table-striped {{name}}">
-    <thead>
-      <tr>
-        <th>{{heading}} <span class="text-muted">(BTC)</span></th>
-        <th>Amount <span class="text-muted">(LSK)</span></th>
-        <th>Total <span class="text-muted">(BTC)</span></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-ng-if="!orders">
-        <td colspan="6">Waiting for {{name}} <i class="fa fa-spinner fa-spin"></i></td>
-      </tr>
-      <tr data-ng-repeat='o in orders track by $index'>
-        <td>{{o[0] | number:8}}</td>
-        <td>{{o[1] | number:8}}</td>
-        <td>{{o[0] * o[1] | number:8}}</td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="table table-hover table-striped {{name}}">
+        <thead>
+            <tr>
+                <th>{{heading}} <span class="text-muted">(BTC)</span></th>
+                <th>Amount <span class="text-muted">(LSK)</span></th>
+                <th>Total <span class="text-muted">(BTC)</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-if="!orders">
+                <td colspan="6">Waiting for {{name}} <i class="fa fa-spinner fa-spin"></i></td>
+            </tr>
+            <tr data-ng-repeat='o in orders track by $index'>
+                <td>{{o[0] | number:8}}</td>
+                <td>{{o[1] | number:8}}</td>
+                <td>{{o[0] * o[1] | number:8}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

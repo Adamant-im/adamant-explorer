@@ -1,33 +1,33 @@
 <div class="table-responsive">
-  <table class="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th><a href="" data-ng-click="table.order('ip')" class="sort-order">IP Address <span data-ng-show="table.predicate === 'ip'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th><a href="" data-ng-click="table.order('port')" class="sort-order">Port <span data-ng-show="table.predicate === 'port'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th class="hidden-xs"><a href="" data-ng-click="table.order('location.hostname')" class="sort-order">Hostname <span data-ng-show="table.predicate === 'location.hostname'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th class="hidden-xs"><a href="" data-ng-click="table.order('location.country_name')" class="sort-order">Country <span data-ng-show="table.predicate === 'location.country_name'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th>Status</th>
-        <th><a href="" data-ng-click="table.order('version')" class="sort-order">Version <span data-ng-show="table.predicate === 'version'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th><a href="" data-ng-click="table.order('os')" class="sort-order">Platform <span data-ng-show="table.predicate === 'os'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-        <th class="hidden-xs hidden-sm"><a href="" data-ng-click="table.order('height')" class="sort-order">Height <span data-ng-show="table.predicate === 'height'" data-ng-class="{reverse:table.reverse}"></span></a></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr data-ng-if="!peers">
-        <td colspan="6">Waiting for peers <i class="fa fa-spinner fa-spin"></i></td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr data-ng-repeat='p in peers | orderBy:table.predicate:table.reverse track by $index + p.ip'>
-        <td><span class="text-muted">{{p.ip}}</span></td>
-        <td><span class="text-muted">{{p.port}}</span></td>
-        <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
-        <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
-        <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
-        <td><span class="text-muted">{{p.version}}</span></td>
-        <td><span os-icon os="p.os" brand="p.osBrand"></span></td>
-        <td class="hidden-xs hidden-sm">{{p.height}}</td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th><a href="" data-ng-click="table.order('ip')" class="sort-order">IP Address <span data-ng-show="table.predicate === 'ip'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th><a href="" data-ng-click="table.order('port')" class="sort-order">Port <span data-ng-show="table.predicate === 'port'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th class="hidden-xs"><a href="" data-ng-click="table.order('location.hostname')" class="sort-order">Hostname <span data-ng-show="table.predicate === 'location.hostname'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th class="hidden-xs"><a href="" data-ng-click="table.order('location.country_name')" class="sort-order">Country <span data-ng-show="table.predicate === 'location.country_name'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th>Status</th>
+                <th><a href="" data-ng-click="table.order('version')" class="sort-order">Version <span data-ng-show="table.predicate === 'version'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th><a href="" data-ng-click="table.order('os')" class="sort-order">Platform <span data-ng-show="table.predicate === 'os'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+                <th class="hidden-xs hidden-sm"><a href="" data-ng-click="table.order('height')" class="sort-order">Height <span data-ng-show="table.predicate === 'height'" data-ng-class="{reverse:table.reverse}"></span></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-if="!peers">
+                <td colspan="6">Waiting for peers <i class="fa fa-spinner fa-spin"></i></td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr data-ng-repeat='p in peers | orderBy:table.predicate:table.reverse track by $index + p.ip'>
+                <td><span class="text-muted">{{p.ip}}</span></td>
+                <td><span class="text-muted">{{p.port}}</span></td>
+                <td class="hidden-xs"><span class="text-muted ellipsis hostname" title="{{p.location.hostname}}">{{p.location.hostname || 'N/A'}}</span></td>
+                <td class="hidden-xs"><span class="flag flag-{{p.location.country_code | lowercase}}" title="{{p.location.country_name}}" /></td>
+                <td><span class="peer-state state-{{p.state}}" title="{{p.humanState}}"></span></td>
+                <td><span class="text-muted">{{p.version}}</span></td>
+                <td><span os-icon os="p.os" brand="p.osBrand"></span></td>
+                <td class="hidden-xs hidden-sm">{{p.height}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
