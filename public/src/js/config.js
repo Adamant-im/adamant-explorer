@@ -43,6 +43,11 @@ angular.module('lisk_explorer').config(function ($routeProvider) {
         templateUrl : '/views/networkMonitor.html',
         title: 'Network Monitor'
     })
+    .when('/delegate/:delegateId', {
+        templateUrl: '/views/delegate.html',
+        title: 'Delegate',
+        parent: 'Home'
+    })
     .otherwise({
         templateUrl: '/views/404.html',
         title: 'Error'
