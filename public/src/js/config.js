@@ -5,47 +5,58 @@ angular.module('lisk_explorer').config(function ($routeProvider) {
     $routeProvider.
     when('/', {
         templateUrl: '/views/index.html',
-        title: 'Home'
+        title: 'Home',
+        parent: 'Home'
     }).
     when('/blocks/:page?', {
         templateUrl: '/views/blocks.html',
-        title: 'Blocks'
+        title: 'Blocks',
+        parent: 'Home'
     }).
     when('/block/:blockId', {
         templateUrl: '/views/block.html',
-        title: 'Block '
+        title: 'Block ',
+        parent: 'Blocks'
     }).
     when('/tx/:txId', {
         templateUrl: '/views/transaction.html',
-        title: 'Transaction '
+        title: 'Transaction ',
+        parent: 'Home'
     }).
     when('/address/:address', {
         templateUrl: '/views/address.html',
-        title: 'Address'
+        title: 'Address',
+        parent: 'Home'
     })
     .when('/activityGraph', {
         templateUrl : '/views/activityGraph.html',
-        title: 'Activity Graph'
+        title: 'Activity Graph',
+        parent: 'Home'
     })
     .when('/topAccounts', {
         templateUrl : '/views/topAccounts.html',
-        title: 'Top Accounts'
+        title: 'Top Accounts',
+        parent: 'Home'
     })
     .when('/delegateMonitor', {
         templateUrl : '/views/delegateMonitor.html',
-        title: 'Delegate Monitor'
+        title: 'Delegate Monitor',
+        parent: 'Home'
     })
     .when('/marketWatcher', {
         templateUrl : '/views/marketWatcher.html',
-        title: 'Market Watcher'
+        title: 'Market Watcher',
+        parent: 'Home'
     })
     .when('/networkMonitor', {
         templateUrl : '/views/networkMonitor.html',
-        title: 'Network Monitor'
+        title: 'Network Monitor',
+        parent: 'Home'
     })
     .otherwise({
         templateUrl: '/views/404.html',
-        title: 'Error'
+        title: 'Error',
+        parent: 'Home'
     });
 });
 
