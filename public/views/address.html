@@ -1,6 +1,5 @@
 <section data-ng-controller="AddressController">
-  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" 
-data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
+  <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !secondaryNavbar}" data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
     <div class="container" data-ng-if="!hideSNavbar">
       <div class="col-md-8 text-left">
         <h3>Address</h3> {{address.address}}
@@ -55,33 +54,31 @@ data-ng-if="address.balance" data-ng-init="hideSNavbar=0">
               </tr>
             </tbody>
           </table>
-     <div class="hidden-sm hidden-md hidden-lg hidden-xl pk-mobile-style" data-ng-if="address.publicKey">
-	<span class="pk-mobile-display"><strong>Public&nbsp;Key</strong>&nbsp;&nbsp;{{address.publicKey}}</span>
-     </div>
+          <div class="hidden-sm hidden-md hidden-lg hidden-xl pk-mobile-style" data-ng-if="address.publicKey">
+            <span class="pk-mobile-display"><strong>Public&nbsp;Key</strong>&nbsp;&nbsp;{{address.publicKey}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 text-center">
+        <qrcode size="160" data="{{address.address}}"></qrcode>
+        <br>
+        (Scan for Address)
+      </div>
     </div>
-  </div>
-     <div class="col-md-2 text-center">
-	 <qrcode size="160" data="{{address.address}}"></qrcode>
-	 <br>
-	(Scan for Address)     
-    </div>
-    </div>
-
-
   </div>
   <div data-ng-if="address.balance" data-ng-init="txs.loadData()">
     <h2>Transactions</h2>
     <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
-	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="!direction" data-ng-click="filterTxs();txs.loadData()">All</a>
-	  </div>
-	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="direction==='sent'" data-ng-click="filterTxs('sent');txs.loadData()">Sent</a>
-	  </div>
-	  <div class="btn-group" role="group">
-		<button class="btn btn-default" data-ng-disabled="direction==='received'" data-ng-click="filterTxs('received');txs.loadData()">Received</a>
-	  </div>
-	</div>
+      <div class="btn-group" role="group">
+        <button class="btn btn-default" data-ng-disabled="!direction" data-ng-click="filterTxs();txs.loadData()">All</a>
+      </div>
+      <div class="btn-group" role="group">
+        <button class="btn btn-default" data-ng-disabled="direction==='sent'" data-ng-click="filterTxs('sent');txs.loadData()">Sent</a>
+      </div>
+      <div class="btn-group" role="group">
+        <button class="btn btn-default" data-ng-disabled="direction==='received'" data-ng-click="filterTxs('received');txs.loadData()">Received</a>
+      </div>
+    </div>
     <div data-ng-include src="'/views/transaction/list.html'"></div>
   </div>
  </section>
