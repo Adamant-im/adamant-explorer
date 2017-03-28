@@ -1,6 +1,15 @@
 <section data-ng-controller="DelegateController">
+
   <div class="delegate">
-    <h2>Delegate</h2>
+    <h2>
+      Delegate&nbsp;
+      <small data-ng-if="address.secondSignature" data-tooltip="Second signiture">
+        <i class="glyphicon glyphicon-lock"></i>
+      </small>
+      <small data-ng-if="address.multisignatures && address.multisignatures.length" data-tooltip="Multi Signiture">
+        <i class="glyphicon glyphicon-info-sign"></i>
+      </small>
+    </h2>
     <div class="row">
       <div class="col-md-12">
         <div class="table-responsive">
