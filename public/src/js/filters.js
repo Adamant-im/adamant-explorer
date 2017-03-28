@@ -189,7 +189,7 @@ angular.module('lisk_explorer')
   }).filter('proposal', function ($sce) {
       return function (name, proposals) {
           var p = _.find (proposals, function (p) {
-              return p.name === name.toLowerCase ();
+              return name && p.name === name.toLowerCase ();
           });
           if (p) {
               return $sce.trustAsHtml('<a class="glyphicon glyphicon-user" href="https://forum.lisk.io/viewtopic.php?f=48&t=' + p.topic + '" title="' + _.escape (p.description) + '" target="_blank"></a> ' + name);
