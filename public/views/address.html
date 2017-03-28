@@ -19,7 +19,15 @@
   <div class="text-muted" data-ng-if="!address.balance">
     <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
   </div>
-  <h2>Address Summary</h2>
+    <h2>
+      Address Summary&nbsp;
+      <small data-ng-if="address.secondSignature" data-tooltip="Second signature">
+        <i class="glyphicon glyphicon-lock"></i>
+      </small>
+      <small data-ng-if="address.multisignatures && address.multisignatures.length" data-tooltip="Multi Signature">
+        <i class="glyphicon glyphicon-info-sign"></i>
+      </small>
+    </h2>
     <div class="row">
       <div class="col-md-10">
         <div class="table-responsive">
