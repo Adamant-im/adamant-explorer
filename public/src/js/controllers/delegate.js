@@ -2,6 +2,7 @@
 
 angular.module('lisk_explorer.address').controller('DelegateController',
   function ($scope, $rootScope, $routeParams, $location, $http, addressTxs) {
+      $rootScope.breadCrumb = {address: $routeParams.delegateId};
       $scope.getAddress = function () {
           $http.get('/api/getAccount', {
               params: {
