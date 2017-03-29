@@ -11,6 +11,12 @@
                                 <td class="text-right" ng-bind-html="address.delegate.username | proposal:delegateProposals"></td>
                             </tr>
                             <tr>
+                                <td><strong>Address</strong></td>
+                                <td class="text-right">
+                                    <a href="/address/{{address.address}}">{{address.address}}</a>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td><strong>Uptime</strong></td>
                                 <td class="text-right">{{address.delegate.productivity || 0.00}}%</td>
                             </tr>
