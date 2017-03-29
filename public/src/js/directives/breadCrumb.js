@@ -6,14 +6,13 @@ angular.module('lisk_explorer')
             restric: 'E',
             templateUrl: '/views/index/breadCrumb.html',
             link: function (scope, element, attrs) {
-
                 scope.init = function (e, next) {
                     scope.sections = [];
 
                     var section = next.$$route;
+
                     while (section.parent !== section.title) {
                         for (route in $route.routes) {
-                            
                             if ($route.routes.hasOwnProperty(route) && $route.routes[route].title === section.parent) {
                                 scope.sections.unshift({
                                     title: $route.routes[route].title,
@@ -24,6 +23,7 @@ angular.module('lisk_explorer')
                             }
                         }
                     }
+
                     scope.sections.push({
                         title: next.$$route.title,
                         url: '#'
