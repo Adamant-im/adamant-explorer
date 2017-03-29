@@ -2,7 +2,7 @@
 
 /**
  * Looks in state/route config for title and parent values and creates an array of their heirarchy.
- * in case of parameters, uses $rootScope.breadCrub object (if exists) to replace with their values
+ * In case of parameters, uses $rootScope.breadCrumb object (if exists) to replace with their values.
  */
 angular.module('lisk_explorer')
     .directive('breadCrumb', ['$route', function ($route) {
@@ -35,7 +35,7 @@ angular.module('lisk_explorer')
                 }
 
                 /**
-                 * Replaces any :param in path string with their corresponding values from given set of breadCrumb values
+                 * Replaces any :param in path string with their corresponding values from given set of breadCrumb values.
                  */
                 scope.setPathParams = function (path, breadCrumbValues) {
                     var paramsReg = /(?:\/\:([^\/]+)?)/g;
