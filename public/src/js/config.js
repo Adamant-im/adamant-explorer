@@ -56,7 +56,7 @@ angular.module('lisk_explorer').config(function ($routeProvider) {
     .when('/delegate/:delegateId', {
         templateUrl: '/views/delegate.html',
         title: 'Delegate',
-        parent: 'Home'
+        parent: 'Address'
     })
     .otherwise({
         templateUrl: '/views/404.html',
