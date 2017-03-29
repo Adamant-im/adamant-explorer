@@ -11,6 +11,7 @@ module.exports = function (config, client) {
         } else {
             running = true;
         }
+
         async.series([
             function (callback) {
                 if (!config.marketWatcher.exchanges.poloniex) {

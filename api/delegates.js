@@ -55,7 +55,7 @@ module.exports = function (app) {
             req.query.q,
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
-	);
+        );
     });
 
     app.get('/api/delegates/getNextForgers', function (req, res, next) {
