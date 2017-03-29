@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * Looks in state/route config for title and parent values and creates an array of their heirarchy.
  * in case of parameters, uses $rootScope.breadCrub object (if exists) to replace with their values
@@ -11,14 +12,12 @@ angular.module('lisk_explorer')
             link: function (scope, element, attrs) {
                 scope.init = function (e, next) {
                     scope.sections = [];
-                    
 
                     var section = next.$$route;
 
                     while (section.parent !== section.title) {
                         for (route in $route.routes) {
                             if ($route.routes.hasOwnProperty(route) && $route.routes[route].title === section.parent) {
-                                
                                 scope.sections.unshift({
                                     title: $route.routes[route].title,
                                     url: scope.setPathParams($route.routes[route].originalPath, scope.breadCrumb)
@@ -34,6 +33,7 @@ angular.module('lisk_explorer')
                         url: '#'
                     });
                 }
+
                 /**
                  * Replaces any :param in path string with their corresponding values from given set of breadCrumb values
                  */
@@ -42,6 +42,7 @@ angular.module('lisk_explorer')
                     var params = path.match(paramsReg);
                     var paramName = '';
                     var paramValue = '';
+
                     if (params) {
                         for (var i = 0; i < params.length; i++) {
                             paramName = params[i].replace(/(^\/\:)|(\?)/g, '');
@@ -49,6 +50,7 @@ angular.module('lisk_explorer')
                             path = path.replace(params[i], '/' + paramValue)
                         }
                     }
+
                     return path;
                 }
 
