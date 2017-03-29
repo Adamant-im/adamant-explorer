@@ -16,7 +16,7 @@ angular.module('lisk_explorer')
                     var section = next.$$route;
 
                     while (section.parent !== section.title) {
-                        for (route in $route.routes) {
+                        for (var route in $route.routes) {
                             if ($route.routes.hasOwnProperty(route) && $route.routes[route].title === section.parent) {
                                 scope.sections.unshift({
                                     title: $route.routes[route].title,
@@ -32,7 +32,7 @@ angular.module('lisk_explorer')
                         title: next.$$route.title,
                         url: '#'
                     });
-                }
+                };
 
                 /**
                  * Replaces any :param in path string with their corresponding values from given set of breadCrumb values.
