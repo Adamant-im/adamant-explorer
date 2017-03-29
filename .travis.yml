@@ -3,7 +3,7 @@ language: node_js
 sudo: required
 node_js:
   - 'node'
-  - '6.9.2'
+  - '6.10.1'
   - '4.0'
 services: 
   - redis-server
