@@ -8,7 +8,7 @@
   },
   "private": true,
   "author": "Boris Povod <boris@crypti.me>, Oliver Beddows <oliver@lisk.io>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "main": "app.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose"
