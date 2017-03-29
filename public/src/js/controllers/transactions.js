@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('lisk_explorer.transactions').controller('TransactionsController',
-  function ($scope, $rootScope, $routeParams, $location, $http) {
+  function ($scope, $rootScope, $stateParams, $location, $http) {
       $scope.getTransaction = function () {
           $http.get('/api/getTransaction', {
               params : {
-                  transactionId : $routeParams.txId
+                  transactionId : $stateParams.txId
               }
           }).then(function (resp) {
               if (resp.data.success) {

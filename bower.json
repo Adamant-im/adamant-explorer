@@ -7,7 +7,6 @@
     "angular-bootstrap": "~0.13.4",
     "angular-gettext": "~2.3.8",
     "angular-resource": "~1.5.8",
-    "angular-route": "~1.5.8",
     "angular-naturalsort": "https://github.com/isabello/angular-naturalsort.git",
     "angular-qrcode": "~3.1.0",
     "bootstrap": "~3.3.7",

@@ -1,37 +1,42 @@
 'use strict';
 
 angular.module('lisk_explorer')
-    .directive('breadCrumb', ['$route', function ($route) {
+    .directive('breadCrumb', ['$state', function ($state) {
         return {
             restric: 'E',
             templateUrl: '/views/index/breadCrumb.html',
             link: function (scope, element, attrs) {
+                console.log('breadCrumb');
 
                 scope.init = function (e, next) {
+                    console.log('breadCrumb should have $$state ', next);
                     scope.sections = [];
 
-                    var section = next.$$route;
+                    var section = next.$$state;
                     while (section.parent !== section.title) {
-                        for (route in $route.routes) {
+                        for (state in $state.states) {
                             
-                            if ($route.routes.hasOwnProperty(route) && $route.routes[route].title === section.parent) {
+                            if ($state.states.hasOwnProperty(state) && $state.states[state].title === section.parent) {
                                 scope.sections.unshift({
-                                    title: $route.routes[route].title,
-                                    url: $route.routes[route].originalPath.replace(/(?:\/\:([^\/]+)?)\?$/g, '')
+                                    title: $state.states[state].title,
+                                    url: $state.states[state].originalPath.replace(/(?:\/\:([^\/]+)?)\?$/g, '')
                                 });
-                                section = $route.routes[route];
+                                section = $state.states[state];
                                 break;
                             }
                         }
                     }
                     scope.sections.push({
-                        title: next.$$route.title,
+                        title: next.$$state.title,
                         url: '#'
                     });
                 }
 
-                // scope.$on('$routeChangeStart', scope.init);
-                scope.$on('$routeChangeSuccess', scope.init);
+                // scope.$on('$stateChangeStart', scope.init);
+                scope.$on('$stateChangeSuccess', function () {
+                    console.log('sdsddfs');
+                    scope.init();
+                });
             }
         };
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lisk_explorer.search').controller('SearchController',
-  function ($scope, $routeParams, $location, $timeout, Global, $http) {
+  function ($scope, $stateParams, $location, $timeout, Global, $http) {
       $scope.loading = false;
       $scope.badQuery = false;
 

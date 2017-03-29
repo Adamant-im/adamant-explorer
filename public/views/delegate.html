@@ -1,4 +1,4 @@
-<section data-ng-controller="DelegateController">
+<section>
     <div class="delegate">
         <h2>Delegate</h2>
         <div class="row">
@@ -8,27 +8,27 @@
                         <tbody>
                             <tr>
                                 <td><strong>Name</strong></td>
-                                <td class="text-right" ng-bind-html="address.delegate.username | proposal:delegateProposals"></td>
+                                <td class="text-right" ng-bind-html="vm.delegate.username | proposal:delegateProposals"></td>
                             </tr>
                             <tr>
                                 <td><strong>Uptime</strong></td>
-                                <td class="text-right">{{address.delegate.productivity || 0.00}}%</td>
+                                <td class="text-right">{{vm.delegate.productivity || 0.00}}%</td>
                             </tr>
                             <tr>
                                 <td><strong>Rank / Status</strong></td>
-                                <td class="text-right">{{address.delegate.rate}} / <span class="text-muted">{{(address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
+                                <td class="text-right">{{vm.delegate.rate}} / <span class="text-muted">{{(vm.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Approval</strong></td>
-                                <td class="text-right">{{address.delegate.approval}}%</td>
+                                <td class="text-right">{{vm.delegate.approval}}%</td>
                             </tr>
                             <tr>
                                 <td><strong>Forged</strong></td>
-                                <td class="text-right">{{address.delegate.forged || 0 | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
+                                <td class="text-right">{{vm.delegate.forged || 0 | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Blocks</strong></td>
-                                <td class="text-right">{{address.delegate.producedblocks}} <span class="text-muted">({{address.delegate.missedblocks}} missed)</span></td>
+                                <td class="text-right">{{vm.delegate.producedblocks}} <span class="text-muted">({{vm.delegate.missedblocks}} missed)</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -36,14 +36,14 @@
             </div>
         </div>
     </div>
-    <div class="delegate-vote" data-ng-if="address.votes">
+    <div class="delegate-vote" data-ng-if="vm.votes">
         <h2>
             <a href="" data-ng-show="!showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-plus-square-o"></i></small></a>
-            <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-minus-square-o"></i></small></a>            Votes <small>{{address.votes.length}}</small>
+            <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-minus-square-o"></i></small></a>            Votes <small>{{vm.votes.length}}</small>
         </h2>
         <div class="row" data-ng-init="showVotes=false" data-ng-show="showVotes">
             <div class="col-md-12">
-                <span data-ng-repeat='v in address.votes'>
+                <span data-ng-repeat='v in vm.votes'>
                     <span data-ng-if="!$last">
                         <a href="/address/{{v.address}}">{{v | votes}}</a>
                         <span class="text-muted">&bull;</span>
@@ -55,14 +55,14 @@
             </div>
         </div>
     </div>
-    <div class="delegate-vote" data-ng-if="address.voters">
+    <div class="delegate-vote" data-ng-if="vm.voters">
         <h2>
             <a href="" data-ng-show="!showVoters" data-ng-click="showVoters=!showVoters"><small><i class="fa fa-plus-square-o"></i></small></a>
-            <a href="" data-ng-show="showVoters" data-ng-click="showVoters=!showVoters"><small><i class="fa fa-minus-square-o"></i></small></a>            Voters <small>{{address.voters.length}}</small>
+            <a href="" data-ng-show="showVoters" data-ng-click="showVoters=!showVoters"><small><i class="fa fa-minus-square-o"></i></small></a>            Voters <small>{{vm.voters.length}}</small>
         </h2>
         <div class="row" data-ng-init="showVoters=false" data-ng-show="showVoters">
             <div class="col-md-12">
-                <span data-ng-repeat='v in address.voters'>
+                <span data-ng-repeat='v in vm.voters'>
                     <span data-ng-if="!$last">
                         <a href="/address/{{v.address}}">{{v | votes}}</a>
                         <span class="text-muted">&bull;</span>

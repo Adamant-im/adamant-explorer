@@ -1,7 +1,7 @@
 <div class="alert alert-danger" data-ng-if="flashMessage">
     {{$root.flashMessage}}
 </div>
-<section data-ng-controller="IndexController">
+<section>
     <div id="home" class="row">
         <div class="col-xs-12 col-md-12">
             <div data-ng-include src="'/views/index/search.html'"></div>
@@ -55,10 +55,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-if="!blocks.length">
+                        <tr data-ng-if="!vm.blocks.length">
                             <td colspan="7">Waiting for blocks...</td>
                         </tr>
-                        <tr data-ng-repeat='b in blocks track by $index'>
+                        <tr data-ng-repeat='b in vm.blocks track by $index'>
                             <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
                             <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
                             <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>

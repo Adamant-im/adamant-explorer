@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('lisk_explorer.address').controller('DelegateController',
-  function ($scope, $rootScope, $routeParams, $location, $http, addressTxs) {
-      $scope.getAddress = function () {
+  function ($scope, $rootScope, $stateParams, $location, $http, addressTxs) {
+      var vm = this;
+      vm.getAddress = function () {
           $http.get('/api/getAccount', {
               params: {
-                  address: $routeParams.delegateId
+                  address: $stateParams.delegateId
               }
           }).then(function (resp) {
               if (resp.data.success) {
-                  $scope.address = resp.data;
+                  vm.address = resp.data;
               } else {
                   throw 'Account was not found!';
               }
@@ -18,16 +19,16 @@ angular.module('lisk_explorer.address').controller('DelegateController',
           });
       };
 
-      $scope.address = {
-          address: $routeParams.delegateId
+      vm.address = {
+          address: $stateParams.delegateId
       };
 
       // Sets the filter for which transactions to display
-      $scope.filterTxs = function(direction) {
-          $scope.direction = direction;
-          $scope.txs = addressTxs($routeParams.delegateId, direction);
+      vm.filterTxs = function(direction) {
+          vm.direction = direction;
+          vm.txs = addressTxs($stateParams.delegateId, direction);
       };
 
-      $scope.getAddress();
-      $scope.txs = addressTxs($routeParams.delegateId);
+      vm.getAddress();
+      vm.txs = addressTxs($stateParams.delegateId);
   });

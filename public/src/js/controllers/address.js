@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('lisk_explorer.address').controller('AddressController',
-  function ($scope, $rootScope, $routeParams, $location, $http, addressTxs) {
+  function ($scope, $rootScope, $stateParams, $location, $http, addressTxs) {
       $scope.getAddress = function () {
           $http.get('/api/getAccount', {
               params: {
-                  address: $routeParams.address
+                  address: $stateParams.address
               }
           }).then(function (resp) {
               if (resp.data.success) {
@@ -19,15 +19,15 @@ angular.module('lisk_explorer.address').controller('AddressController',
       };
 
       $scope.address = {
-          address: $routeParams.address
+          address: $stateParams.address
       };
 
       // Sets the filter for which transactions to display
       $scope.filterTxs = function (direction) {
           $scope.direction = direction;
-          $scope.txs = addressTxs($routeParams.address, direction);
+          $scope.txs = addressTxs($stateParams.address, direction);
       };
 
       $scope.getAddress();
-      $scope.txs = addressTxs($routeParams.address);
+      $scope.txs = addressTxs($stateParams.address);
   });

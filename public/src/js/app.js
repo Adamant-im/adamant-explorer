@@ -3,7 +3,7 @@
 angular.module('lisk_explorer',[
     'ngAnimate',
     'ngResource',
-    'ngRoute',
+    'ui.router',
     'ngProgress',
     'ui.bootstrap',
     'gettext',

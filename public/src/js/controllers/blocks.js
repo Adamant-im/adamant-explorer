@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lisk_explorer.blocks').controller('BlocksController',
-  function ($scope, $rootScope, $routeParams, $location, $http, blockTxs) {
+  function ($scope, $rootScope, $stateParams, $location, $http, blockTxs) {
       $scope.getLastBlocks = function (n) {
           var offset = 0;
 
@@ -38,14 +38,14 @@ angular.module('lisk_explorer.blocks').controller('BlocksController',
           });
       };
 
-      if ($routeParams.blockId) {
+      if ($stateParams.blockId) {
           $scope.block = {
-              id : $routeParams.blockId
+              id : $stateParams.blockId
           };
-          $scope.getBlock($routeParams.blockId);
-          $scope.txs = blockTxs($routeParams.blockId);
-      } else if ($routeParams.page) {
-          $scope.getLastBlocks($routeParams.page);
+          $scope.getBlock($stateParams.blockId);
+          $scope.txs = blockTxs($stateParams.blockId);
+      } else if ($stateParams.page) {
+          $scope.getLastBlocks($stateParams.page);
       } else {
           $scope.getLastBlocks();
       }
