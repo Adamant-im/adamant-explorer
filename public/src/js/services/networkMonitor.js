@@ -1,6 +1,6 @@
 'use strict';
 
-var NetworkMonitor = function ($scope) {
+var NetworkMonitor = function (vm) {
     this.map = new NetworkMap();
 
     function Platforms () {
@@ -137,18 +137,18 @@ var NetworkMonitor = function ($scope) {
     };
 
     this.updatePeers = function (peers) {
-        $scope.peers   = peers.list;
-        $scope.counter = this.counter(peers.list);
+        vm.peers   = peers.list;
+        vm.counter = this.counter(peers.list);
         this.map.addConnected(peers.list);
     };
 
     this.updateLastBlock = function (lastBlock) {
-        $scope.lastBlock = lastBlock.block;
+        vm.lastBlock = lastBlock.block;
     };
 
     this.updateBlocks = function (blocks) {
-        $scope.bestBlock = blocks.best;
-        $scope.volume    = blocks.volume;
+        vm.bestBlock = blocks.best;
+        vm.volume    = blocks.volume;
     };
 };
 
@@ -258,9 +258,9 @@ var NetworkMap = function () {
 };
 
 angular.module('lisk_explorer.tools').factory('networkMonitor',
-  function ($socket) {
-      return function ($scope) {
-          var networkMonitor = new NetworkMonitor($scope),
+  function ($socket, $rootScope) {
+      return function (vm) {
+          var networkMonitor = new NetworkMonitor(vm),
               ns = $socket('/networkMonitor');
 
           ns.on('data', function (res) {
@@ -287,11 +287,11 @@ angular.module('lisk_explorer.tools').factory('networkMonitor',
               }
           });
 
-          $scope.$on('$destroy', function (event) {
+          $rootScope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 
-          $scope.$on('$locationChangeStart', function (event, next, current) {
+          $rootScope.$on('$locationChangeStart', function (event, next, current) {
               ns.emit('forceDisconnect');
           });
 

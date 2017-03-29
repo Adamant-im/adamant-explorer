@@ -1,37 +1,38 @@
 'use strict';
 
 angular.module('lisk_explorer.tools').controller('DelegateMonitor',
-  function (delegateMonitor, orderBy, $scope, $rootScope, $http) {
-      delegateMonitor($scope);
+  function (delegateMonitor, orderBy, $rootScope, $http) {
+      var vm = this;
+      delegateMonitor(vm);
 
-      $scope.getStandby = function (n) {
+      vm.getStandby = function (n) {
           var offset = 0;
 
           if (n) {
               offset = (n - 1) * 20;
           }
 
-          $scope.standbyDelegates = null;
+          vm.standbyDelegates = null;
 
           $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
               if (resp.data.success) {
-                  _.each(resp.data.delegates, function (d) {
-                      d.proposal = _.find ($rootScope.delegateProposals, function (p) {
-                        return p.name === d.username.toLowerCase ();
+                  _.each(resp.data.delegates, function (deligate) {
+                      deligate.proposal = _.find ($rootScope.delegateProposals, function (proposal) {
+                        return proposal.name === deligate.username.toLowerCase ();
                       });
                   });
 
-                  $scope.standbyDelegates = resp.data.delegates;
+                  vm.standbyDelegates = resp.data.delegates;
               }
               if (resp.data.pagination) {
-                  $scope.pagination = resp.data.pagination;
+                  vm.pagination = resp.data.pagination;
               }
           });
       };
 
-      $scope.getStandby(1);
+      vm.getStandby(1);
 
-      $scope.tables = {
+      vm.tables = {
           active : orderBy('rate'),
           standby : orderBy('rate')
       };

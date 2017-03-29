@@ -13,10 +13,10 @@ angular.module('lisk_explorer')
                     scope.sections = [];
 
                     var section = next.$$state;
-                    while (section.parent !== section.title) {
+                    while (section.parentDir !== section.title) {
                         for (state in $state.states) {
                             
-                            if ($state.states.hasOwnProperty(state) && $state.states[state].title === section.parent) {
+                            if ($state.states.hasOwnProperty(state) && $state.states[state].title === section.parentDir) {
                                 scope.sections.unshift({
                                     title: $state.states[state].title,
                                     url: $state.states[state].originalPath.replace(/(?:\/\:([^\/]+)?)\?$/g, '')

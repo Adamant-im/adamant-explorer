@@ -1,37 +1,38 @@
 'use strict';
 
 angular.module('lisk_explorer.search').controller('SearchController',
-  function ($scope, $stateParams, $location, $timeout, Global, $http) {
-      $scope.loading = false;
-      $scope.badQuery = false;
+  function ($stateParams, $location, $timeout, Global, $http) {
+      var sch = this;
+      sch.loading = false;
+      sch.badQuery = false;
 
       var _badQuery = function () {
-          $scope.badQuery = true;
+          sch.badQuery = true;
 
           $timeout(function () {
-              $scope.badQuery = false;
+              sch.badQuery = false;
           }, 2000);
       };
 
       var _resetSearch = function () {
-          $scope.q = '';
-          $scope.loading = false;
+          sch.q = '';
+          sch.loading = false;
       };
 
-      $scope.search = function () {
-          $scope.badQuery = false;
-          $scope.loading = true;
+      sch.search = function () {
+          sch.badQuery = false;
+          sch.loading = true;
 
           $http.get('/api/search', {
               params : {
-                  id : $scope.q
+                  id : sch.q
               }
           }).then(function (resp) {
               if (resp.data.success === false) {
-                  $scope.loading = false;
+                  sch.loading = false;
                   _badQuery();
               } else if (resp.data.id) {
-                  $scope.loading = false;
+                  sch.loading = false;
                   _resetSearch();
 
                   $location.path('/' + resp.data.type + '/' + resp.data.id);

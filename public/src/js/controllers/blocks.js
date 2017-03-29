@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('lisk_explorer.blocks').controller('BlocksController',
-  function ($scope, $rootScope, $stateParams, $location, $http, blockTxs) {
-      $scope.getLastBlocks = function (n) {
+  function ($rootScope, $stateParams, $location, $http, blockTxs) {
+      var vm = this;
+      vm.getLastBlocks = function (n) {
           var offset = 0;
 
           if (n) {
@@ -11,25 +12,25 @@ angular.module('lisk_explorer.blocks').controller('BlocksController',
 
           $http.get('/api/getLastBlocks?n=' + offset).then(function (resp) {
               if (resp.data.success) {
-                  $scope.blocks = resp.data.blocks;
+                  vm.blocks = resp.data.blocks;
 
                   if (resp.data.pagination) {
-                      $scope.pagination = resp.data.pagination;
+                      vm.pagination = resp.data.pagination;
                   }
               } else {
-                  $scope.blocks = [];
+                  vm.blocks = [];
               }
           });
       };
 
-      $scope.getBlock = function (blockId) {
+      vm.getBlock = function (blockId) {
           $http.get('/api/getBlock', {
               params : {
                   blockId : blockId
               }
           }).then(function (resp) {
               if (resp.data.success) {
-                  $scope.block = resp.data.block;
+                  vm.block = resp.data.block;
               } else {
                   throw 'Block was not found!';
               }
@@ -39,14 +40,14 @@ angular.module('lisk_explorer.blocks').controller('BlocksController',
       };
 
       if ($stateParams.blockId) {
-          $scope.block = {
+          vm.block = {
               id : $stateParams.blockId
           };
-          $scope.getBlock($stateParams.blockId);
-          $scope.txs = blockTxs($stateParams.blockId);
+          vm.getBlock($stateParams.blockId);
+          vm.txs = blockTxs($stateParams.blockId);
       } else if ($stateParams.page) {
-          $scope.getLastBlocks($stateParams.page);
+          vm.getLastBlocks($stateParams.page);
       } else {
-          $scope.getLastBlocks();
+          vm.getLastBlocks();
       }
   });

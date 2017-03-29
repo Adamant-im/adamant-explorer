@@ -21,10 +21,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-if="!txs.length">
+                        <tr data-ng-if="!vm.txs.length">
                             <td colspan="6">Waiting for transactions...</td>
                         </tr>
-                        <tr data-ng-repeat='tx in txs track by $index'>
+                        <tr data-ng-repeat='tx in vm.txs track by $index'>
                             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
                             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}<span></td>
                             <td class="text-right hidden-xs"><a class="ellipsis" href="/address/{{tx.senderId}}">{{tx | txSender}}</a></td>
@@ -70,7 +70,7 @@
                     </tbody>
                 </table>
                 <div class="btn-more">
-                    <a href="/blocks" class="btn btn-default">See all blocks</a>
+                    <a href="/blocks/" class="btn btn-default">See all blocks</a>
                 </div>
             </div>
         </div>

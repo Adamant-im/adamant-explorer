@@ -13,13 +13,13 @@
             </a>
         </div>
         <div class="collapse navbar-collapse" collapse="$root.isCollapsed">
-            <form id="search-form" data-ng-controller="SearchController" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="search()">
-                <div class="form-group" data-ng-class="{'has-error': badQuery}">
-                    <input id="search" type="text" class="form-control" data-ng-model="q"
-                        data-ng-class="{'loading': loading}" placeholder="Find a block, transaction, address or delegate"
-                        data-ng-submit="search()">
+            <form id="search-form" data-ng-controller="SearchController as sch" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="sch.search()">
+                <div class="form-group" data-ng-class="{'has-error': sch.badQuery}">
+                    <input id="search" type="text" class="form-control" data-ng-model="sch.q"
+                        data-ng-class="{'loading': sch.loading}" placeholder="Find a block, transaction, address or delegate"
+                        data-ng-submit="sch.search()">
                 </div>
-                <div class="no_matching text-danger" data-ng-if="badQuery">No matching records found!</div>
+                <div class="no_matching text-danger" data-ng-if="sch.badQuery">No matching records found!</div>
             </form>
             <div class="status" data-ng-show="blockStatus">
                 <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>

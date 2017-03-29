@@ -109,8 +109,8 @@ var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 
 angular.module('lisk_explorer.tools').factory('delegateMonitor',
   function ($socket, $rootScope, forgingMonitor) {
-      return function ($scope) {
-          var delegateMonitor = new DelegateMonitor($scope, $rootScope, forgingMonitor),
+      return function (vm) {
+          var delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor),
               ns = $socket('/delegateMonitor');
 
           ns.on('data', function (res) {
@@ -131,14 +131,15 @@ angular.module('lisk_explorer.tools').factory('delegateMonitor',
               }
           });
 
-          $scope.$on('$destroy', function (event) {
+          $rootScope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 
-          $scope.$on('$locationChangeStart', function (event, next, current) {
+          $rootScope.$on('$stateChangeStart', function (event, next, current) {
               ns.emit('forceDisconnect');
           });
 
           return delegateMonitor;
       };
-  });
+  }
+);

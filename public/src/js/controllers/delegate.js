@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('lisk_explorer.address').controller('DelegateController',
-  function ($scope, $rootScope, $stateParams, $location, $http, addressTxs) {
+  function ($rootScope, $stateParams, $location, $http, addressTxs) {
       var vm = this;
       vm.getAddress = function () {
           $http.get('/api/getAccount', {

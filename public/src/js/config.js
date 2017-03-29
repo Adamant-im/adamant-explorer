@@ -1,121 +1,116 @@
 'use strict';
 
 // Setting up routes
-angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvider) {
-    console.log($stateProvider);
+angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $stateProvider.
     state('home', {
         templateUrl: '/views/index.html',
         url: '/',
-        title: 'Home',
-        parent: 'Home',
+        // title: 'Home',
+        // parentDir: 'Home',
         controller: "IndexController",
         controllerAs: "vm"
     }).
     state('blocks', {
         templateUrl: '/views/blocks.html',
-        url: '/blocks/:page?', 
-        title: 'Blocks',
-        parent: 'Home',
+        url: '/blocks/:page', 
+        // title: 'Blocks',
+        // parentDir: 'Home',
         controller: "BlocksController",
         controllerAs: "vm"
     }).
     state('block', {
         templateUrl: '/views/block.html',
         url: '/block/:blockId',
-        title: 'Block ',
-        parent: 'Blocks',
+        // title: 'Block ',
+        // parentDir: 'Blocks',
         controller: "BlocksController",
         controllerAs: "vm"
     }).
     state('transaction', {
         templateUrl: '/views/transaction.html',
         url: '/tx/:txId',
-        title: 'Transaction ',
-        parent: 'Home',
+        // title: 'Transaction ',
+        // parentDir: 'Home',
         controller: "TransactionsController",
         controllerAs: "vm"
     }).
     state('address', {
         templateUrl: '/views/address.html',
         url: '/address/:address',
-        title: 'Address',
-        parent: 'Home',
+        // title: 'Address',
+        // parentDir: 'Home',
         controller: "AddressController",
         controllerAs: "vm"
     })
     .state('activity-graph', {
         templateUrl : '/views/activityGraph.html',
         url: '/activityGraph',
-        title: 'Activity Graph',
-        parent: 'Home',
+        // title: 'Activity Graph',
+        // parentDir: 'Home',
         controller: "ActivityGraph",
         controllerAs: "vm"
     })
     .state('top-accounts', {
         templateUrl : '/views/topAccounts.html',
         url: '/topAccounts',
-        title: 'Top Accounts',
-        parent: 'Home',
+        // title: 'Top Accounts',
+        // parentDir: 'Home',
         controller: "TopAccounts",
         controllerAs: "vm"
     })
     .state('delegate-monitor', {
         templateUrl : '/views/delegateMonitor.html',
         url: '/delegateMonitor',
-        title: 'Delegate Monitor',
-        parent: 'Home',
+        // title: 'Delegate Monitor',
+        // parentDir: 'Home',
         controller: "DelegateMonitor",
         controllerAs: "vm"
     })
     .state('market-watcher', {
         templateUrl : '/views/marketWatcher.html',
         url: '/marketWatcher',
-        title: 'Market Watcher',
-        parent: 'Home',
+        // title: 'Market Watcher',
+        // parentDir: 'Home',
         controller: "MarketWatcher",
         controllerAs: "vm"
     })
     .state('network-monitor', {
         templateUrl : '/views/networkMonitor.html',
         url: '/networkMonitor',
-        title: 'Network Monitor',
-        parent: 'Home',
+        // title: 'Network Monitor',
+        // parentDir: 'Home',
         controller: "NetworkMonitor",
         controllerAs: "vm"
     })
     .state('delegate', {
         templateUrl: '/views/delegate.html',
         url: '/delegate/:delegateId',
-        title: 'Delegate',
-        parent: 'Home',
+        // title: 'Delegate',
+        // parentDir: 'Home',
         controller: "DelegateController",
         controllerAs: "vm"
     })
     .state('error', {
         url: '404',
         templateUrl: '/views/404.html',
-        title: 'Error',
-        parent: 'Home'
+        // title: 'Error',
+        // parentDir: 'Home'
     });
     $urlRouterProvider.otherwise('/404');
+    $locationProvider.html5Mode(true);
+    
 });
 
 // Setting HTML5 location mode
 angular.module('lisk_explorer')
-//   .config(function ($locationProvider) {
-//       $locationProvider.html5Mode(true);
-//       $locationProvider.hashPrefix('!');
-//   })
   .run(function ($rootScope, $state, $location, $stateParams, $anchorScroll, $http, ngProgress, gettextCatalog) {
       gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$stateChangeStart', function () {
-          console.log('in run stateChangeStart');
+      $rootScope.$on('$stateChangeStart', function (a,b) {
           ngProgress.start();
       });
 
-      $rootScope.$on('$stateChangeSuccess', function () {
-          console.log('in run stateChangeSuccess');
+      $rootScope.$on('$stateChangeSuccess', function (a,b) {
           ngProgress.complete();
 
           // Change page title, based on route information
