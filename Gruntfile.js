@@ -33,7 +33,7 @@ module.exports = function (grunt) {
             angular: {
                 src: ['bower_components/angular/angular.min.js',
                       'bower_components/angular-resource/angular-resource.min.js',
-                      'bower_components/angular-route/angular-route.min.js',
+                      'node_modules/angular-ui-router/release/angular-ui-router.min.js',
                       'bower_components/angular-animate/angular-animate.min.js',
                       'bower_components/angular-bootstrap/ui-bootstrap.js',
                       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',

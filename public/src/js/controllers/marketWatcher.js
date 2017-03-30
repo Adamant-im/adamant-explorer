@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('lisk_explorer.tools').controller('MarketWatcher',
-  function (marketWatcher, $scope) {
-      marketWatcher($scope);
-  });
+var MarketWatcherCtrlConstructor = function (marketWatcher) {
+    marketWatcher(this);
+}
+
+angular.module('lisk_explorer.tools').controller('MarketWatcherCtrl', MarketWatcherCtrlConstructor);

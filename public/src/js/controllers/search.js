@@ -1,41 +1,44 @@
 'use strict';
 
-angular.module('lisk_explorer.search').controller('SearchController',
-  function ($scope, $routeParams, $location, $timeout, Global, $http) {
-      $scope.loading = false;
-      $scope.badQuery = false;
+var SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global, $http) {
+    var sch = this;
 
-      var _badQuery = function () {
-          $scope.badQuery = true;
+    sch.loading = false;
+    sch.badQuery = false;
 
-          $timeout(function () {
-              $scope.badQuery = false;
-          }, 2000);
-      };
+    var _badQuery = function () {
+        sch.badQuery = true;
 
-      var _resetSearch = function () {
-          $scope.q = '';
-          $scope.loading = false;
-      };
+        $timeout(function () {
+            sch.badQuery = false;
+        }, 2000);
+    };
 
-      $scope.search = function () {
-          $scope.badQuery = false;
-          $scope.loading = true;
+    var _resetSearch = function () {
+        sch.q = '';
+        sch.loading = false;
+    };
 
-          $http.get('/api/search', {
-              params : {
-                  id : $scope.q
-              }
-          }).then(function (resp) {
-              if (resp.data.success === false) {
-                  $scope.loading = false;
-                  _badQuery();
-              } else if (resp.data.id) {
-                  $scope.loading = false;
-                  _resetSearch();
+    sch.search = function () {
+        sch.badQuery = false;
+        sch.loading = true;
 
-                  $location.path('/' + resp.data.type + '/' + resp.data.id);
-              }
-          });
-      };
-  });
+        $http.get('/api/search', {
+            params : {
+                id : sch.q
+            }
+        }).then(function (resp) {
+            if (resp.data.success === false) {
+                sch.loading = false;
+                _badQuery();
+            } else if (resp.data.id) {
+                sch.loading = false;
+                _resetSearch();
+
+                $location.path('/' + resp.data.type + '/' + resp.data.id);
+            }
+        });
+    };
+}
+
+angular.module('lisk_explorer.search').controller('SearchCtrl', SearchCtrlConstructor);

@@ -1,38 +1,40 @@
 'use strict';
 
-angular.module('lisk_explorer.tools').controller('DelegateMonitor',
-  function (delegateMonitor, orderBy, $scope, $rootScope, $http) {
-      delegateMonitor($scope);
+var DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
+    var vm = this;
+    delegateMonitor(vm);
 
-      $scope.getStandby = function (n) {
-          var offset = 0;
+    vm.getStandby = function (n) {
+        var offset = 0;
 
-          if (n) {
-              offset = (n - 1) * 20;
-          }
+        if (n) {
+            offset = (n - 1) * 20;
+        }
 
-          $scope.standbyDelegates = null;
+        vm.standbyDelegates = null;
 
-          $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
-              if (resp.data.success) {
-                  _.each(resp.data.delegates, function (d) {
-                      d.proposal = _.find ($rootScope.delegateProposals, function (p) {
-                        return p.name === d.username.toLowerCase ();
-                      });
-                  });
+        $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
+            if (resp.data.success) {
+                _.each(resp.data.delegates, function (deligate) {
+                    deligate.proposal = _.find ($rootScope.delegateProposals, function (proposal) {
+                    return proposal.name === deligate.username.toLowerCase ();
+                    });
+                });
 
-                  $scope.standbyDelegates = resp.data.delegates;
-              }
-              if (resp.data.pagination) {
-                  $scope.pagination = resp.data.pagination;
-              }
-          });
-      };
+                vm.standbyDelegates = resp.data.delegates;
+            }
+            if (resp.data.pagination) {
+                vm.pagination = resp.data.pagination;
+            }
+        });
+    };
 
-      $scope.getStandby(1);
+    vm.getStandby(1);
 
-      $scope.tables = {
-          active : orderBy('rate'),
-          standby : orderBy('rate')
-      };
-  });
+    vm.tables = {
+        active: orderBy('rate'),
+        standby: orderBy('rate')
+    };
+}
+
+angular.module('lisk_explorer.tools').controller('DelegateMonitorCtrl', DelegateMonitorCtrlConstructor);

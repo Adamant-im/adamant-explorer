@@ -57,27 +57,27 @@ angular.module('lisk_explorer.tools')
           this.updateDepth = function () {
               var delay = 0;
 
-              if (!scope.depthChart) {
+              if (!scope.data.depthChart) {
                   delay = 500;
                   console.log('Initializing depth chart...');
-                  scope.depthChart = AmCharts.makeChart('depthChart', self.config);
-                  scope.depthChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
+                  scope.data.depthChart = AmCharts.makeChart('depthChart', self.config);
+                  scope.data.depthChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
               }
 
               $timeout(function () {
-                  if (scope.tab !== 'depthChart') {
+                  if (scope.data.tab !== 'depthChart') {
                       return;
                   }
 
-                  if (_.size(scope.orders.depth) > 0) {
-                      scope.depthChart.dataProvider = scope.orders.depth;
-                      scope.depthChart.validateData();
+                  if (_.size(scope.data.orders.depth) > 0) {
+                      scope.data.depthChart.dataProvider = scope.data.orders.depth;
+                      scope.data.depthChart.validateData();
                       console.log('Depth chart data updated');
                       elm.contents().css('display', 'block');
                   } else {
                       console.log('Depth chart data is empty');
-                      scope.depthChart.dataProvider = [];
-                      scope.depthChart.validateData();
+                      scope.data.depthChart.dataProvider = [];
+                      scope.data.depthChart.validateData();
                       elm.contents().css('display', 'none');
                       elm.prepend('<p class="amChartsEmpty"><i class="fa fa-exclamation-circle"></i> No Data</p>');
                   }
@@ -94,6 +94,9 @@ angular.module('lisk_explorer.tools')
           restric: 'E',
           replace: true,
           template: '<div id="depthChart"></div>',
+          scope: {
+              data: '='
+          },
           link: function (scope, elm, attr) {
               var depthChart = new DepthChart(scope, elm, attr);
               scope.$on('$ordersUpdated', depthChart.updateDepth);

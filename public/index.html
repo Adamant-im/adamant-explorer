@@ -33,17 +33,18 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,400italic">
   <link rel="stylesheet" href="/css/main.min.css">
+  <base href="/">
 </head>
 <body data-ng-cloak class="ng-cloak">
   <div id="wrap">
     <div class="navbar navbar-default navbar-fixed-top" data-ng-include="'/views/index/header.html'" role='navigation'></div>
     <section class="container">
       <bread-crumb></bread-crumb>
-      <div data-ng-view></div>
+      <div data-ui-view></div>
     </section>
   </div>
   <div id="footer" role="navigation">
-    <div class="container" data-ng-controller="FooterController">
+    <div class="container" data-ng-controller="FooterCtrl">
       <div class="row">
         <div class="col-left col-xs-6">
           <a href="https://lisk.io" target="_blank" title="Official Lisk Website">Website</a>

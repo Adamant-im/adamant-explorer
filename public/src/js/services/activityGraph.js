@@ -302,35 +302,35 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
 };
 
 angular.module('lisk_explorer.tools').factory('activityGraph',
-  function ($socket) {
-      return function ($scope) {
+  function ($socket, $rootScope) {
+      return function (vm) {
           var activityGraph = new ActivityGraph(),
               ns = $socket('/activityGraph');
 
-          $scope.activityGraph = activityGraph;
-          $scope.nodeSelect = activityGraph.nodeSelect;
-          $scope.cameraMenu = activityGraph.cameraMenu;
-          $scope.statistics = activityGraph.statistics;
+          vm.activityGraph = activityGraph;
+          vm.nodeSelect = activityGraph.nodeSelect;
+          vm.cameraMenu = activityGraph.cameraMenu;
+          vm.statistics = activityGraph.statistics;
 
           activityGraph.sigma.bind('clickNode', function (event) {
-              $scope.$apply(function () {
+              // $rootScope.$apply(function () {
                   activityGraph.nodeSelect.add(event);
-              });
+              // });
           });
 
           activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
-              $scope.$apply(function () {
+              // $rootScope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
-              });
+              // });
           });
 
           ns.on('data', function (res) { activityGraph.refresh(res.block); });
 
-          $scope.$on('$destroy', function (event) {
+          $rootScope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 
-          $scope.$on('$locationChangeStart', function (event, next, current) {
+          $rootScope.$on('$stateChangeStart', function (event, next, current) {
               ns.emit('forceDisconnect');
           });
 

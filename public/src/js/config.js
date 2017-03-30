@@ -1,88 +1,110 @@
 'use strict';
 
 // Setting up routes
-angular.module('lisk_explorer').config(function ($routeProvider) {
-    $routeProvider.
-    when('/', {
+angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    $stateProvider.
+    state('home', {
         templateUrl: '/views/index.html',
-        title: 'Home',
-        parent: 'Home'
+        url: '/',
+        parentDir: 'home',
+        controller: 'HomeCtrl',
+        controllerAs: 'vm'
     }).
-    when('/blocks/:page?', {
+    state('blocks', {
         templateUrl: '/views/blocks.html',
-        title: 'Blocks',
-        parent: 'Home'
+        url: '/blocks/:page',
+        parentDir: 'home',
+        controller: 'BlocksCtrl',
+        controllerAs: 'vm'
     }).
-    when('/block/:blockId', {
+    state('block', {
         templateUrl: '/views/block.html',
-        title: 'Block ',
-        parent: 'Blocks'
+        url: '/block/:blockId',
+        parentDir: 'blocks',
+        controller: 'BlocksCtrl',
+        controllerAs: 'vm'
     }).
-    when('/tx/:txId', {
+    state('transaction', {
         templateUrl: '/views/transaction.html',
-        title: 'Transaction ',
-        parent: 'Home'
+        url: '/tx/:txId',
+        parentDir: 'home',
+        controller: 'TransactionsCtrl',
+        controllerAs: 'vm'
     }).
-    when('/address/:address', {
+    state('address', {
         templateUrl: '/views/address.html',
-        title: 'Address',
-        parent: 'Home'
+        url: '/address/:address',
+        parentDir: 'home',
+        controller: 'AddressCtrl',
+        controllerAs: 'vm'
     })
-    .when('/activityGraph', {
+    .state('activity-graph', {
         templateUrl : '/views/activityGraph.html',
-        title: 'Activity Graph',
-        parent: 'Home'
+        url: '/activityGraph',
+        parentDir: 'home',
+        controller: 'ActivityGraphCtrl',
+        controllerAs: 'vm'
     })
-    .when('/topAccounts', {
+    .state('top-accounts', {
         templateUrl : '/views/topAccounts.html',
-        title: 'Top Accounts',
-        parent: 'Home'
+        url: '/topAccounts',
+        parentDir: 'home',
+        controller: 'TopAccountsCtrl',
+        controllerAs: 'vm'
     })
-    .when('/delegateMonitor', {
+    .state('delegate-monitor', {
         templateUrl : '/views/delegateMonitor.html',
-        title: 'Delegate Monitor',
-        parent: 'Home'
+        url: '/delegateMonitor',
+        parentDir: 'home',
+        controller: 'DelegateMonitorCtrl',
+        controllerAs: 'vm'
     })
-    .when('/marketWatcher', {
+    .state('market-watcher', {
         templateUrl : '/views/marketWatcher.html',
-        title: 'Market Watcher',
-        parent: 'Home'
+        url: '/marketWatcher',
+        parentDir: 'home',
+        controller: 'MarketWatcherCtrl',
+        controllerAs: 'vm'
     })
-    .when('/networkMonitor', {
+    .state('network-monitor', {
         templateUrl : '/views/networkMonitor.html',
-        title: 'Network Monitor',
-        parent: 'Home'
+        url: '/networkMonitor',
+        parentDir: 'home',
+        controller: 'NetworkMonitorCtrl',
+        controllerAs: 'vm'
     })
-    .when('/delegate/:delegateId', {
+    .state('delegate', {
         templateUrl: '/views/delegate.html',
-        title: 'Delegate',
-        parent: 'Address'
+        url: '/delegate/:delegateId',
+        parentDir: 'address',
+        controller: 'DelegateCtrl',
+        controllerAs: 'vm'
     })
-    .otherwise({
+    .state('error', {
+        url: '404',
         templateUrl: '/views/404.html',
-        title: 'Error',
-        parent: 'Home'
+        parentDir: 'home'
     });
+    $urlRouterProvider.otherwise('/404');
+    $locationProvider.html5Mode(true);
+
 });
 
 // Setting HTML5 location mode
 angular.module('lisk_explorer')
-  .config(function ($locationProvider) {
-      $locationProvider.html5Mode(true);
-      $locationProvider.hashPrefix('!');
-  })
-  .run(function ($rootScope, $route, $location, $routeParams, $anchorScroll, $http, ngProgress, gettextCatalog) {
+  .run(function ($rootScope, $state, $location, $stateParams, $anchorScroll, $http, ngProgress, gettextCatalog) {
       gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$routeChangeStart', function () {
+
+      $rootScope.$on('$stateChangeStart', function (a, b) {
           ngProgress.start();
       });
 
-      $rootScope.$on('$routeChangeSuccess', function () {
+      $rootScope.$on('$stateChangeSuccess', function (a, b) {
           ngProgress.complete();
 
           // Change page title, based on route information
           $rootScope.titleDetail = '';
-          $rootScope.title = $route.current.title;
+          $rootScope.title = $state.current.title;
           $rootScope.isCollapsed = true;
 
           // Market Watcher
@@ -92,7 +114,7 @@ angular.module('lisk_explorer')
               }
           });
 
-          $location.hash($routeParams.scrollTo);
+          $location.hash($stateParams.scrollTo);
           $anchorScroll();
       });
   });

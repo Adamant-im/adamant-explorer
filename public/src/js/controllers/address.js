@@ -1,33 +1,36 @@
 'use strict';
 
-angular.module('lisk_explorer.address').controller('AddressController',
-  function ($scope, $rootScope, $routeParams, $location, $http, addressTxs) {
-      $scope.getAddress = function () {
-          $http.get('/api/getAccount', {
-              params: {
-                  address: $routeParams.address
-              }
-          }).then(function (resp) {
-              if (resp.data.success) {
-                  $scope.address = resp.data;
-              } else {
-                  throw 'Account was not found!';
-              }
-          }).catch(function (error) {
-              $location.path('/');
-          });
-      };
+var AddressCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
+    var vm = this;
 
-      $scope.address = {
-          address: $routeParams.address
-      };
+    vm.getAddress = function () {
+        $http.get('/api/getAccount', {
+            params: {
+                address: $stateParams.address
+            }
+        }).then(function (resp) {
+            if (resp.data.success) {
+                vm.address = resp.data;
+            } else {
+                throw 'Account was not found!';
+            }
+        }).catch(function (error) {
+            $location.path('/');
+        });
+    };
 
-      // Sets the filter for which transactions to display
-      $scope.filterTxs = function (direction) {
-          $scope.direction = direction;
-          $scope.txs = addressTxs($routeParams.address, direction);
-      };
+    vm.address = {
+        address: $stateParams.address
+    };
 
-      $scope.getAddress();
-      $scope.txs = addressTxs($routeParams.address);
-  });
+    // Sets the filter for which transactions to display
+    vm.filterTxs = function (direction) {
+        vm.direction = direction;
+        vm.txs = addressTxs($stateParams.address, direction);
+    };
+
+    vm.getAddress();
+    vm.txs = addressTxs($stateParams.address);
+}
+
+angular.module('lisk_explorer.address').controller('AddressCtrl', AddressCtrlConstructor);

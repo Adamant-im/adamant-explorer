@@ -5,31 +5,32 @@
  * In case of parameters, uses $rootScope.breadCrumb object (if exists) to replace with their values.
  */
 angular.module('lisk_explorer')
-    .directive('breadCrumb', ['$route', function ($route) {
+    .directive('breadCrumb', ['$state', function ($state) {
         return {
             restric: 'E',
             templateUrl: '/views/index/breadCrumb.html',
             link: function (scope, element, attrs) {
+                var states = $state.get();
+
                 scope.init = function (e, next) {
                     scope.sections = [];
 
-                    var section = next.$$route;
-
-                    while (section.parent !== section.title) {
-                        for (var route in $route.routes) {
-                            if ($route.routes.hasOwnProperty(route) && $route.routes[route].title === section.parent) {
+                    var section = next;
+                    while (section.parentDir !== section.name) {
+                        for (var i = 0; i < states.length; i++) {
+                            if (states[i].name === section.parentDir) {
                                 scope.sections.unshift({
-                                    title: $route.routes[route].title,
-                                    url: scope.setPathParams($route.routes[route].originalPath, scope.breadCrumb)
+                                    name: states[i].name,
+                                    url: scope.setPathParams(states[i].url, scope.breadCrumb)
                                 });
-                                section = $route.routes[route];
+                                section = states[i];
                                 break;
                             }
-                        }
+                        };
                     }
 
                     scope.sections.push({
-                        title: next.$$route.title,
+                        name: next.name,
                         url: '#'
                     });
                 };
@@ -54,8 +55,28 @@ angular.module('lisk_explorer')
                     return path;
                 }
 
-                // scope.$on('$routeChangeStart', scope.init);
-                scope.$on('$routeChangeSuccess', scope.init);
+                /**
+                 * Replaces any :param in path string with their corresponding values from given set of breadCrumb values.
+                 */
+                scope.setPathParams = function (path, breadCrumbValues) {
+                    var paramsReg = /(?:\/\:([^\/]+)?)/g;
+                    var params = path.match(paramsReg);
+                    var paramName = '';
+                    var paramValue = '';
+
+                    if (params) {
+                        for (var i = 0; i < params.length; i++) {
+                            paramName = params[i].replace(/(^\/\:)|(\?)/g, '');
+                            paramValue = paramName && breadCrumbValues ? breadCrumbValues[paramName]: '';
+                            path = path.replace(params[i], '/' + paramValue)
+                        }
+                    }
+
+                    return path;
+                }
+
+                // // scope.$on('$stateChangeStart', scope.init);
+                scope.$on('$stateChangeSuccess', scope.init);
             }
         };
     }

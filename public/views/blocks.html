@@ -1,8 +1,8 @@
-<section data-ng-controller="BlocksController">
+<section>
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <div class="page-header">
-                <h1>Blocks <small data-ng-if="blocks.length > 1">{{blocks[0].height}} &#8594; {{blocks[blocks.length - 1].height}}</small></h1>
+                <h1>Blocks <small data-ng-if="vm.blocks.length > 1">{{vm.blocks[0].height}} &#8594; {{vm.blocks[vm.blocks.length - 1].height}}</small></h1>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-striped">
@@ -21,24 +21,24 @@
                         <tr data-ng-if="loading">
                             <td colspan="7">Waiting for blocks <i class="fa fa-spinner fa-spin"></i></td>
                         </tr>
-                        <tr data-ng-repeat='b in blocks track by b.id'>
-                            <td><a class="ellipsis" href="/block/{{b.id}}">{{b.id}}</a></td>
-                            <td class="text-right"><span class="ellipsis">{{b.height}}</span></td>
-                            <td class="text-right hidden-xs"><span class="ellipsis">{{b.timestamp | timestamp}}</span></td>
-                            <td class="text-right hidden-xs">{{b.transactionsCount}}</td>
-                            <td class="text-right hidden-xs hidden-sm"><a href="/address/{{b.generator}}">{{b.delegate.username || b.generator}}</a></td>
-                            <td class="text-right hidden-xs hidden-sm">{{b.totalAmount | currency:currency}}</td>
-                            <td class="text-right hidden-xs hidden-sm">{{b.totalForged | currency:currency}}</td>
+                        <tr data-ng-repeat='block in vm.blocks track by block.id'>
+                            <td><a class="ellipsis" href="/block/{{block.id}}">{{block.id}}</a></td>
+                            <td class="text-right"><span class="ellipsis">{{block.height}}</span></td>
+                            <td class="text-right hidden-xs"><span class="ellipsis">{{block.timestamp | timestamp}}</span></td>
+                            <td class="text-right hidden-xs">{{block.transactionsCount}}</td>
+                            <td class="text-right hidden-xs hidden-sm"><a href="/address/{{block.generator}}">{{block.delegate.username || block.generator}}</a></td>
+                            <td class="text-right hidden-xs hidden-sm">{{block.totalAmount | currency:currency}}</td>
+                            <td class="text-right hidden-xs hidden-sm">{{block.totalForged | currency:currency}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div data-ng-if="pagination.more || pagination.before">
-                <a class="btn btn-primary" href="/blocks/{{pagination.previousPage}}" data-ng-if="pagination.before">Previous page</a>
-                <a class="btn btn-primary" href="/blocks/{{pagination.nextPage}}" data-ng-if="pagination.more && pagination.nextPage != 0">Next page</a>
+            <div data-ng-if="vm.pagination.more || vm.pagination.before">
+                <a class="btn btn-primary" href="/blocks/{{pagination.previousPage}}" data-ng-if="vm.pagination.before">Previous page</a>
+                <a class="btn btn-primary" href="/blocks/{{pagination.nextPage}}" data-ng-if="vm.pagination.more && vm.pagination.nextPage != 0">Next page</a>
             </div>
         </div>
     </div>
-    <!-- @todo A headnig is the last tag? -->
-    <h2 class="text-center text-muted" data-ng-if="!loading && !blocks.length">No blocks yet.</h2>
+    <!-- @todo A heading is the last tag? -->
+    <h2 class="text-center text-muted" data-ng-if="!loading && !vm.blocks.length">No blocks yet.</h2>
 </section>

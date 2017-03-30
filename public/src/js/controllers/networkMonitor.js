@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('lisk_explorer.tools').controller('NetworkMonitor',
-  function (networkMonitor, $scope) {
-      networkMonitor($scope);
-  });
+var NetworkMonitorCtrlConstructor = function (networkMonitor) {
+    networkMonitor(this);
+}
+
+angular.module('lisk_explorer.tools').controller('NetworkMonitorCtrl', NetworkMonitorCtrlConstructor);

@@ -1,44 +1,47 @@
 'use strict';
 
-angular.module('lisk_explorer.system').controller('IndexController',
-  function ($scope, $http, $interval) {
-      $scope.getLastBlocks = function () {
-          $http.get('/api/getLastBlocks').then(function (resp) {
-              if (resp.data.success) {
-                  if ($scope.blocks && $scope.blocks.length > 0) {
-                      if ($scope.blocks[0].id !== resp.data.blocks[0].id) {
-                          $scope.blocks = resp.data.blocks;
-                      }
-                  } else {
-                      $scope.blocks = resp.data.blocks;
-                  }
-              }
-          });
-      };
+var HomeCtrlConstructor = function ($scope, $http, $interval) {
+    var vm = this;
 
-      $scope.blocksInterval = $interval(function () {
-          $scope.getLastBlocks();
-      }, 30000);
+    vm.getLastBlocks = function () {
+        $http.get('/api/getLastBlocks').then(function (resp) {
+            if (resp.data.success) {
+                if (vm.blocks && vm.blocks.length > 0) {
+                    if (vm.blocks[0].id !== resp.data.blocks[0].id) {
+                        vm.blocks = resp.data.blocks;
+                    }
+                } else {
+                    vm.blocks = resp.data.blocks;
+                }
+            }
+        });
+    };
 
-      $scope.getLastBlocks();
+    vm.blocksInterval = $interval(function () {
+        vm.getLastBlocks();
+    }, 30000);
 
-      $scope.getLastTransactions = function () {
-          $http.get('/api/getLastTransactions').then(function (resp) {
-              if (resp.data.success) {
-                  if ($scope.txs && $scope.txs.length > 0) {
-                      if ($scope.txs[0] !== resp.data.transactions[0]) {
-                          $scope.txs = resp.data.transactions;
-                      }
-                  } else {
-                      $scope.txs = resp.data.transactions;
-                  }
-              }
-          });
-      };
+    vm.getLastBlocks();
 
-      $scope.transactionsInterval = $interval(function () {
-          $scope.getLastTransactions();
-      }, 30000);
+    vm.getLastTransactions = function () {
+        $http.get('/api/getLastTransactions').then(function (resp) {
+            if (resp.data.success) {
+                if (vm.txs && vm.txs.length > 0) {
+                    if (vm.txs[0] !== resp.data.transactions[0]) {
+                        vm.txs = resp.data.transactions;
+                    }
+                } else {
+                    vm.txs = resp.data.transactions;
+                }
+            }
+        });
+    };
 
-      $scope.getLastTransactions();
-  });
+    vm.transactionsInterval = $interval(function () {
+        vm.getLastTransactions();
+    }, 30000);
+
+    vm.getLastTransactions();
+}
+
+angular.module('lisk_explorer.system').controller('HomeCtrl', HomeCtrlConstructor);

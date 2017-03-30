@@ -1,52 +1,55 @@
 'use strict';
 
-angular.module('lisk_explorer.blocks').controller('BlocksController',
-  function ($scope, $rootScope, $routeParams, $location, $http, blockTxs) {
-      $scope.getLastBlocks = function (n) {
-          var offset = 0;
+var BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
+    var vm = this;
 
-          if (n) {
-              offset = (n - 1) * 20;
-          }
+    vm.getLastBlocks = function (n) {
+        var offset = 0;
 
-          $http.get('/api/getLastBlocks?n=' + offset).then(function (resp) {
-              if (resp.data.success) {
-                  $scope.blocks = resp.data.blocks;
+        if (n) {
+            offset = (n - 1) * 20;
+        }
 
-                  if (resp.data.pagination) {
-                      $scope.pagination = resp.data.pagination;
-                  }
-              } else {
-                  $scope.blocks = [];
-              }
-          });
-      };
+        $http.get('/api/getLastBlocks?n=' + offset).then(function (resp) {
+            if (resp.data.success) {
+                vm.blocks = resp.data.blocks;
 
-      $scope.getBlock = function (blockId) {
-          $http.get('/api/getBlock', {
-              params : {
-                  blockId : blockId
-              }
-          }).then(function (resp) {
-              if (resp.data.success) {
-                  $scope.block = resp.data.block;
-              } else {
-                  throw 'Block was not found!';
-              }
-          }).catch(function (error) {
-              $location.path('/');
-          });
-      };
+                if (resp.data.pagination) {
+                    vm.pagination = resp.data.pagination;
+                }
+            } else {
+                vm.blocks = [];
+            }
+        });
+    };
 
-      if ($routeParams.blockId) {
-          $scope.block = {
-              id : $routeParams.blockId
-          };
-          $scope.getBlock($routeParams.blockId);
-          $scope.txs = blockTxs($routeParams.blockId);
-      } else if ($routeParams.page) {
-          $scope.getLastBlocks($routeParams.page);
-      } else {
-          $scope.getLastBlocks();
-      }
-  });
+    vm.getBlock = function (blockId) {
+        $http.get('/api/getBlock', {
+            params : {
+                blockId : blockId
+            }
+        }).then(function (resp) {
+            if (resp.data.success) {
+                vm.block = resp.data.block;
+            } else {
+                throw 'Block was not found!';
+            }
+        }).catch(function (error) {
+            $location.path('/');
+        });
+    };
+
+    if ($stateParams.blockId) {
+        vm.block = {
+            id : $stateParams.blockId
+        };
+        vm.getBlock($stateParams.blockId);
+        vm.txs = blockTxs($stateParams.blockId);
+    } else if ($stateParams.page) {
+        vm.getLastBlocks($stateParams.page);
+    } else {
+        vm.getLastBlocks();
+    }
+}
+
+angular.module('lisk_explorer.blocks').controller('BlocksCtrl', BlocksCtrlConstructor);

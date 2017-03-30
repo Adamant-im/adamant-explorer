@@ -1,6 +1,12 @@
 'use strict';
 
-angular.module('lisk_explorer.system').controller('HeaderController',
-  function (header, $scope) {
-      header($scope);
-  });
+/**
+ *
+ * @todo Fix the service usage
+ *
+ */
+var HeaderCtrlConstructor = function (header, $scope) {
+    header();
+}
+
+angular.module('lisk_explorer.system').controller('HeaderCtrl', HeaderCtrlConstructor);

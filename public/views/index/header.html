@@ -1,5 +1,5 @@
 <div class="container fadein">
-    <div data-ng-controller="HeaderController" id="header" role="navigation" class="navbar navbar-default">
+    <div data-ng-controller="HeaderCtrl" id="header" role="navigation" class="navbar navbar-default">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                 data-target=".navbar-collapse" data-ng-click="$root.isCollapsed = !$root.isCollapsed">
@@ -13,13 +13,13 @@
             </a>
         </div>
         <div class="collapse navbar-collapse" collapse="$root.isCollapsed">
-            <form id="search-form" data-ng-controller="SearchController" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="search()">
-                <div class="form-group" data-ng-class="{'has-error': badQuery}">
-                    <input id="search" type="text" class="form-control" data-ng-model="q"
-                        data-ng-class="{'loading': loading}" placeholder="Find a block, transaction, address or delegate"
-                        data-ng-submit="search()">
+            <form id="search-form" data-ng-controller="SearchCtrl as sch" class="navbar-form navbar-left hidden-xs" role="search" data-ng-submit="sch.search()">
+                <div class="form-group" data-ng-class="{'has-error': sch.badQuery}">
+                    <input id="search" type="text" class="form-control" data-ng-model="sch.q"
+                        data-ng-class="{'loading': sch.loading}" placeholder="Find a block, transaction, address or delegate"
+                        data-ng-submit="sch.search()">
                 </div>
-                <div class="no_matching text-danger" data-ng-if="badQuery">No matching records found!</div>
+                <div class="no_matching text-danger" data-ng-if="sch.badQuery">No matching records found!</div>
             </form>
             <div class="status" data-ng-show="blockStatus">
                 <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>
@@ -31,7 +31,7 @@
                 </p>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" dropdown data-ng-controller="CurrencyController">
+                <li class="dropdown" dropdown data-ng-controller="CurrencyCtrl">
                     <a class="dropdown-toggle" dropdown-toggle href="#">
                         {{currency.symbol}} <span class="caret"></span>
                     </a>

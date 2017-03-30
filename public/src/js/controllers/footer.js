@@ -1,6 +1,5 @@
 'use strict';
 
-angular.module('lisk_explorer.system').controller('FooterController',
-  function ($scope) {
+var FooterCtrlConstructor = function () {};
 
-  });
+angular.module('lisk_explorer.system').controller('FooterCtrl', FooterCtrlConstructor);

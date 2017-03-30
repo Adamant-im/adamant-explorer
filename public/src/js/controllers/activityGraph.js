@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('lisk_explorer.tools').controller('ActivityGraph',
-  function (activityGraph, $scope) {
-      activityGraph($scope);
-  });
+var ActivityGraphCtrlConstructor = function (activityGraph) {
+    activityGraph(this);
+}
+
+angular.module('lisk_explorer.tools').controller('ActivityGraphCtrl', ActivityGraphCtrlConstructor);

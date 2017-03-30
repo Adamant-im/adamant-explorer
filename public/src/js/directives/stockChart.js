@@ -191,13 +191,13 @@ angular.module('lisk_explorer.tools')
           };
 
           this.updatePeriod = function () {
-              var newPeriod = (scope.newExchange || scope.newDuration);
+              var newPeriod = (scope.data.newExchange || scope.data.newDuration);
 
               if (newPeriod) {
                   console.log('Updating period selector...');
-                  scope.stockChart.categoryAxesSettings.minPeriod = self.dataSets[scope.duration].minPeriod;
-                  scope.stockChart.periodSelector.periods = self.dataSets[scope.duration].periods;
-                  scope.stockChart.validateNow();
+                  scope.data.stockChart.categoryAxesSettings.minPeriod = self.dataSets[scope.data.duration].minPeriod;
+                  scope.data.stockChart.periodSelector.periods = self.dataSets[scope.data.duration].periods;
+                  scope.data.stockChart.validateNow();
               }
 
               return newPeriod;
@@ -206,35 +206,35 @@ angular.module('lisk_explorer.tools')
           this.updateCandles = function () {
               var delay = 0;
 
-              if (!scope.stockChart) {
+              if (!scope.data.stockChart) {
                   delay = 500;
                   console.log('Initializing stock chart...');
-                  scope.stockChart = AmCharts.makeChart('stockChart', self.config);
-                  scope.stockChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
+                  scope.data.stockChart = AmCharts.makeChart('stockChart', self.config);
+                  scope.data.stockChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
               }
 
               $timeout(function () {
-                  if (scope.tab !== 'stockChart') {
+                  if (scope.data.tab !== 'stockChart') {
                       return;
                   }
 
                   var newPeriod = self.updatePeriod(scope);
 
-                  if (_.size(scope.candles) > 0) {
+                  if (_.size(scope.data.candles) > 0) {
                       console.log('Stock chart data updated');
-                      scope.stockChart.dataSets[0].dataProvider = scope.candles;
-                      scope.stockChart.validateData();
+                      scope.data.stockChart.dataSets[0].dataProvider = scope.data.candles;
+                      scope.data.stockChart.validateData();
                       elm.contents().css('display', 'block');
                   } else {
                       console.log('Stock chart data is empty');
-                      scope.stockChart.dataSets[0].dataProvider = [];
-                      scope.stockChart.validateNow();
+                      scope.data.stockChart.dataSets[0].dataProvider = [];
+                      scope.data.stockChart.validateNow();
                       elm.contents().css('display', 'none');
                       elm.prepend('<p class="amChartsEmpty"><i class="fa fa-exclamation-circle"></i> No Data</p>');
                   }
 
                   if (newPeriod) {
-                      scope.stockChart.periodSelector.setDefaultPeriod();
+                      scope.data.stockChart.periodSelector.setDefaultPeriod();
                       console.log('Default period set');
                   }
 
@@ -250,6 +250,9 @@ angular.module('lisk_explorer.tools')
           restric: 'E',
           replace: true,
           template: '<div id="stockChart"></div>',
+          scope: {
+              data: '='
+          },
           link: function (scope, elm, attr) {
               var stockChart = new StockChart(scope, elm, attr);
               scope.$on('$candlesUpdated', stockChart.updateCandles);

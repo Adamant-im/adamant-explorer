@@ -1,73 +1,74 @@
 'use strict';
 
-var MarketWatcher = function ($q, $http, $scope) {
+var MarketWatcher = function ($q, $http, $rootScope, vm) {
+    console.log(vm);
     var self = this,
         interval;
 
-    $scope.setTab = function (tab) {
-        $scope.oldTab = $scope.tab;
-        $scope.tab    = tab;
+    vm.setTab = function (tab) {
+        vm.oldTab = vm.tab;
+        vm.tab    = tab;
 
-        if (!$scope.oldTab) { return; }
-        console.log('Switched tab from', $scope.oldTab, 'to', $scope.tab);
+        if (!vm.oldTab) { return; }
+        console.log('Switched tab from', vm.oldTab, 'to', vm.tab);
 
         switch (tab) {
             case 'stockChart':
-                if ($scope.oldTab !== 'stockChart') {
-                    $scope.$broadcast('$candlesUpdated');
+                if (vm.oldTab !== 'stockChart') {
+                    $rootScope.$broadcast('$candlesUpdated');
                 }
                 break;
             case 'depthChart':
-                if ($scope.oldTab !== 'depthChart') {
-                    $scope.$broadcast('$ordersUpdated');
+                if (vm.oldTab !== 'depthChart') {
+                    $rootScope.$broadcast('$ordersUpdated');
                 }
                 break;
         }
     };
 
-    $scope.setExchange = function (exchange, duration) {
-        $scope.oldExchange = $scope.exchange;
-        $scope.exchange = (exchange || $scope.exchange || _.first ($scope.exchanges));
-        $scope.newExchange = ($scope.exchange !== $scope.oldExchange);
-        if ($scope.newExchange) {
-            console.log('Changed exchange from:', $scope.oldExchange, 'to:', $scope.exchange);
+    vm.setExchange = function (exchange, duration) {
+        vm.oldExchange = vm.exchange;
+        vm.exchange = (exchange || vm.exchange || _.first (vm.exchanges));
+        vm.newExchange = (vm.exchange !== vm.oldExchange);
+        if (vm.newExchange) {
+            console.log('Changed exchange from:', vm.oldExchange, 'to:', vm.exchange);
         }
-        return $scope.setDuration(duration);
+        return vm.setDuration(duration);
     };
 
-    $scope.setDuration = function (duration) {
-        $scope.oldDuration = $scope.duration;
-        $scope.duration = (duration || $scope.duration || 'hour');
-        $scope.newDuration = ($scope.duration !== $scope.oldDuration);
-        if ($scope.newDuration) {
-            console.log('Changed duration from:', $scope.oldDuration, 'to:', $scope.duration);
+    vm.setDuration = function (duration) {
+        vm.oldDuration = vm.duration;
+        vm.duration = (duration || vm.duration || 'hour');
+        vm.newDuration = (vm.duration !== vm.oldDuration);
+        if (vm.newDuration) {
+            console.log('Changed duration from:', vm.oldDuration, 'to:', vm.duration);
         }
         return getData();
     };
 
     var updateAll = function () {
-        return $scope.newExchange || (!$scope.newExchange && !$scope.newDuration);
+        return vm.newExchange || (!vm.newExchange && !vm.newDuration);
     };
 
     var getData = function () {
-        console.log('New exchange:', $scope.newExchange);
-        console.log('New duration:', $scope.newDuration);
+        console.log('New exchange:', vm.newExchange);
+        console.log('New duration:', vm.newDuration);
         console.log('Updating all:', updateAll());
 
         $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
             if (results[0] && results[0].data) {
-                $scope.candles = results[0].data.candles;
-                $scope.$broadcast('$candlesUpdated');
+                vm.candles = results[0].data.candles;
+                $rootScope.$broadcast('$candlesUpdated');
                 console.log('Candles updated');
             }
             if (results[1] && results[1].data) {
-                $scope.statistics = results[1].data.statistics;
-                $scope.$broadcast('$statisticsUpdated');
+                vm.statistics = results[1].data.statistics;
+                $rootScope.$broadcast('$statisticsUpdated');
                 console.log('Statistics updated');
             }
             if (results[2] && results[2].data) {
-                $scope.orders = results[2].data.orders;
-                $scope.$broadcast('$ordersUpdated');
+                vm.orders = results[2].data.orders;
+                $rootScope.$broadcast('$ordersUpdated');
                 console.log('Orders updated');
             }
         });
@@ -77,15 +78,15 @@ var MarketWatcher = function ($q, $http, $scope) {
         console.log ('Retrieving exchanges...');
         $http.get('/api/exchanges').then (function (result) {
             if (result.data.success) {
-                $scope.exchanges = _.keys (_.pick (result.data.exchanges, function (value, key) {
+                vm.exchanges = _.keys (_.pick (result.data.exchanges, function (value, key) {
                     return value ? key : false;
                 }));
-                if ($scope.exchanges.length > 0) {
-                    $scope.setExchange();
+                if (vm.exchanges.length > 0) {
+                    vm.setExchange();
                     interval = setInterval(getData, 30000);
                 }
             } else {
-                $scope.exchanges = [];
+                vm.exchanges = [];
             }
         });
     };
@@ -93,50 +94,52 @@ var MarketWatcher = function ($q, $http, $scope) {
     var getCandles = function () {
         console.log('Retrieving candles...');
         return $http.get(['/api/exchanges/getCandles',
-                   '?e=', angular.lowercase($scope.exchange),
-                   '&d=', $scope.duration].join(''));
+                   '?e=', angular.lowercase(vm.exchange),
+                   '&d=', vm.duration].join(''));
     };
 
     var getStatistics = function () {
         if (!updateAll()) { return; }
         console.log('Retrieving statistics...');
         return $http.get(['/api/exchanges/getStatistics',
-                          '?e=', angular.lowercase($scope.exchange)].join(''));
+                          '?e=', angular.lowercase(vm.exchange)].join(''));
     };
 
     var getOrders = function () {
         if (!updateAll()) { return; }
         console.log('Retrieving orders...');
         return $http.get(['/api/exchanges/getOrders',
-                          '?e=', angular.lowercase($scope.exchange)].join(''));
+                          '?e=', angular.lowercase(vm.exchange)].join(''));
     };
 
     getExchanges ();
-    $scope.isCollapsed = false;
+    vm.isCollapsed = false;
 
-    $scope.$on('$locationChangeStart', function (event, next, current) {
+    $rootScope.$on('$locationChangeStart', function (event, next, current) {
         clearInterval(interval);
     });
 
-    $scope.$on('$stockChartUpdated', function (event, next, current) {
-        $scope.newExchange = $scope.newDuration = false;
+    $rootScope.$on('$stockChartUpdated', function (event, next, current) {
+        vm.newExchange = vm.newDuration = false;
     });
 };
 
 angular.module('lisk_explorer.tools').factory('marketWatcher',
-  function ($q, $http, $socket) {
-      return function ($scope) {
-          var marketWatcher = new MarketWatcher($q, $http, $scope),
+  function ($q, $http, $socket, $rootScope) {
+      return function (vm) {
+          console.log('passing', vm);
+          var marketWatcher = new MarketWatcher($q, $http, $rootScope, vm),
               ns = $socket('/marketWatcher');
+            console.log('marketWatcher retuning value', marketWatcher);
 
           ns.on('data', function (res) {
           });
 
-          $scope.$on('$destroy', function (event) {
+          $rootScope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 
-          $scope.$on('$locationChangeStart', function (event, next, current) {
+          $rootScope.$on('$stateChangeStart', function (event, next, current) {
               ns.emit('forceDisconnect');
           });
 

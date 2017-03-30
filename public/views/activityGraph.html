@@ -1,4 +1,4 @@
-<div data-ng-controller="ActivityGraph">
+<div>
     <div class="row">
         <div class="col-xs-12">
             <h1>Activity Graph</h1>
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-xs-6">
                     <div class="btn-group" role="group" aria-label="Camera Buttons">
-                        <button type="button" class="btn btn-default btn-md" data-ng-click="cameraMenu.reset()" title="Reset camera position/zoom">
+                        <button type="button" class="btn btn-default btn-md" data-ng-click="vm.cameraMenu.reset()" title="Reset camera position/zoom">
                             <span class="glyphicon glyphicon-camera"></span>
                             &nbsp;Reset Camera
                         </button>
@@ -69,23 +69,23 @@
                 <table class="table">
                     <tr>
                         <th>Txs</th>
-                        <td>{{statistics.txs}}</td>
+                        <td>{{vm.statistics.txs}}</td>
                     </tr>
                     <tr>
                         <th>Volume</th>
-                        <td>{{statistics.volume | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
+                        <td>{{vm.statistics.volume | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
                     </tr>
                     <tr>
                         <th>Blocks</th>
-                        <td>{{statistics.blocks}}</td>
+                        <td>{{vm.statistics.blocks}}</td>
                     </tr>
                     <tr>
                         <th>Timespan</th>
-                        <td>{{statistics.beginning | timeSpan:statistics.end}}</td>
+                        <td>{{vm.statistics.beginning | timeSpan:vm.statistics.end}}</td>
                     </tr>
                     <tr>
                         <th>Accounts</th>
-                        <td>{{statistics.accounts}}</td>
+                        <td>{{vm.statistics.accounts}}</td>
                     </tr>
                 </table>
             </div>

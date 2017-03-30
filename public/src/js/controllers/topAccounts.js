@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('lisk_explorer.address').controller('TopAccounts',
-  function ($scope, lessMore) {
-      $scope.topAccounts = lessMore({
-          url : '/api/getTopAccounts',
-          key : 'accounts'
-      });
-  });
+var TopAccountsCtrlConstructor = function (lessMore) {
+    this.topAccounts = lessMore({
+        url : '/api/getTopAccounts',
+        key : 'accounts'
+    });
+}
+
+angular.module('lisk_explorer.address').controller('TopAccountsCtrl', TopAccountsCtrlConstructor);
