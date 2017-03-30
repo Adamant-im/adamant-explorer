@@ -23,11 +23,13 @@ module.exports = function (config) {
     };
 
     // Interval
+
     if (config.exchangeRates.enabled) {
         setInterval(this.loadRates, config.exchangeRates.updateInterval);
     }
 
     // Private
+
     var api = require('./exchange-api')(config),
         exchange = this;
 };
