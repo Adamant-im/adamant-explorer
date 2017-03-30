@@ -1,9 +1,9 @@
-<section data-ng-init="topAccounts.loadData()">
+<section data-ng-init="vm.topAccounts.loadData()">
     <h1>Top Accounts</h1>
 
     <hr />
-    <div data-ng-if="topAccounts.results.length">
-        <div class="row" data-ng-hide="!topAccounts.results.length">
+    <div data-ng-if="vm.topAccounts.results.length">
+        <div class="row" data-ng-hide="!vm.topAccounts.results.length">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped">
@@ -17,7 +17,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr data-ng-repeat="address in topAccounts.results track by $index">
+                            <tr data-ng-repeat="address in vm.topAccounts.results track by $index">
                                 <td>{{$index + 1}}</td>
                                 <td class="text-right">
                                     <a href="/address/{{ address.address }}">{{address.address}}</a>
@@ -37,17 +37,17 @@
             </div>
         </div>
     </div>
-    <div class="progress progress-striped active" data-ng-if="topAccounts.loading">
+    <div class="progress progress-striped active" data-ng-if="vm.topAccounts.loading">
         <div class="progress-bar progress-bar-loading" style="width: 100%">
             <span>Loading Accounts...</span>
         </div>
     </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="Less/More Accounts" data-ng-hide="topAccounts.disabled()">
+    <div class="btn-group btn-group-justified" role="group" aria-label="Less/More Accounts" data-ng-hide="vm.topAccounts.disabled()">
         <div class="btn-group" role="group">
-            <button class="btn btn-default" data-ng-disabled="!topAccounts.lessData" data-ng-click="topAccounts.loadLess()">Less</button>
+            <button class="btn btn-default" data-ng-disabled="!vm.topAccounts.lessData" data-ng-click="vm.topAccounts.loadLess()">Less</button>
         </div>
         <div class="btn-group" role="group">
-            <button class="btn btn-default" data-ng-disabled="!topAccounts.moreData" data-ng-click="topAccounts.loadMore()">More</button>
+            <button class="btn btn-default" data-ng-disabled="!vm.topAccounts.moreData" data-ng-click="vm.topAccounts.loadMore()">More</button>
         </div>
     </div>
 </section>

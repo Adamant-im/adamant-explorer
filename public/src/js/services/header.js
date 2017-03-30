@@ -41,7 +41,7 @@ var Header = function ($rootScope) {
 
 angular.module('lisk_explorer.system').factory('header',
   function ($rootScope, $socket) {
-      return function ($scope) {
+      return function () {
           var header = new Header($rootScope),
               ns = $socket('/header');
 
@@ -55,7 +55,7 @@ angular.module('lisk_explorer.system').factory('header',
           });
 
 
-          $scope.$on('$destroy', function (event) {
+          $rootScope.$on('$destroy', function (event) {
               ns.removeAllListeners();
           });
 

@@ -8,7 +8,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/',
         // title: 'Home',
         // parentDir: 'Home',
-        controller: "IndexController",
+        controller: "HomeCtrl",
         controllerAs: "vm"
     }).
     state('blocks', {
@@ -16,7 +16,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/blocks/:page', 
         // title: 'Blocks',
         // parentDir: 'Home',
-        controller: "BlocksController",
+        controller: "BlocksCtrl",
         controllerAs: "vm"
     }).
     state('block', {
@@ -24,7 +24,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/block/:blockId',
         // title: 'Block ',
         // parentDir: 'Blocks',
-        controller: "BlocksController",
+        controller: "BlocksCtrl",
         controllerAs: "vm"
     }).
     state('transaction', {
@@ -32,7 +32,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/tx/:txId',
         // title: 'Transaction ',
         // parentDir: 'Home',
-        controller: "TransactionsController",
+        controller: "TransactionsCtrl",
         controllerAs: "vm"
     }).
     state('address', {
@@ -40,7 +40,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/address/:address',
         // title: 'Address',
         // parentDir: 'Home',
-        controller: "AddressController",
+        controller: "AddressCtrl",
         controllerAs: "vm"
     })
     .state('activity-graph', {
@@ -48,7 +48,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/activityGraph',
         // title: 'Activity Graph',
         // parentDir: 'Home',
-        controller: "ActivityGraph",
+        controller: "ActivityGraphCtrl",
         controllerAs: "vm"
     })
     .state('top-accounts', {
@@ -56,7 +56,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/topAccounts',
         // title: 'Top Accounts',
         // parentDir: 'Home',
-        controller: "TopAccounts",
+        controller: "TopAccountsCtrl",
         controllerAs: "vm"
     })
     .state('delegate-monitor', {
@@ -64,7 +64,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/delegateMonitor',
         // title: 'Delegate Monitor',
         // parentDir: 'Home',
-        controller: "DelegateMonitor",
+        controller: "DelegateMonitorCtrl",
         controllerAs: "vm"
     })
     .state('market-watcher', {
@@ -72,7 +72,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/marketWatcher',
         // title: 'Market Watcher',
         // parentDir: 'Home',
-        controller: "MarketWatcher",
+        controller: "MarketWatcherCtrl",
         controllerAs: "vm"
     })
     .state('network-monitor', {
@@ -80,7 +80,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/networkMonitor',
         // title: 'Network Monitor',
         // parentDir: 'Home',
-        controller: "NetworkMonitor",
+        controller: "NetworkMonitorCtrl",
         controllerAs: "vm"
     })
     .state('delegate', {
@@ -88,7 +88,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
         url: '/delegate/:delegateId',
         // title: 'Delegate',
         // parentDir: 'Home',
-        controller: "DelegateController",
+        controller: "DelegateCtrl",
         controllerAs: "vm"
     })
     .state('error', {
