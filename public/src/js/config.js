@@ -6,96 +6,84 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
     state('home', {
         templateUrl: '/views/index.html',
         url: '/',
-        // title: 'Home',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "HomeCtrl",
         controllerAs: "vm"
     }).
     state('blocks', {
         templateUrl: '/views/blocks.html',
         url: '/blocks/:page', 
-        // title: 'Blocks',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "BlocksCtrl",
         controllerAs: "vm"
     }).
     state('block', {
         templateUrl: '/views/block.html',
         url: '/block/:blockId',
-        // title: 'Block ',
-        // parentDir: 'Blocks',
+        parentDir: 'blocks',
         controller: "BlocksCtrl",
         controllerAs: "vm"
     }).
     state('transaction', {
         templateUrl: '/views/transaction.html',
         url: '/tx/:txId',
-        // title: 'Transaction ',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "TransactionsCtrl",
         controllerAs: "vm"
     }).
     state('address', {
         templateUrl: '/views/address.html',
         url: '/address/:address',
-        // title: 'Address',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "AddressCtrl",
         controllerAs: "vm"
     })
     .state('activity-graph', {
         templateUrl : '/views/activityGraph.html',
         url: '/activityGraph',
-        // title: 'Activity Graph',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "ActivityGraphCtrl",
         controllerAs: "vm"
     })
     .state('top-accounts', {
         templateUrl : '/views/topAccounts.html',
         url: '/topAccounts',
-        // title: 'Top Accounts',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "TopAccountsCtrl",
         controllerAs: "vm"
     })
     .state('delegate-monitor', {
         templateUrl : '/views/delegateMonitor.html',
         url: '/delegateMonitor',
-        // title: 'Delegate Monitor',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "DelegateMonitorCtrl",
         controllerAs: "vm"
     })
     .state('market-watcher', {
         templateUrl : '/views/marketWatcher.html',
         url: '/marketWatcher',
-        // title: 'Market Watcher',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "MarketWatcherCtrl",
         controllerAs: "vm"
     })
     .state('network-monitor', {
         templateUrl : '/views/networkMonitor.html',
         url: '/networkMonitor',
-        // title: 'Network Monitor',
-        // parentDir: 'Home',
+        parentDir: 'home',
         controller: "NetworkMonitorCtrl",
         controllerAs: "vm"
     })
     .state('delegate', {
         templateUrl: '/views/delegate.html',
         url: '/delegate/:delegateId',
-        // title: 'Delegate',
-        // parentDir: 'Home',
+        parentDir: 'address',
         controller: "DelegateCtrl",
         controllerAs: "vm"
     })
     .state('error', {
         url: '404',
         templateUrl: '/views/404.html',
-        // title: 'Error',
-        // parentDir: 'Home'
+        parentDir: 'home'
     });
     $urlRouterProvider.otherwise('/404');
     $locationProvider.html5Mode(true);

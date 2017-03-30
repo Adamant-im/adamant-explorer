@@ -6,37 +6,52 @@ angular.module('lisk_explorer')
             restric: 'E',
             templateUrl: '/views/index/breadCrumb.html',
             link: function (scope, element, attrs) {
-                console.log('breadCrumb');
+                var states = $state.get();
 
                 scope.init = function (e, next) {
-                    console.log('breadCrumb should have $$state ', next);
                     scope.sections = [];
 
-                    var section = next.$$state;
-                    while (section.parentDir !== section.title) {
-                        for (state in $state.states) {
-                            
-                            if ($state.states.hasOwnProperty(state) && $state.states[state].title === section.parentDir) {
+                    var section = next;
+                    while (section.parentDir !== section.name) {
+                        for (var i = 0; i < states.length; i++) {
+                            if (states[i].name === section.parentDir) {
                                 scope.sections.unshift({
-                                    title: $state.states[state].title,
-                                    url: $state.states[state].originalPath.replace(/(?:\/\:([^\/]+)?)\?$/g, '')
+                                    name: states[i].name,
+                                    url: scope.setPathParams(states[i].url, scope.breadCrumb)
                                 });
-                                section = $state.states[state];
+                                section = states[i];
                                 break;
                             }
-                        }
+                        };
                     }
                     scope.sections.push({
-                        title: next.$$state.title,
+                        name: next.name,
                         url: '#'
                     });
                 }
 
-                // scope.$on('$stateChangeStart', scope.init);
-                scope.$on('$stateChangeSuccess', function () {
-                    console.log('sdsddfs');
-                    scope.init();
-                });
+                /**
+                 * Replaces any :param in path string with their corresponding values from given set of breadCrumb values.
+                 */
+                scope.setPathParams = function (path, breadCrumbValues) {
+                    var paramsReg = /(?:\/\:([^\/]+)?)/g;
+                    var params = path.match(paramsReg);
+                    var paramName = '';
+                    var paramValue = '';
+
+                    if (params) {
+                        for (var i = 0; i < params.length; i++) {
+                            paramName = params[i].replace(/(^\/\:)|(\?)/g, '');
+                            paramValue = paramName && breadCrumbValues ? breadCrumbValues[paramName]: '';
+                            path = path.replace(params[i], '/' + paramValue)
+                        }
+                    }
+
+                    return path;
+                }
+
+                // // scope.$on('$stateChangeStart', scope.init);
+                scope.$on('$stateChangeSuccess', scope.init);
             }
         };
     }
