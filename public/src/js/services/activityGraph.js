@@ -313,15 +313,15 @@ angular.module('lisk_explorer.tools').factory('activityGraph',
           vm.statistics = activityGraph.statistics;
 
           activityGraph.sigma.bind('clickNode', function (event) {
-            //   $rootScope.$apply(function () {
+              // $rootScope.$apply(function () {
                   activityGraph.nodeSelect.add(event);
-            //   });
+              // });
           });
 
           activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
-            //   $rootScope.$apply(function () {
+              // $rootScope.$apply(function () {
                   activityGraph.nodeSelect.remove(event);
-            //   });
+              // });
           });
 
           ns.on('data', function (res) { activityGraph.refresh(res.block); });

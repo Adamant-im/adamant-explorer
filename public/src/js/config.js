@@ -94,11 +94,12 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
 angular.module('lisk_explorer')
   .run(function ($rootScope, $state, $location, $stateParams, $anchorScroll, $http, ngProgress, gettextCatalog) {
       gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$stateChangeStart', function (a,b) {
+
+      $rootScope.$on('$stateChangeStart', function (a, b) {
           ngProgress.start();
       });
 
-      $rootScope.$on('$stateChangeSuccess', function (a,b) {
+      $rootScope.$on('$stateChangeSuccess', function (a, b) {
           ngProgress.complete();
 
           // Change page title, based on route information
