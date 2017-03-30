@@ -2,6 +2,7 @@
 
 var HomeCtrlConstructor = function ($scope, $http, $interval) {
     var vm = this;
+
     vm.getLastBlocks = function () {
         $http.get('/api/getLastBlocks').then(function (resp) {
             if (resp.data.success) {

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * 
+ *
  * @todo Move this to a directive instead
- * 
+ *
  */
 var CurrencyCtrlConstructor = function ($rootScope) {
     $rootScope.currency.symbol = localStorage && localStorage.getItem ('lisk_explorer-currency') || 'LSK';

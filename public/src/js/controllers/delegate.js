@@ -2,7 +2,9 @@
 
 var DelegateCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
     var vm = this;
+
     $rootScope.breadCrumb = {address: $stateParams.delegateId};
+
     vm.getAddress = function () {
         $http.get('/api/getAccount', {
             params: {

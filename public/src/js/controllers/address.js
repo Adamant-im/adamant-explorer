@@ -2,6 +2,7 @@
 
 var AddressCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
     var vm = this;
+
     vm.getAddress = function () {
         $http.get('/api/getAccount', {
             params: {

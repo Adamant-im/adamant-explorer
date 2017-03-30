@@ -2,6 +2,7 @@
 
 var SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global, $http) {
     var sch = this;
+
     sch.loading = false;
     sch.badQuery = false;
 

@@ -189,6 +189,7 @@ angular.module('lisk_explorer')
               return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
           };
       }
+
       var types = {
           dashSeparated: {
               reg: /\s/g,
@@ -199,10 +200,10 @@ angular.module('lisk_explorer')
               alternate: ' '
           }
       }
+
       return function (phrase, type) {
           if (type in types) {
               return phrase.trim().replace(types[type].reg, types[type].alternate);
-
           }
       }
   })

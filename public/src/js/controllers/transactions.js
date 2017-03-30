@@ -2,6 +2,7 @@
 
 var TransactionsCtrlConstructor = function ($rootScope, $stateParams, $location, $http) {
     var vm = this;
+
     vm.getTransaction = function () {
         $http.get('/api/getTransaction', {
             params : {

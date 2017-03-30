@@ -87,7 +87,7 @@ angular.module('lisk_explorer').config(function ($stateProvider, $urlRouterProvi
     });
     $urlRouterProvider.otherwise('/404');
     $locationProvider.html5Mode(true);
-    
+
 });
 
 // Setting HTML5 location mode

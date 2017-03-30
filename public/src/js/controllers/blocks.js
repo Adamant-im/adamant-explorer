@@ -2,6 +2,7 @@
 
 var BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
     var vm = this;
+
     vm.getLastBlocks = function (n) {
         var offset = 0;
 

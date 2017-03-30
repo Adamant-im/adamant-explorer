@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * 
+ *
  * @todo Fix the service usage
- * 
+ *
  */
 var HeaderCtrlConstructor = function (header, $scope) {
     header();
