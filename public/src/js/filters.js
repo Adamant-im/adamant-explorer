@@ -183,7 +183,7 @@ angular.module('lisk_explorer')
       };
   })
   .filter('alterWordSeparation', function () {
-      // @todo  Use polymer insteqd
+      // @todo Use polymer instead
       if (!String.prototype.trim) {
           String.prototype.trim = function () {
               return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
