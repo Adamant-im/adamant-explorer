@@ -20,9 +20,6 @@
     <div class="text-muted" data-ng-if="!vm.address.balance">
         <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
     </div>
-    <div class="text-muted" data-ng-if="!vm.address.balance">
-        <span>Loading Address <i class="fa fa-spinner fa-spin"></i></span>
-    </div>
     <h2>
         Address Summary&nbsp;
         <small data-ng-if="vm.address.secondSignature" data-tooltip="Second signature">
@@ -70,8 +67,8 @@
                         </tr>
                         <tr ng-if="vm.address.delegate || proposal">
                             <td><strong>Delegate</strong></td>
-                            <td class="text-right"><a href="/delegate/{{vm.address.delegate.address}}" data-ng-bind-html="vm.address.delegate.username | proposal:delegateProposals"
-                                />
+                            <td class="text-right">
+                              <span data-ng-bind-html="vm.address.delegate.username | proposal:delegateProposals"></span> <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
                             </td>
                         </tr>
                     </tbody>

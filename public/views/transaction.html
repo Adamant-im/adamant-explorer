@@ -77,7 +77,7 @@
                 </tr>
                 <tr>
                     <td><strong>Block </strong></td>
-                    <td data-ng-if="tx.blockId" class="text-right">
+                    <td data-ng-if="vm.tx.blockId" class="text-right">
                         <a href="/block/{{vm.tx.blockId}}">{{vm.tx.blockId}}</a>
                     </td>
                     <td data-ng-if="!vm.tx.blockId" class="text-right">Unconfirmed</td>
