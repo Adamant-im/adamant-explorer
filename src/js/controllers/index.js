@@ -1,9 +1,9 @@
 'use strict';
 
-var HomeCtrlConstructor = function ($scope, $http, $interval) {
-    var vm = this;
-    vm.getLastBlocks = function () {
-        $http.get('/api/getLastBlocks').then(function (resp) {
+const HomeCtrlConstructor = function ($scope, $http, $interval) {
+    const vm = this;
+    vm.getLastBlocks = () => {
+        $http.get('/api/getLastBlocks').then(resp => {
             if (resp.data.success) {
                 if (vm.blocks && vm.blocks.length > 0) {
                     if (vm.blocks[0].id !== resp.data.blocks[0].id) {
@@ -16,14 +16,14 @@ var HomeCtrlConstructor = function ($scope, $http, $interval) {
         });
     };
 
-    vm.blocksInterval = $interval(function () {
+    vm.blocksInterval = $interval(() => {
         vm.getLastBlocks();
     }, 30000);
 
     vm.getLastBlocks();
 
-    vm.getLastTransactions = function () {
-        $http.get('/api/getLastTransactions').then(function (resp) {
+    vm.getLastTransactions = () => {
+        $http.get('/api/getLastTransactions').then(resp => {
             if (resp.data.success) {
                 if (vm.txs && vm.txs.length > 0) {
                     if (vm.txs[0] !== resp.data.transactions[0]) {
@@ -36,11 +36,11 @@ var HomeCtrlConstructor = function ($scope, $http, $interval) {
         });
     };
 
-    vm.transactionsInterval = $interval(function () {
+    vm.transactionsInterval = $interval(() => {
         vm.getLastTransactions();
     }, 30000);
 
     vm.getLastTransactions();
-}
+};
 
 angular.module('lisk_explorer.system').controller('HomeCtrl', HomeCtrlConstructor);

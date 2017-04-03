@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('lisk_explorer.tools')
-  .directive('stockChart', function ($timeout) {
+  .directive('stockChart', $timeout => {
       function StockChart (scope, elm, attr) {
-          var self = this;
+          const self = this;
 
           this.style = {
               width: '100%',
@@ -190,8 +190,8 @@ angular.module('lisk_explorer.tools')
               }
           };
 
-          this.updatePeriod = function () {
-              var newPeriod = (scope.data.newExchange || scope.data.newDuration);
+          this.updatePeriod = () => {
+              const newPeriod = (scope.data.newExchange || scope.data.newDuration);
 
               if (newPeriod) {
                   console.log('Updating period selector...');
@@ -203,8 +203,8 @@ angular.module('lisk_explorer.tools')
               return newPeriod;
           };
 
-          this.updateCandles = function () {
-              var delay = 0;
+          this.updateCandles = () => {
+              let delay = 0;
 
               if (!scope.data.stockChart) {
                   delay = 500;
@@ -213,12 +213,12 @@ angular.module('lisk_explorer.tools')
                   scope.data.stockChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
               }
 
-              $timeout(function () {
+              $timeout(() => {
                   if (scope.data.tab !== 'stockChart') {
                       return;
                   }
 
-                  var newPeriod = self.updatePeriod(scope);
+                  const newPeriod = self.updatePeriod(scope);
 
                   if (_.size(scope.data.candles) > 0) {
                       console.log('Stock chart data updated');
@@ -254,7 +254,7 @@ angular.module('lisk_explorer.tools')
               data: '='
           },
           link: function (scope, elm, attr) {
-              var stockChart = new StockChart(scope, elm, attr);
+              const stockChart = new StockChart(scope, elm, attr);
               scope.$on('$candlesUpdated', stockChart.updateCandles);
           }
       };

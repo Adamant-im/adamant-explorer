@@ -2,8 +2,7 @@
 
 // Global service for global variables
 angular.module('lisk_explorer.system')
-  .factory('Global', [ function () { return true; } ])
+  // @todo what's this?
+  .factory('Global', [ () => true ])
   .factory('Version',
-    function ($resource) {
-        return $resource('/api/version');
-    });
+    $resource => $resource('/api/version'));

@@ -1,5 +1,5 @@
 'use strict';
 
-var FooterCtrlConstructor = function () {};
+const FooterCtrlConstructor = () => {};
 
 angular.module('lisk_explorer.system').controller('FooterCtrl', FooterCtrlConstructor);

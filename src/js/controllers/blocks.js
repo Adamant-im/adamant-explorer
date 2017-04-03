@@ -1,15 +1,15 @@
 'use strict';
 
-var BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
-    var vm = this;
-    vm.getLastBlocks = function (n) {
-        var offset = 0;
+const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
+    const vm = this;
+    vm.getLastBlocks = n => {
+        let offset = 0;
 
         if (n) {
             offset = (n - 1) * 20;
         }
 
-        $http.get('/api/getLastBlocks?n=' + offset).then(function (resp) {
+        $http.get(`/api/getLastBlocks?n=${offset}`).then(resp => {
             if (resp.data.success) {
                 vm.blocks = resp.data.blocks;
 
@@ -22,18 +22,18 @@ var BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http
         });
     };
 
-    vm.getBlock = function (blockId) {
+    vm.getBlock = blockId => {
         $http.get('/api/getBlock', {
             params : {
                 blockId : blockId
             }
-        }).then(function (resp) {
+        }).then(resp => {
             if (resp.data.success) {
                 vm.block = resp.data.block;
             } else {
                 throw 'Block was not found!';
             }
-        }).catch(function (error) {
+        }).catch(error => {
             $location.path('/');
         });
     };
@@ -49,6 +49,6 @@ var BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http
     } else {
         vm.getLastBlocks();
     }
-}
+};
 
 angular.module('lisk_explorer.blocks').controller('BlocksCtrl', BlocksCtrlConstructor);

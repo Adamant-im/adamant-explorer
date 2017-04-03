@@ -12,6 +12,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-markdown');
     grunt.loadNpmTasks('grunt-angular-gettext');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-babel');
 
     // Load Custom Tasks
     grunt.loadTasks('tasks');
@@ -76,6 +77,17 @@ module.exports = function (grunt) {
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
                       'src/css/**/*.css'],
                 dest: 'public/css/main.css'
+            }
+        },
+        babel: {
+            options: {
+                sourceMap: true,
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    'public/js/main.js': 'public/js/main.js'
+                }
             }
         },
         uglify: {
@@ -152,7 +164,7 @@ module.exports = function (grunt) {
         watch: {
             main: {
                 files: ['src/js/**/*.js'],
-                tasks: ['concat:main', 'uglify:main'],
+                tasks: ['concat:main', 'babel', 'uglify:main'],
             },
             css: {
                 files: ['src/css/**/*.css'],
@@ -250,7 +262,7 @@ module.exports = function (grunt) {
     grunt.registerTask('travis', ['jshint', 'mochaTest']);
 
     // Compile task (concat + minify).
-    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy:vedors', 'copy:html', 'copy:assets']);
+    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'babel', 'uglify', 'cssmin', 'copy:vedors', 'copy:html', 'copy:assets']);
 
     // Copy ZeroClipboard.swf to public/swf.
     grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
