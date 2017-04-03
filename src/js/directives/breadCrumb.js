@@ -14,12 +14,13 @@ angular.module('lisk_explorer')
                     var section = next;
                     while (section.parentDir !== section.name) {
                         for (var i = 0; i < states.length; i++) {
-                            if (states[i].name === section.parentDir) {
+                            var item = states[i];
+                            if (item.name === section.parentDir) {
                                 scope.sections.unshift({
-                                    name: states[i].name,
-                                    url: scope.setPathParams(states[i].url, scope.breadCrumb)
+                                    name: item.name,
+                                    url: scope.setPathParams(item.url, scope.breadCrumb)
                                 });
-                                section = states[i];
+                                section = item;
                                 break;
                             }
                         };
@@ -41,9 +42,10 @@ angular.module('lisk_explorer')
 
                     if (params) {
                         for (var i = 0; i < params.length; i++) {
-                            paramName = params[i].replace(/(^\/\:)|(\?)/g, '');
+                            var item = params[i];
+                            paramName = item.replace(/(^\/\:)|(\?)/g, '');
                             paramValue = paramName && breadCrumbValues && breadCrumbValues[paramName] ? breadCrumbValues[paramName]: '';
-                            path = path.replace(params[i], '/' + paramValue)
+                            path = path.replace(item, '/' + paramValue)
                         }
                     }
 

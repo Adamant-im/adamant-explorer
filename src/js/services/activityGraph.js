@@ -179,8 +179,9 @@ ActivityGraph.prototype.positionNodes = function () {
         var i, len = nodes.length, slice = 2 * Math.PI / len;
 
         for (i = 0; i < len; i++) {
-            var angle = slice * i, node = nodes[i];
-            var graph = this.sigma.graph.nodes(node.id);
+            var item = nodes[i];
+            var angle = slice * i;
+            var graph = this.sigma.graph.nodes(item.id);
             graph.x = (type + 1) * Math.cos(angle);
             graph.y = (type + 1) * Math.sin(angle);
         }
