@@ -41,7 +41,8 @@ var NetworkMonitor = function (vm) {
 
             if (angular.isString(version)) {
                 for (var i = 0; i < this.versions.length; i++) {
-                    if (version === this.versions[i]) {
+                    var item = this.versions[i];
+                    if (version === item) {
                         detected = version;
                         this.counter[i]++;
                         break;
@@ -85,7 +86,8 @@ var NetworkMonitor = function (vm) {
 
             if (height) {
                 for (var i = 0; i < this.heights.length; i++) {
-                    if (height === this.heights[i]) {
+                    var item = this.heights[i];
+                    if (height === item) {
                         detected = height;
                         this.counter[i]++;
                         break;
@@ -106,7 +108,8 @@ var NetworkMonitor = function (vm) {
 
         this.calculatePercent = function (peers) {
             for (var i = 0; i < this.counter.length; i++) {
-              this.percent[i] = Math.round((this.counter[i] / peers.length) * 100);
+                var item = this.counter[i];
+              this.percent[i] = Math.round((item / peers.length) * 100);
             }
             return this.percent;
         };
@@ -118,7 +121,8 @@ var NetworkMonitor = function (vm) {
             heights   = new Heights(peers.connected);
 
         for (var i = 0; i < peers.connected.length; i++) {
-            var p = peers.connected[i];
+            var item = peers.connected[i];
+            var p = item;
 
             platforms.detect(p.osBrand);
             versions.detect(p.version);
@@ -184,22 +188,22 @@ var NetworkMap = function () {
         var connected = [];
 
         for (var i = 0; i < peers.connected.length; i++) {
-            var p = peers.connected[i];
+            var item = peers.connected[i];
 
-            if (!validLocation(p.location)) {
-                //console.warn('Invalid geo-location data received for:', p.ip);
+            if (!validLocation(item.location)) {
+                //console.warn('Invalid geo-location data received for:', item.ip);
                 continue;
             }
 
-            if (!_.has(this.markers, p.ip)) {
+            if (!_.has(this.markers, item.ip)) {
                 this.cluster.addLayer(
-                    this.markers[p.ip] = L.marker(
-                        [p.location.latitude, p.location.longitude],
-                        { title: p.ipString, icon: platformIcons[p.osBrand.name] }
-                    ).bindPopup(popupContent(p))
+                    this.markers[item.ip] = L.marker(
+                        [item.location.latitude, item.location.longitude],
+                        { title: item.ipString, icon: platformIcons[item.osBrand.name] }
+                    ).bindPopup(popupContent(item))
                 );
             }
-            connected.push(p.ip);
+            connected.push(item.ip);
         }
 
         this.removeDisconnected(connected);
