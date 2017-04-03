@@ -30,11 +30,14 @@ const Header = function ($rootScope) {
         }
     };
 
+    // @todo shouldn't this be in run inetad of header?
     this.updateDelegateProposals = res => {
+        $rootScope.delegateProposals = {};
         if (res.success) {
-            $rootScope.delegateProposals = res.proposals;
-        } else {
-            $rootScope.delegateProposals = [];
+            
+            for (let proposal of res.proposals) {
+                $rootScope.delegateProposals[proposal.name.toLowerCase()] = proposal;
+            }
         }
     };
 };

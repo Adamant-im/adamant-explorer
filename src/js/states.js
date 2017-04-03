@@ -1,7 +1,6 @@
-'use strict';
 
-// Setting up routes
-angular.module('lisk_explorer').config(($stateProvider, $urlRouterProvider, $locationProvider) => {
+angular.module('lisk_explorer')
+.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $stateProvider.
     state('home', {
         templateUrl: '/views/index.html',
@@ -89,40 +88,3 @@ angular.module('lisk_explorer').config(($stateProvider, $urlRouterProvider, $loc
     $locationProvider.html5Mode(true);
     
 });
-
-// Setting HTML5 location mode
-angular.module('lisk_explorer')
-  .run((
-    $rootScope,
-    $state,
-    $location,
-    $stateParams,
-    $anchorScroll,
-    $http,
-    ngProgress,
-    gettextCatalog
-) => {
-      gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$stateChangeStart', () => {
-          ngProgress.start();
-      });
-
-      $rootScope.$on('$stateChangeSuccess', () => {
-          ngProgress.complete();
-
-          // Change page title, based on route information
-          $rootScope.titleDetail = '';
-          $rootScope.title = $state.current.title;
-          $rootScope.isCollapsed = true;
-
-          // Market Watcher
-          $http.get('/api/exchanges').then (result => {
-              if (result.data.success && result.data.enabled) {
-                $rootScope.marketWatcher = true;
-              }
-          });
-
-          $location.hash($stateParams.scrollTo);
-          $anchorScroll();
-      });
-  });

@@ -4,7 +4,7 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     this.updateActive = active => {
         _.each(active.delegates, d => {
             d.forgingStatus = forgingMonitor.getStatus(d);
-            d.proposal = _.find ($rootScope.delegateProposals, p => p.name === d.username.toLowerCase ());
+            d.proposal = $rootScope.delegateProposals[d.username.toLowerCase()];
         });
         $scope.activeDelegates = active.delegates;
 

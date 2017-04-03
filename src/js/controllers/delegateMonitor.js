@@ -16,7 +16,7 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
         $http.get(`/api/delegates/getStandby?n=${offset}`).then(resp => {
             if (resp.data.success) {
                 _.each(resp.data.delegates, deligate => {
-                    deligate.proposal = _.find ($rootScope.delegateProposals, proposal => proposal.name === deligate.username.toLowerCase ());
+                    deligate.proposal = $rootScope.delegateProposals[deligate.username.toLowerCase()];
                 });
 
                 vm.standbyDelegates = resp.data.delegates;
