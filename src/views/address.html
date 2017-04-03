@@ -68,7 +68,9 @@
                         <tr ng-if="vm.address.delegate || proposal">
                             <td><strong>Delegate</strong></td>
                             <td class="text-right">
-                              <span data-ng-bind-html="vm.address.delegate.username | proposal:delegateProposals"></span> <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
+                                <a class="glyphicon glyphicon-user" ng-if="vm.address.delegate.username | proposal:delegateProposals" href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:delegateProposals: 'description'}}" target="_blank"></a>
+                                &nbsp;
+                                <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
                             </td>
                         </tr>
                     </tbody>
