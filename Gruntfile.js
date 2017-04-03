@@ -44,14 +44,14 @@ module.exports = function (grunt) {
                 dest: 'public/js/angularjs-all.js'
             },
             main: {
-                src: ['public/src/js/app.js',
-                      'public/src/js/controllers/*.js',
-                      'public/src/js/directives/*.js',
-                      'public/src/js/services/*.js',
-                      'public/src/js/filters.js',
-                      'public/src/js/config.js',
-                      'public/src/js/init.js',
-                      'public/src/js/translations.js'],
+                src: ['src/js/app.js',
+                      'src/js/controllers/*.js',
+                      'src/js/directives/*.js',
+                      'src/js/services/*.js',
+                      'src/js/filters.js',
+                      'src/js/config.js',
+                      'src/js/init.js',
+                      'src/js/translations.js'],
                 dest: 'public/js/main.js'
             },
             vendors: {
@@ -74,7 +74,7 @@ module.exports = function (grunt) {
                       'bower_components/font-awesome/css/font-awesome.css',
                       'bower_components/leaflet/dist/leaflet.css',
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
-                      'public/src/css/**/*.css'],
+                      'src/css/**/*.css'],
                 dest: 'public/css/main.css'
             }
         },
@@ -151,16 +151,24 @@ module.exports = function (grunt) {
         },
         watch: {
             main: {
-                files: ['public/src/js/**/*.js'],
+                files: ['src/js/**/*.js'],
                 tasks: ['concat:main', 'uglify:main'],
             },
             css: {
-                files: ['public/src/css/**/*.css'],
+                files: ['src/css/**/*.css'],
                 tasks: ['concat:css', 'cssmin'],
             },
+            html: {
+                files: ['src/views/**/*.html', 'src/index.html'],
+                tasks: ['copy:html'],
+            },
+            assets: {
+                files: ['img/**/*', 'sound/**/*', 'swf/**/*', 'fonts/**/*'],
+                tasks: ['copy:assets']
+            }
         },
         copy: {
-            dist: {
+            vedors: {
                 files: [
                     {
                         // Copy AmCharts images to public/img/amcharts.
@@ -188,11 +196,35 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            html: {
+                files: [
+                    {
+                        // Copy HTML files
+                        expand: true,
+                        dot: true,
+                        cwd: 'src',
+                        src: ['index.html', 'views/**/*.html'],
+                        dest: 'public'
+                    }
+                ]
+            },
+            assets: {
+                files: [
+                    {
+                        // Copy HTML files
+                        expand: true,
+                        dot: true,
+                        cwd: 'src',
+                        src: ['img/**/*', 'sound/**/*', 'swf/**/*'],
+                        dest: 'public'
+                    }
+                ]
+            }
         },
         nggettext_extract: {
             pot: {
                 files: {
-                    'po/template.pot': ['public/views/*.html', 'public/views/**/*.html']
+                    'po/template.pot': ['src/views/*.html', 'src/views/**/*.html']
                 }
             },
         },
@@ -202,7 +234,7 @@ module.exports = function (grunt) {
                     module: 'lisk_explorer'
                 },
                 files: {
-                    'public/src/js/translations.js': ['po/*.po']
+                    'src/js/translations.js': ['po/*.po']
                 }
             },
         }
@@ -218,7 +250,7 @@ module.exports = function (grunt) {
     grunt.registerTask('travis', ['jshint', 'mochaTest']);
 
     // Compile task (concat + minify).
-    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy']);
+    grunt.registerTask('compile', ['nggettext_extract', 'nggettext_compile', 'concat', 'uglify', 'cssmin', 'copy:vedors', 'copy:html', 'copy:assets']);
 
     // Copy ZeroClipboard.swf to public/swf.
     grunt.file.copy('bower_components/zeroclipboard/ZeroClipboard.swf', 'public/swf/ZeroClipboard.swf');
