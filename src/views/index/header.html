@@ -31,16 +31,16 @@
                 </p>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" dropdown data-ng-controller="CurrencyCtrl">
+                <li class="dropdown" dropdown data-ng-controller="CurrencyCtrl as cc">
                     <a class="dropdown-toggle" dropdown-toggle href="#">
                         {{currency.symbol}} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a data-ng-click="setCurrency('LSK')" data-ng-class="{active: currency.symbol == 'LSK'}">LSK</a>
+                            <a data-ng-click="cc.setCurrency('LSK')" data-ng-class="{active: currency.symbol == 'LSK'}">LSK</a>
                         </li>
                         <li data-ng-if="currency.tickers.LSK" data-ng-repeat="(key, value) in currency.tickers.LSK">
-                            <a data-ng-click="setCurrency(key)" data-ng-class="{active: currency.symbol == {{key}}}">{{key}}</a>
+                            <a data-ng-click="cc.setCurrency(key)" data-ng-class="{active: currency.symbol == {{key}}}">{{key}}</a>
                         </li>
                     </ul>
                 </li>
