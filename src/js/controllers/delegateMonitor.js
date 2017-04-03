@@ -32,8 +32,8 @@ var DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootSc
     vm.getStandby(1);
 
     vm.tables = {
-        active : orderBy('rate'),
-        standby : orderBy('rate')
+        active: orderBy('rate'),
+        standby: orderBy('rate')
     };
 }
 

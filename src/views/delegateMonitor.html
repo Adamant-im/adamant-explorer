@@ -86,7 +86,7 @@
                                 <p class="big-details">
                                     <span class="lisk">{{vm.totalForged || 0 | currency:currency}}</span>
                                 </p>
-                                <p class="text-muted total-active">between {{totalActive || 0 }} active delegates</p>
+                                <p class="text-muted total-active">between {{vm.totalActive || 0 }} active delegates</p>
                             </div>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr data-ng-repeat="d in vm.activeDelegates | orderBy:natural(tables.active.predicate):tables.active.reverse track by d.rate">
+                                <tr data-ng-repeat="d in vm.activeDelegates | orderBy:natural(vm.tables.active.predicate):vm.tables.active.reverse track by d.rate">
                                     <td>{{d.rate}}</td>
                                     <td>
                                         <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
@@ -326,7 +326,8 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr data-ng-repeat='d in standbyDelegates | orderBy:natural(tables.standby.predicate):tables.standby.reverse track by d.rate'>
+                                <tr data-ng-repeat='d in vm.standbyDelegates | orderBy:natural(vm.tables.standby.predicate):vm.tables.standby.reverse track by d.rate'>
+                                    
                                     <td>{{d.rate}}</td>
                                     <td>
                                         <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
