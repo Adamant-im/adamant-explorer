@@ -13,6 +13,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-gettext');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-babel');
+    grunt.loadNpmTasks('grunt-contrib-rename');
 
     // Load Custom Tasks
     grunt.loadTasks('tasks');
@@ -45,16 +46,15 @@ module.exports = function (grunt) {
                 dest: 'public/js/angularjs-all.js'
             },
             main: {
-                src: ['src/js/app.js',
-                      'src/js/states.js',
-                      'src/js/run.js',
-                      'src/js/controllers/*.js',
-                      'src/js/directives/*.js',
-                      'src/js/services/*.js',
-                      'src/js/filters/*.js',
-                      'src/js/config.js',
-                      'src/js/init.js',
-                      'src/js/translations.js'],
+                src: ['src/app/app.js',
+                      'src/app/states.js',
+                      'src/app/run.js',
+                      'src/filters/**/*.js',
+                      'src/services/**/*.js',
+                      'src/components/**/*.js',
+                      'src/directives/**/*.js',
+                      'src/shared/**/*.js',
+                      'src/main.js'],
                 dest: 'public/js/main.js'
             },
             vendors: {
@@ -77,7 +77,7 @@ module.exports = function (grunt) {
                       'bower_components/font-awesome/css/font-awesome.css',
                       'bower_components/leaflet/dist/leaflet.css',
                       'bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css',
-                      'src/css/**/*.css'],
+                      'src/**/*.css'],
                 dest: 'public/css/main.css'
             }
         },
@@ -110,6 +110,12 @@ module.exports = function (grunt) {
                 dest: 'public/js/vendors.min.js'
             }
         },
+        rename: {
+            moveThis: {
+                src: 'public/js/main.js',
+                dest: 'public/js/main.min.js'
+            }
+        },
         cssmin: {
             all: {
                 files: [{
@@ -132,7 +138,7 @@ module.exports = function (grunt) {
                   'cache.js',
                   'Gruntfile.js',
                   'lib/**/*.js',
-                  'public/src/js/**/*.js',
+                  'public/src/**/*.js',
                   'redis.js',
                   'sockets/**/*.js',
                   'tasks/**/*.js',
@@ -165,19 +171,19 @@ module.exports = function (grunt) {
         },
         watch: {
             main: {
-                files: ['src/js/**/*.js'],
-                tasks: ['concat:main', 'babel', 'uglify:main'],
+                files: ['src/**/*.js'],
+                tasks: ['concat:main', 'babel', 'rename'],
             },
             css: {
-                files: ['src/css/**/*.css'],
+                files: ['src/**/*.css'],
                 tasks: ['concat:css', 'cssmin'],
             },
             html: {
-                files: ['src/views/**/*.html', 'src/index.html'],
+                files: ['src/**/*.html'],
                 tasks: ['copy:html'],
             },
             assets: {
-                files: ['img/**/*', 'sound/**/*', 'swf/**/*', 'fonts/**/*'],
+                files: ['assets/**/*'],
                 tasks: ['copy:assets']
             }
         },
@@ -215,10 +221,9 @@ module.exports = function (grunt) {
                     {
                         // Copy HTML files
                         expand: true,
-                        dot: true,
                         cwd: 'src',
-                        src: ['index.html', 'views/**/*.html'],
-                        dest: 'public'
+                        src: ['index.html', 'components/**/*.html', 'shared/**/*.html'],
+                        dest: 'public/'
                     }
                 ]
             },
@@ -229,7 +234,7 @@ module.exports = function (grunt) {
                         expand: true,
                         dot: true,
                         cwd: 'src',
-                        src: ['img/**/*', 'sound/**/*', 'swf/**/*'],
+                        src: ['assets/**/*'],
                         dest: 'public'
                     }
                 ]
@@ -238,7 +243,7 @@ module.exports = function (grunt) {
         nggettext_extract: {
             pot: {
                 files: {
-                    'po/template.pot': ['src/views/*.html', 'src/views/**/*.html']
+                    'po/template.pot': ['src/**/*.html']
                 }
             },
         },
@@ -248,7 +253,7 @@ module.exports = function (grunt) {
                     module: 'lisk_explorer'
                 },
                 files: {
-                    'src/js/translations.js': ['po/*.po']
+                    'src/translations.js': ['po/*.po']
                 }
             },
         }
