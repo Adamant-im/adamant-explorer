@@ -8,9 +8,9 @@
 <td data-title="Recipient" data-ng-show="tx.type >= 1">{{tx | txType}}</td>
 <td data-title="Amount">
     <div class="txvalues" data-ng-class="{
-    'txvalues-danger': tx.type == 0 && $parent.address.address == tx.senderId && tx.senderId != tx.recipientId,
-    'txvalues-success': tx.type == 0 && $parent.address.address && tx.senderId != $parent.address.address,
-    'txvalues-default': tx.type != 0 || $parent.address.address === undefined
+    'txvalues-danger': tx.type == 0 && $parent.vm.address.address == tx.senderId && tx.senderId != tx.recipientId,
+    'txvalues-success': tx.type == 0 && $parent.vm.address.address && tx.senderId != $parent.vm.address.address,
+    'txvalues-default': tx.type != 0 || $parent.vm.address.address === undefined
   }">{{tx.amount | currency:currency}} {{currency.symbol}}
     </div>
 </td>
