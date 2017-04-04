@@ -107,7 +107,7 @@
         <h2>Deleted votes <small>{{vm.tx.votes.deleted.length}}</small></h2>
         <div class="row">
             <div class="col-md-12">
-                <span data-ng-repeat='v in tx.votes.deleted'>
+                <span data-ng-repeat='v in vm.tx.votes.deleted'>
                     <span data-ng-if="!$last">
                         <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
                         <span class="text-muted">&bull;</span>
