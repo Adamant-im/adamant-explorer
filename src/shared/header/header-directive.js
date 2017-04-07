@@ -1,11 +1,9 @@
-'use strict';
-
 /**
  * 
  * @todo Fix the service usage
  * 
  */
-const HeaderCtrlConstructor = () => {
+const HeaderLink = () => {
     $rootScope.currency = {
       symbol: 'LSK'
     };
@@ -27,10 +25,10 @@ const HeaderCtrlConstructor = () => {
     });
 };
 
-angular.module('lisk_explorer.system').directive('HeaderCtrl', ($socket, $rootScope, header) => {
+angular.module('lisk_explorer.system').directive('mainHeader', ($socket, $rootScope, header) => {
     return {
         restrict: 'E',
-        link: HeaderCtrlConstructor,
+        link: HeaderLink,
         templateUrl: '/shared/header/header.html'
     }
 });

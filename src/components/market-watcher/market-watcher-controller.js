@@ -1,5 +1,3 @@
-'use strict';
-
 const MarketWatcherCtrlConstructor = function (marketWatcher) {
     marketWatcher(this);
 };

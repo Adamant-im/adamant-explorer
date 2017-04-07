@@ -1,5 +1,3 @@
-'use strict';
-
 const NetworkMonitorCtrlConstructor = function (networkMonitor) {
     networkMonitor(this);
 };

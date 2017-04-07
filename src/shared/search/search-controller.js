@@ -1,6 +1,6 @@
 'use strict';
 
-const SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global, $http) {
+const SearchLink = function ($stateParams, $location, $timeout, Global, $http) {
     const sch = this;
     sch.loading = false;
     sch.badQuery = false;
@@ -40,10 +40,10 @@ const SearchCtrlConstructor = function ($stateParams, $location, $timeout, Globa
     };
 };
 
-angular.module('lisk_explorer.search').directive('SearchCtrl', () => {
+angular.module('lisk_explorer.search').directive('Search', () => {
     return {
         restrict: 'E',
-        link: SearchCtrlConstructor,
+        link: SearchLink,
         templateUrl : '/shared/search/search.html'
     }
 });

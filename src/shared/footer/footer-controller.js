@@ -1,11 +1,9 @@
-'use strict';
+const FooterLink = () => {};
 
-const FooterCtrlConstructor = () => {};
-
-angular.module('lisk_explorer.system').directive('FooterCtrl', () => {
+angular.module('lisk_explorer.system').directive('mainFooter', () => {
     return {
         restrict: 'E',
-        link: FooterCtrlConstructor,
+        link: FooterLink,
         templateUrl: '/shared/footer/footer.html'
     }
 });

@@ -1,5 +1,3 @@
-'use strict';
-
 const ActivityGraphCtrlConstructor = function (activityGraph) {
     activityGraph(this);
 };
