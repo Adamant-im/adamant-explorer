@@ -50,10 +50,32 @@ module.exports = function (grunt) {
                       'src/app/states.js',
                       'src/app/run.js',
                       'src/filters/**/*.js',
-                      'src/services/**/*.js',
+
+                      'src/services/socket.js',
+                      'src/services/forging-status.js',
+                      'src/services/forging-monitor.js',
+                      'src/services/delegate-monitor.js',
+                      'src/services/activity-graph.js',
+                      'src/services/global.js',
+                      'src/services/less-more.js',
+                      'src/services/tx-types.js',
+                      'src/services/order-by.js',
+                      'src/services/address-txs.js',
+                      'src/services/block-txs.js',
+                      'src/services/market-matcher.js',
+                      'src/services/network-monitor.js',
+
                       'src/components/**/*.js',
+
                       'src/directives/**/*.js',
-                      'src/shared/**/*.js',
+                      'src/shared/bread-crumb/*.js',
+                      'src/shared/orders/*.js',
+                      'src/shared/currency/*.js',
+                      'src/shared/peers/*.js',
+                      'src/shared/forging-status/*.js',
+                      'src/shared/footer/*.js',
+                      'src/shared/header/header-service.js',
+                      'src/shared/header/header-directive.js',
                       'src/main.js'],
                 dest: 'public/js/main.js'
             },
@@ -87,9 +109,9 @@ module.exports = function (grunt) {
                 presets: ['es2015']
             },
             dist: {
-                files: {
+                files: [{
                     'public/js/main.js': 'public/js/main.js'
-                }
+                }]
             }
         },
         uglify: {
@@ -233,8 +255,8 @@ module.exports = function (grunt) {
                         // Copy HTML files
                         expand: true,
                         dot: true,
-                        cwd: 'src',
-                        src: ['assets/**/*'],
+                        cwd: 'src/assets',
+                        src: ['**/*'],
                         dest: 'public'
                     }
                 ]

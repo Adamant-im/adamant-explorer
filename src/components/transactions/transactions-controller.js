@@ -1,5 +1,3 @@
-'use strict';
-
 const TransactionsCtrlConstructor = function ($rootScope, $stateParams, $location, $http) {
     const vm = this;
     vm.getTransaction = () => {

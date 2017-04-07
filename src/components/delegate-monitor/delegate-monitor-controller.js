@@ -1,5 +1,3 @@
-'use strict';
-
 const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
     const vm = this;
     delegateMonitor(vm);

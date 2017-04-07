@@ -10,6 +10,6 @@ angular.module('lisk_explorer.tools')
         name: '@name'
     },
 
-    templateUrl: '/views/marketWatcher/orders.html',
+    templateUrl: '/shared/orders/orders.html',
     replace: true
 }));

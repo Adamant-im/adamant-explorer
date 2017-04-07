@@ -1,5 +1,3 @@
-'use strict';
-
 const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
     const vm = this;
     vm.getLastBlocks = n => {
