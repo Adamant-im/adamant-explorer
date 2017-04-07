@@ -32,10 +32,12 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.0",
     "bower": "^1.7.9",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-angular-gettext": "^2.2.3",
+    "grunt-babel": "^6.0.0",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
@@ -43,8 +45,8 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "*",
-    "grunt-mocha-test": "=0.13.2",
     "grunt-markdown": "^0.7.0",
+    "grunt-mocha-test": "=0.13.2",
     "mocha": "^3.2.0",
     "supertest": "^2.0.1"
   }
