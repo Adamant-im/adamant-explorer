@@ -1,11 +1,11 @@
 'use strict';
 
-var Header = function ($rootScope) {
+const Header = function ($rootScope) {
     $rootScope.currency = {
       symbol: 'LSK'
     };
 
-    this.updateBlockStatus = function (res) {
+    this.updateBlockStatus = res => {
         if (res.success) {
             $rootScope.blockStatus = {
                 height:    res.height,
@@ -18,19 +18,19 @@ var Header = function ($rootScope) {
         }
     };
 
-    this.updatePriceTicker = function (res) {
+    this.updatePriceTicker = res => {
         if (res.success) {
             $rootScope.currency.tickers = res.tickers;
         }
 
         // When ticker for user-stored currency is not available - switch to LSK temporarly
         if ($rootScope.currency.symbol !== 'LSK' && (!$rootScope.currency.tickers || !$rootScope.currency.tickers.LSK || !$rootScope.currency.tickers.LSK[$rootScope.currency.symbol])) {
-            console.log ('Currency ' + $rootScope.currency.symbol + ' not available, fallback to LSK');
+            console.log (`Currency ${$rootScope.currency.symbol} not available, fallback to LSK`);
             $rootScope.currency.symbol = 'LSK';
         }
     };
 
-    this.updateDelegateProposals = function (res) {
+    this.updateDelegateProposals = res => {
         if (res.success) {
             $rootScope.delegateProposals = res.proposals;
         } else {
@@ -40,25 +40,22 @@ var Header = function ($rootScope) {
 };
 
 angular.module('lisk_explorer.system').factory('header',
-  function ($rootScope, $socket) {
-      return function () {
-          var header = new Header($rootScope),
-              ns = $socket('/header');
+  ($rootScope, $socket) => () => {
+      const header = new Header($rootScope), ns = $socket('/header');
 
-          ns.on('data', function (res) {
-              if (res.status) { header.updateBlockStatus(res.status); }
-              if (res.ticker) { header.updatePriceTicker(res.ticker); }
-          });
+      ns.on('data', res => {
+          if (res.status) { header.updateBlockStatus(res.status); }
+          if (res.ticker) { header.updatePriceTicker(res.ticker); }
+      });
 
-          ns.on('delegateProposals', function (res) {
-              if (res) { header.updateDelegateProposals(res); }
-          });
+      ns.on('delegateProposals', res => {
+          if (res) { header.updateDelegateProposals(res); }
+      });
 
 
-          $rootScope.$on('$destroy', function (event) {
-              ns.removeAllListeners();
-          });
+      $rootScope.$on('$destroy', event => {
+          ns.removeAllListeners();
+      });
 
-          return header;
-      };
+      return header;
   });

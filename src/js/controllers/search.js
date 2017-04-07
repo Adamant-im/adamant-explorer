@@ -1,24 +1,24 @@
 'use strict';
 
-var SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global, $http) {
-    var sch = this;
+const SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global, $http) {
+    const sch = this;
     sch.loading = false;
     sch.badQuery = false;
 
-    var _badQuery = function () {
+    const _badQuery = () => {
         sch.badQuery = true;
 
-        $timeout(function () {
+        $timeout(() => {
             sch.badQuery = false;
         }, 2000);
     };
 
-    var _resetSearch = function () {
+    const _resetSearch = () => {
         sch.q = '';
         sch.loading = false;
     };
 
-    sch.search = function () {
+    sch.search = () => {
         sch.badQuery = false;
         sch.loading = true;
 
@@ -26,7 +26,7 @@ var SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global,
             params : {
                 id : sch.q
             }
-        }).then(function (resp) {
+        }).then(resp => {
             if (resp.data.success === false) {
                 sch.loading = false;
                 _badQuery();
@@ -34,10 +34,10 @@ var SearchCtrlConstructor = function ($stateParams, $location, $timeout, Global,
                 sch.loading = false;
                 _resetSearch();
 
-                $location.path('/' + resp.data.type + '/' + resp.data.id);
+                $location.path(`/${resp.data.type}/${resp.data.id}`);
             }
         });
     };
-}
+};
 
 angular.module('lisk_explorer.search').controller('SearchCtrl', SearchCtrlConstructor);

@@ -1,7 +1,7 @@
 'use strict';
 
-var NetworkMonitorCtrlConstructor = function (networkMonitor) {
+const NetworkMonitorCtrlConstructor = function (networkMonitor) {
     networkMonitor(this);
-}
+};
 
 angular.module('lisk_explorer.tools').controller('NetworkMonitorCtrl', NetworkMonitorCtrlConstructor);

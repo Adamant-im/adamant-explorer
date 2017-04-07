@@ -1,9 +1,9 @@
 'use strict';
 
-var ZeroClipboard = window.ZeroClipboard;
+const ZeroClipboard = window.ZeroClipboard;
 
 angular.module('lisk_explorer')
-  .directive('clipCopy', function () {
+  .directive('clipCopy', () => {
       ZeroClipboard.config({
           moviePath: '/swf/ZeroClipboard.swf',
           trustedDomains: ['*'],
@@ -16,23 +16,21 @@ angular.module('lisk_explorer')
           scope: { clipCopy: '=clipCopy' },
           template: '<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Copied!</div></div>',
           link: function (scope, elm) {
-              var clip = new ZeroClipboard(elm);
+              const clip = new ZeroClipboard(elm);
 
-              clip.on('load', function (client) {
-                  var onMousedown = function (client) {
+              clip.on('load', client => {
+                  const onMousedown = client => {
                       client.setText(scope.clipCopy);
                   };
 
                   client.on('mousedown', onMousedown);
 
-                  scope.$on('$destroy', function () {
+                  scope.$on('$destroy', () => {
                       client.off('mousedown', onMousedown);
                   });
               });
 
-              clip.on('noFlash wrongflash', function () {
-                  return elm.remove();
-              });
+              clip.on('noFlash wrongflash', () => elm.remove());
           }
       };
   });

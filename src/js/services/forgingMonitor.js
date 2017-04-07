@@ -1,12 +1,10 @@
 'use strict';
 
-var ForgingMonitor = function (forgingStatus) {
-    this.getStatus = function (delegate) {
-        return forgingStatus(delegate);
-    };
+const ForgingMonitor = function (forgingStatus) {
+    this.getStatus = delegate => forgingStatus(delegate);
 
-    this.getforgingTotals = function (delegates) {
-        var cnt1 = _.countBy(delegates, function (d) {
+    this.getforgingTotals = delegates => {
+        const cnt1 = _.countBy(delegates, d => {
             switch (d.forgingStatus.code) {
                 case 0:
                 case 3:
@@ -23,7 +21,7 @@ var ForgingMonitor = function (forgingStatus) {
                     return 'unprocessed';
             }
         });
-        var cnt2 = _.countBy(delegates, function (d) {
+        const cnt2 = _.countBy(delegates, d => {
             switch (d.forgingStatus.code) {
                 case 3:
                 case 4:
@@ -37,8 +35,8 @@ var ForgingMonitor = function (forgingStatus) {
         return cnt1;
     };
 
-    this.getForgingProgress = function (totals) {
-        var unprocessed  = totals.unprocessed || 0;
+    this.getForgingProgress = totals => {
+        let unprocessed  = totals.unprocessed || 0;
             unprocessed += totals.staleStatus || 0;
 
         if (unprocessed > 0) {
@@ -50,6 +48,4 @@ var ForgingMonitor = function (forgingStatus) {
 };
 
 angular.module('lisk_explorer.tools').service('forgingMonitor',
-  function (forgingStatus) {
-      return new ForgingMonitor(forgingStatus);
-  });
+  forgingStatus => new ForgingMonitor(forgingStatus));

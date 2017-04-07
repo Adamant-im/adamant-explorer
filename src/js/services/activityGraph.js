@@ -1,6 +1,6 @@
 'use strict';
 
-var ActivityGraph = function () {
+const ActivityGraph = function () {
     this.loading   = true;
     this.blocks    = 0;
     this.maxBlocks = 20;
@@ -69,11 +69,11 @@ var ActivityGraph = function () {
         this.href = function () {
             switch (this.type()) {
                 case 0:
-                return '/tx/' + this.node.id;
+                return `/tx/${this.node.id}`;
                 case 1:
-                return '/block/' + this.node.id;
+                return `/block/${this.node.id}`;
                 case 2:
-                return '/address/' + this.node.id;
+                return `/address/${this.node.id}`;
                 default:
                 return '#';
             }
@@ -99,9 +99,9 @@ var ActivityGraph = function () {
         this.volume = this.txs = this.blocks = this.accounts = 0;
 
         this.refresh = function () {
-            var txs      = this.graph.nodesByType(0);
-            var blocks   = this.graph.nodesByType(1);
-            var accounts = this.graph.nodesByType(2);
+            const txs      = this.graph.nodesByType(0);
+            const blocks   = this.graph.nodesByType(1);
+            const accounts = this.graph.nodesByType(2);
 
             this.txs       = txs.size().value();
             this.volume    = txsVolume(txs);
@@ -111,27 +111,19 @@ var ActivityGraph = function () {
             this.accounts  = accounts.size().value();
         };
 
-        var txsVolume = function (chain) {
-            return chain.reduce(function (vol, tx) {
-                return vol += tx.amount;
-            }, 0).value();
-        };
+        var txsVolume = chain => chain.reduce((vol, tx) => vol += tx.amount, 0).value();
 
-        var minTime = function (chain) {
-            return chain.min(function (block) {
-                if (block.timestamp > 0) {
-                    return block.timestamp;
-                }
-            }).value().timestamp;
-        };
+        var minTime = chain => chain.min(block => {
+            if (block.timestamp > 0) {
+                return block.timestamp;
+            }
+        }).value().timestamp;
 
-        var maxTime = function (chain) {
-            return chain.max(function (block) {
-                if (block.timestamp > 0) {
-                    return block.timestamp;
-                }
-            }).value().timestamp;
-        };
+        var maxTime = chain => chain.max(block => {
+            if (block.timestamp > 0) {
+                return block.timestamp;
+            }
+        }).value().timestamp;
     }
 
     this.statistics = new Statistics(this);
@@ -162,26 +154,25 @@ ActivityGraph.prototype.clear = function () {
 
 ActivityGraph.prototype.sizeNodes = function () {
     _.each(this.sigma.graph.nodes(), function (node) {
-        var deg = this.sigma.graph.degree(node.id);
+        const deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
 };
 
 ActivityGraph.prototype.nodesByType = function (type) {
-    return _.chain(this.sigma.graph.nodes()).filter(function (node) {
-        return node.type === type;
-    });
+    return _.chain(this.sigma.graph.nodes()).filter(node => node.type === type);
 };
 
 ActivityGraph.prototype.positionNodes = function () {
-    for (var type = 0; type < 3; type++) {
-        var nodes = this.nodesByType(type).value();
-        var i, len = nodes.length, slice = 2 * Math.PI / len;
+    for (let type = 0; type < 3; type++) {
+        const nodes = this.nodesByType(type).value();
+        let i;
+        const len = nodes.length;
+        const slice = 2 * Math.PI / len;
 
         for (i = 0; i < len; i++) {
-            var item = nodes[i];
-            var angle = slice * i;
-            var graph = this.sigma.graph.nodes(item.id);
+            const angle = slice * i;
+            const graph = this.sigma.graph.nodes(nodes[i].id);
             graph.x = (type + 1) * Math.cos(angle);
             graph.y = (type + 1) * Math.sin(angle);
         }
@@ -229,9 +220,7 @@ ActivityGraph.prototype.addAccount = function (id) {
     });
 };
 
-ActivityGraph.prototype.amount = function (tx, sign) {
-    return (sign + tx.amount / Math.pow(10, 8)) + ' LSK';
-};
+ActivityGraph.prototype.amount = (tx, sign) => `${sign + tx.amount / Math.pow(10, 8)} LSK`;
 
 ActivityGraph.prototype.addTxSender = function (tx) {
     this.addAccount(tx.senderId);
@@ -303,38 +292,35 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
 };
 
 angular.module('lisk_explorer.tools').factory('activityGraph',
-  function ($socket, $rootScope) {
-      return function (vm) {
-          var activityGraph = new ActivityGraph(),
-              ns = $socket('/activityGraph');
+  ($socket, $rootScope) => vm => {
+      const activityGraph = new ActivityGraph(), ns = $socket('/activityGraph');
 
-          vm.activityGraph = activityGraph;
-          vm.nodeSelect = activityGraph.nodeSelect;
-          vm.cameraMenu = activityGraph.cameraMenu;
-          vm.statistics = activityGraph.statistics;
+      vm.activityGraph = activityGraph;
+      vm.nodeSelect = activityGraph.nodeSelect;
+      vm.cameraMenu = activityGraph.cameraMenu;
+      vm.statistics = activityGraph.statistics;
 
-          activityGraph.sigma.bind('clickNode', function (event) {
-            // $rootScope.$apply(function () {
-                  activityGraph.nodeSelect.add(event);
-            // });
-          });
+      activityGraph.sigma.bind('clickNode', event => {
+        // $rootScope.$apply(function () {
+              activityGraph.nodeSelect.add(event);
+        // });
+      });
 
-          activityGraph.sigma.bind('clickStage doubleClickStage', function (event) {
-            // $rootScope.$apply(function () {
-                  activityGraph.nodeSelect.remove(event);
-            // });
-          });
+      activityGraph.sigma.bind('clickStage doubleClickStage', event => {
+        // $rootScope.$apply(function () {
+              activityGraph.nodeSelect.remove(event);
+        // });
+      });
 
-          ns.on('data', function (res) { activityGraph.refresh(res.block); });
+      ns.on('data', res => { activityGraph.refresh(res.block); });
 
-          $rootScope.$on('$destroy', function (event) {
-              ns.removeAllListeners();
-          });
+      $rootScope.$on('$destroy', event => {
+          ns.removeAllListeners();
+      });
 
-          $rootScope.$on('$stateChangeStart', function (event, next, current) {
-              ns.emit('forceDisconnect');
-          });
+      $rootScope.$on('$stateChangeStart', (event, next, current) => {
+          ns.emit('forceDisconnect');
+      });
 
-          return activityGraph;
-      };
+      return activityGraph;
   });

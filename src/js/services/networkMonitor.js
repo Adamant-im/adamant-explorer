@@ -1,6 +1,6 @@
 'use strict';
 
-var NetworkMonitor = function (vm) {
+const NetworkMonitor = function (vm) {
     this.map = new NetworkMap();
 
     function Platforms () {
@@ -24,9 +24,9 @@ var NetworkMonitor = function (vm) {
     }
 
     function Versions (peers) {
-        var inspect = function () {
+        const inspect = () => {
             if (angular.isArray(peers)) {
-                return _.uniq(_.map(peers, function (p) { return p.version; })
+                return _.uniq(_.map(peers, p => p.version)
                         .sort(), true).reverse().slice(0, 3);
             } else {
                 return [];
@@ -37,12 +37,11 @@ var NetworkMonitor = function (vm) {
         this.versions = inspect();
 
         this.detect = function (version) {
-            var detected = null;
+            let detected = null;
 
             if (angular.isString(version)) {
-                for (var i = 0; i < this.versions.length; i++) {
-                    var item = this.versions[i];
-                    if (version === item) {
+                for (let i = 0; i < this.versions.length; i++) {
+                    if (version === this.versions[i]) {
                         detected = version;
                         this.counter[i]++;
                         break;
@@ -65,12 +64,12 @@ var NetworkMonitor = function (vm) {
     }
 
     function Heights (peers) {
-        var inspect = function () {
+        const inspect = () => {
           function sortNumber(a,b) {
             return b - a;
           }
           if (angular.isArray(peers)) {
-              return _.uniq(_.map(peers, function (p) { return p.height; })
+              return _.uniq(_.map(peers, p => p.height)
                       .sort(sortNumber), true).slice(0, 4);
           } else {
               return [];
@@ -82,12 +81,11 @@ var NetworkMonitor = function (vm) {
         this.heights = inspect();
 
         this.detect = function (height) {
-            var detected = null;
+            let detected = null;
 
             if (height) {
-                for (var i = 0; i < this.heights.length; i++) {
-                    var item = this.heights[i];
-                    if (height === item) {
+                for (let i = 0; i < this.heights.length; i++) {
+                    if (height === this.heights[i]) {
                         detected = height;
                         this.counter[i]++;
                         break;
@@ -107,26 +105,21 @@ var NetworkMonitor = function (vm) {
         };
 
         this.calculatePercent = function (peers) {
-            for (var i = 0; i < this.counter.length; i++) {
-                var item = this.counter[i];
-              this.percent[i] = Math.round((item / peers.length) * 100);
+            for (let item of this.counter) {
+                item = Math.round((item / peers.length) * 100);
             }
+
             return this.percent;
         };
     }
 
-    this.counter = function (peers) {
-        var platforms = new Platforms(),
-            versions  = new Versions(peers.connected),
-            heights   = new Heights(peers.connected);
+    this.counter = peers => {
+        const platforms = new Platforms(), versions  = new Versions(peers.connected), heights   = new Heights(peers.connected);
 
-        for (var i = 0; i < peers.connected.length; i++) {
-            var item = peers.connected[i];
-            var p = item;
-
-            platforms.detect(p.osBrand);
-            versions.detect(p.version);
-            heights.detect(p.height);
+        for (let item of peers.connected) {
+            platforms.detect(item.osBrand);
+            versions.detect(item.version);
+            heights.detect(item.height);
         }
 
         return {
@@ -146,17 +139,17 @@ var NetworkMonitor = function (vm) {
         this.map.addConnected(peers.list);
     };
 
-    this.updateLastBlock = function (lastBlock) {
+    this.updateLastBlock = lastBlock => {
         vm.lastBlock = lastBlock.block;
     };
 
-    this.updateBlocks = function (blocks) {
+    this.updateBlocks = blocks => {
         vm.bestBlock = blocks.best;
         vm.volume    = blocks.volume;
     };
 };
 
-var NetworkMap = function () {
+const NetworkMap = function () {
     this.markers = {};
     this.options = { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 };
     this.map     = L.map('map', this.options);
@@ -168,7 +161,7 @@ var NetworkMap = function () {
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    var PlatformIcon = L.Icon.extend({
+    const PlatformIcon = L.Icon.extend({
         options: {
             iconSize:   [32, 41],
             iconAnchor: [16, 41],
@@ -176,7 +169,7 @@ var NetworkMap = function () {
         }
     });
 
-    var platformIcons = {
+    const platformIcons = {
         darwin:  new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-darwin.png' }),
         linux:   new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
         win:     new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-win.png' }),
@@ -185,11 +178,9 @@ var NetworkMap = function () {
     };
 
     this.addConnected = function (peers) {
-        var connected = [];
+        const connected = [];
 
-        for (var i = 0; i < peers.connected.length; i++) {
-            var item = peers.connected[i];
-
+        for (let item of peers.connected) {
             if (!validLocation(item.location)) {
                 //console.warn('Invalid geo-location data received for:', item.ip);
                 continue;
@@ -211,9 +202,9 @@ var NetworkMap = function () {
     };
 
     this.removeDisconnected = function (connected) {
-        for (var ip in this.markers) {
+        for (const ip in this.markers) {
             if (!_.contains(connected, ip)) {
-                var m = this.markers[ip];
+                const m = this.markers[ip];
 
                 this.map.removeLayer(m);
                 this.cluster.removeLayer(m);
@@ -224,12 +215,10 @@ var NetworkMap = function () {
 
     // Private
 
-    var validLocation = function (location) {
-        return location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
-    };
+    var validLocation = location => location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
 
-    var popupContent = function (p) {
-        var content = '<p class="ip">'.concat(p.ip, '</p>');
+    var popupContent = p => {
+        let content = '<p class="ip">'.concat(p.ip, '</p>');
 
         if (p.location.hostname) {
             content += '<p class="hostname">'
@@ -262,43 +251,40 @@ var NetworkMap = function () {
 };
 
 angular.module('lisk_explorer.tools').factory('networkMonitor',
-  function ($socket, $rootScope) {
-      return function (vm) {
-          var networkMonitor = new NetworkMonitor(vm),
-              ns = $socket('/networkMonitor');
+  ($socket, $rootScope) => vm => {
+      const networkMonitor = new NetworkMonitor(vm), ns = $socket('/networkMonitor');
 
-          ns.on('data', function (res) {
-              if (res.peers) { networkMonitor.updatePeers(res.peers); }
-              if (res.lastBlock) { networkMonitor.updateLastBlock(res.lastBlock); }
-              if (res.blocks) { networkMonitor.updateBlocks(res.blocks); }
-          });
+      ns.on('data', res => {
+          if (res.peers) { networkMonitor.updatePeers(res.peers); }
+          if (res.lastBlock) { networkMonitor.updateLastBlock(res.lastBlock); }
+          if (res.blocks) { networkMonitor.updateBlocks(res.blocks); }
+      });
 
-          ns.on('data1', function (res) {
-              if (res.lastBlock) {
-                  networkMonitor.updateLastBlock(res.lastBlock);
-              }
-          });
+      ns.on('data1', res => {
+          if (res.lastBlock) {
+              networkMonitor.updateLastBlock(res.lastBlock);
+          }
+      });
 
-          ns.on('data2', function (res) {
-              if (res.blocks) {
-                  networkMonitor.updateBlocks(res.blocks);
-              }
-          });
+      ns.on('data2', res => {
+          if (res.blocks) {
+              networkMonitor.updateBlocks(res.blocks);
+          }
+      });
 
-          ns.on('data3', function (res) {
-              if (res.peers) {
-                  networkMonitor.updatePeers(res.peers);
-              }
-          });
+      ns.on('data3', res => {
+          if (res.peers) {
+              networkMonitor.updatePeers(res.peers);
+          }
+      });
 
-          $rootScope.$on('$destroy', function (event) {
-              ns.removeAllListeners();
-          });
+      $rootScope.$on('$destroy', event => {
+          ns.removeAllListeners();
+      });
 
-          $rootScope.$on('$locationChangeStart', function (event, next, current) {
-              ns.emit('forceDisconnect');
-          });
+      $rootScope.$on('$locationChangeStart', (event, next, current) => {
+          ns.emit('forceDisconnect');
+      });
 
-          return networkMonitor;
-      };
+      return networkMonitor;
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-var OrderBy = function (predicate) {
+const OrderBy = function (predicate) {
     this.reverse   = false;
     this.predicate = predicate;
 
@@ -11,8 +11,4 @@ var OrderBy = function (predicate) {
 };
 
 angular.module('lisk_explorer.system').factory('orderBy',
-  function () {
-      return function (predicate) {
-          return new OrderBy(predicate);
-      };
-  });
+  () => predicate => new OrderBy(predicate));

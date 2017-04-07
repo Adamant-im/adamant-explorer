@@ -1,12 +1,10 @@
 'use strict';
 
-var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
-    this.updateActive = function (active) {
-        _.each(active.delegates, function (d) {
+const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
+    this.updateActive = active => {
+        _.each(active.delegates, d => {
             d.forgingStatus = forgingMonitor.getStatus(d);
-            d.proposal = _.find ($rootScope.delegateProposals, function (p) {
-              return p.name === d.username.toLowerCase ();
-            });
+            d.proposal = _.find ($rootScope.delegateProposals, p => p.name === d.username.toLowerCase ());
         });
         $scope.activeDelegates = active.delegates;
 
@@ -14,7 +12,7 @@ var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
         updateForgingProgress($scope.forgingTotals);
     };
 
-    this.updateTotals = function (active) {
+    this.updateTotals = active => {
         $scope.totalDelegates = active.totalCount || 0;
         $scope.totalActive    = 101;
 
@@ -30,34 +28,32 @@ var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
         $scope.worstProductivity = worstProductivity(active.delegates);
     };
 
-    this.updateLastBlock = function (lastBlock) {
+    this.updateLastBlock = lastBlock => {
         $scope.lastBlock = lastBlock.block;
     };
 
-    this.updateRegistrations = function (registrations) {
+    this.updateRegistrations = registrations => {
         $scope.registrations = registrations.transactions;
     };
 
-    this.updateNextForgers = function (nextForgers) {
+    this.updateNextForgers = nextForgers => {
         $scope.nextForgers = nextForgers;
     };
 
-    this.updateVotes = function (votes) {
+    this.updateVotes = votes => {
         $scope.votes = votes.transactions;
     };
 
-    this.updateApproval = function (approval) {
+    this.updateApproval = approval => {
         $scope.approval = approval;
     };
 
-    this.updateLastBlocks = function (delegate) {
-        _.each($scope.activeDelegates, function (d) {
+    this.updateLastBlocks = delegate => {
+        _.each($scope.activeDelegates, d => {
             d.forgingStatus = forgingMonitor.getStatus(d);
         });
 
-        var existing = _.find($scope.activeDelegates, function (d) {
-            return d.publicKey === delegate.publicKey;
-        });
+        const existing = _.find($scope.activeDelegates, d => d.publicKey === delegate.publicKey);
         if (existing) {
             existing.blocksAt = delegate.blocksAt;
             existing.blocks = delegate.blocks;
@@ -69,36 +65,34 @@ var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 
     // Private
 
-    var bestForger = function (delegates) {
+    var bestForger = delegates => {
         if (_.size(delegates) > 0) {
-            return _.max(delegates, function (d) { return parseInt(d.forged); });
+            return _.max(delegates, d => parseInt(d.forged));
         }
     };
 
-    var totalForged = function (delegates) {
-        return _.chain(delegates)
-                .map(function (d) { return parseInt(d.forged); })
-                .reduce(function (memo, num) { return parseInt(memo) + parseInt(num); }, 0)
-                .value();
-    };
+    var totalForged = delegates => _.chain(delegates)
+            .map(d => parseInt(d.forged))
+            .reduce((memo, num) => parseInt(memo) + parseInt(num), 0)
+            .value();
 
-    var bestProductivity = function (delegates) {
+    var bestProductivity = delegates => {
         if (_.size(delegates) > 0) {
-            return _.max(delegates, function (d) { return parseFloat(d.productivity); });
+            return _.max(delegates, d => parseFloat(d.productivity));
         }
     };
 
-    var worstProductivity = function (delegates) {
+    var worstProductivity = delegates => {
         if (_.size(delegates) > 0) {
-            return _.min(delegates, function (d) { return parseFloat(d.productivity); });
+            return _.min(delegates, d => parseFloat(d.productivity));
         }
     };
 
-    var updateForgingTotals = function (delegates) {
+    var updateForgingTotals = delegates => {
         $scope.forgingTotals = forgingMonitor.getforgingTotals(delegates);
     };
 
-    var updateForgingProgress = function (totals) {
+    var updateForgingProgress = totals => {
         totals.processed = forgingMonitor.getForgingProgress(totals);
 
         if (totals.processed > 0) {
@@ -108,38 +102,35 @@ var DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 };
 
 angular.module('lisk_explorer.tools').factory('delegateMonitor',
-  function ($socket, $rootScope, forgingMonitor) {
-      return function (vm) {
-          var delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor),
-              ns = $socket('/delegateMonitor');
+  ($socket, $rootScope, forgingMonitor) => vm => {
+      const delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor), ns = $socket('/delegateMonitor');
 
-          ns.on('data', function (res) {
-              if (res.active) {
-                  delegateMonitor.updateActive(res.active);
-                  delegateMonitor.updateTotals(res.active);
-              }
-              if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
-              if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
-              if (res.nextForgers) { delegateMonitor.updateNextForgers(res.nextForgers); }
-              if (res.votes) { delegateMonitor.updateVotes(res.votes); }
-              if (res.approval) { delegateMonitor.updateApproval(res.approval); }
-          });
+      ns.on('data', res => {
+          if (res.active) {
+              delegateMonitor.updateActive(res.active);
+              delegateMonitor.updateTotals(res.active);
+          }
+          if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
+          if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
+          if (res.nextForgers) { delegateMonitor.updateNextForgers(res.nextForgers); }
+          if (res.votes) { delegateMonitor.updateVotes(res.votes); }
+          if (res.approval) { delegateMonitor.updateApproval(res.approval); }
+      });
 
-          ns.on('delegate', function (res) {
-              if (res.publicKey) {
-                  delegateMonitor.updateLastBlocks(res);
-              }
-          });
+      ns.on('delegate', res => {
+          if (res.publicKey) {
+              delegateMonitor.updateLastBlocks(res);
+          }
+      });
 
-          $rootScope.$on('$destroy', function (event) {
-              ns.removeAllListeners();
-          });
+      $rootScope.$on('$destroy', event => {
+          ns.removeAllListeners();
+      });
 
-          $rootScope.$on('$stateChangeStart', function (event, next, current) {
-              ns.emit('forceDisconnect');
-          });
+      $rootScope.$on('$stateChangeStart', (event, next, current) => {
+          ns.emit('forceDisconnect');
+      });
 
-          return delegateMonitor;
-      };
+      return delegateMonitor;
   }
 );

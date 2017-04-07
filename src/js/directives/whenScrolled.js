@@ -1,28 +1,25 @@
 'use strict';
 
 angular.module('lisk_explorer')
-  .directive('whenScrolled', function ($window) {
-      return {
-          restric: 'A',
-          link: function (scope, elm, attr) {
-              var pageHeight, clientHeight, scrollPos;
-              $window = angular.element($window);
+  .directive('whenScrolled', $window => ({
+    restric: 'A',
 
-              var handler = function () {
-                  pageHeight = window.document.documentElement.scrollHeight;
-                  clientHeight = window.document.documentElement.clientHeight;
-                  scrollPos = window.pageYOffset;
+    link: function (scope, elm, attr) {
+        let pageHeight, clientHeight, scrollPos;
+        $window = angular.element($window);
 
-                  if (pageHeight - (scrollPos + clientHeight) === 0) {
-                      scope.$apply(attr.whenScrolled);
-                  }
-              };
+        const handler = () => {
+            pageHeight = window.document.documentElement.scrollHeight;
+            clientHeight = window.document.documentElement.clientHeight;
+            scrollPos = window.pageYOffset;
 
-              $window.on('scroll', handler);
+            if (pageHeight - (scrollPos + clientHeight) === 0) {
+                scope.$apply(attr.whenScrolled);
+            }
+        };
 
-              scope.$on('$destroy', function () {
-                  return $window.off('scroll', handler);
-              });
-          }
-      };
-  });
+        $window.on('scroll', handler);
+
+        scope.$on('$destroy', () => $window.off('scroll', handler));
+    }
+}));

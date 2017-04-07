@@ -1,11 +1,11 @@
 'use strict';
 
-var DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
-    var vm = this;
+const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
+    const vm = this;
     delegateMonitor(vm);
 
-    vm.getStandby = function (n) {
-        var offset = 0;
+    vm.getStandby = n => {
+        let offset = 0;
 
         if (n) {
             offset = (n - 1) * 20;
@@ -13,12 +13,10 @@ var DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootSc
 
         vm.standbyDelegates = null;
 
-        $http.get('/api/delegates/getStandby?n=' + offset).then(function (resp) {
+        $http.get(`/api/delegates/getStandby?n=${offset}`).then(resp => {
             if (resp.data.success) {
-                _.each(resp.data.delegates, function (deligate) {
-                    deligate.proposal = _.find ($rootScope.delegateProposals, function (proposal) {
-                    return proposal.name === deligate.username.toLowerCase ();
-                    });
+                _.each(resp.data.delegates, deligate => {
+                    deligate.proposal = _.find ($rootScope.delegateProposals, proposal => proposal.name === deligate.username.toLowerCase ());
                 });
 
                 vm.standbyDelegates = resp.data.delegates;
@@ -35,6 +33,6 @@ var DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootSc
         active: orderBy('rate'),
         standby: orderBy('rate')
     };
-}
+};
 
 angular.module('lisk_explorer.tools').controller('DelegateMonitorCtrl', DelegateMonitorCtrlConstructor);

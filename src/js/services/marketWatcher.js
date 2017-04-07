@@ -1,11 +1,11 @@
 'use strict';
 
-var MarketWatcher = function ($q, $http, $rootScope, vm) {
+const MarketWatcher = function ($q, $http, $rootScope, vm) {
     console.log(vm);
-    var self = this,
-        interval;
+    const self = this;
+    let interval;
 
-    vm.setTab = function (tab) {
+    vm.setTab = tab => {
         vm.oldTab = vm.tab;
         vm.tab    = tab;
 
@@ -26,7 +26,7 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
         }
     };
 
-    vm.setExchange = function (exchange, duration) {
+    vm.setExchange = (exchange, duration) => {
         vm.oldExchange = vm.exchange;
         vm.exchange = (exchange || vm.exchange || _.first (vm.exchanges));
         vm.newExchange = (vm.exchange !== vm.oldExchange);
@@ -36,7 +36,7 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
         return vm.setDuration(duration);
     };
 
-    vm.setDuration = function (duration) {
+    vm.setDuration = duration => {
         vm.oldDuration = vm.duration;
         vm.duration = (duration || vm.duration || 'hour');
         vm.newDuration = (vm.duration !== vm.oldDuration);
@@ -46,16 +46,14 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
         return getData();
     };
 
-    var updateAll = function () {
-        return vm.newExchange || (!vm.newExchange && !vm.newDuration);
-    };
+    const updateAll = () => vm.newExchange || (!vm.newExchange && !vm.newDuration);
 
-    var getData = function () {
+    var getData = () => {
         console.log('New exchange:', vm.newExchange);
         console.log('New duration:', vm.newDuration);
         console.log('Updating all:', updateAll());
 
-        $q.all([getCandles(), getStatistics(), getOrders()]).then(function (results) {
+        $q.all([getCandles(), getStatistics(), getOrders()]).then(results => {
             if (results[0] && results[0].data) {
                 vm.candles = results[0].data.candles;
                 $rootScope.$broadcast('$candlesUpdated');
@@ -74,13 +72,11 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
         });
     };
 
-    var getExchanges = function () {
+    const getExchanges = () => {
         console.log ('Retrieving exchanges...');
-        $http.get('/api/exchanges').then (function (result) {
+        $http.get('/api/exchanges').then (result => {
             if (result.data.success) {
-                vm.exchanges = _.keys (_.pick (result.data.exchanges, function (value, key) {
-                    return value ? key : false;
-                }));
+                vm.exchanges = _.keys (_.pick (result.data.exchanges, (value, key) => value ? key : false));
                 if (vm.exchanges.length > 0) {
                     vm.setExchange();
                     interval = setInterval(getData, 30000);
@@ -91,21 +87,21 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
         });
     };
 
-    var getCandles = function () {
+    var getCandles = () => {
         console.log('Retrieving candles...');
         return $http.get(['/api/exchanges/getCandles',
                    '?e=', angular.lowercase(vm.exchange),
                    '&d=', vm.duration].join(''));
     };
 
-    var getStatistics = function () {
+    var getStatistics = () => {
         if (!updateAll()) { return; }
         console.log('Retrieving statistics...');
         return $http.get(['/api/exchanges/getStatistics',
                           '?e=', angular.lowercase(vm.exchange)].join(''));
     };
 
-    var getOrders = function () {
+    var getOrders = () => {
         if (!updateAll()) { return; }
         console.log('Retrieving orders...');
         return $http.get(['/api/exchanges/getOrders',
@@ -115,34 +111,31 @@ var MarketWatcher = function ($q, $http, $rootScope, vm) {
     getExchanges ();
     vm.isCollapsed = false;
 
-    $rootScope.$on('$locationChangeStart', function (event, next, current) {
+    $rootScope.$on('$locationChangeStart', (event, next, current) => {
         clearInterval(interval);
     });
 
-    $rootScope.$on('$stockChartUpdated', function (event, next, current) {
+    $rootScope.$on('$stockChartUpdated', (event, next, current) => {
         vm.newExchange = vm.newDuration = false;
     });
 };
 
 angular.module('lisk_explorer.tools').factory('marketWatcher',
-  function ($q, $http, $socket, $rootScope) {
-      return function (vm) {
-          console.log('passing', vm);
-          var marketWatcher = new MarketWatcher($q, $http, $rootScope, vm),
-              ns = $socket('/marketWatcher');
-            console.log('marketWatcher retuning value', marketWatcher);
+  ($q, $http, $socket, $rootScope) => vm => {
+      console.log('passing', vm);
+      const marketWatcher = new MarketWatcher($q, $http, $rootScope, vm), ns = $socket('/marketWatcher');
+        console.log('marketWatcher retuning value', marketWatcher);
 
-          ns.on('data', function (res) {
-          });
+      ns.on('data', res => {
+      });
 
-          $rootScope.$on('$destroy', function (event) {
-              ns.removeAllListeners();
-          });
+      $rootScope.$on('$destroy', event => {
+          ns.removeAllListeners();
+      });
 
-          $rootScope.$on('$stateChangeStart', function (event, next, current) {
-              ns.emit('forceDisconnect');
-          });
+      $rootScope.$on('$stateChangeStart', (event, next, current) => {
+          ns.emit('forceDisconnect');
+      });
 
-          return marketWatcher;
-      };
+      return marketWatcher;
   });

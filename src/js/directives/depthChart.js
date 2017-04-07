@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('lisk_explorer.tools')
-  .directive('depthChart', function ($timeout) {
+  .directive('depthChart', $timeout => {
       function DepthChart (scope, elm, attr) {
-          var self = this;
+          const self = this;
 
           this.style = {
               width: '100%',
@@ -54,8 +54,8 @@ angular.module('lisk_explorer.tools')
               }
           };
 
-          this.updateDepth = function () {
-              var delay = 0;
+          this.updateDepth = () => {
+              let delay = 0;
 
               if (!scope.data.depthChart) {
                   delay = 500;
@@ -64,7 +64,7 @@ angular.module('lisk_explorer.tools')
                   scope.data.depthChart.categoryAxesSettings = new AmCharts.CategoryAxesSettings();
               }
 
-              $timeout(function () {
+              $timeout(() => {
                   if (scope.data.tab !== 'depthChart') {
                       return;
                   }
@@ -98,7 +98,7 @@ angular.module('lisk_explorer.tools')
               data: '='
           },
           link: function (scope, elm, attr) {
-              var depthChart = new DepthChart(scope, elm, attr);
+              const depthChart = new DepthChart(scope, elm, attr);
               scope.$on('$ordersUpdated', depthChart.updateDepth);
           }
       };
