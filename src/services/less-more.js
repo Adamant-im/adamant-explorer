@@ -39,6 +39,7 @@ LessMore.prototype.getData = function (offset, limit, cb) {
     this.$http.get(this.url, {
         params : params
     }).then(resp => {
+        console.log(resp);
         if (resp.data.success && angular.isArray(resp.data[this.key])) {
             cb(resp.data[this.key]);
         } else {
@@ -105,6 +106,7 @@ LessMore.prototype.reloadMore = function () {
     }
 
     self.$q.all(promises).then(responses => {
+        console.log(responses);
         angular.forEach(responses, function (resp) {
             if (resp.data.success && angular.isArray(resp.data[this.key])) {
                 self.acceptData(resp.data[self.key]);
