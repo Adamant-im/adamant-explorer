@@ -8,7 +8,7 @@ angular.module('lisk_explorer.tools')
         forgingStatus: '=forgingStatus'
     },
 
-    templateUrl: '/views/delegateMonitor/forgingStatus.html',
+    templateUrl: '/shared/forging-status/forging-status.html',
     replace: true,
     transclude: true,
 
