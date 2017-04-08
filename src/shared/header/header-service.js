@@ -1,5 +1,3 @@
-'use strict';
-
 const HeaderConstrcutor = function ($rootScope) {
 
     this.updateBlockStatus = res => {
@@ -41,5 +39,5 @@ const HeaderConstrcutor = function ($rootScope) {
     return this;
 };
 
-angular.module('lisk_explorer.system').factory('header',
+angular.module('lisk_explorer.system').factory('Header',
   ($rootScope, $socket) => HeaderConstrcutor);
