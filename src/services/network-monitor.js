@@ -1,4 +1,103 @@
-'use strict';
+const NetworkMap = function () {
+    this.markers = {};
+    this.options = { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 };
+    this.map     = L.map('map', this.options);
+    this.cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
+
+    L.Icon.Default.imagePath = '/img/leaflet';
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map);
+
+    const PlatformIcon = L.Icon.extend({
+        options: {
+            iconSize:   [32, 41],
+            iconAnchor: [16, 41],
+            popupAnchor: [0, -41]
+        }
+    });
+
+    const platformIcons = {
+        darwin:  new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-darwin.png' }),
+        linux:   new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
+        win:     new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-win.png' }),
+        freebsd: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-freebsd.png' }),
+        unknown: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-unknown.png' })
+    };
+
+    this.addConnected = function (peers) {
+        const connected = [];
+
+        for (let item of peers.connected) {
+            if (!validLocation(item.location)) {
+                //console.warn('Invalid geo-location data received for:', item.ip);
+                continue;
+            }
+
+            if (!_.has(this.markers, item.ip)) {
+                this.cluster.addLayer(
+                    this.markers[item.ip] = L.marker(
+                        [item.location.latitude, item.location.longitude],
+                        { title: item.ipString, icon: platformIcons[item.osBrand.name] }
+                    ).bindPopup(popupContent(item))
+                );
+            }
+            connected.push(item.ip);
+        }
+
+        this.removeDisconnected(connected);
+        this.map.addLayer(this.cluster);
+    };
+
+    this.removeDisconnected = function (connected) {
+        for (const ip in this.markers) {
+            if (!_.contains(connected, ip)) {
+                const m = this.markers[ip];
+
+                this.map.removeLayer(m);
+                this.cluster.removeLayer(m);
+                delete this.markers[ip];
+            }
+        }
+    };
+
+    // Private
+
+    var validLocation = location => location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
+
+    var popupContent = p => {
+        let content = '<p class="ip">'.concat(p.ip, '</p>');
+
+        if (p.location.hostname) {
+            content += '<p class="hostname">'
+               .concat('<span class="label">Hostname: </span>', p.location.hostname, '</p>');
+        }
+
+        content += '<p class="version">'
+           .concat('<span class="label">Version: </span>', p.version, '</p>');
+
+        content += '<p class="os">'
+           .concat('<span class="label">OS: </span>', p.os, '</p>');
+
+        if (p.location.city) {
+            content += '<p class="city">'
+               .concat('<span class="label">City: </span>', p.location.city, '</p>');
+        }
+
+        if (p.location.region_name) {
+            content += '<p class="region">'
+               .concat('<span class="label">Region: </span>', p.location.region_name, '</p>');
+        }
+
+        if (p.location.country_name) {
+            content += '<p class="country">'
+               .concat('<span class="label">Country: </span>', p.location.country_name, '</p>');
+        }
+
+        return content;
+    };
+};
 
 const NetworkMonitor = function (vm) {
     this.map = new NetworkMap();
@@ -146,107 +245,6 @@ const NetworkMonitor = function (vm) {
     this.updateBlocks = blocks => {
         vm.bestBlock = blocks.best;
         vm.volume    = blocks.volume;
-    };
-};
-
-const NetworkMap = function () {
-    this.markers = {};
-    this.options = { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 };
-    this.map     = L.map('map', this.options);
-    this.cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
-
-    L.Icon.Default.imagePath = '/img/leaflet';
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
-
-    const PlatformIcon = L.Icon.extend({
-        options: {
-            iconSize:   [32, 41],
-            iconAnchor: [16, 41],
-            popupAnchor: [0, -41]
-        }
-    });
-
-    const platformIcons = {
-        darwin:  new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-darwin.png' }),
-        linux:   new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
-        win:     new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-win.png' }),
-        freebsd: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-freebsd.png' }),
-        unknown: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-unknown.png' })
-    };
-
-    this.addConnected = function (peers) {
-        const connected = [];
-
-        for (let item of peers.connected) {
-            if (!validLocation(item.location)) {
-                //console.warn('Invalid geo-location data received for:', item.ip);
-                continue;
-            }
-
-            if (!_.has(this.markers, item.ip)) {
-                this.cluster.addLayer(
-                    this.markers[item.ip] = L.marker(
-                        [item.location.latitude, item.location.longitude],
-                        { title: item.ipString, icon: platformIcons[item.osBrand.name] }
-                    ).bindPopup(popupContent(item))
-                );
-            }
-            connected.push(item.ip);
-        }
-
-        this.removeDisconnected(connected);
-        this.map.addLayer(this.cluster);
-    };
-
-    this.removeDisconnected = function (connected) {
-        for (const ip in this.markers) {
-            if (!_.contains(connected, ip)) {
-                const m = this.markers[ip];
-
-                this.map.removeLayer(m);
-                this.cluster.removeLayer(m);
-                delete this.markers[ip];
-            }
-        }
-    };
-
-    // Private
-
-    var validLocation = location => location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
-
-    var popupContent = p => {
-        let content = '<p class="ip">'.concat(p.ip, '</p>');
-
-        if (p.location.hostname) {
-            content += '<p class="hostname">'
-               .concat('<span class="label">Hostname: </span>', p.location.hostname, '</p>');
-        }
-
-        content += '<p class="version">'
-           .concat('<span class="label">Version: </span>', p.version, '</p>');
-
-        content += '<p class="os">'
-           .concat('<span class="label">OS: </span>', p.os, '</p>');
-
-        if (p.location.city) {
-            content += '<p class="city">'
-               .concat('<span class="label">City: </span>', p.location.city, '</p>');
-        }
-
-        if (p.location.region_name) {
-            content += '<p class="region">'
-               .concat('<span class="label">Region: </span>', p.location.region_name, '</p>');
-        }
-
-        if (p.location.country_name) {
-            content += '<p class="country">'
-               .concat('<span class="label">Country: </span>', p.location.country_name, '</p>');
-        }
-
-        return content;
     };
 };
 
