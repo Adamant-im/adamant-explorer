@@ -4,7 +4,7 @@ angular.module('lisk_explorer.tools')
   .directive('peers', orderBy => ({
     restrict: 'E',
     scope: { peers: '=' },
-    templateUrl: '/views/networkMonitor/peers.html',
+    templateUrl: '/shared/peers/peers.html',
     replace: true,
 
     link: function (scope, element, attr) {

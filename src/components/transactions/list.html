@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-if="vm.txs.results.length" data-ng-repeat="tx in vm.txs.results track by tx.id" data-ng-include="'/views/transaction/tx.html'">
+            <tr data-ng-if="vm.txs.results.length" data-ng-repeat="tx in vm.txs.results track by tx.id" data-ng-include="'/components/transactions/tx.html'">
             </tr>
         </tbody>
     </table>
