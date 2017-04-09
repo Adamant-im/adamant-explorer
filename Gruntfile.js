@@ -87,8 +87,8 @@ module.exports = function (grunt) {
                       'src/services/network-monitor.js',
 
                       'src/components/**/*.js',
-
                       'src/directives/**/*.js',
+
                       'src/shared/bread-crumb/*.js',
                       'src/shared/orders/*.js',
                       'src/shared/currency/*.js',
@@ -97,6 +97,8 @@ module.exports = function (grunt) {
                       'src/shared/footer/*.js',
                       'src/shared/header/header-service.js',
                       'src/shared/header/header-directive.js',
+                      'src/shared/search/search-directive.js',
+
                       'src/main.js'],
                 dest: 'public/js/main.js'
             },
