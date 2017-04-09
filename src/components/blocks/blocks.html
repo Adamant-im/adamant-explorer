@@ -34,8 +34,8 @@
                 </table>
             </div>
             <div data-ng-if="vm.pagination.more || vm.pagination.before">
-                <a class="btn btn-primary" href="/blocks/{{pagination.previousPage}}" data-ng-if="vm.pagination.before">Previous page</a>
-                <a class="btn btn-primary" href="/blocks/{{pagination.nextPage}}" data-ng-if="vm.pagination.more && vm.pagination.nextPage != 0">Next page</a>
+                <a class="btn btn-primary" href="/blocks/{{vm.pagination.previousPage}}" data-ng-if="vm.pagination.before">Previous page</a>
+                <a class="btn btn-primary" href="/blocks/{{vm.pagination.nextPage}}" data-ng-if="vm.pagination.more && vm.pagination.nextPage != 0">Next page</a>
             </div>
         </div>
     </div>
