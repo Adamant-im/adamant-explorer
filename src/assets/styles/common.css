@@ -338,7 +338,7 @@ a:hover {
 
 #search-form { color: #5f696e; }
 
-#search-form #search { 
+.navbar-default search .form-group input { 
   width: 275px;
   line-height: normal;
 }
