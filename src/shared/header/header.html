@@ -14,7 +14,7 @@
                 </a>
             </div>
             <div class="collapse navbar-collapse" collapse="$root.isCollapsed">
-                <search></search>
+                <search class="navbar-form navbar-left hidden-xs" />
                 <div class="status" data-ng-show="blockStatus">
                     <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>
                     <span class="supply">&middot; <strong>Supply: </strong> {{blockStatus.supply | lisk | number:0}}</span>
