@@ -24,7 +24,7 @@ angular.module('lisk_explorer')
         controllerAs: 'vm'
     }).
     state('transaction', {
-        templateUrl: '/components/transaction/transaction.html',
+        templateUrl: '/components/transactions/transaction.html',
         url: '/tx/:txId',
         parentDir: 'home',
         controller: 'TransactionsCtrl',
