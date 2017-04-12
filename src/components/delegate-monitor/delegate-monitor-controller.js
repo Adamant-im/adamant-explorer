@@ -2,15 +2,7 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
     const vm = this;
     delegateMonitor(vm);
 
-    vm.getStandby = n => {
-        let offset = 0;
-
-        if (n) {
-            offset = (n - 1) * 20;
-        }
-
-        vm.standbyDelegates = null;
-
+    let fetchStandbyDelegates = (offset) => {
         $http.get(`/api/delegates/getStandby?n=${offset}`).then(resp => {
             if (resp.data.success) {
                 _.each(resp.data.delegates, deligate => {
@@ -23,6 +15,27 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
                 vm.pagination = resp.data.pagination;
             }
         });
+    }
+
+    vm.getStandby = n => {
+        let offset = 0;
+
+        if (n) {
+            offset = (n - 1) * 20;
+        }
+
+        vm.standbyDelegates = null;
+        if ($rootScope.delegateProposals) {
+            fetchStandbyDelegates(offset);
+        } else {
+            let unbindWatch = $rootScope.$watch('delegateProposals', (value) => {
+                if (value) {
+                    fetchStandbyDelegates(offset);
+                    unbindWatch();
+                }
+            });
+        }
+        
     };
 
     vm.getStandby(1);
