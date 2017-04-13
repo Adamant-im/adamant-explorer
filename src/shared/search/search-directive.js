@@ -1,6 +1,5 @@
 angular.module('lisk_explorer.search').directive('search', ($stateParams, $location, $timeout, Global, $http) => {
     const SearchCtrl = function () {
-        console.log('earch link');
         const sch = this;
         this.loading = false;
         this.badQuery = false;

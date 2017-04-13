@@ -32,12 +32,11 @@ LessMore.prototype.disabled = function () {
 };
 
 LessMore.prototype.getData = function (offset, limit, cb) {
-    const params = angular.extend({ offset : offset, limit : limit }, this.params);
-
+    const params = angular.extend({offset, limit}, this.params);
     this.disable();
     this.loading = true;
     this.$http.get(this.url, {
-        params : params
+        params
     }).then(resp => {
         if (resp.data.success && angular.isArray(resp.data[this.key])) {
             cb(resp.data[this.key]);
