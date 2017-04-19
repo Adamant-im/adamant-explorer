@@ -300,7 +300,7 @@
                                     <td class="hidden-xs hidden-sm">{{d.forgingTime | forgingTime}}</td>
                                     <td><i forging-status="d.forgingStatus"></i></td>
                                     <td>{{d.productivity || 0}}%</td>
-                                    <td class="hidden-xs">{{d.approval}}%</td>
+                                    <td class="hidden-xs"><span tooltip="{{d.vote | currency:currency}} {{currency.symbol}}">{{d.approval}}%</span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -335,7 +335,7 @@
                                     </td>
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                                     <td class="hidden-xs">{{d.productivity || 0}}%</td>
-                                    <td class="hidden-xs">{{d.approval}}%</td>
+                                    <td class="hidden-xs"><span tooltip="{{d.vote | currency:currency}} {{currency.symbol}}">{{d.approval}}%</span></td>
                                 </tr>
                             </tbody>
                         </table>
