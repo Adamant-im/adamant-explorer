@@ -1,6 +1,7 @@
-'use strict';
+import 'angular';
+import AppSocket from './index';
 
-angular.module('lisk_explorer.socket').factory('$socket',
+AppSocket.factory('$socket',
   ($location, $rootScope) => namespace => {
         const socket = io(`${$location.host()}:${$location.port()}${namespace}`, { 'forceNew': true });
 

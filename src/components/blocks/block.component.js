@@ -1,4 +1,7 @@
-const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
+import 'angular';
+import AppBlock from './index';
+
+const BlockCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
     const vm = this;
     vm.getLastBlocks = n => {
         let offset = 0;
@@ -49,4 +52,4 @@ const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $ht
     }
 };
 
-angular.module('lisk_explorer.blocks').controller('BlocksCtrl', BlocksCtrlConstructor);
+AppBlock.controller('BlockCtrl', BlockCtrlConstructor);

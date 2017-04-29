@@ -1,3 +1,7 @@
+import 'angular';
+import AppHome from './home.module';
+import tmp from './home.template.html';
+
 const HomeCtrlConstructor = function ($scope, $http, $interval) {
     const vm = this;
     vm.getLastBlocks = () => {
@@ -41,4 +45,8 @@ const HomeCtrlConstructor = function ($scope, $http, $interval) {
     vm.getLastTransactions();
 };
 
-angular.module('lisk_explorer.system').controller('HomeCtrl', HomeCtrlConstructor);
+AppHome.component('homeCtrl', {
+    template: tmp,
+    controller: HomeCtrlConstructor,
+    controllerAs: 'vm'
+});

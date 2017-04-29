@@ -1,3 +1,6 @@
+import 'angular';
+import AppDelegateMonitor from './index';
+
 const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
     const vm = this;
     delegateMonitor(vm);
@@ -33,4 +36,4 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
     };
 };
 
-angular.module('lisk_explorer.tools').controller('DelegateMonitorCtrl', DelegateMonitorCtrlConstructor);
+AppDelegateMonitor.controller('DelegateMonitorCtrl', DelegateMonitorCtrlConstructor);

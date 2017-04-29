@@ -1,3 +1,6 @@
+import 'angular';
+import AppTransactions from './index';
+
 const TransactionsCtrlConstructor = function ($rootScope, $stateParams, $location, $http) {
     const vm = this;
     vm.getTransaction = () => {
@@ -19,4 +22,4 @@ const TransactionsCtrlConstructor = function ($rootScope, $stateParams, $locatio
     vm.getTransaction();
 };
 
-angular.module('lisk_explorer.transactions').controller('TransactionsCtrl', TransactionsCtrlConstructor);
+AppTransactions.controller('TransactionsCtrl', TransactionsCtrlConstructor);

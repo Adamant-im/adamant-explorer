@@ -1,22 +1,22 @@
+import 'angular';
+import App from './app';
 
-angular.module('lisk_explorer')
-.run((
+App.run((
     $rootScope,
     $state,
     $location,
     $stateParams,
     $anchorScroll,
     $http,
-    ngProgress,
     gettextCatalog
 ) => {
       gettextCatalog.currentLanguage = 'en';
       $rootScope.$on('$stateChangeStart', () => {
-          ngProgress.start();
+        //   ngProgress.start();
       });
 
       $rootScope.$on('$stateChangeSuccess', () => {
-          ngProgress.complete();
+        //   ngProgress.complete();
 
           // Change page title, based on route information
           $rootScope.titleDetail = '';

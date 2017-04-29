@@ -1,4 +1,5 @@
-'use strict';
+import 'angular';
+import AppDelegate from './index';
 
 const DelegateCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
     const vm = this;
@@ -33,4 +34,4 @@ const DelegateCtrlConstructor = function ($rootScope, $stateParams, $location, $
     vm.txs = addressTxs($stateParams.delegateId);
 };
 
-angular.module('lisk_explorer.address').controller('DelegateCtrl', DelegateCtrlConstructor);
+AppDelegate.controller('DelegateCtrl', DelegateCtrlConstructor);

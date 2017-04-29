@@ -1,4 +1,7 @@
-angular.module('lisk_explorer.search').directive('search', ($stateParams, $location, $timeout, Global, $http) => {
+import 'angular';
+import AppSearch from './index';
+
+AppSearch.directive('search', ($stateParams, $location, $timeout, Global, $http) => {
     const SearchCtrl = function () {
         const sch = this;
         this.loading = false;

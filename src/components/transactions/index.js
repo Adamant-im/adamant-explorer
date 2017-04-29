@@ -1,0 +1,1 @@
+const AppTransactions = angular.module('lisk_explorer.transactions', []);

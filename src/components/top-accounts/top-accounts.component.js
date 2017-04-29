@@ -1,4 +1,5 @@
-'use strict';
+import 'angular';
+import AppTopAccounts from './index';
 
 const TopAccountsCtrlConstructor = function (lessMore) {
     this.topAccounts = lessMore({
@@ -7,4 +8,4 @@ const TopAccountsCtrlConstructor = function (lessMore) {
     });
 };
 
-angular.module('lisk_explorer.address').controller('TopAccountsCtrl', TopAccountsCtrlConstructor);
+AppTopAccounts.controller('TopAccountsCtrl', TopAccountsCtrlConstructor);
