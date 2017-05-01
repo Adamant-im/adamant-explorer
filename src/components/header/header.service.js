@@ -1,3 +1,5 @@
+import AppHeader from './header.module';
+
 const HeaderConstrcutor = function ($rootScope) {
 
     this.updateBlockStatus = res => {
@@ -39,5 +41,5 @@ const HeaderConstrcutor = function ($rootScope) {
     return this;
 };
 
-angular.module('lisk_explorer.system').factory('Header',
+AppHeader.factory('Header',
   ($rootScope, $socket) => HeaderConstrcutor);

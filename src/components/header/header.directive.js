@@ -1,11 +1,12 @@
+import AppHeader from './header.module';
+import template from './header.html';
+
 /**
  * 
  * @todo Fix the service usage
  * 
  */
-
-
-angular.module('lisk_explorer.system').directive('mainHeader', ($socket, $rootScope, Header) => {
+AppHeader.directive('mainHeader', ($socket, $rootScope, Header) => {
     const HeaderLink = () => {
         $rootScope.currency = {
         symbol: 'LSK'
@@ -33,6 +34,6 @@ angular.module('lisk_explorer.system').directive('mainHeader', ($socket, $rootSc
         restrict: 'E',
         replace: true,
         link: HeaderLink,
-        templateUrl: '/shared/header/header.html'
+        template: template
     }
 });
