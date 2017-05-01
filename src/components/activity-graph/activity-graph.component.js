@@ -1,8 +1,13 @@
 import 'angular';
-import AppActivityGraph from './index';
+import AppActivityGraph from './activity-graph.module';
+import template from './activity-graph.html';
 
-const ActivityGraphCtrlConstructor = function (activityGraph) {
+const ActivityGraphConstructor = function (activityGraph) {
     activityGraph(this);
 };
 
-AppActivityGraph.controller('ActivityGraphCtrl', ActivityGraphCtrlConstructor);
+AppActivityGraph.component('activityGraph', {
+    template: template,
+    controller: ActivityGraphConstructor,
+    controllerAs: 'vm'
+});

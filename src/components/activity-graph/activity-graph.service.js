@@ -1,4 +1,5 @@
-'use strict';
+import AppActivityGraph from './activity-graph.module';
+import sigma from 'sigma';
 
 const ActivityGraph = function () {
     this.loading   = true;
@@ -291,7 +292,7 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
     }
 };
 
-angular.module('lisk_explorer.tools').factory('activityGraph',
+AppActivityGraph.factory('activityGraph',
   ($socket, $rootScope) => vm => {
       const activityGraph = new ActivityGraph(), ns = $socket('/activityGraph');
 

@@ -1,5 +1,3 @@
-import 'angular';
-
-const AppActivityGraph = angular.module('lisk_explorer.activityGraph', []);
-
-export default AppActivityGraph;
+import './activity-graph.module';
+import './activity-graph.component';
+import './activity-graph.service';
