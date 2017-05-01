@@ -1,8 +1,8 @@
 import 'angular';
 import AppHome from './home.module';
-import tmp from './home.template.html';
+import template from './home.html';
 
-const HomeCtrlConstructor = function ($scope, $http, $interval) {
+const HomeConstructor = function ($scope, $http, $interval) {
     const vm = this;
     vm.getLastBlocks = () => {
         $http.get('/api/getLastBlocks').then(resp => {
@@ -45,8 +45,8 @@ const HomeCtrlConstructor = function ($scope, $http, $interval) {
     vm.getLastTransactions();
 };
 
-AppHome.component('homeCtrl', {
-    template: tmp,
-    controller: HomeCtrlConstructor,
+AppHome.component('home', {
+    template: template,
+    controller: HomeConstructor,
     controllerAs: 'vm'
 });
