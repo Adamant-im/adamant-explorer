@@ -1,5 +1,6 @@
-angular.module('lisk_explorer')
-.filter('approval', () => votes => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('approval', () => votes => {
     if (isNaN(votes)) {
         return 0;
     } else {

@@ -1,5 +1,6 @@
-angular.module('lisk_explorer')
-.filter('lisk', () => amount => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('lisk', () => amount => {
     if (isNaN(amount)) {
         return (0).toFixed(8);
     } else {

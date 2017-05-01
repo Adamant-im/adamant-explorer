@@ -1,5 +1,6 @@
-angular.module('lisk_explorer')
-.filter('round', () => height => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('round', () => height => {
     if (isNaN(height)) {
         return 0;
     } else {

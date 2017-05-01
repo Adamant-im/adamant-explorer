@@ -1,5 +1,6 @@
-angular.module('lisk_explorer')
-.filter('alterWordSeparation', () => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('alterWordSeparation', () => {
       // @todo Use polymer instead
       if (!String.prototype.trim) {
           String.prototype.trim = function () {

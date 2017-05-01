@@ -1,2 +1,3 @@
-angular.module('lisk_explorer')
-.filter('txType', txTypes => tx => txTypes[parseInt(tx.type)]);
+import AppFilters from './filters.module';
+
+AppFilters.filter('txType', txTypes => tx => txTypes[parseInt(tx.type)]);

@@ -1,7 +1,6 @@
-'use strict';
+import AppFilters from './filters.module';
 
-angular.module('lisk_explorer')
-.filter('startFrom', () => (input, start) => {
+AppFilters.filter('startFrom', () => (input, start) => {
     start = +start;
     return input.slice(start);
 })

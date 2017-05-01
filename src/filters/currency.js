@@ -1,7 +1,16 @@
-angular.module('lisk_explorer')
-.filter('currency', (numberFilter, liskFilter) => (amount, currency, decimal_places) => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('currency', (numberFilter, liskFilter) => (amount, currency, decimal_places) => {
     const lisk = liskFilter (amount);
     let factor = 1;
+    /**
+     * @todo remove this after fixing template
+     */
+    if (!currency) {
+      console.log('no currency passed');
+      return amount;
+    }
+    console.log('currency passed');
 
     if (currency.tickers && currency.tickers.LSK && currency.tickers.LSK[currency.symbol]) {
       factor = currency.tickers.LSK[currency.symbol];

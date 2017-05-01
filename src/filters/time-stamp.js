@@ -1,5 +1,6 @@
-angular.module('lisk_explorer')
-.filter('timestamp', epochStampFilter => timestamp => {
+import AppFilters from './filters.module';
+
+AppFilters.filter('timestamp', epochStampFilter => timestamp => {
     const stamp     = epochStampFilter(timestamp);
     let month = stamp.getMonth() + 1;
 
