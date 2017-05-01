@@ -1,10 +1,12 @@
 import 'angular';
-import AppCurrency from './index';
+import AppCurrency from './currency-selector.module';
+import template from './currency-selector.html';
 
 AppCurrency.directive ('currencySelector', ($rootScope, $timeout) => {
     const CurrencySelectorLink = () => {
         $timeout(() => {
             $rootScope.currency.symbol = localStorage && localStorage.getItem ('lisk_explorer-currency') || 'LSK';
+            console.log('$rootScope.currency', $rootScope.currency);
         });
     };
 
@@ -23,6 +25,6 @@ AppCurrency.directive ('currencySelector', ($rootScope, $timeout) => {
         controller: CurrencySelectorCtrl,
         controllerAs: 'cs',
         link: CurrencySelectorLink,
-        templateUrl: '/shared/currency/currency-selector.html'
+        template: template
     }
 });
