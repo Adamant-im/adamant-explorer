@@ -1,5 +1,6 @@
 import 'angular';
-import AppSearch from './index';
+import AppSearch from './search.module';
+import template from './search.html';
 
 AppSearch.directive('search', ($stateParams, $location, $timeout, Global, $http) => {
     const SearchCtrl = function () {
@@ -49,6 +50,6 @@ AppSearch.directive('search', ($stateParams, $location, $timeout, Global, $http)
         link: SearchLink,
         controller: SearchCtrl,
         controllerAs: 'sch',
-        templateUrl : '/shared/search/search.html'
+        template,
     }
 });
