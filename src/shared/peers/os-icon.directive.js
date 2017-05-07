@@ -1,17 +1,6 @@
-'use strict';
+import AppTools from '../../app/app-tools.module';
 
-angular.module('lisk_explorer.tools')
-  .directive('peers', orderBy => ({
-    restrict: 'E',
-    scope: { peers: '=' },
-    templateUrl: '/shared/peers/peers.html',
-    replace: true,
-
-    link: function (scope, element, attr) {
-        scope.table = orderBy('ip');
-    }
-}))
-  .directive('osIcon', () => ({
+const osIcon = AppTools.directive('osIcon', () => ({
     restrict: 'A',
 
     scope: {
@@ -29,3 +18,5 @@ angular.module('lisk_explorer.tools')
         el.className += (` os-icon os-${scope.brand.name}`);
     }
 }));
+
+export default osIcon;
