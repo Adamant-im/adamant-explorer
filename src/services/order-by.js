@@ -1,4 +1,4 @@
-'use strict';
+import AppServices from './services.module';
 
 const OrderBy = function (predicate) {
     this.reverse   = false;
@@ -10,5 +10,5 @@ const OrderBy = function (predicate) {
     };
 };
 
-angular.module('lisk_explorer.system').factory('orderBy',
+AppServices.factory('orderBy',
   () => predicate => new OrderBy(predicate));

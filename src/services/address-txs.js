@@ -1,6 +1,7 @@
-'use strict';
+import AppServices from './services.module';
+import LessMore from './less-more';
 
-angular.module('lisk_explorer.system').factory('addressTxs',
+AppServices.factory('addressTxs',
   ($http, $q) => (address, direction) => {
       const lessMore = new LessMore($http, $q, {
           url       : '/api/getTransactionsByAddress',

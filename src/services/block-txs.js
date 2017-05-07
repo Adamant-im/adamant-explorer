@@ -1,6 +1,7 @@
-'use strict';
+import AppServices from './services.module';
+import LessMore from './less-more';
 
-angular.module('lisk_explorer.system').factory('blockTxs',
+AppServices.factory('blockTxs',
   ($http, $q) => blockId => {
       const lessMore = new LessMore($http, $q, {
           url     : '/api/getTransactionsByBlock',

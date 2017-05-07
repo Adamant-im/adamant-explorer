@@ -1,13 +1,15 @@
-'use strict';
+import AppServices from './services.module';
+import moment from 'moment';
 
-angular.module('lisk_explorer.tools').service('forgingStatus',
+AppServices.service('forgingStatus',
   ($rootScope, epochStampFilter, roundFilter) => delegate => {
       const status = { updatedAt: delegate.blocksAt };
       let statusAge = 0;
       let blockAge = 0;
 
-      if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
-          status.lastBlock = _.first(delegate.blocks);
+      // if (delegate.blocksAt && _.size(delegate.blocks) > 0) {
+      if (delegate.blocksAt && delegate.blocks.length > 0) {
+          status.lastBlock = delegate.blocks[0];
           status.blockAt   = epochStampFilter(status.lastBlock.timestamp);
           status.networkRound = roundFilter($rootScope.blockStatus.height);
           status.delegateRound = roundFilter(status.lastBlock.height);

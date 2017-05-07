@@ -1,4 +1,4 @@
-'use strict';
+import AppServices from './services.module';
 
 const MarketWatcher = function ($q, $http, $rootScope, vm) {
     console.log(vm);
@@ -120,7 +120,7 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
     });
 };
 
-angular.module('lisk_explorer.tools').factory('marketWatcher',
+AppServices.factory('marketWatcher',
   ($q, $http, $socket, $rootScope) => vm => {
       console.log('passing', vm);
       const marketWatcher = new MarketWatcher($q, $http, $rootScope, vm), ns = $socket('/marketWatcher');

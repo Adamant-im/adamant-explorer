@@ -1,6 +1,6 @@
-'use strict';
+import AppServices from './services.module';
 
-angular.module('lisk_explorer.system').value('txTypes', {
+AppServices.value('txTypes', {
     0 : 'Normal transaction',
     1 : 'Second signature creation',
     2 : 'Delegate registration',

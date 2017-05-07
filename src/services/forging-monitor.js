@@ -1,10 +1,25 @@
-'use strict';
+import AppServices from './services.module';
 
 const ForgingMonitor = function (forgingStatus) {
+    const countBy = (arr, mapper) => {
+        const result = {};
+
+        arr.forEach(item => {
+            let key = mapper(item);
+            if (result[key]) {
+                result[key]++;
+            } else {
+                result[key] = 1;
+            }
+        });
+
+        return result;
+    }
+
     this.getStatus = delegate => forgingStatus(delegate);
 
     this.getforgingTotals = delegates => {
-        const cnt1 = _.countBy(delegates, d => {
+        const cnt1 = countBy(delegates, d => {
             switch (d.forgingStatus.code) {
                 case 0:
                 case 3:
@@ -21,7 +36,7 @@ const ForgingMonitor = function (forgingStatus) {
                     return 'unprocessed';
             }
         });
-        const cnt2 = _.countBy(delegates, d => {
+        const cnt2 = countBy(delegates, d => {
             switch (d.forgingStatus.code) {
                 case 3:
                 case 4:
@@ -47,5 +62,5 @@ const ForgingMonitor = function (forgingStatus) {
     };
 };
 
-angular.module('lisk_explorer.tools').service('forgingMonitor',
+AppServices.service('forgingMonitor',
   forgingStatus => new ForgingMonitor(forgingStatus));

@@ -1,4 +1,4 @@
-'use strict';
+import AppServices from './services.module';
 
 const LessMore = function ($http, $q, params) {
     this.$http = $http;
@@ -143,5 +143,7 @@ LessMore.prototype.loadLess = function () {
     this.prevOffset();
 };
 
-angular.module('lisk_explorer.system').factory('lessMore',
+AppServices.factory('lessMore',
   ($http, $q) => params => new LessMore($http, $q, params));
+
+export default LessMore;
