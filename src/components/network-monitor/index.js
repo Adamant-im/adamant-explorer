@@ -1,5 +1,3 @@
-import 'angular';
-
-const AppNetworkMonitor = angular.module('lisk_explorer.networkMonitor', []);
-
-export default AppNetworkMonitor;
+import './network-monitor.module';
+import './network-monitor.service';
+import './network-monitor.component';

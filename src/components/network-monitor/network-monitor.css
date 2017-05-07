@@ -8,23 +8,23 @@
 }
 
 .os-darwin {
-  background-image: url(/img/os/darwin.png);
+  background-image: url('../../assets/img/os/darwin.png');
 }
 
 .os-linux {
-  background-image: url(/img/os/linux.png);
+  background-image: url('../../assets/img/os/linux.png');
 }
 
 .os-win {
-  background-image: url(/img/os/win.png);
+  background-image: url('../../assets/img/os/win.png');
 }
 
 .os-freebsd {
-  background-image: url(/img/os/freebsd.png);
+  background-image: url('../../assets/img/os/freebsd.png');
 }
 
 .os-unknown {
-  background-image: url(/img/os/unknown.png);
+  background-image: url('../../assets/img/os/unknown.png');
 }
 
 #map {

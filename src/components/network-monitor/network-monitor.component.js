@@ -1,8 +1,14 @@
 import 'angular';
-import AppNetworkMonitor from './index';
+import AppNetworkMonitor from './network-monitor.module';
+import template from './network-monitor.html';
+import './network-monitor.css';
 
-const NetworkMonitorCtrlConstructor = function (networkMonitor) {
+const NetworkMonitorConstructor = function (networkMonitor) {
     networkMonitor(this);
 };
 
-AppNetworkMonitor.controller('NetworkMonitorCtrl', NetworkMonitorCtrlConstructor);
+AppNetworkMonitor.component('networkMonitor', {
+    template: template,
+    controller: NetworkMonitorConstructor,
+    controllerAs: 'vm'
+});
