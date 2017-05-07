@@ -1,5 +1,3 @@
-import 'angular';
-
-const AppDelegateMonitor = angular.module('lisk_explorer.delegateMonitor', []);
-
-export default AppDelegateMonitor;
+import './delegate-monitor.module';
+import './delegate-monitor.service';
+import './delegate-monitor.component';

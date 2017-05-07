@@ -1,7 +1,8 @@
 import 'angular';
-import AppDelegate from './index';
+import AppDelegate from './delegate.module';
+import template from './delegate.html';
 
-const DelegateCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
+const DelegateConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
     const vm = this;
     $rootScope.breadCrumb = {address: $stateParams.delegateId};
     vm.getAddress = () => {
@@ -34,4 +35,8 @@ const DelegateCtrlConstructor = function ($rootScope, $stateParams, $location, $
     vm.txs = addressTxs($stateParams.delegateId);
 };
 
-AppDelegate.controller('DelegateCtrl', DelegateCtrlConstructor);
+AppDelegate.component('delegate', {
+    template: template,
+    controller: DelegateConstructor,
+    controllerAs: 'vm'
+});

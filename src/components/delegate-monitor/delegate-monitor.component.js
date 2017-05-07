@@ -1,7 +1,9 @@
 import 'angular';
-import AppDelegateMonitor from './index';
+import AppDelegateMonitor from './delegate-monitor.module';
+import template from './delegate-monitor.html';
+import './delegate-monitor.css';
 
-const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
+const DelegateMonitorConstructor = function (delegateMonitor, orderBy, $rootScope, $http) {
     const vm = this;
     delegateMonitor(vm);
 
@@ -16,7 +18,8 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
 
         $http.get(`/api/delegates/getStandby?n=${offset}`).then(resp => {
             if (resp.data.success) {
-                _.each(resp.data.delegates, deligate => {
+                // _.each(resp.data.delegates, deligate => {
+                resp.data.delegates.forEach(deligate => {
                     deligate.proposal = $rootScope.delegateProposals[deligate.username.toLowerCase()];
                 });
 
@@ -36,4 +39,8 @@ const DelegateMonitorCtrlConstructor = function (delegateMonitor, orderBy, $root
     };
 };
 
-AppDelegateMonitor.controller('DelegateMonitorCtrl', DelegateMonitorCtrlConstructor);
+AppDelegateMonitor.component('delegateMonitor', {
+    template: template,
+    controller: DelegateMonitorConstructor,
+    controllerAs: 'vm'
+});
