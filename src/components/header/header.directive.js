@@ -1,5 +1,6 @@
 import AppHeader from './header.module';
 import template from './header.html';
+import logo from '../../assets/img/logo.png';
 
 /**
  * 
@@ -9,8 +10,10 @@ import template from './header.html';
 AppHeader.directive('mainHeader', ($socket, $rootScope, Header) => {
     const HeaderLink = () => {
         $rootScope.currency = {
-        symbol: 'LSK'
+            symbol: 'LSK'
         };
+
+        $rootScope.logo = logo;
 
         const header = new Header($rootScope);
         let ns = $socket('/header');

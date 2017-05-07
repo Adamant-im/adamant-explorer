@@ -28,10 +28,10 @@ const HeaderConstrcutor = function ($rootScope) {
     };
 
     // @todo shouldn't this be in run inetad of header?
+    $rootScope.delegateProposals = {};
     this.updateDelegateProposals = res => {
         $rootScope.delegateProposals = {};
         if (res.success) {
-            
             for (let proposal of res.proposals) {
                 $rootScope.delegateProposals[proposal.name.toLowerCase()] = proposal;
             }
