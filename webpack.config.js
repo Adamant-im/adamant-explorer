@@ -33,9 +33,10 @@ module.exports = env => ({
     devServer: {
         contentBase: PATHS.dev,
         compress: true,
-        port: 9000,
+        port: 9001,
         proxy: {
-            "/api": "http://localhost:4000"
+            "/socket.io": "http://localhost:6040",
+            "/api": "http://localhost:6040"
         }
     },
     plugins: removeEmpty([
@@ -47,7 +48,11 @@ module.exports = env => ({
             name: 'vendor',
             chunks: ['main'],
             minChunks: module => PATHS.vendors.test(module.resource)
-        })
+        }),
+        new Webpack.ProvidePlugin({
+            app: `exports?exports.default!${Path.join(PATHS.app, 'app')}`,
+        }),
+        new Webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     ]),
     module: {
         rules: [
@@ -67,7 +72,7 @@ module.exports = env => ({
             }, {
                 test: /\.css$/,
                 // exclude: PATHS.vendors,
-                use: [ 'css-loader' ]
+                use: ["style-loader", 'css-loader']
             }, {
                 test: /\.html$/,
                 exclude: /node_modules/,
@@ -79,11 +84,19 @@ module.exports = env => ({
                 }],
             }, {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                loader: 'file-loader?name=fonts/**/[name].[ext]'
+                loader: 'file-loader?name=fonts/[name].[ext]'
             }, {
                 test: /\.(png|jpg|gif|svg)$/,
-                loader: 'file-loader?name=img/[name].[ext]'
-            },
+                // loader: 'file-loader?name=img/[name].[ext]',
+                loaders: [
+                    'file-loader?name=img/[name].[ext]',
+                    'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                ]
+            }, {
+                test: /\/sigma.*\.js?$/, // the test to only select sigma files
+                exclude: ['src'], // you ony need to check node_modules, so remove your application files
+                loader: 'script-loader' // loading as script
+            }
         ]
     }
 
