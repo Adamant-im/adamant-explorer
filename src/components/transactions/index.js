@@ -1,1 +1,2 @@
-const AppTransactions = angular.module('lisk_explorer.transactions', []);
+import './transactions.module';
+import './transactions.component';

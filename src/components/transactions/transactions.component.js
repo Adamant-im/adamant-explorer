@@ -1,7 +1,8 @@
 import 'angular';
-import AppTransactions from './index';
+import AppTransactions from './transactions.module';
+import template from './transactions.html';
 
-const TransactionsCtrlConstructor = function ($rootScope, $stateParams, $location, $http) {
+const TransactionsConstructor = function ($rootScope, $stateParams, $location, $http) {
     const vm = this;
     vm.getTransaction = () => {
         $http.get('/api/getTransaction', {
@@ -22,4 +23,9 @@ const TransactionsCtrlConstructor = function ($rootScope, $stateParams, $locatio
     vm.getTransaction();
 };
 
-AppTransactions.controller('TransactionsCtrl', TransactionsCtrlConstructor);
+AppTransactions.component('transactions', {
+    template: template,
+    controller: TransactionsConstructor,
+    controllerAs: 'vm'
+});
+

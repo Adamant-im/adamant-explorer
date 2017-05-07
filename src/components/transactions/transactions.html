@@ -12,7 +12,7 @@
             <div class="col-md-6 col-lg-5 text-right">
                 <span data-ng-if="vm.tx.confirmations" class="txvalues txvalues-success">{{vm.tx.confirmations}} Confirmations</span>
                 <span data-ng-if="!vm.tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
-                <span class="txvalues txvalues-primary">{{vm.tx.amount | currency:currency}} {{currency.symbol}}</span>
+                <span class="txvalues txvalues-primary">{{vm.tx.amount | currency:$root.currency}} {{$root.currency.symbol}}</span>
             </div>
         </div>
         <div class="hide_snavbar">
@@ -65,11 +65,11 @@
                 </tr>
                 <tr>
                     <td><strong>Amount</strong></td>
-                    <td class="text-right">{{vm.tx.amount | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
+                    <td class="text-right">{{vm.tx.amount | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                 </tr>
                 <tr>
                     <td><strong>Fee</strong></td>
-                    <td class="text-right">{{vm.tx.fee | currency:currency}} <span class="text-muted">{{currency.symbol}}</span></td>
+                    <td class="text-right">{{vm.tx.fee | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                 </tr>
                 <tr>
                     <td><strong>Timestamp</strong></td>
@@ -134,8 +134,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- @todo Replace this with directive -->
-                <tr data-ng-if="vm.tx.id" data-ng-init="tx=vm.tx" data-ng-include="'/components/transactions/tx.html'"></tr>
+                <transaction-item data-ng-if="vm.tx.id" data-tx="vm.tx"></transaction-item>
             </tbody>
         </table>
     </div>
