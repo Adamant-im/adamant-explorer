@@ -4,87 +4,65 @@ import App from './app';
 App.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
     $stateProvider.
     state('home', {
-        // templateUrl: '/components/home/home.html',
         url: '/',
         parentDir: 'home',
-        component: 'homeCtrl',
-        // controllerAs: 'vm'
-    }) //.
-    // state('blocks', {
-    //     templateUrl: '/components/blocks/blocks.html',
-    //     url: '/blocks/:page', 
-    //     parentDir: 'home',
-    //     controller: 'BlocksCtrl',
-    //     controllerAs: 'vm'
-    // }).
-    // state('block', {
-    //     templateUrl: '/components/blocks/block.html',
-    //     url: '/block/:blockId',
-    //     parentDir: 'blocks',
-    //     controller: 'BlockCtrl',
-    //     controllerAs: 'vm'
-    // }).
-    // state('transaction', {
-    //     templateUrl: '/components/transactions/transaction.html',
-    //     url: '/tx/:txId',
-    //     parentDir: 'home',
-    //     controller: 'TransactionsCtrl',
-    //     controllerAs: 'vm'
-    // }).
-    // state('address', {
-    //     templateUrl: '/components/address/address.html',
-    //     url: '/address/:address',
-    //     parentDir: 'home',
-    //     controller: 'AddressCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('activity-graph', {
-    //     templateUrl : '/components/activity-graph/activity-graph.html',
-    //     url: '/activityGraph',
-    //     parentDir: 'home',
-    //     controller: 'ActivityGraphCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('top-accounts', {
-    //     templateUrl : '/components/top-accounts/top-accounts.html',
-    //     url: '/topAccounts',
-    //     parentDir: 'home',
-    //     controller: 'TopAccountsCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('delegate-monitor', {
-    //     templateUrl : '/components/delegate-monitor/delegate-monitor.html',
-    //     url: '/delegateMonitor',
-    //     parentDir: 'home',
-    //     controller: 'DelegateMonitorCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('market-watcher', {
-    //     templateUrl : '/components/market-watcher/market-watcher.html',
-    //     url: '/marketWatcher',
-    //     parentDir: 'home',
-    //     controller: 'MarketWatcherCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('network-monitor', {
-    //     templateUrl : '/components/network-monitor/network-monitor.html',
-    //     url: '/networkMonitor',
-    //     parentDir: 'home',
-    //     controller: 'NetworkMonitorCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('delegate', {
-    //     templateUrl: '/components/delegate/delegate.html',
-    //     url: '/delegate/:delegateId',
-    //     parentDir: 'address',
-    //     controller: 'DelegateCtrl',
-    //     controllerAs: 'vm'
-    // })
-    // .state('error', {
-    //     url: '404',
-    //     templateUrl: '/components/404/404.html',
-    //     parentDir: 'home'
-    // });
+        component: 'home',
+    }).
+    state('blocks', {
+        url: '/blocks/:page', 
+        parentDir: 'home',
+        component: 'blocks',
+    }).
+    state('block', {
+        url: '/block/:blockId',
+        parentDir: 'blocks',
+        component: 'block',
+    }).
+    state('transaction', {
+        url: '/tx/:txId',
+        parentDir: 'home',
+        component: 'transactions',
+    }).
+    state('address', {
+        url: '/address/:address',
+        parentDir: 'home',
+        component: 'address',
+    })
+    .state('activity-graph', {
+        url: '/activityGraph',
+        parentDir: 'home',
+        component: 'activityGraph',
+    })
+    .state('top-accounts', {
+        url: '/topAccounts',
+        parentDir: 'home',
+        component: 'topAccounts',
+    })
+    .state('delegate-monitor', {
+        url: '/delegateMonitor',
+        parentDir: 'home',
+        component: 'delegateMonitor',
+    })
+    .state('market-watcher', {
+        url: '/marketWatcher',
+        parentDir: 'home',
+        component: 'marketWatcher',
+    })
+    .state('network-monitor', {
+        url: '/networkMonitor',
+        parentDir: 'home',
+        component: 'networkMonitor',
+    })
+    .state('delegate', {
+        url: '/delegate/:delegateId',
+        parentDir: 'address',
+        component: 'delegate',
+    })
+    .state('error', {
+        url: '404',
+        parentDir: 'home',
+        component: 'c404',
+    });
     // $urlRouterProvider.otherwise('/404');
     $locationProvider.html5Mode(true);
 });
