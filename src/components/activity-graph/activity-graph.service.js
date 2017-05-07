@@ -1,5 +1,17 @@
 import AppActivityGraph from './activity-graph.module';
-import sigma from 'sigma';
+import 'sigma';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.layout.forceAtlas2.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.parsers.gexf.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.parsers.json.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.animate.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.dragNodes.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.filter.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.neighborhoods.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.relativeSize.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.customEdgeShapes.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.customShapes.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.edgeLabels.min';
+import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.statistics.HITS.min';
 
 const ActivityGraph = function () {
     this.loading   = true;
@@ -104,27 +116,37 @@ const ActivityGraph = function () {
             const blocks   = this.graph.nodesByType(1);
             const accounts = this.graph.nodesByType(2);
 
-            this.txs       = txs.size().value();
+            // this.txs       = txs.size().value();
+            this.txs       = txs.length;
             this.volume    = txsVolume(txs);
-            this.blocks    = blocks.size().value();
+            // this.blocks    = blocks.size().value();
+            this.blocks    = blocks.length;
             this.beginning = minTime(blocks);
             this.end       = maxTime(blocks);
-            this.accounts  = accounts.size().value();
+            // this.accounts  = accounts.size().value();
+            this.accounts  = accounts.length;
         };
 
-        var txsVolume = chain => chain.reduce((vol, tx) => vol += tx.amount, 0).value();
+        // var txsVolume = chain => chain.reduce((vol, tx) => vol += tx.amount, 0).value();
+        var txsVolume = arr => arr.reduce((vol, tx) => vol += tx.amount, 0);
 
-        var minTime = chain => chain.min(block => {
-            if (block.timestamp > 0) {
-                return block.timestamp;
-            }
-        }).value().timestamp;
+        // var minTime = chain => chain.min(block => {
+        //     if (block.timestamp > 0) {
+        //         return block.timestamp;
+        //     }
+        // }).value().timestamp;
+        var minTime = arr => Math.min(...arr.map(block => {
+            if (block.timestamp > 0) return block.timestamp;
+        }));
 
-        var maxTime = chain => chain.max(block => {
-            if (block.timestamp > 0) {
-                return block.timestamp;
-            }
-        }).value().timestamp;
+        // var maxTime = chain => chain.max(block => {
+        //     if (block.timestamp > 0) {
+        //         return block.timestamp;
+        //     }
+        // }).value().timestamp;
+        var maxTime = arr => Math.max(...arr.map(block => {
+            if (block.timestamp > 0) return block.timestamp;
+        }));
     }
 
     this.statistics = new Statistics(this);
@@ -154,19 +176,21 @@ ActivityGraph.prototype.clear = function () {
 };
 
 ActivityGraph.prototype.sizeNodes = function () {
-    _.each(this.sigma.graph.nodes(), function (node) {
+    this.sigma.graph.nodes().forEach((node) => {
         const deg = this.sigma.graph.degree(node.id);
         node.size = this.settings.maxNodeSize * Math.sqrt(deg);
     }, this);
 };
 
 ActivityGraph.prototype.nodesByType = function (type) {
-    return _.chain(this.sigma.graph.nodes()).filter(node => node.type === type);
+    // return _.chain(this.sigma.graph.nodes()).filter(node => node.type === type);
+    return this.sigma.graph.nodes().filter(node => node.type === type);
 };
 
 ActivityGraph.prototype.positionNodes = function () {
     for (let type = 0; type < 3; type++) {
-        const nodes = this.nodesByType(type).value();
+        // const nodes = this.nodesByType(type).value();   // this was using underscore chain
+        const nodes = this.nodesByType(type);
         let i;
         const len = nodes.length;
         const slice = 2 * Math.PI / len;
@@ -181,7 +205,7 @@ ActivityGraph.prototype.positionNodes = function () {
 };
 
 ActivityGraph.prototype.addNode = function (node) {
-    if (!_.contains(this.indexes, node.id)) {
+    if (!this.indexes.includes(node.id)) {
         node.x = Math.random();
         node.y = Math.random();
         this.indexes.push(node.id);
@@ -190,14 +214,14 @@ ActivityGraph.prototype.addNode = function (node) {
 };
 
 ActivityGraph.prototype.addEdge = function (edge) {
-    if (!_.contains(this.indexes, edge.id)) {
+    if (!this.indexes.includes(edge.id)) {
         this.indexes.push(edge.id);
         this.sigma.graph.addEdge(edge);
     }
 };
 
 ActivityGraph.prototype.addTx = function (tx) {
-    if (_.contains(this.indexes, tx.id)) { return; }
+    if (this.indexes.includes(tx.id)) { return; }
     this.addNode({
         id: tx.id,
         label: tx.id,
@@ -249,7 +273,7 @@ ActivityGraph.prototype.addTxRecipient = function (tx) {
 };
 
 ActivityGraph.prototype.addBlock = function (block) {
-    if (_.contains(this.indexes, block.id)) { return; }
+    if (this.indexes.includes(block.id)) { return; }
     if ((this.blocks + 1) > this.maxBlocks) { this.clear(); }
     this.addNode({
         id: block.id,
@@ -278,8 +302,9 @@ ActivityGraph.prototype.addBlockGenerator = function (block) {
 };
 
 ActivityGraph.prototype.addBlockTxs = function (block) {
-    if (!_.isEmpty(block.transactions)) {
-        _.each(block.transactions, function (tx) {
+    // if (!_.isEmpty(block.transactions)) {
+    if (block.transactions && block.transactions.length) {
+        block.transactions.forEach((tx) => {
             this.addTx(tx);
             this.addEdge({
                 id: block.id + tx.id,
@@ -294,7 +319,8 @@ ActivityGraph.prototype.addBlockTxs = function (block) {
 
 AppActivityGraph.factory('activityGraph',
   ($socket, $rootScope) => vm => {
-      const activityGraph = new ActivityGraph(), ns = $socket('/activityGraph');
+      const ns = $socket('/activityGraph');
+      const activityGraph = new ActivityGraph();
 
       vm.activityGraph = activityGraph;
       vm.nodeSelect = activityGraph.nodeSelect;
