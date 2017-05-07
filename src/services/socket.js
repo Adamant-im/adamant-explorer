@@ -1,7 +1,11 @@
-import 'angular';
-import AppSocket from './index';
+import AppServices from './services.module';
 
-AppSocket.factory('$socket',
+
+/**
+ * @todo isolate socket.io
+ * @todo why sicket is not mounted in bundle?
+ */
+AppServices.factory('$socket',
   ($location, $rootScope) => namespace => {
         const socket = io(`${$location.host()}:${$location.port()}${namespace}`, { 'forceNew': true });
 
