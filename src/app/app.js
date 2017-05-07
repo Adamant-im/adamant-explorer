@@ -4,7 +4,6 @@ import 'angular-resource';
 import 'angular-animate';
 import 'angular-bootstrap';
 import 'angular-gettext';
-import 'angular-qrcode';
 // import 'babel-polyfill';
 import 'angular-naturalsort';
 
@@ -16,13 +15,20 @@ import '../components/transactions';
 import '../components/delegate';
 import '../components/delegate-monitor';
 import '../components/top-accounts';
-import '../shared/search';
-import '../shared/currency';
+import '../components/search';
+import '../components/header';
+import '../components/footer';
+import '../components/currency-selector';
 import '../components/activity-graph';
 import '../components/home';
 import '../components/market-watcher';
 import '../components/network-monitor';
 
+import '../filters';
+import '../services';
+import '../directives';
+import './app-tools.module.js';
+import '../shared';
 
 import '../../bower_components/amstockchart/amcharts/style.css';
 import '../../bower_components/bootstrap/dist/css/bootstrap.css';
@@ -39,9 +45,10 @@ const App = angular.module('lisk_explorer',[
     'ui.router',
     'ui.bootstrap',
     'gettext',
-    'monospaced.qrcode',
-    'lisk_explorer.system',
-    'lisk_explorer.socket',
+    'lisk_explorer.filters',
+    'lisk_explorer.services',
+    'lisk_explorer.header',
+    'lisk_explorer.footer',
     'lisk_explorer.blocks',
     'lisk_explorer.transactions',
     'lisk_explorer.address',
@@ -56,8 +63,5 @@ const App = angular.module('lisk_explorer',[
     'lisk_explorer.networkMonitor',
     'lisk_explorer.marketWatcher'
 ]);
-
-const AppSystem = angular.module('lisk_explorer.system', []);
-const AppTools = angular.module('lisk_explorer.tools', ['naturalSort']);
 
 export default App;
