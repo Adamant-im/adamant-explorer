@@ -1,7 +1,8 @@
 import 'angular';
-import AppBlock from './index';
+import AppBlocks from './blocks.module';
+import template from './block.html';
 
-const BlockCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
+const BlockConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
     const vm = this;
     vm.getLastBlocks = n => {
         let offset = 0;
@@ -52,4 +53,8 @@ const BlockCtrlConstructor = function ($rootScope, $stateParams, $location, $htt
     }
 };
 
-AppBlock.controller('BlockCtrl', BlockCtrlConstructor);
+AppBlocks.component('block', {
+    template: template,
+    controller: BlockConstructor,
+    controllerAs: 'vm'
+});

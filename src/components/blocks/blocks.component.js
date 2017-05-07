@@ -1,5 +1,6 @@
 import 'angular';
-import AppBlock from './index';
+import AppBlocks from './blocks.module';
+import template from './blocks.html';
 
 const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $http, blockTxs) {
     const vm = this;
@@ -52,4 +53,9 @@ const BlocksCtrlConstructor = function ($rootScope, $stateParams, $location, $ht
     }
 };
 
-AppBlock.controller('BlocksCtrl', BlocksCtrlConstructor);
+AppBlocks.component('blocks', {
+    template: template,
+    controller: BlocksCtrlConstructor,
+    controllerAs: 'vm'
+});
+

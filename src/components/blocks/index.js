@@ -1,5 +1,3 @@
-import 'angular';
-
-const AppBlock = angular.module('lisk_explorer.blocks', []);
-
-export default AppBlock;
+import './blocks.module';
+import './blocks.component';
+import './block.component';
