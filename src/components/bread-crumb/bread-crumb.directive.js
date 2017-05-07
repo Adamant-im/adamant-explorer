@@ -1,17 +1,14 @@
-'use strict';
+import AppBreadCrumb from './bread-crumb.module';
+import template from './bread-crumb.html';
 
-angular.module('lisk_explorer')
-    .directive('breadCrumb', ['$state', $state => ({
-    restric: 'E',
-    templateUrl: '/shared/bread-crumb/bread-crumb.html',
-
-    link: function (scope, element, attrs) {
+AppBreadCrumb.directive('breadCrumb',  ($state, $transitions) => {
+    const BreadCrumpLink = (scope, element, attrs) => {
         const states = $state.get();
 
-        scope.init = (e, next) => {
+        scope.init = () => {
             scope.sections = [];
 
-            let section = next;
+            let section = $state.current;
             while (section.parentDir !== section.name) {
                 for (let item of states) {
                     if (item.name === section.parentDir) {
@@ -25,7 +22,7 @@ angular.module('lisk_explorer')
                 }
             }
             scope.sections.push({
-                name: next.name,
+                name: $state.current.name,
                 url: '#'
             });
         }
@@ -50,8 +47,12 @@ angular.module('lisk_explorer')
             return path;
         }
 
-        // // scope.$on('$stateChangeStart', scope.init);
-        scope.$on('$stateChangeSuccess', scope.init);
+        $transitions.onSuccess({ to: '*' }, scope.init);
     }
-})
-]);
+
+    return {
+        restric: 'E',
+        template,
+        link: BreadCrumpLink,
+    }
+});

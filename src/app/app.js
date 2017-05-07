@@ -21,6 +21,7 @@ import '../components/footer';
 import '../components/currency-selector';
 import '../components/activity-graph';
 import '../components/home';
+import '../components/bread-crumb';
 import '../components/market-watcher';
 import '../components/network-monitor';
 
@@ -45,6 +46,7 @@ const App = angular.module('lisk_explorer',[
     'ui.router',
     'ui.bootstrap',
     'gettext',
+    'lisk_explorer.breadCrumb',
     'lisk_explorer.filters',
     'lisk_explorer.services',
     'lisk_explorer.header',
