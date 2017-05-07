@@ -1,6 +1,8 @@
-'use strict';
+import 'angular';
+import AppAddress from './address.module';
+import template from './address.html';
 
-const AddressCtrlConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
+const AddressConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
     const vm = this;
     vm.getAddress = () => {
         $http.get('/api/getAccount', {
@@ -32,4 +34,8 @@ const AddressCtrlConstructor = function ($rootScope, $stateParams, $location, $h
     vm.txs = addressTxs($stateParams.address);
 };
 
-angular.module('lisk_explorer.address').controller('AddressCtrl', AddressCtrlConstructor);
+AppAddress.component('address', {
+    template: template,
+    controller: AddressConstructor,
+    controllerAs: 'vm'
+});
