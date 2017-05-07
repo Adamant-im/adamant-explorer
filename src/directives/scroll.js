@@ -1,7 +1,6 @@
-'use strict';
+import AppTools from '../app/app-tools.module.js';
 
-angular.module('lisk_explorer')
-  .directive('scroll', $window => (scope, element, attrs) => {
+AppTools.directive('scroll', $window => (scope, element, attrs) => {
     angular.element($window).bind('scroll', function () {
         if (this.pageYOffset >= 200) {
             scope.secondaryNavbar = true;

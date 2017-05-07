@@ -1,7 +1,6 @@
-'use strict';
+import AppTools from '../app/app-tools.module.js';
 
-angular.module('lisk_explorer')
-  .directive('whenScrolled', $window => ({
+AppTools.directive('whenScrolled', $window => ({
     restric: 'A',
 
     link: function (scope, elm, attr) {

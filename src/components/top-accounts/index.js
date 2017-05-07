@@ -1,5 +1,2 @@
-import 'angular';
-
-const AppTopAccounts = angular.module('lisk_explorer.topAccounts', []);
-
-export default AppTopAccounts;
+import './top-accounts.module';
+import './top-accounts.component';

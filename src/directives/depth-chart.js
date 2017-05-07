@@ -1,7 +1,6 @@
-'use strict';
+import AppTools from '../app/app-tools.module.js';
 
-angular.module('lisk_explorer.tools')
-  .directive('depthChart', $timeout => {
+AppTools.directive('depthChart', $timeout => {
       function DepthChart (scope, elm, attr) {
           const self = this;
 

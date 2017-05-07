@@ -1,7 +1,6 @@
-'use strict';
+import AppTools from '../app/app-tools.module.js';
 
-angular.module('lisk_explorer.tools')
-  .directive('stockChart', $timeout => {
+AppTools.directive('stockChart', $timeout => {
       function StockChart (scope, elm, attr) {
           const self = this;
 

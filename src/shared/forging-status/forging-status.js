@@ -1,17 +1,15 @@
 'use strict';
+import moment from 'moment';
+import template from './forging-status.html';
 
 angular.module('lisk_explorer.tools')
   .directive('forgingStatus', $sce => ({
     restrict: 'A',
-
     scope: {
-        forgingStatus: '=forgingStatus'
+        forgingStatus: '='
     },
-
-    templateUrl: '/shared/forging-status/forging-status.html',
-    replace: true,
+    template,
     transclude: true,
-
     link: function (scope, element, attr) {
         const el = element[0];
 

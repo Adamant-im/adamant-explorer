@@ -1,8 +1,14 @@
 import 'angular';
-import AppMarketWatcher from './index';
+import AppMarketWatcher from './market-watcher.module';
+import template from './market-watcher.html';
+import './market-watcher.css';
 
-const MarketWatcherCtrlConstructor = function (marketWatcher) {
+const MarketWatcherConstructor = function (marketWatcher) {
     marketWatcher(this);
 };
 
-AppMarketWatcher.controller('MarketWatcherCtrl', MarketWatcherCtrlConstructor);
+AppMarketWatcher.component('marketWatcher', {
+    template: template,
+    controller: MarketWatcherConstructor,
+    controllerAs: 'vm'
+});

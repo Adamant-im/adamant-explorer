@@ -1,11 +1,16 @@
 import 'angular';
-import AppTopAccounts from './index';
+import AppTopAccounts from './top-accounts.module';
+import template from './top-accounts.html';
 
-const TopAccountsCtrlConstructor = function (lessMore) {
+const TopAccountsConstructor = function (lessMore) {
     this.topAccounts = lessMore({
         url : '/api/getTopAccounts',
         key : 'accounts'
     });
 };
 
-AppTopAccounts.controller('TopAccountsCtrl', TopAccountsCtrlConstructor);
+AppTopAccounts.component('topAccounts', {
+    template: template,
+    controller: TopAccountsConstructor,
+    controllerAs: 'vm'
+});
