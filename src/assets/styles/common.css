@@ -4,18 +4,18 @@
 
 @font-face {
     font-family: Roboto;
-    src: url(/fonts/Roboto-Regular.ttf)
+    src: url('../fonts/Roboto-Regular.ttf')
 }
 
 @font-face {
     font-family: Roboto;
-    src: url(/fonts/Roboto-Bold.ttf);
+    src: url('../fonts/Roboto-Bold.ttf');
     font-weight: 700
 }
 
 @font-face {
     font-family: Roboto;
-    src: url(/fonts/Roboto-BoldItalic.ttf);
+    src: url('../fonts/Roboto-BoldItalic.ttf');
     font-weight: 700;
     font-style: italic
 }
@@ -87,6 +87,15 @@ a:hover {
   z-index: 999;
 }
 
+qrcode {
+  width: 160px;
+  height: 160px;
+  display: inline-block;
+}
+qrcode svg {
+  widows: 100%;
+  height: 100%;
+}
 /* QR modal */
 #qr-canvas { display: none; }
 
