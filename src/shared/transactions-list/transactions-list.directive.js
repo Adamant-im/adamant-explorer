@@ -6,8 +6,7 @@ const transactionsList = AppTools.directive('transactionsList', () => ({
     template,
     scope: {
       txs: '='
-    },
-    link: ($scope) => console.log('transactionsList', $scope)
+    }
 }));
 
 export default transactionsList;

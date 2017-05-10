@@ -183,13 +183,11 @@ ActivityGraph.prototype.sizeNodes = function () {
 };
 
 ActivityGraph.prototype.nodesByType = function (type) {
-    // return _.chain(this.sigma.graph.nodes()).filter(node => node.type === type);
     return this.sigma.graph.nodes().filter(node => node.type === type);
 };
 
 ActivityGraph.prototype.positionNodes = function () {
     for (let type = 0; type < 3; type++) {
-        // const nodes = this.nodesByType(type).value();   // this was using underscore chain
         const nodes = this.nodesByType(type);
         let i;
         const len = nodes.length;
@@ -302,7 +300,6 @@ ActivityGraph.prototype.addBlockGenerator = function (block) {
 };
 
 ActivityGraph.prototype.addBlockTxs = function (block) {
-    // if (!_.isEmpty(block.transactions)) {
     if (block.transactions && block.transactions.length) {
         block.transactions.forEach((tx) => {
             this.addTx(tx);

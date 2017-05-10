@@ -6,7 +6,6 @@ const NetworkMap = function () {
     this.markers = {};
     this.options = { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 };
     this.map     = L.map('map', this.options);
-    console.log(L,  L.markerClusterGroup);
     this.cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
 
     L.Icon.Default.imagePath = '/img/leaflet';
@@ -36,11 +35,9 @@ const NetworkMap = function () {
 
         for (let item of peers.connected) {
             if (!validLocation(item.location)) {
-                //console.warn('Invalid geo-location data received for:', item.ip);
                 continue;
             }
 
-            // if (!_.has(this.markers, item.ip)) {
             if (!Object.keys(this.markers).contains(item.ip)) {
                 this.cluster.addLayer(
                     this.markers[item.ip] = L.marker(
@@ -58,7 +55,6 @@ const NetworkMap = function () {
 
     this.removeDisconnected = function (connected) {
         for (const ip in this.markers) {
-            // if (!_.contains(connected, ip)) {
             if (!connected.contains(ip)) {
                 const m = this.markers[ip];
 
@@ -70,7 +66,6 @@ const NetworkMap = function () {
     };
 
     // Private
-
     var validLocation = location => location && angular.isNumber(location.latitude) && angular.isNumber(location.longitude);
 
     var popupContent = p => {
@@ -138,8 +133,6 @@ const NetworkMonitor = function (vm) {
     function Versions (peers) {
         const inspect = () => {
             if (angular.isArray(peers)) {
-                // return _.uniq(peers.map(p => p.version)
-                //         .sort(), true).reverse().slice(0, 3);
                 return uniq(peers.map(p => p.version)
                         .sort()).reverse().slice(0, 3); 
             } else {
@@ -183,8 +176,6 @@ const NetworkMonitor = function (vm) {
                 return b - a;
             }
             if (angular.isArray(peers)) {
-                // return _.uniq(_.map(peers, p => p.height)
-                //         .sort(sortNumber), true).slice(0, 4);
                 return uniq(peers.map(p => p.height)
                             .sort()).reverse().slice(0, 4); 
             } else {

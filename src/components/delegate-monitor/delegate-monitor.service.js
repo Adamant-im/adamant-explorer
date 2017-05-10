@@ -53,7 +53,6 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
             d.forgingStatus = forgingMonitor.getStatus(d);
         });
 
-        // const existing = _.find($scope.activeDelegates, d => d.publicKey === delegate.publicKey);
         let found = false;
         const existing = $scope.activeDelegates.filter((d) => {
             if (!found && (d.publicKey === delegate.publicKey)) {
@@ -72,32 +71,24 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     };
 
     // Private
-
     var bestForger = delegates => {
-        // if (_.size(delegates) > 0) {
         if (delegates.length > 0) {
-            // return _.max(delegates, d => parseInt(d.forged));
             return Math.max(...delegates.map(delegate => delegate.forged));
         }
     };
 
-    // var totalForged = delegates => _.chain(delegates)
     var totalForged = delegates => delegates
             .map(d => parseInt(d.forged))
             .reduce((memo, num) => parseInt(memo) + parseInt(num), 0);
-            // .value();
 
     var bestProductivity = delegates => {
-        // if (_.size(delegates) > 0) {
         if (delegates.length > 0) {
-            // return _.max(delegates, d => parseFloat(d.productivity));
             return Math.max(...delegates.map(delegate => delegate.productivity));
         }
     };
 
     var worstProductivity = delegates => {
         if (delegates.length > 0) {
-            // return _.min(delegates, d => parseFloat(d.productivity));
             return Math.min(...delegates.map(delegate => delegate.productivity));
         }
     };
