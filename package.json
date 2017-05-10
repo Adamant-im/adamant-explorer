@@ -14,7 +14,7 @@
     "test": "./node_modules/.bin/grunt travis --verbose",
     "start": "npm run copy-files && webpack-dev-server --open",
     "validate": "webpack-validator webpack.config.js",
-    "copy-files": "cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
+    "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
     "build": "webpack --env.prod",
     "build:prod": "webpack --env.prod -p"
   },
