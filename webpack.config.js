@@ -86,6 +86,9 @@ module.exports = env => ({
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
                 loader: 'file-loader?name=fonts/[name].[ext]'
             }, {
+                test: /\.(swf)$/,
+                loader: 'file-loader?name=[name].[ext]'
+            }, {
                 test: /\.(png|jpg|gif|svg)$/,
                 // loader: 'file-loader?name=img/[name].[ext]',
                 loaders: [
