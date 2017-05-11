@@ -4,7 +4,7 @@ import template from './transaction-item.html';
 
 const transactionsItem = AppTools.directive('transactionItem', () => ({
     template,
-    repalce: true,
+    restrict: 'A',
     scope: {
       tx: '='
     },
