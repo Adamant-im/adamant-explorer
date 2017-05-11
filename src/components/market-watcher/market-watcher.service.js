@@ -1,7 +1,6 @@
-import AppServices from './services.module';
+import AppMarketWatcher from './market-watcher.module';
 
 const MarketWatcher = function ($q, $http, $rootScope, vm) {
-    console.log(vm);
     const self = this;
     let interval;
 
@@ -28,7 +27,7 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
 
     vm.setExchange = (exchange, duration) => {
         vm.oldExchange = vm.exchange;
-        vm.exchange = (exchange || vm.exchange || _.first (vm.exchanges));
+        vm.exchange = (exchange || vm.exchange || vm.exchanges[0]);
         vm.newExchange = (vm.exchange !== vm.oldExchange);
         if (vm.newExchange) {
             console.log('Changed exchange from:', vm.oldExchange, 'to:', vm.exchange);
@@ -76,7 +75,15 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
         console.log ('Retrieving exchanges...');
         $http.get('/api/exchanges').then (result => {
             if (result.data.success) {
-                vm.exchanges = _.keys (_.pick (result.data.exchanges, (value, key) => value ? key : false));
+                // const temp = _.keys (_.pick (result.data.exchanges, (value, key) => value ? key : false));
+                // console.log('using _', temp);
+                vm.exchanges = Object.keys(result.data.exchanges).filter((value, key) => {
+                    if (result.data.exchanges[key]) return key;
+                }).reduce((raw, key) => {
+                    raw[key] = result.data.exchanges[key];
+                    return raw;
+                }, {});
+                console.log('using ES6', vm.exchanges);
                 if (vm.exchanges.length > 0) {
                     vm.setExchange();
                     interval = setInterval(getData, 30000);
@@ -120,11 +127,9 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
     });
 };
 
-AppServices.factory('marketWatcher',
+AppMarketWatcher.factory('marketWatcher',
   ($q, $http, $socket, $rootScope) => vm => {
-      console.log('passing', vm);
       const marketWatcher = new MarketWatcher($q, $http, $rootScope, vm), ns = $socket('/marketWatcher');
-        console.log('marketWatcher retuning value', marketWatcher);
 
       ns.on('data', res => {
       });
