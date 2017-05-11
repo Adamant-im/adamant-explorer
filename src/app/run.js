@@ -8,17 +8,11 @@ App.run((
     $stateParams,
     $anchorScroll,
     $http,
-    gettextCatalog
+    gettextCatalog,
+    $transitions
 ) => {
       gettextCatalog.currentLanguage = 'en';
-      $rootScope.$on('$stateChangeStart', () => {
-        //   ngProgress.start();
-      });
-
-      $rootScope.$on('$stateChangeSuccess', () => {
-        //   ngProgress.complete();
-
-          // Change page title, based on route information
+      $transitions.onSuccess({ to: '*' }, () => {
           $rootScope.titleDetail = '';
           $rootScope.title = $state.current.title;
           $rootScope.isCollapsed = true;
