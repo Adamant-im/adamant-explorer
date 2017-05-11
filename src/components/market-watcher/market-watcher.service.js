@@ -75,21 +75,22 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
         console.log ('Retrieving exchanges...');
         $http.get('/api/exchanges').then (result => {
             if (result.data.success) {
-                // const temp = _.keys (_.pick (result.data.exchanges, (value, key) => value ? key : false));
-                // console.log('using _', temp);
-                vm.exchanges = Object.keys(result.data.exchanges).filter((value, key) => {
+                vm.exchangeLogos = {};
+                vm.exchanges = Object.keys(result.data.exchanges).filter((key, idx) => {
+                    System.import('../../assets/img/exchanges/' + key + '.png').then((value) => {
+                        vm.exchangeLogos[key] = value;
+                    });
                     if (result.data.exchanges[key]) return key;
-                }).reduce((raw, key) => {
-                    raw[key] = result.data.exchanges[key];
-                    return raw;
-                }, {});
-                console.log('using ES6', vm.exchanges);
+                });
+
                 if (vm.exchanges.length > 0) {
                     vm.setExchange();
                     interval = setInterval(getData, 30000);
                 }
             } else {
                 vm.exchanges = [];
+                vm.noExchange = true;
+                $rootScope.noExchange = true;
             }
         });
     };

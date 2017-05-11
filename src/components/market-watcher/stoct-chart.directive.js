@@ -1,6 +1,9 @@
-import AppTools from '../app/app-tools.module.js';
+import AppMarketWatcher from './market-watcher.module';
+import 'amstock3';
+import '../../../node_modules/amstock3/amcharts/serial';
+import '../../../node_modules/amstock3/amcharts/amstock';
 
-AppTools.directive('stockChart', $timeout => {
+AppMarketWatcher.directive('stockChart', $timeout => {
       function StockChart (scope, elm, attr) {
           const self = this;
 
@@ -219,7 +222,7 @@ AppTools.directive('stockChart', $timeout => {
 
                   const newPeriod = self.updatePeriod(scope);
 
-                  if (_.size(scope.data.candles) > 0) {
+                  if (scope.data.candles && Object.keys(scope.data.candles).length > 0) {
                       console.log('Stock chart data updated');
                       scope.data.stockChart.dataSets[0].dataProvider = scope.data.candles;
                       scope.data.stockChart.validateData();

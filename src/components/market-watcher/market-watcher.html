@@ -6,9 +6,9 @@
         </div>
     </div>
 
-    <div class="alert alert-warning" data-ng-if="vm.exchanges && !vm.exchanges.length">No exchanges available.</div>
+    <div class="alert alert-warning" data-ng-if="vm.exchanges && vm.noExchange">No exchanges available.</div>
 
-    <div class="row" data-ng-show="vm.exchanges.length">
+    <div class="row" data-ng-show="!vm.noExchange">
         <div class="col-xs-12">
             <div class="progress progress-striped active" data-ng-hide="vm.statistics">
                 <div class="progress-bar progress-bar-loading" style="width: 100%">
@@ -20,7 +20,7 @@
                     <tabset justified="true" class="exchanges">
                         <tab data-ng-repeat='e in vm.exchanges' data-ng-click="vm.setExchange(e)">
                             <tab-heading>
-                                <img src="/img/exchanges/{{e}}.png" alt="{{e}}" />
+                                <img src="{{vm.exchangeLogos[e]}}" alt="{{e}}" />
                             </tab-heading>
                         </tab>
                     </tabset>
