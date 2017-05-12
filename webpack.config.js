@@ -3,6 +3,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const Webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const NgAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 /**
  * Utils
@@ -53,18 +54,29 @@ module.exports = env => ({
             app: `exports?exports.default!${Path.join(PATHS.app, 'app')}`,
         }),
         new Webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+
+        new NgAnnotatePlugin({
+            add: true,
+            // other ng-annotate options here
+        }),
     ]),
     module: {
         rules: [
             {
                 test: /\.js$/,
                 exclude: PATHS.vendors,
-                use: {
+                use: [{
                     loader: 'babel-loader',
                     options: {
                         presets: ['react', 'es2015']
                     }
-                }
+                }/* , {
+                    loader: 'ng-annotate-loader',
+                    options: {
+                        add: true,
+                        map: false,
+                    }
+                } */]
             }, {
                 test: /\.scss$/,
                 loader: 'style!css!scss',
@@ -99,7 +111,7 @@ module.exports = env => ({
                 test: /\/sigma.*\.js?$/, // the test to only select sigma files
                 exclude: ['src'], // you ony need to check node_modules, so remove your application files
                 loader: 'script-loader' // loading as script
-            }
+            },
         ]
     }
 
