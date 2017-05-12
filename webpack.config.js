@@ -102,11 +102,30 @@ module.exports = env => ({
                 loader: 'file-loader?name=[name].[ext]'
             }, {
                 test: /\.(png|jpg|gif|svg)$/,
-                // loader: 'file-loader?name=img/[name].[ext]',
-                loaders: [
-                    'file-loader?name=img/[name].[ext]',
-                    'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-                ]
+                use: [{
+                        loader: 'file-loader',
+                        options: {
+                            query: {
+                            name:'img/[name].[ext]'
+                            }
+                        }
+                    },
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            query: {
+                                mozjpeg: {
+                                    progressive: true,
+                                },
+                                gifsicle: {
+                                    interlaced: true,
+                                },
+                                optipng: {
+                                    optimizationLevel: 7,
+                                }
+                            }
+                        }
+                }]
             }, {
                 test: /\/sigma.*\.js?$/, // the test to only select sigma files
                 exclude: ['src'], // you ony need to check node_modules, so remove your application files
