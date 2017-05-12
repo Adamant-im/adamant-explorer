@@ -8,8 +8,8 @@ node_js:
 services: 
   - redis-server
 before_script:
-  - bower install
-  - grunt compile
+  - npm install
+  - npm run build
   - grunt candles:build
   - wget https://github.com/fiorix/freegeoip/releases/download/v3.1.5/freegeoip-3.1.5-linux-amd64.tar.gz
   - tar -zxvf freegeoip-3.1.5-linux-amd64.tar.gz
