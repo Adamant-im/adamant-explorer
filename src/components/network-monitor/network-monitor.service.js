@@ -8,7 +8,7 @@ const NetworkMap = function () {
     this.map     = L.map('map', this.options);
     this.cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
 
-    L.Icon.Default.imagePath = '/img/leaflet';
+    L.Icon.Default.imagePath = '../../assets/img/leaflet';
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -23,11 +23,11 @@ const NetworkMap = function () {
     });
 
     const platformIcons = {
-        darwin:  new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-darwin.png' }),
-        linux:   new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-linux.png' }),
-        win:     new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-win.png' }),
-        freebsd: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-freebsd.png' }),
-        unknown: new PlatformIcon({ iconUrl: '/img/leaflet/marker-icon-unknown.png' })
+        darwin:  new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-darwin.png' }),
+        linux:   new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-linux.png' }),
+        win:     new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-win.png' }),
+        freebsd: new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-freebsd.png' }),
+        unknown: new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-unknown.png' })
     };
 
     this.addConnected = function (peers) {
