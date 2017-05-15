@@ -15,7 +15,7 @@
     "start": "npm run copy-files && webpack-dev-server --open",
     "validate": "webpack-validator webpack.config.js",
     "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
-    "build": "npm run copy-files && webpack --env.prod",
+    "build": "npm run copy-files && webpack -p",
     "build:prod": "webpack --env.prod -p"
   },
   "dependencies": {
