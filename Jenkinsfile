@@ -12,6 +12,7 @@ pipeline {
             checkout scm
             sh '''#!/bin/bash
             bash ~/lisk-test/lisk.sh start_node
+            mkdir public || true
 
             # Install Deps
             npm install
