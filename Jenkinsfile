@@ -3,21 +3,11 @@ node('lisk-explorer-01'){
     stage ('Prepare Workspace') {
       sh '''#!/bin/bash
       pkill -f app.js || true
+      bash ~/lisk-test/lisk.sh stop
       '''
       deleteDir()
       checkout scm
 
-    }
-
-    stage ('Start Lisk ') {
-      try {
-        sh '''#!/bin/bash
-        bash ~/lisk-test/lisk.sh start_node
-        '''
-      } catch (err) {
-        currentBuild.result = 'FAILURE'
-        error('Stopping build, installation failed')
-      }
     }
 
     stage ('Build Dependencies') {
@@ -53,9 +43,21 @@ node('lisk-explorer-01'){
         '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
-        error('Stopping build, webpack failed')
+        error('Stopping build, candles build failed')
       }
     }
+    
+    stage ('Start Lisk ') {
+      try {
+        sh '''#!/bin/bash
+        bash ~/lisk-test/lisk.sh start
+        '''
+      } catch (err) {
+        currentBuild.result = 'FAILURE'
+        error('Stopping build, lisk-core failed')
+      }
+    }
+    
     stage ('Start Explorer') {
       try {
       sh '''#!/bin/bash
@@ -77,8 +79,12 @@ node('lisk-explorer-01'){
         npm run test
         '''
       } catch (err) {
-      sh '''#!/bin/bash
-        pkill -f $(pwd)/app.js
+        sh '''#!/bin/bash
+            # Stop Lisk-Node
+            bash ~/lisk-test/lisk.sh stop
+            
+            # Stop Lisk-Explorer
+            pkill -f $(pwd)/app.js
         '''
         currentBuild.result = 'FAILURE'
         error('Stopping build, tests failed')
@@ -93,7 +99,7 @@ node('lisk-explorer-01'){
     stage ('Cleanup') {
       sh '''#!/bin/bash
           # Stop Lisk-Node
-          bash ~/lisk-test/lisk.sh stop_node
+          bash ~/lisk-test/lisk.sh stop
           
           # Stop Lisk-Explorer
           pkill -f $(pwd)/app.js
