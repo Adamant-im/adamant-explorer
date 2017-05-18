@@ -18,5 +18,5 @@
 <td data-title="Confirmations">
     <span data-ng-if="!block.confirmations && !tx.confirmations" class="text-danger">Unconfirmed Transaction!</span>
 	<span data-ng-if="(block.confirmations > 0  && block.confirmations < 101) || (tx.confirmations > 0 && tx.confirmations < 101)" class="text-success">{{block.confirmations || tx.confirmations}}</span>
-	<span data-ng-if="block.confirmations >= 101 || tx.confirmations >= 101" class="text-success" tooltip="{{block.confirmations || tx.confirmations}} Confirmations">Well Confirmed</span>
+	<span data-ng-if="block.confirmations >= 101 || tx.confirmations >= 101" class="text-success" tooltip="{{block.confirmations || tx.confirmations}} Confirmations">Confirmed</span>
 </td>
