@@ -1,0 +1,88 @@
+<section>
+    <div class="delegate">
+        <h2>Delegate</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td><strong>Name</strong></td>
+                                <td class="text-right">
+                                    <a class="glyphicon glyphicon-user" ng-if="vm.address.delegate.username | proposal:delegateProposals" href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:delegateProposals: 'description'}}" target="_blank"></a>
+                                    &nbsp;
+                                    <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Address</strong></td>
+                                <td class="text-right">
+                                    <a href="/address/{{vm.address.address}}">{{vm.address.address}}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uptime</strong></td>
+                                <td class="text-right">{{vm.address.delegate.productivity || 0.00}}%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rank / Status</strong></td>
+                                <!--<td class="text-right">{{vm.address.delegate.rate}} / <span class="text-muted">{{(vm.address.delegate.rate <= 101) ? 'Active' : 'Standby'}}</span></td>-->
+                            </tr>
+                            <tr>
+                                <td><strong>Approval</strong></td>
+                                <td class="text-right">{{vm.address.delegate.approval}}%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Forged</strong></td>
+                                <td class="text-right">{{vm.address.delegate.forged || 0 | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Blocks</strong></td>
+                                <td class="text-right">{{vm.address.delegate.producedblocks}} <span class="text-muted">({{vm.address.delegate.missedblocks}} missed)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="delegate-vote" data-ng-if="vm.address.votes">
+        <h2>
+            <a href="" data-ng-show="!showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-plus-square-o"></i></small></a>
+            <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-minus-square-o"></i></small></a>            Votes <small>{{vm.address.votes.length}}</small>
+        </h2>
+        <div class="row" data-ng-init="showVotes=false" data-ng-show="showVotes">
+            <div class="col-md-12">
+                <span data-ng-repeat='vote in vm.address.votes'>
+                    <span data-ng-if="!$last">
+                        <a href="/address/{{vote.address}}">{{vote | votes}}</a>
+                        <span class="text-muted">&bull;</span>
+                    </span>
+                    <span data-ng-if="$last">
+                        <a href="/address/{{vote.address}}">{{vote | votes}}</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="delegate-vote" data-ng-if="vm.address.voters">
+        <h2>
+            <a href="" data-ng-show="!showVoters" data-ng-click="showVoters=!showVoters"><small><i class="fa fa-plus-square-o"></i></small></a>
+            <a href="" data-ng-show="showVoters" data-ng-click="showVoters=!showVoters"><small><i class="fa fa-minus-square-o"></i></small></a>            Voters <small>{{vm.address.voters.length}}</small>
+        </h2>
+        <div class="row" data-ng-init="showVoters=false" data-ng-show="showVoters">
+            <div class="col-md-12">
+                <span data-ng-repeat='voter in vm.address.voters'>
+                    <span data-ng-if="!$last">
+                        <a href="/address/{{voter.address}}">{{voter | votes}}</a>
+                        <span class="text-muted">&bull;</span>
+                    </span>
+                    <span data-ng-if="$last">
+                        <a href="/address/{{voter.address}}">{{voter | votes}}</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
