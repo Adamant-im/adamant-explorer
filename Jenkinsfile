@@ -1,8 +1,12 @@
-node('master-explorer-01'){
-  lock(resource: "master-explorer-01", inversePrecedence: true) {
+node('lisk-explorer-01'){
+  lock(resource: "lisk-explorer-01", inversePrecedence: true) {
     stage ('Prepare Workspace') {
-    deleteDir()
-    checkout scm
+      sh '''#!/bin/bash
+      pkill -f app.js || true
+      '''
+      deleteDir()
+      checkout scm
+
     }
 
     stage ('Start Lisk ') {
@@ -21,8 +25,7 @@ node('master-explorer-01'){
         sh '''#!/bin/bash
 
         # Install Deps
-        mkdir public || true
-        npm install
+        npm install --verbose
         '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
@@ -58,7 +61,7 @@ node('master-explorer-01'){
       sh '''#!/bin/bash
 
       cp test/config.test ./config.js
-      node app.js &> /dev/null &
+      node $(pwd)/app.js &> /dev/null &
       sleep 5
       '''
       } catch (err) {
@@ -73,8 +76,10 @@ node('master-explorer-01'){
         # Run Tests
         npm run test
         '''
-        currentBuild.result = 'SUCCESS'
       } catch (err) {
+      sh '''#!/bin/bash
+        pkill -f $(pwd)/app.js
+        '''
         currentBuild.result = 'FAILURE'
         error('Stopping build, tests failed')
       }
@@ -82,13 +87,18 @@ node('master-explorer-01'){
 
     stage ('Set milestone') {
       milestone 1
+      currentBuild.result = 'SUCCESS'
     }
 
     stage ('Cleanup') {
       sh '''#!/bin/bash
           # Stop Lisk-Node
           bash ~/lisk-test/lisk.sh stop_node
+          
+          # Stop Lisk-Explorer
+          pkill -f $(pwd)/app.js
       '''
     }
   }
 }
+
