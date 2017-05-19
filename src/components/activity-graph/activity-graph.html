@@ -13,12 +13,12 @@
     <div class="row">
         <div class="col-md-8">
             <div id="sigma-canvas" width="512" height="512" style="height: 512px;">
-                <div class="hud hud-loading" data-ng-if="activityGraph.loading">
+                <div class="hud hud-loading" data-ng-if="vm.activityGraph.loading">
                     <div class="text-muted">
                         <span>Loading Graph <i class="fa fa-spinner fa-spin"></i></span>
                     </div>
                 </div>
-                <div class="hud hud-node" data-ng-if="nodeSelect.selected()">
+                <div class="hud hud-node" data-ng-if="vm.nodeSelect.selected()">
                     <div class="btn-group" role="group" aria-label="Node Buttons">
                         <button type="button" class="btn btn-default btn-lg" data-ng-click="nodeSelect.remove()" title="Cancel/remove node selection">
                             <span class="glyphicon glyphicon-remove-sign"></span>

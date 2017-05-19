@@ -1,17 +1,17 @@
 import AppActivityGraph from './activity-graph.module';
-import 'sigma';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.layout.forceAtlas2.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.parsers.gexf.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.parsers.json.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.animate.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.dragNodes.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.filter.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.neighborhoods.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.plugins.relativeSize.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.customEdgeShapes.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.customShapes.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.renderers.edgeLabels.min';
-import 'imports-loader?sigma=>sigma!../../../node_modules/sigma/plugins/sigma.statistics.HITS.min';
+import sigma from 'sigma';
+// import '../../../node_modules/sigma/plugins/sigma.layout.forceAtlas2.min';
+import '../../../node_modules/sigma/build/plugins/sigma.parsers.gexf.min';
+import '../../../node_modules/sigma/build/plugins/sigma.parsers.json.min';
+import '../../../node_modules/sigma/build/plugins/sigma.plugins.animate.min';
+import '../../../node_modules/sigma/build/plugins/sigma.plugins.dragNodes.min';
+import '../../../node_modules/sigma/build/plugins/sigma.plugins.filter.min';
+import '../../../node_modules/sigma/build/plugins/sigma.plugins.neighborhoods.min';
+import '../../../node_modules/sigma/build/plugins/sigma.plugins.relativeSize.min';
+import '../../../node_modules/sigma/build/plugins/sigma.renderers.customEdgeShapes.min';
+import '../../../node_modules/sigma/build/plugins/sigma.renderers.customShapes.min';
+import '../../../node_modules/sigma/build/plugins/sigma.renderers.edgeLabels.min';
+import '../../../node_modules/sigma/build/plugins/sigma.statistics.HITS.min';
 
 const ActivityGraph = function () {
     this.loading   = true;
