@@ -4,9 +4,8 @@ node_modules
 bower_components
 npm-debug.log
 .DS_Store
-public/css/*.css
-public/img/amcharts
-public/js/*.js
+public/*
+public/.gitkeep
 po/*.pot
 Thumbs.db
 sftp-config.json

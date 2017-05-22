@@ -1,0 +1,32 @@
+<div class="alert alert-warning" data-ng-if="!txs.loading && !txs.results.length">There are no transactions involving this {{txs.parent}}.</div>
+<div id="table-mobile" class="table-responsive" data-ng-if="txs.results.length">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Date</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Fee</th>
+                <th>Confirmations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-transaction-item data-tx="tx" data-ng-repeat="tx in txs.results track by tx.id"></tr>
+        </tbody>
+    </table>
+</div>
+<div class="progress progress-striped active" data-ng-if="txs.loading">
+    <div class="progress-bar progress-bar-loading" style="width: 100%">
+        <span>Loading Transactions...</span>
+    </div>
+</div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Less/More Transactions" data-ng-hide="txs.disabled()">
+    <div class="btn-group" role="group">
+        <button class="btn btn-default" data-ng-disabled="!txs.lessData" data-ng-click="txs.loadLess()">Less</a>
+    </div>
+    <div class="btn-group" role="group">
+        <button class="btn btn-default" data-ng-disabled="!txs.moreData" data-ng-click="txs.loadMore()">More</a>
+    </div>
+</div>

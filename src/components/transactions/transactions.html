@@ -1,0 +1,142 @@
+<section>
+    <div class="secondary_navbar hidden-xs hidden-sm" scroll data-ng-class="{'hidden': !vm.secondaryNavbar}" data-ng-if="vm.tx.id"
+        data-ng-init="vm.hideSNavbar=0">
+        <div class="container" data-ng-if="!vm.hideSNavbar">
+            <div class="col-md-6 col-lg-7 text-left">
+                <h3>Transaction</h3>
+                <div class="ellipsis">
+                    <small>{{tx.id}}</small>
+                    <span class="btn-copy" clip-copy="tx.id"></span>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-5 text-right">
+                <span data-ng-if="vm.tx.confirmations" class="txvalues txvalues-success">{{vm.tx.confirmations}} Confirmations</span>
+                <span data-ng-if="!vm.tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
+                <span class="txvalues txvalues-primary">{{vm.tx.amount | currency:$root.currency}} {{$root.currency.symbol}}</span>
+            </div>
+        </div>
+        <div class="hide_snavbar">
+            <a href="#" data-ng-click="vm.hideSNavbar=!vm.hideSNavbar">
+                <span data-ng-if="vm.hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-down"></span></span>
+                <span data-ng-if="!vm.hideSNavbar"><span class="text-muted glyphicon glyphicon-chevron-up"></span></span>
+            </a>
+        </div>
+    </div>
+    <h1>Transaction <small>{{vm.tx.id}}</small></h1>
+    <div class="text-muted" data-ng-if="!vm.tx.id">
+        <span>Loading Transaction <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <div data-ng-if="vm.tx.id">
+    <div class="well well-sm ellipsis">
+    <strong>Transaction ID</strong>
+    <span class="txid text-muted">{{vm.tx.id}}</span>
+        <span class="btn-copy" clip-copy="vm.tx.id"></span>
+    </div>
+    <h2>Summary</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><strong>Sender</strong></td>
+                    <td class="text-right">
+                        <a href="/address/{{vm.tx.senderId}}">{{vm.tx.senderId}}</a>
+                        <div data-ng-if="tx.knownSender">
+                            <span class="owner-name">{{vm.tx.knownSender.owner}}</span>
+                            <span class="owner-desc text-muted">{{vm.tx.knownSender.description}}</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Recipient</strong></td>
+                    <td class="text-right">
+                        <div data-ng-if="vm.tx.type == 0">
+                            <a href="/address/{{vm.tx.recipientId}}">{{vm.tx.recipientId}}</a>
+                            <div data-ng-if="vm.tx.knownRecipient">
+                                <span class="owner-name">{{vm.tx.knownRecipient.owner}}</span>
+                                <span class="owner-desc text-muted">{{vm.tx.knownRecipient.description}}</span>
+                            </div>
+                        </div>
+                        <div data-ng-if="vm.tx.type >= 1">{{vm.tx | txType}}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Confirmations</strong></td>
+                    <td class="text-right">{{vm.tx.confirmations || 0}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Amount</strong></td>
+                    <td class="text-right">{{vm.tx.amount | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Fee</strong></td>
+                    <td class="text-right">{{vm.tx.fee | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Timestamp</strong></td>
+                    <td class="text-right">{{vm.tx.timestamp | timestamp}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Block </strong></td>
+                    <td data-ng-if="vm.tx.blockId" class="text-right">
+                        <a href="/block/{{vm.tx.blockId}}">{{vm.tx.blockId}}</a>
+                    </td>
+                    <td data-ng-if="!vm.tx.blockId" class="text-right">Unconfirmed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="delegate" data-ng-if="vm.tx.votes.added">
+        <h2>Added votes <small>{{vm.tx.votes.added.length}}</small></h2>
+        <div class="row">
+            <div class="col-md-12">
+                <span data-ng-repeat='v in vm.tx.votes.added'>
+                    <span data-ng-if="!$last">
+                        <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
+                        <span class="text-muted">&bull;</span>
+                    </span>
+                    <span data-ng-if="$last">
+                        <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="delegate" data-ng-if="vm.tx.votes.deleted">
+        <h2>Deleted votes <small>{{vm.tx.votes.deleted.length}}</small></h2>
+        <div class="row">
+            <div class="col-md-12">
+                <span data-ng-repeat='v in vm.tx.votes.deleted'>
+                    <span data-ng-if="!$last">
+                        <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
+                        <span class="text-muted">&bull;</span>
+                    </span>
+                    <span data-ng-if="$last">
+                        <a href="/address/{{v.delegate.address}}">{{v.delegate.username || v.delegate.address}}</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <h2>Details</h2>
+    <div id="table-mobile" class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Sender</th>
+                    <th>Recipient</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                    <th>Confirmations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-transaction-item data-ng-if="vm.tx.id" data-tx="vm.tx"></tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</section>

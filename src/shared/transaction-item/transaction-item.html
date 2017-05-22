@@ -1,0 +1,22 @@
+<td data-title="Transaction ID" class="text-nowrap">
+    <a class="txid" href="/tx/{{tx.id}}">{{tx.id}}</a>
+    <span class="btn-copy" clip-copy="tx.id"></span>
+</td>
+<td data-title="Date">{{tx.timestamp | timestamp }}</td>
+<td data-title="Sender"><a href="/address/{{tx.senderId}}">{{tx | txSender}}</a></td>
+<td data-title="Recipient" data-ng-show="tx.type == 0"><a href="/address/{{tx.recipientId}}">{{tx | txRecipient}}</a></td>
+<td data-title="Recipient" data-ng-show="tx.type >= 1">{{tx | txType}}</td>
+<td data-title="Amount">
+    <div class="txvalues" data-ng-class="{
+    'txvalues-danger': tx.type == 0 && $parent.vm.address.address == tx.senderId && tx.senderId != tx.recipientId,
+    'txvalues-success': tx.type == 0 && $parent.vm.address.address && tx.senderId != $parent.vm.address.address,
+    'txvalues-default': tx.type != 0 || $parent.vm.address.address === undefined
+  }">{{tx.amount | currency:$root.currency}} {{$root.currency.symbol}}
+    </div>
+</td>
+<td data-title="Fee" class="text-nowrap">{{tx.fee | currency:$root.currency}} {{$root.currency.symbol}}</td>
+<td data-title="Confirmations">
+    <span data-ng-if="!block.confirmations && !tx.confirmations" class="text-danger">Unconfirmed Transaction!</span>
+	<span data-ng-if="(block.confirmations > 0  && block.confirmations < 101) || (tx.confirmations > 0 && tx.confirmations < 101)" class="text-warning">{{block.confirmations || tx.confirmations}}</span>
+	<span data-ng-if="block.confirmations >= 101 || tx.confirmations >= 101" class="text-success" tooltip="{{block.confirmations || tx.confirmations}} Confirmations">Confirmed</span>
+</td>
