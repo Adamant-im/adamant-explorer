@@ -24,7 +24,7 @@ const PATHS = {
 process.traceDeprecation = true;
 
 module.exports = env => ({
-    devtool: 'source-map',
+    devtool: 'hidden',
     entry: Path.resolve(__dirname, PATHS.app + '/main.js'),
     output: {
         filename: '[name].bundle.js',
@@ -38,6 +38,11 @@ module.exports = env => ({
         proxy: {
             "/socket.io": "http://localhost:6040",
             "/api": "http://localhost:6040"
+        }
+    },
+    resolve: {
+        alias: {
+            sigma: Path.resolve(__dirname, "node_modules/sigma/build/sigma.require.js") 
         }
     },
     plugins: removeEmpty([
@@ -127,10 +132,16 @@ module.exports = env => ({
                         }
                 }]
             }, {
+                test: /\/sigma.*\.js?$/,
+                use: [{
+                    loader: 'imports-loader?sigma'
+                }]
+            },
+            /*{
                 test: /\/sigma.*\.js?$/, // the test to only select sigma files
                 exclude: ['src'], // you ony need to check node_modules, so remove your application files
                 loader: 'script-loader' // loading as script
-            },
+            }, */
         ]
     }
 

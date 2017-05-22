@@ -4,7 +4,6 @@ sudo: required
 node_js:
   - 'node'
   - '6.10.1'
-  - '4.0'
 services: 
   - redis-server
 before_script:
