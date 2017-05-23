@@ -6,8 +6,9 @@ const transactionsItem = AppTools.directive('transactionItem', () => ({
     template,
     restrict: 'A',
     scope: {
-      tx: '='
-    },
+      tx: '=',
+      address: '=',
+    }
 }));
 
 export default transactionsItem;

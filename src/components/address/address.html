@@ -22,10 +22,10 @@
     </div>
     <h2>
         Address Summary&nbsp;
-        <small data-ng-if="vm.address.secondSignature" data-tooltip="Second signature">
+        <small data-ng-if="vm.address.secondSignature" data-uib-tooltip="Second signature">
             <i class="glyphicon glyphicon-lock"></i>
         </small>
-        <small data-ng-if="vm.address.multisignatures && vm.address.multisignatures.length" data-tooltip="Multi Signature">
+        <small data-ng-if="vm.address.multisignatures && vm.address.multisignatures.length" data-uib-tooltip="Multi Signature">
             <i class="glyphicon glyphicon-info-sign"></i>
         </small>
     </h2>
@@ -98,7 +98,6 @@
                 <button class="btn btn-default" data-ng-disabled="vm.direction==='received'" data-ng-click="vm.filterTxs('received');vm.txs.loadData()">Received</button>
             </div>
         </div>
-        <!--<div data-ng-include src="'/components/transactions/list.html'"></div>-->
-        <transactions-list data-txs="vm.txs"></transactions-list>
+        <transactions-list data-txs="vm.txs" data-address="vm.address.address"></transactions-list>
     </div>
  </section>

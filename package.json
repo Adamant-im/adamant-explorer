@@ -12,7 +12,7 @@
   "main": "src/main.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose",
-    "start": "npm run copy-files && webpack-dev-server --open",
+    "start": "npm run copy-files && webpack-dev-server --open --history-api-fallback",
     "validate": "webpack-validator webpack.config.js",
     "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
     "build": "npm run copy-files && webpack -p",
@@ -21,11 +21,11 @@
   "dependencies": {
     "amstock3": "github:amcharts/amstock3",
     "angular-animate": "^1.6.4",
-    "angular-bootstrap": "^0.12.2",
     "angular-gettext": "^2.3.9",
     "angular-naturalsort": "https://github.com/isabello/angular-naturalsort.git",
     "angular-qrcode": "^7.2.0",
     "angular-resource": "^1.6.4",
+    "angular-ui-bootstrap": "^2.5.0",
     "angular-ui-router": "=1.0.0-rc.1",
     "async": "^2.0.1",
     "benchmark": "^2.1.1",

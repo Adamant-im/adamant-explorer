@@ -3,6 +3,9 @@ import 'amstock3';
 import '../../../node_modules/amstock3/amcharts/serial';
 import '../../../node_modules/amstock3/amcharts/amstock';
 
+var imagesContext = require.context('!!file-loader?name=amcharts/[name].[ext]!amstock3/amcharts/images');
+imagesContext.keys().forEach(imagesContext);
+
 AppMarketWatcher.directive('stockChart', $timeout => {
       function StockChart (scope, elm, attr) {
           const self = this;
@@ -15,7 +18,7 @@ AppMarketWatcher.directive('stockChart', $timeout => {
           this.config = {
               type: 'stock',
               theme: 'light',
-              pathToImages: '/img/amcharts/',
+              pathToImages: '/amcharts/',
               dataSets: [{
                   fieldMappings: [{
                       fromField: 'date',

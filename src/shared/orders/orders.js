@@ -1,15 +1,15 @@
-'use strict';
+import AppTools from '../../app/app-tools.module';
+import template from './orders.html';
 
-angular.module('lisk_explorer.tools')
-  .directive('orders', () => ({
+const orders = AppTools.directive('orders', () => ({
     restrict: 'E',
-
     scope: {
         orders: '=orders',
         heading: '@heading',
         name: '@name'
     },
-
-    templateUrl: '/shared/orders/orders.html',
+    template,
     replace: true
 }));
+
+export default orders;

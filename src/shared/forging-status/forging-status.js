@@ -1,14 +1,14 @@
-'use strict';
+import AppTools from '../../app/app-tools.module';
 import moment from 'moment';
 import template from './forging-status.html';
 
-angular.module('lisk_explorer.tools')
-  .directive('forgingStatus', $sce => ({
+const forgingStatus = AppTools.directive('forgingStatus', $sce => ({
     restrict: 'A',
     scope: {
         forgingStatus: '='
     },
     template,
+    replace: true,
     transclude: true,
     link: function (scope, element, attr) {
         const el = element[0];
@@ -64,3 +64,5 @@ angular.module('lisk_explorer.tools')
         scope.$watch('forgingStatus', updateStatus, true);
     }
 }));
+
+export default forgingStatus;
