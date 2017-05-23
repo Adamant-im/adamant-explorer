@@ -2,35 +2,41 @@ import AppBreadCrumb from './bread-crumb.module';
 import template from './bread-crumb.html';
 
 AppBreadCrumb.directive('breadCrumb',  ($state, $transitions) => {
-    const BreadCrumpLink = (scope, element, attrs) => {
-        const states = $state.get();
+    const BreadCrumbCtrl = function () {
 
-        scope.init = () => {
-            scope.sections = [];
+        /**
+         * Initiates the hierarchy array of sections
+         */
+        this.setSections = (next, states, breadCrumbValues) => {
+            let sections = [];
+            let section = next;
 
-            let section = $state.current;
             while (section.parentDir !== section.name) {
                 for (let item of states) {
                     if (item.name === section.parentDir) {
-                        scope.sections.unshift({
+                        sections.unshift({
                             name: item.name,
-                            url: scope.setPathParams(item.url, scope.breadCrumb)
+                            url: this.setPathParams(item.url, breadCrumbValues)
                         });
                         section = item;
                         break;
                     }
                 }
             }
-            scope.sections.push({
-                name: $state.current.name,
+            sections.push({
+                name: next.name,
                 url: '#'
             });
+
+            return sections;
         }
 
         /**
          * Replaces any :param in path string with their corresponding values from given set of breadCrumb values.
+         * Use this method to set values either when initiating the component/controller of the state
+         * or inside any sync function's callback.
          */
-        scope.setPathParams = (path, breadCrumbValues) => {
+        this.setPathParams = (path, breadCrumbValues) => {
             const paramsReg = /(?:\/\:([^\/]+)?)/g;
             const params = path.match(paramsReg);
             let paramName = '';
@@ -46,13 +52,29 @@ AppBreadCrumb.directive('breadCrumb',  ($state, $transitions) => {
 
             return path;
         }
+    }
 
-        $transitions.onSuccess({ to: '*' }, scope.init);
+    const BreadCrumbLink = (scope, element, attrs, ctrl) => {
+        let init = (values) => {
+            const states = $state.get();
+            if (!scope.breadCrumb) {
+                scope.breadCrumb = {};
+            }
+            if (values.constructor.name != "Transition") {
+                angular.merge(scope.breadCrumb, values);
+            }
+            scope.breadCrumb.set = init;
+
+            scope.sections = ctrl.setSections($state.current, states, scope.breadCrumb);
+        }
+
+        $transitions.onSuccess({ to: '*' }, init);
     }
 
     return {
-        restric: 'E',
+        restrict: 'E',
         template,
-        link: BreadCrumpLink,
+        controller: BreadCrumbCtrl,
+        link: BreadCrumbLink,
     }
 });
