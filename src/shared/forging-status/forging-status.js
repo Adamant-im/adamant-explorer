@@ -9,6 +9,7 @@ angular.module('lisk_explorer.tools')
         forgingStatus: '='
     },
     template,
+    replace: true,
     transclude: true,
     link: function (scope, element, attr) {
         const el = element[0];

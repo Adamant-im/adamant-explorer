@@ -1,8 +1,8 @@
-<li class="dropdown" dropdown>
-    <a class="dropdown-toggle" dropdown-toggle href="#">
+<li class="dropdown" data-uib-dropdown>
+    <a class="dropdown-toggle" id="main-currency-selector" data-uib-dropdown-toggle data-aria-haspopup="true" role="button" data-aria-expanded="false">
         {{currency.symbol}} <span class="caret"></span>
     </a>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu" role="menu" data-aria-labelledby="main-currency-selector">
         <li>
             <a data-ng-click="cs.setCurrency('LSK')" data-ng-class="{active: currency.symbol == 'LSK'}">LSK</a>
         </li>

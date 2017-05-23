@@ -64,7 +64,7 @@
 }
 
 .tooltip-grey .tooltip-inner {
-  background-color: #5f696e;
+  background-color: #5f696e !important;
 }
 
 .tooltip-grey.left .tooltip-arrow {
@@ -76,7 +76,7 @@
 }
 
 .tooltip-green .tooltip-inner {
-  background-color: #7CB342;
+  background-color: #7CB342 !important;
 }
 
 .tooltip-green.left .tooltip-arrow {
@@ -88,7 +88,7 @@
 }
 
 .tooltip-orange .tooltip-inner {
-  background-color: #f57c00;
+  background-color: #f57c00 !important;
 }
 
 .tooltip-orange.left .tooltip-arrow {

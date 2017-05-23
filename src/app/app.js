@@ -2,7 +2,7 @@ import 'angular';
 import 'angular-ui-router';
 import 'angular-resource';
 import 'angular-animate';
-import 'angular-bootstrap';
+import 'angular-ui-bootstrap';
 import 'angular-gettext';
 // import 'babel-polyfill';
 
