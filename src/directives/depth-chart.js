@@ -68,7 +68,7 @@ AppTools.directive('depthChart', $timeout => {
                       return;
                   }
 
-                  if (_.size(scope.data.orders.depth) > 0) {
+                  if (scope.data.orders.depth.length > 0) {
                       scope.data.depthChart.dataProvider = scope.data.orders.depth;
                       scope.data.depthChart.validateData();
                       console.log('Depth chart data updated');
