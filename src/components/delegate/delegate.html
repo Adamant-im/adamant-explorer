@@ -56,11 +56,11 @@
             <div class="col-md-12">
                 <span data-ng-repeat='vote in vm.address.votes'>
                     <span data-ng-if="!$last">
-                        <a href="/address/{{vote.address}}">{{vote | votes}}</a>
+                        <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
                         <span class="text-muted">&bull;</span>
                     </span>
                     <span data-ng-if="$last">
-                        <a href="/address/{{vote.address}}">{{vote | votes}}</a>
+                        <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
                     </span>
                 </span>
             </div>
@@ -75,11 +75,11 @@
             <div class="col-md-12">
                 <span data-ng-repeat='voter in vm.address.voters'>
                     <span data-ng-if="!$last">
-                        <a href="/address/{{voter.address}}">{{voter | votes}}</a>
+                        <a data-account-href="voter" data-type="voter">{{voter | votes}}</a>
                         <span class="text-muted">&bull;</span>
                     </span>
                     <span data-ng-if="$last">
-                        <a href="/address/{{voter.address}}">{{voter | votes}}</a>
+                        <a data-account-href="voter" data-type="voter">{{voter | votes}}</a>
                     </span>
                 </span>
             </div>

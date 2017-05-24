@@ -29,7 +29,7 @@
                             <div class="pull-left last-block">
                                 <p class="small-title">Last Block By</p>
                                 <p class="big-details" data-ng-switch="!!vm.lastBlock">
-                                    <a data-ng-href="/address/{{vm.lastBlock.delegate.address}}" data-ng-switch-when="true">{{vm.lastBlock.delegate.username}}</a>
+                                    <a data-account-href="vm.lastBlock.delegate" data-type="delegate" data-ng-switch-when="true">{{vm.lastBlock.delegate.username}}</a>
                                     <span class="text-muted" data-ng-switch-when="false">N/A</span>
                                 </p>
                                 <p class="text-muted" data-ng-switch="!!vm.lastBlock">
@@ -56,15 +56,15 @@
                                     <span data-ng-repeat='v in vm.nextForgers track by $index'>
                                     <div data-ng-if="$first">
                                         <p class="big-details">
-                                            <a data-ng-href="/address/{{v.address}}">{{v.username}}</a>
+                                            <a data-account-href="v" data-type="delegate">{{v.username}}</a>
                                         </p>
                                     </div>
                                     <span data-ng-if="!$first && !$last">
-                                        <a data-ng-href="/address/{{v.address}}">{{v.username}}</a>
+                                        <a data-account-href="v" data-type="delegate">{{v.username}}</a>
                                         <span class="text-muted">&bull;</span>
                                     </span>
                                     <span data-ng-if="$last">
-                                        <a data-ng-href="/address/{{v.address}}">{{v.username}}</a>
+                                        <a data-account-href="v" data-type="delegate">{{v.username}}</a>
                                     </span>
                                     </span>
                                 </div>
@@ -97,7 +97,7 @@
                             <div class="pull-left best-forger">
                                 <p class="small-title">Best Forger</p>
                                 <p class="big-details" data-ng-switch="!!vm.bestForger">
-                                    <a data-ng-href="/address/{{vm.bestForger.address}}" data-ng-switch-when="true">{{vm.bestForger.username}}</a>
+                                    <a data-account-href="vm.bestForger" data-type="delegate" data-ng-switch-when="true">{{vm.bestForger.username}}</a>
                                     <span class="text-muted" data-ng-switch-when="false">N/A</span>
                                 </p>
                                 <p class="text-muted lisk">{{vm.bestForger.forged || 0 | currency:$root.currency}} {{$root.currency.symbol}} forged</p>
@@ -114,7 +114,7 @@
                                 <p class="big-details">{{vm.bestProductivity.productivity || 0}}%</p>
                                 <p data-ng-switch="!!vm.bestProductivity">
                                     <span class="text-muted">by</span>
-                                    <a data-ng-href="/address/{{vm.bestProductivity.address}}" data-ng-switch-when="true">{{vm.bestProductivity.username}}</a>
+                                    <a data-account-href="vm.bestProductivity" data-type="delegate" data-ng-switch-when="true">{{vm.bestProductivity.username}}</a>
                                     <span class="text-muted" data-ng-switch-when="false">N/A</span>
                                 </p>
                             </div>
@@ -129,7 +129,7 @@
                                 <p class="big-details">{{vm.worstProductivity.productivity || 0}}%</p>
                                 <p data-ng-switch="!!vm.worstProductivity">
                                     <span class="text-muted">by</span>
-                                    <a data-ng-href="/address/{{vm.worstProductivity.address}}" data-ng-switch-when="true">{{vm.worstProductivity.username}}</a>
+                                    <a data-account-href="vm.worstProductivity" data-type="delegate" data-ng-switch-when="true">{{vm.worstProductivity.username}}</a>
                                     <span class="text-muted" data-ng-switch-when="false">N/A</span>
                                 </p>
                             </div>
@@ -165,7 +165,8 @@
                                         <tbody>
                                             <tr data-ng-repeat='v in vm.votes track by $index'>
                                                 <td class="voter">
-                                                    <a data-ng-href="/address/{{v.senderId}}">{{v.delegate.username || v.senderId}}</a>
+                                                    <a data-account-href="v" data-type="sender" data-ng-if="v.senderId && !v.delegate.username">{{v.senderId}}</a>
+                                                    <a data-account-href="v.delegate" data-type="delegate" data-ng-if="v.delegate.username">{{v.delegate.username}}</a>
                                                 </td>
                                                 <td class="tx hidden-xs">
                                                     <a class="ellipsis" data-ng-href="/tx/{{v.id}}">{{v.id}}</a>
@@ -204,7 +205,7 @@
                                         <tbody>
                                             <tr data-ng-repeat='r in vm.registrations track by $index'>
                                                 <td class="delegate">
-                                                    <a data-ng-href="/address/{{r.senderId}}">{{r.delegate.username}}</a>
+                                                    <a data-account-href="r.delegate" data-type="delegate">{{r.delegate.username}}</a>
                                                 </td>
                                                 <td class="tx hidden-xs">
                                                     <a class="ellipsis" data-ng-href="/tx/{{r.id}}">{{r.id}}</a>
@@ -293,7 +294,7 @@
                                     <td>
                                         <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
                                             title="{{d.proposal.description}}" target="_new"></a>&nbsp;
-                                        <a data-ng-href="/address/{{d.address}}">{{d.username}}</a>
+                                        <a data-account-href="d" data-type="delegate">{{d.username}}</a>
                                     </td>
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                                     <td class="hidden-xs hidden-sm">{{d.forged | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
@@ -332,7 +333,7 @@
                                     <td>
                                         <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
                                             title="{{d.proposal.description}}" target="_new"></a>&nbsp;
-                                        <a data-ng-href="/address/{{d.address}}">{{d.username}}</a>
+                                        <a data-account-href="d" data-type="delegate">{{d.username}}</a>
                                     </td>
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                                     <td class="hidden-xs">{{d.productivity || 0}}%</td>

@@ -3,8 +3,12 @@
     <span class="btn-copy" clip-copy="tx.id"></span>
 </td>
 <td data-title="Date">{{tx.timestamp | timestamp }}</td>
-<td data-title="Sender"><a href="/address/{{tx.senderId}}">{{tx | txSender}}</a></td>
-<td data-title="Recipient" data-ng-show="tx.type == 0"><a href="/address/{{tx.recipientId}}">{{tx | txRecipient}}</a></td>
+<td data-title="Sender">
+    <a data-account-href="tx" data-type="sender">{{tx | txSender}}</a>
+</td>
+<td data-title="Recipient" data-ng-show="tx.type == 0">
+    <a data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
+</td>
 <td data-title="Recipient" data-ng-show="tx.type >= 1">{{tx | txType}}</td>
 <td data-title="Amount">
     <div class="txvalues" data-ng-class="{
