@@ -1075,3 +1075,6 @@ a.sort-order span.reverse:after {
     vertical-align: middle;
     margin-top: -5px;
 }
+.breadcrumb > li + li:before {
+    padding: 0 0 0 7px;
+}
