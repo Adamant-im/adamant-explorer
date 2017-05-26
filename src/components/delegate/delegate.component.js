@@ -2,7 +2,7 @@ import 'angular';
 import AppDelegate from './delegate.module';
 import template from './delegate.html';
 
-const DelegateConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs) {
+const DelegateConstructor = function ($rootScope, $stateParams, $location, $http, addressTxs, $state) {
     const vm = this;
     $rootScope.breadCrumb = {address: $stateParams.delegateId};
     vm.getAddress = () => {
@@ -13,8 +13,12 @@ const DelegateConstructor = function ($rootScope, $stateParams, $location, $http
         }).then(resp => {
             if (resp.data.success) {
                 vm.address = resp.data;
+
+                if (!vm.address.delegate) {
+                    $state.go('address', { address: $stateParams.delegateId });
+                }
             } else {
-                throw 'Account was not found!';
+                $state.go('home');
             }
         }).catch(error => {
             $location.path('/');
