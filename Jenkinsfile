@@ -63,7 +63,7 @@ node('lisk-explorer-01'){
       sh '''#!/bin/bash
 
       cp test/config.test ./config.js
-      node $(pwd)/app.js &> /dev/null &
+      node $(pwd)/app.js &> ./explorer.log &
       sleep 5
       '''
       } catch (err) {
@@ -84,7 +84,7 @@ node('lisk-explorer-01'){
             bash ~/lisk-test/lisk.sh stop
             
             # Stop Lisk-Explorer
-            pkill -f $(pwd)/app.js
+            pkill -f $(pwd)/app.js || true
         '''
         currentBuild.result = 'FAILURE'
         error('Stopping build, tests failed')
@@ -102,7 +102,7 @@ node('lisk-explorer-01'){
           bash ~/lisk-test/lisk.sh stop
           
           # Stop Lisk-Explorer
-          pkill -f $(pwd)/app.js
+          pkill -f $(pwd)/app.js || true
       '''
     }
   }
