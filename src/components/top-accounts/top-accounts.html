@@ -20,7 +20,7 @@
                             <tr data-ng-repeat="address in vm.topAccounts.results track by $index">
                                 <td>{{$index + 1}}</td>
                                 <td class="text-right">
-                                    <a href="/address/{{ address.address }}">{{address.address}}</a>
+                                    <a href="/address/{{address.address}}">{{address.address}}</a>
                                 </td>
                                 <td class="text-right hidden-sm hidden-md hidden-lg">{{address.balance | currency:$root.currency:0}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                                 <td class="text-right hidden-xs">{{address.balance | currency:$root.currency:2}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
