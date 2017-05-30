@@ -1,6 +1,6 @@
 {
         "apps": [{
-                "name": "explorer.app",
+                "name": "lisk-explorer",
                 "script": "app.js",
                 "cwd": ".",
                 "pid_file": "./pids/explorer.app.pid",
