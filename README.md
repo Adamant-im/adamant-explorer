@@ -37,9 +37,10 @@ These programs and resources are required to install and run Lisk Explorer
 
   `sudo npm install -g grunt`
 
-- PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer (Recommended)
+- PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer and handles log rotation (Highly Recommended)
 
   `sudo npm install -g pm2`
+  `pm2 install pm2-logrotate`
 
 - Git (<https://github.com/git/git>) -- Used for cloning and updating Lisk Explorer
 
@@ -121,7 +122,7 @@ After the process is started its runtime status and log location can be found by
 
 To stop Explorer after it has been started with `PM2`, issue the following command:
 
-`pm2 stop explorer.app`
+`pm2 stop lisk-explorer`
 
 ## Tests
 
