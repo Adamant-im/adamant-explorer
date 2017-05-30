@@ -9,7 +9,7 @@ Lisk Explorer version 1.1.0 works in conjunction with the Lisk Core API. It uses
 
 These programs and resources are required to install and run Lisk Explorer
 
-- Nodejs v6.9.2 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
+- Nodejs v6.10.1 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
 
   ```
   curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -37,9 +37,16 @@ These programs and resources are required to install and run Lisk Explorer
 
   `sudo npm install -g grunt`
 
-- Forever (<https://github.com/foreverjs/forever>) -- Forever manages the node processes for Lisk Explorer
+- PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer and handles log rotation (Highly Recommended)
 
-  `sudo npm install -g forever`
+  `sudo npm install -g pm2`
+  
+- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) -- Manages PM2 logs
+
+  ```
+  pm2 install pm2-logrotate
+  pm2 set pm2-logrotate:max_size 100M
+  ```
 
 - Git (<https://github.com/git/git>) -- Used for cloning and updating Lisk Explorer
 
@@ -111,17 +118,17 @@ To test that Lisk Explorer is configured correctly, run the following command:
 
 Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
 
-Once the process is verified as running correctly, `CTRL+C` and start the process with `forever`. This will fork the process into the background and automatically recover the process if it fails.
+Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
 
-`forever start app.js`
+`pm2 start pm2-explorer.json`
 
 After the process is started its runtime status and log location can be found by issuing this statement:
 
-`forever list`
+`pm2 list`
 
-To stop Explorer after it has been started with `forever`, issue the following command:
+To stop Explorer after it has been started with `PM2`, issue the following command:
 
-`forever stop app.js`
+`pm2 stop lisk-explorer`
 
 ## Tests
 
@@ -141,7 +148,7 @@ Then restart the Lisk Client (example):
 
 Launch Lisk Explorer (runs on port 6040):
 
-`forever start app.js`
+`pm2 start pm2-explorer.json`
 
 Run the test suite:
 
