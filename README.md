@@ -111,7 +111,7 @@ To test that Lisk Explorer is configured correctly, run the following command:
 
 Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
 
-Once the process is verified as running correctly, `CTRL+C` and start the process with `forever`. This will fork the process into the background and automatically recover the process if it fails.
+Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
 
 `pm2 start pm2-explorer.json`
 
@@ -119,7 +119,7 @@ After the process is started its runtime status and log location can be found by
 
 `pm2 list`
 
-To stop Explorer after it has been started with `forever`, issue the following command:
+To stop Explorer after it has been started with `PM2`, issue the following command:
 
 `pm2 stop explorer.app`
 
@@ -141,7 +141,7 @@ Then restart the Lisk Client (example):
 
 Launch Lisk Explorer (runs on port 6040):
 
-`forever start app.js`
+`pm2 start pm2-explorer.json`
 
 Run the test suite:
 
