@@ -40,7 +40,13 @@ These programs and resources are required to install and run Lisk Explorer
 - PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer and handles log rotation (Highly Recommended)
 
   `sudo npm install -g pm2`
-  `pm2 install pm2-logrotate`
+  
+- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) -- Manages PM2 logs
+
+  ```
+  pm2 install pm2-logrotate
+  pm2 set pm2-logrotate:max_size 100M
+  ```
 
 - Git (<https://github.com/git/git>) -- Used for cloning and updating Lisk Explorer
 
