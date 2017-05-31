@@ -1,9 +1,8 @@
-
 {
     "port": 7000,
     "address": "0.0.0.0",
-    "version": "0.5.1a",
-    "minVersion": "~0.5.0",
+    "version": "0.8.2b",
+    "minVersion": ">=0.5.0",
     "fileLogLevel": "info",
     "logFileName": "logs/lisk.log",
     "consoleLogLevel": "info",
@@ -23,8 +22,10 @@
         ]
     },
     "api": {
+        "enabled": true,
         "access": {
-            "whiteList": []
+            "public": false,
+            "whiteList": ["127.0.0.1"]
         },
         "options": {
             "limits": {
@@ -36,29 +37,32 @@
         }
     },
     "peers": {
+        "enabled": true,
         "list": [
             {
-                "ip": "13.69.159.242",
+                "ip": "94.237.29.221",
                 "port": 7000
             },
             {
-                "ip": "40.68.34.176",
+                "ip": "83.136.254.104",
                 "port": 7000
             },
             {
-                "ip": "52.165.40.188",
+                "ip": "209.50.48.177",
                 "port": 7000
             },
             {
-                "ip": "13.82.31.30",
+                "ip": "94.237.64.33",
                 "port": 7000
             },
             {
-                "ip": "13.91.61.2",
+                "ip": "94.237.30.23",
                 "port": 7000
             }
         ],
-        "blackList": [],
+        "access": {
+            "blackList": []
+        },
         "options": {
             "limits": {
                 "max": 0,
@@ -75,6 +79,9 @@
         "parallelLimit": 20,
         "releaseLimit": 25,
         "relayLimit": 2
+    },
+    "transactions": {
+        "maxTxsPerQueue": 1000
     },
     "forging": {
         "force": false,
@@ -100,9 +107,8 @@
     },
     "dapp": {
         "masterrequired": true,
-        "masterpassword": "Bdp2EtpCzLvj",
+        "masterpassword": "",
         "autoexec": []
     },
     "nethash": "da3ed6a45429278bac2666961289ca17ad86595d33b31037615d4b8e8f158bba"
 }
-
