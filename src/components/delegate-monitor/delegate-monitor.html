@@ -226,8 +226,8 @@
     </div>
     <div class="row">
         <div class="col-xs-12 big-info">
-            <tabset vertical="true" type="pills">
-                <tab heading="Active Delegates">
+            <uib-tabset vertical="true" type="pills">
+                <uib-tab heading="Active Delegates">
                     <p class="small-title">Active Delegates</p>
 
                     <div class="row forging-totals">
@@ -306,8 +306,8 @@
                             </tbody>
                         </table>
                     </div>
-                </tab>
-                <tab heading="Standby Delegates" data-ng-click="vm.getStandby(1)">
+                </uib-tab>
+                <uib-tab heading="Standby Delegates" data-ng-click="vm.getStandby(1)">
                     <p class="small-title">Standby Delegates</p>
 
                     <div class="table-responsive">
@@ -346,8 +346,8 @@
                         <button class="btn btn-primary" data-ng-click="vm.getStandby(vm.pagination.previousPage)" data-ng-if="vm.pagination.before">Previous page</button>
                         <button class="btn btn-primary" data-ng-click="vm.getStandby(vm.pagination.nextPage)" data-ng-if="vm.pagination.more">Next page</button>
                     </div>
-                </tab>
-            </tabset>
+                </uib-tab>
+            </uib-tabset>
         </div>
     </div>
 </div>
