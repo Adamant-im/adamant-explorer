@@ -259,13 +259,13 @@
 
                     <div class="row forging-progress" data-ng-if="vm.forgingProgress">
                         <div class="col-xs-12">
-                            <progressbar max="101" type="forging" value="vm.forgingTotals.processed" data-ng-class="{'progress-striped active': vm.forgingTotals.processed < 101,'inactive': vm.forgingTotals.processed == 101}">
+                            <uib-progressbar max="101" type="forging" value="vm.forgingTotals.processed" data-ng-class="{'progress-striped active': vm.forgingTotals.processed < 101,'inactive': vm.forgingTotals.processed == 101}">
                                 <p data-ng-if="vm.forgingTotals.processed > 5">
                                     <span>{{vm.forgingTotals.processed || 0}} / 101</span>
                                     <span data-ng-if="vm.forgingTotals.processed < 101"><i class="fa fa-cog"></i> Updated</span>
                                     <span data-ng-if="vm.forgingTotals.processed == 101"><i class="fa fa-check-square"></i> Update-to-date</span>
                                 </p>
-                            </progressbar>
+                            </uib-progressbar>
                         </div>
                     </div>
 
