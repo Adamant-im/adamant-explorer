@@ -31,7 +31,7 @@ describe('Exchanges API (Market Watcher)', function () {
                     'btcVolume',
                     'firstTrade',
                     'lastTrade',
-                    'nextStart',
+                    'nextEnd',
                     'numTrades'
                 );
             }
