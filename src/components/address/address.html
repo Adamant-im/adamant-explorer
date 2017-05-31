@@ -85,6 +85,27 @@
             <br> (Scan for Address)
         </div>
     </div>
+
+    <div class="delegate-vote" data-ng-if="vm.address.votes && !vm.address.delegate">
+        <h2>
+            <a href="" data-ng-show="!showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-plus-square-o"></i></small></a>
+            <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-minus-square-o"></i></small></a>            Votes <small>{{vm.address.votes.length}}</small>
+        </h2>
+        <div class="row" data-ng-init="showVotes=false" data-ng-show="showVotes">
+            <div class="col-md-12">
+                <span data-ng-repeat='vote in vm.address.votes'>
+                    <span data-ng-if="!$last">
+                        <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
+                        <span class="text-muted">&bull;</span>
+                    </span>
+                    <span data-ng-if="$last">
+                        <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <div data-ng-if="vm.address.balance" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
         <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
