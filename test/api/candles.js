@@ -28,7 +28,7 @@ describe('Candles API', function() {
                     'btcVolume',
                     'firstTrade',
                     'lastTrade',
-                    'nextStart',
+                    'nextEnd',
                     'numTrades'
                 );
             }
