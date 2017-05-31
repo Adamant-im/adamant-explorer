@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
         async.series([
             function (callback) {
-                var poloniex = new candles.poloniex(client);
+                var poloniex = new candles.poloniex(client, config);
 
                 poloniex.buildCandles(function (err, res) {
                     if (err) {
