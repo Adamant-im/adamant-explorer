@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                     return callback(null);
                 }
 
-                var poloniex = new candles.poloniex(client);
+                var poloniex = new candles.poloniex(client, config.marketWatcher.candles.poloniex);
 
                 poloniex.buildCandles(function (err, res) {
                     if (err) {
