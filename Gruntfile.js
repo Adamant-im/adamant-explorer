@@ -69,9 +69,6 @@ module.exports = function (grunt) {
         },
     });
 
-    // Making grunt default to force in order not to break the project.
-    grunt.option('force', true);
-
     // Register tasks for travis.
     grunt.registerTask('travis', ['jshint', 'mochaTest']);
 };
