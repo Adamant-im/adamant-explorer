@@ -289,7 +289,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr data-ng-repeat="d in vm.activeDelegates | orderBy:natural(vm.tables.active.predicate):vm.tables.active.reverse track by d.rate">
+                                <tr data-ng-repeat="d in vm.activeDelegates | orderBy:$root.natural(vm.tables.active.predicate):vm.tables.active.reverse track by d.rate">
                                     <td>{{d.rate}}</td>
                                     <td>
                                         <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
@@ -327,7 +327,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr data-ng-repeat='d in vm.standbyDelegates | orderBy:natural(vm.tables.standby.predicate):vm.tables.standby.reverse track by d.rate'>
+                                <tr data-ng-repeat='d in vm.standbyDelegates | orderBy:$root.natural(vm.tables.standby.predicate):vm.tables.standby.reverse track by d.rate'>
                                     
                                     <td>{{d.rate}}</td>
                                     <td>
