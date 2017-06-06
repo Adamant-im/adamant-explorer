@@ -73,7 +73,7 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     // Private
     var bestForger = delegates => {
         if (delegates.length > 0) {
-            return Math.max(...delegates.map(delegate => delegate.forged));
+            return delegates.reduce((d1, d2) => (d1.forged > d2.forged) ? d1 : d2);
         }
     };
 
@@ -83,13 +83,13 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 
     var bestProductivity = delegates => {
         if (delegates.length > 0) {
-            return Math.max(...delegates.map(delegate => delegate.productivity));
+            return delegates.reduce((d1, d2) => (d1.productivity > d2.productivity) ? d1 : d2);
         }
     };
 
     var worstProductivity = delegates => {
         if (delegates.length > 0) {
-            return Math.min(...delegates.map(delegate => delegate.productivity));
+            return delegates.reduce((d1, d2) => (d1.productivity < d2.productivity) ? d1 : d2);
         }
     };
 
