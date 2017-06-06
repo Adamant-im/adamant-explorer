@@ -12,7 +12,7 @@
   "main": "src/main.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose",
-    "start": "npm run copy-files && webpack-dev-server --open --history-api-fallback",
+    "start": "npm run copy-files && webpack -w",
     "validate": "webpack-validator webpack.config.js",
     "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
     "build": "npm run copy-files && webpack -p",
