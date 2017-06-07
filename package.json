@@ -11,7 +11,7 @@
   "license": "MIT",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "./node_modules/.bin/mocha --reporter spec --timeout 250s"
   },
   "dependencies": {
     "async": "^2.0.1",
