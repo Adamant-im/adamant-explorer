@@ -85,6 +85,9 @@
             <br> (Scan for Address)
         </div>
     </div>
+
+    <votes data-votes="vm.address.votes" data-ng-if="!vm.address.delegate"></votes>
+
     <div data-ng-if="vm.address.balance" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
         <div class="btn-group btn-group-justified" role="group" aria-label="All/Sent/Received Transactions">
