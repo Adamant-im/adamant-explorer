@@ -31,6 +31,7 @@ config.exchangeRates.exchanges.LSK.BTC = 'poloniex'; // LSK/BTC pair, supported:
 config.exchangeRates.exchanges.LSK.CNY = 'jubi';     // LSK/CNY pair, supported: jubi, bitbays
 config.exchangeRates.exchanges.BTC.USD = 'bitfinex'; // BTC/USD pair, supported: bitfinex, bitstamp, btce
 config.exchangeRates.exchanges.BTC.EUR = 'bitstamp'; // BTC/EUR pair, supported: bitstamp, bitmarket
+config.exchangeRates.exchanges.BTC.RUB = 'btce';     // BTC/RUB pair, supported: btce, exmo
 config.exchangeRates.exchanges.BTC.PLN = false;      // BTC/PLN pair, supported: bitmarket
 
 // Market watcher
