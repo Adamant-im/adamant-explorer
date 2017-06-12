@@ -15,8 +15,8 @@
     "start": "npm run copy-files && webpack-dev-server --open --history-api-fallback",
     "validate": "webpack-validator webpack.config.js",
     "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp ./src/assets/img/favicon.ico ./public && cp ./src/index.html ./public",
-    "build": "npm run copy-files && webpack -p",
-    "build:prod": "webpack --env.prod -p"
+    "build": "npm run copy-files && webpack",
+    "build:prod": "webpack --env.prod"
   },
   "dependencies": {
     "amstock3": "github:amcharts/amstock3",
