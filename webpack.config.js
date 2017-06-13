@@ -42,13 +42,17 @@ module.exports = env => ({
     },
     resolve: {
         alias: {
-            sigma: Path.resolve(__dirname, "node_modules/sigma/build/sigma.require.js") 
+            sigma: Path.resolve(__dirname, "node_modules/sigma/build/sigma.require.js")
         }
     },
     plugins: removeEmpty([
         new BundleAnalyzerPlugin({
             openAnalyzer: false,
             analyzerMode: 'static'
+        }),
+        new Webpack.optimize.UglifyJsPlugin({
+            sourceMap: false,
+            mangle: false
         }),
         new Webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
