@@ -86,7 +86,7 @@
                                     <span class="volume-amount">{{vm.volume.amount || 0 | currency:$root.currency}}</span>
                                 </p>
                                 <div data-ng-if="!vm.volume.amount">
-                                    <p class="text-muted">waiting for vm.transactions <i class="fa fa-spinner fa-spin"></i></p>
+                                    <p class="text-muted">waiting for transactions <i class="fa fa-spinner fa-spin"></i></p>
                                 </div>
                                 <div data-ng-if="vm.volume.amount">
                                     <p class="text-muted vol-timespan">transferred within {{vm.volume.beginning | timeSpan:volume.end}}</p>
