@@ -38,7 +38,7 @@ const NetworkMap = function () {
                 continue;
             }
 
-            if (!Object.keys(this.markers).contains(item.ip)) {
+            if (!Object.keys(this.markers).includes(item.ip)) {
                 this.cluster.addLayer(
                     this.markers[item.ip] = L.marker(
                         [item.location.latitude, item.location.longitude],
@@ -55,7 +55,7 @@ const NetworkMap = function () {
 
     this.removeDisconnected = function (connected) {
         for (const ip in this.markers) {
-            if (!connected.contains(ip)) {
+            if (!connected.includes(ip)) {
                 const m = this.markers[ip];
 
                 this.map.removeLayer(m);
