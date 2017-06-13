@@ -11,15 +11,10 @@ AppFilters.filter('currency', (numberFilter, liskFilter) => (amount, currency, d
       return 'N/A';
     }
 
-    if (decimal_places === undefined) {
-      switch (currency.symbol) {
-        case 'LSK':
-        case 'BTC':
-          return numberFilter ((lisk * factor), 8).replace (/\.?0+$/, '');
-        default:
-          return numberFilter ((lisk * factor), 2).replace (/\.?0+$/, '');
-      }
+    let decimals = (currency.symbol === 'LSK' || currency.symbol === 'BTC') ? decimal_places : 2;
+    if (decimals && lisk > 0) {
+      return numberFilter ((lisk * factor), decimals);
     } else {
-      return numberFilter ((lisk * factor), decimal_places);
+      return numberFilter ((lisk * factor), 8).replace (/\.?0+$/, '');
     }
 });
