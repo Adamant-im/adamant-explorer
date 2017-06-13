@@ -2,14 +2,28 @@
     <div class="container">
         <div class="row">
         <div class="col-left col-xs-6">
-            <a href="https://lisk.io" target="_blank" title="Official Lisk Website">Website</a>
-            <a href="https://forum.lisk.io" target="_blank" title="Official Lisk Forum">Forum</a>
-            <a href="https://bitcointalk.org/index.php?topic=1346646" target="_blank" title="Bitcoin Talk Thread">BTT Thread</a>
+            <a href="https://lisk.io" target="_blank" title="Official Lisk Website" class="link">Website</a>
+            <a href="https://forum.lisk.io" target="_blank" title="Official Lisk Forum" class="link">Forum</a>
+            <a href="https://bitcointalk.org/index.php?topic=1346646" target="_blank" title="Bitcoin Talk Thread" class="link">BTT Thread</a>
+            <div class="dropup decimal-places-selector" data-uib-dropdown>
+                <a href id="decimal-points-dropdown" class="dropdown-toggle"
+                data-uib-dropdown-toggle data-aria-haspopup="true"
+                data-ng-class="{disabled: ($root.currency.symbol !== 'BTC' && $root.currency.symbol !== 'LSK')}"
+                role="button" data-aria-expanded="false">Decimal places <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" data-aria-labelledby="decimal-points-dropdown">
+                    <li data-ng-class='{active: $root.decimalPlaces === 4}'>
+                        <a data-ng-click='$root.decimalPlaces = 4;'>Round to 4</a>
+                    </li>
+                    <li data-ng-class='{active: $root.decimalPlaces === 8}'>
+                        <a data-ng-click='$root.decimalPlaces = 8;'>Show all 8</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="col-right col-xs-6">
-            <a href="https://www.reddit.com/r/Lisk/" target="_blank" title="Reddit"><i class="fa fa-reddit-square fa-2x"></i></a>
-            <a href="https://twitter.com/LiskHQ" target="_blank" title="Twitter"><i class="fa fa-twitter fa-2x"></i></a>
-            <a href="https://github.com/LiskHQ/lisk-explorer" target="_blank" title="Github"><i class="fa fa-github fa-2x"></i></a>
+            <a href="https://www.reddit.com/r/Lisk/" target="_blank" title="Reddit" class="link"><i class="fa fa-reddit-square fa-2x"></i></a>
+            <a href="https://twitter.com/LiskHQ" target="_blank" title="Twitter" class="link"><i class="fa fa-twitter fa-2x"></i></a>
+            <a href="https://github.com/LiskHQ/lisk-explorer" target="_blank" title="Github" class="link"><i class="fa fa-github fa-2x"></i></a>
         </div>
         </div>
     </div>
