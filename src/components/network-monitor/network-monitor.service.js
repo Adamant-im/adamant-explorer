@@ -23,11 +23,11 @@ const NetworkMap = function () {
     });
 
     const platformIcons = {
-        darwin:  new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-darwin.png' }),
-        linux:   new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-linux.png' }),
-        win:     new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-win.png' }),
-        freebsd: new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-freebsd.png' }),
-        unknown: new PlatformIcon({ iconUrl: '../../assets/img/leaflet/marker-icon-unknown.png' })
+        darwin:  new PlatformIcon({ iconUrl: './leaflet/marker-icon-darwin.png' }),
+        linux:   new PlatformIcon({ iconUrl: './leaflet/marker-icon-linux.png' }),
+        win:     new PlatformIcon({ iconUrl: './leaflet/marker-icon-win.png' }),
+        freebsd: new PlatformIcon({ iconUrl: './leaflet/marker-icon-freebsd.png' }),
+        unknown: new PlatformIcon({ iconUrl: './leaflet/marker-icon-unknown.png' })
     };
 
     this.addConnected = function (peers) {
