@@ -15,7 +15,7 @@
     'txvalues-danger': tx.type == 0 && address == tx.senderId && tx.senderId != tx.recipientId,
     'txvalues-success': tx.type == 0 && address && tx.senderId != address,
     'txvalues-default': tx.type != 0 || address === undefined || tx.senderId === tx.recipientId
-  }">{{tx.amount | currency:$root.currency}} {{$root.currency.symbol}}
+  }">{{tx.amount | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}
     </div>
 </td>
 <td data-title="Fee" class="text-nowrap">{{tx.fee | currency:$root.currency}} {{$root.currency.symbol}}</td>
