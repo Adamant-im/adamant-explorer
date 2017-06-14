@@ -77,6 +77,6 @@
     <div data-ng-if="vm.block.height" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
         <!--<div data-ng-include src="'/components/transactions/list.html'"></div>-->
-        <transactions-list></transactions-list>
+        <transactions-list txs="vm.txs"></transactions-list>
     </div>
 </section>

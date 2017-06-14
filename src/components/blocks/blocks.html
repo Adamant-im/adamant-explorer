@@ -30,7 +30,7 @@
                                 <a data-account-href="block.delegate" data-type="delegate" data-id="block.generator">{{block.delegate.username || block.generator}}</a>
                             </td>
                             <td class="text-right hidden-xs hidden-sm">{{block.totalAmount | currency:$root.currency:$root.decimalPlaces}}</td>
-                            <td class="text-right hidden-xs hidden-sm">{{block.totalForged | currency:$root.currency:$root.decimalPlaces}}</td>
+                            <td class="text-right hidden-xs hidden-sm">{{block.totalForged | currency:$root.currency}}</td>
                         </tr>
                     </tbody>
                 </table>
