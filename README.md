@@ -1,6 +1,6 @@
 # Lisk Blockchain Explorer
 
-Lisk Explorer version 1.1.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Lisk Explorer version 1.2.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
@@ -29,11 +29,7 @@ These programs and resources are required to install and run Lisk Explorer
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
 
-- Bower (<http://bower.io/>) -- Bower helps to install required JavaScript dependencies.
-
-  `sudo npm install -g bower`
-
-- Grunt.js (<http://gruntjs.com/>) -- Grunt is used to compile the frontend code and serves other functions.
+- Grunt.js (<http://gruntjs.com/>) -- Grunt is used to run eslint and unit tests.
 
   `sudo npm install -g grunt`
 
@@ -64,15 +60,21 @@ Clone the Lisk Explorer Repository:
 git clone https://github.com/LiskHQ/lisk-explorer.git
 cd lisk-explorer
 npm install
-bower install
 ```
 
 ## Build Steps
 
 #### Frontend
- The frontend must be built with Grunt before starting Lisk Explorer. Run the following command to compile the frontend components:
+ The frontend is using Webpack to create core bundles for Lisk Explorer.  
+ 
+ For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
 
-`grunt compile`
+`npm run start`
+ 
+ And for generating the minified bundles in production environment run:
+ 
+`npm run build`
+
 
 #### Market Watcher
  Candlestick data needs to be initialized prior to starting Lisk Explorer. During runtime candlestick data is updated automatically.
