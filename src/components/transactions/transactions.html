@@ -12,7 +12,7 @@
             <div class="col-md-6 col-lg-5 text-right">
                 <span data-ng-if="vm.tx.confirmations" class="txvalues txvalues-success">{{vm.tx.confirmations}} Confirmations</span>
                 <span data-ng-if="!vm.tx.confirmations" class="txvalues txvalues-danger">Unconfirmed Transaction!</span>
-                <span class="txvalues txvalues-primary">{{vm.tx.amount | currency:$root.currency}} {{$root.currency.symbol}}</span>
+                <span class="txvalues txvalues-primary">{{vm.tx.amount | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
             </div>
         </div>
         <div class="hide_snavbar">
@@ -65,7 +65,7 @@
                 </tr>
                 <tr>
                     <td><strong>Amount</strong></td>
-                    <td class="text-right">{{vm.tx.amount | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                    <td class="text-right">{{vm.tx.amount | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                 </tr>
                 <tr>
                     <td><strong>Fee</strong></td>

@@ -632,7 +632,7 @@ qrcode svg {
   background-color: #393C3E;
   color: white;
   height: 48px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   padding-top: 8px;
 }
 
@@ -641,7 +641,7 @@ qrcode svg {
   text-align: left;
 }
 
-#footer .col-left a {
+#footer .col-left a.link {
   margin-right: 20px;
 }
 
@@ -650,19 +650,19 @@ qrcode svg {
   text-align: right;
 }
 
-#footer .col-right a {
+#footer .col-right a.link {
   color: #27292A;
   margin-left: 10px;
 }
 
-#footer a, #footer a:focus, #footer a:active {
+#footer a.link, #footer a.link:focus, #footer a.link:active {
   color: white;
   line-height: 32px;
   display: inline-block;
   font-size: 14px;
 }
 
-#footer a:hover {
+#footer a.link:hover {
   color: white;
 }
 
@@ -1077,4 +1077,18 @@ a.sort-order span.reverse:after {
 }
 .breadcrumb > li + li:before {
     padding: 0 0 0 7px;
+}
+
+.decimal-places-selector {
+  display: inline-block;
+}
+.decimal-places-selector .dropdown-menu a {
+  cursor: pointer;
+}
+#decimal-points-dropdown {
+  color: #fff;
+}
+#decimal-points-dropdown.disabled {
+  color: #999;
+  cursor: auto;
 }

@@ -32,7 +32,7 @@
                         </tr>
                         <tr>
                             <td><strong>Reward</strong></td>
-                            <td class="text-right">{{vm.block.reward | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            <td class="text-right">{{vm.block.reward | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                         </tr>
                         <tr>
                             <td><strong>Total Fee</strong></td>
@@ -40,11 +40,11 @@
                         </tr>
                         <tr>
                             <td><strong>Total Forged</strong></td>
-                            <td class="text-right">{{vm.block.totalForged | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            <td class="text-right">{{vm.block.totalForged | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                         </tr>
                         <tr>
                             <td><strong>Total Amount</strong></td>
-                            <td class="text-right">{{vm.block.totalAmount | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            <td class="text-right">{{vm.block.totalAmount | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                         </tr>
                         <tr>
                             <td><strong>Timestamp</strong></td>
@@ -77,6 +77,6 @@
     <div data-ng-if="vm.block.height" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
         <!--<div data-ng-include src="'/components/transactions/list.html'"></div>-->
-        <transactions-list></transactions-list>
+        <transactions-list txs="vm.txs"></transactions-list>
     </div>
 </section>

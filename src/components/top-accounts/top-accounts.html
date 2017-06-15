@@ -22,8 +22,8 @@
                                 <td class="text-right">
                                     <a href="/address/{{address.address}}">{{address.address}}</a>
                                 </td>
-                                <td class="text-right hidden-sm hidden-md hidden-lg">{{address.balance | currency:$root.currency:0}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
-                                <td class="text-right hidden-xs">{{address.balance | currency:$root.currency:2}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                                <td class="text-right hidden-sm hidden-md hidden-lg">{{address.balance | currency:$root.currency:$root.decimalPlaces:0}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                                <td class="text-right hidden-xs">{{address.balance | currency:$root.currency:$root.decimalPlaces:2}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                                 <td class="text-right hidden-xs">{{address.balance | supplyPercent:blockStatus.supply}}%</td>
                                 <td class="text-right hidden-xs hidden-sm">
                                     <span class="owner-name">{{address.knowledge.owner}}</span>
