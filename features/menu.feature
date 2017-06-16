@@ -22,3 +22,9 @@ Feature: Top menu
     When  I fill in "genesis_17" to "search" field
     And I hit "enter" in "search" field
     Then I should be on page "/address/537318935439898807L"
+
+  Scenario: should show an error message on invalid input
+    Given I'm on page "/"
+    When  I fill in "invalid" to "search" field
+    And I hit "enter" in "search" field
+    Then I should see "No matching records found!" in "text danger" element

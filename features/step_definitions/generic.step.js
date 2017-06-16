@@ -66,5 +66,10 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndCheckItsText('.md-input-message-animation', text, callback);
   });
 
+  Then('I should see "{text}" in "{elementName}" element', (text, elementName, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    waitForElemAndCheckItsText(selector, text, callback);
+  });
+
 });
 
