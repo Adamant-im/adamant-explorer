@@ -62,7 +62,14 @@ app.use(function (req, res, next) {
 
 var morgan = require('morgan');
 app.use(morgan('combined', {
-    stream: split().on('data', data => logger.info(data))
+    skip: (req, res) => {
+        return parseInt(res.statusCode) < 400;
+    }, stream: split().on('data', data => logger.error(data))
+}));
+app.use(morgan('combined', {
+    skip: (req, res) => {
+        return parseInt(res.statusCode) >= 400;
+    }, stream: split().on('data', data => logger.info(data))
 }));
 var compression = require('compression');
 app.use(compression());
