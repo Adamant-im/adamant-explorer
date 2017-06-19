@@ -10,7 +10,7 @@ Feature: Transaction page
       | Fee           | 0 LSK                 |
       | Timestamp     | 2016/05/24 19:00:00   | 
       | Block         | 6524861224470851795   |
-    And I should see header of table "details" containing:
-      | Transaction ID | Date | Sender | Recipient | Amount | Fee | Confirmations |
     And I should see table "details" containing:
-      | 1465651642158264047 | 2016/05/24 19:00:00 | 1085993630748340485L | 16313739661670634666L | 100,000,000 LSK | 0 LSK | Confirmed |
+      | Transaction ID      | Date                | Sender               | Recipient             | Amount          | Fee   | Confirmations |
+      |---------------------|---------------------|----------------------|-----------------------|-----------------|-------|---------------|
+      | 1465651642158264047 | 2016/05/24 19:00:00 | 1085993630748340485L | 16313739661670634666L | 100,000,000 LSK | 0 LSK | Confirmed     |

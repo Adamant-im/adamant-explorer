@@ -40,8 +40,7 @@ function urlChanged(url) {
 function elementOccursXTimes(selector, count) {
   return function () {
     return element.all(by.css(selector)).count().then((actualCount) => {
-      console.log(selector, count, actualCount);
-      return count === actualCount;
+      return `${count}` === `${actualCount}`;
     });
   };
 }
@@ -55,7 +54,39 @@ function scrollTo(scrollToElement) {
   return scrollToElement.getLocation().then(function (loc) {
       return wd.executeScript('window.scrollTo(0,arguments[0]);', loc.y);
   });
-};
+}
+
+function checkTableContents(selector, data, rowCount, callback) {
+  const hasHeader = data[1] && data[1].join('').match(/^-+$/g);
+  if (!rowCount) {
+    rowCount = data.length - (hasHeader ? 2 : 0);
+  }
+  browser.wait(elementOccursXTimes(`table.${selector} tbody tr`, rowCount), waitTime, `waiting for ${rowCount} instances of 'table.${selector} tbody tr'`);
+  if (hasHeader) {
+    checkRowsContents(`table.${selector} thead`, [data[0]]);
+    checkRowsContents(`table.${selector} tbody`, data.slice(2), callback);
+  } else {
+    checkRowsContents(`table.${selector} tbody`, data, callback);
+  }
+}
+
+function checkRowsContents(selector, data, callback) {
+  let rowCount = data.length;
+  if (rowCount > 0) {
+    let counter = 0;
+    const cellCount = data.length * data[0].length;
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[i].length; j++) {
+        waitForElemAndCheckItsText(`${selector} tr:nth-child(${i + 1}) td:nth-child(${j + 1}), ${selector} tr:nth-child(${i + 1}) th:nth-child(${j + 1})`, data[i][j], () => {
+          counter++;
+          if (counter == cellCount && callback) {
+            callback();
+          }
+        });
+      }
+    }
+  }
+}
 
 module.exports = {
   waitForElemAndCheckItsText,
@@ -65,4 +96,5 @@ module.exports = {
   urlChanged,
   elementOccursXTimes,
   scrollTo,
+  checkTableContents,
 };

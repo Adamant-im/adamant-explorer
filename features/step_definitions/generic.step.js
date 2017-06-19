@@ -10,6 +10,7 @@ const {
   urlChanged,
   elementOccursXTimes,
   scrollTo,
+  checkTableContents,
 } = require('../support/util.js');
 
 chai.use(chaiAsPromised);
@@ -83,61 +84,11 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   Then('I should see table "{selector}" with {rowCount} rows starting with:', (selector, rowCount, data, callback) => {
-    expect(element.all(by.css(`table.${selector} tbody tr`)).count()).to.eventually.equal(parseInt(rowCount, 10));
-    if (rowCount > 0) {
-      let counter = 0;
-      const cellCount = data.rawTable.length * data.rawTable[0].length;
-      for (var i = 0; i < data.rawTable.length; i++) {
-        for (var j = 0; j < data.rawTable[i].length; j++) {
-          waitForElemAndCheckItsText(`table.` + selector + ` tbody tr:nth-child(${i + 1}) td:nth-child(${j + 1})`, data.rawTable[i][j], () => {
-            counter++;
-            if (counter == cellCount) {
-              callback();
-            }
-          });
-        }
-      }
-    }
+    checkTableContents(selector, data.rawTable, rowCount, callback);
   });
 
   Then('I should see table "{selector}" containing:', (selector, data, callback) => {
-    let rowCount = data.rawTable.length;
-    expect(element.all(by.css(`table.${selector} tbody tr`)).count()).to.eventually.equal(rowCount);
-    if (rowCount > 0) {
-      let counter = 0;
-      const cellCount = data.rawTable.length * data.rawTable[0].length;
-      for (var i = 0; i < data.rawTable.length; i++) {
-        for (var j = 0; j < data.rawTable[i].length; j++) {
-          waitForElemAndCheckItsText(`table.` + selector + ` tbody tr:nth-child(${i + 1}) td:nth-child(${j + 1})`, data.rawTable[i][j], () => {
-            counter++;
-            if (counter == cellCount) {
-              callback();
-            }
-          });
-        }
-      }
-    }
-  });
-
-  Then('I should see table "{elementName}" with {rowCount} rows', (elementName, rowCount, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
-    browser.wait(elementOccursXTimes(`table${selector} tbody tr`, rowCount), waitTime, `waiting for ${rowCount} instances of 'table${selector} tbody tr'`).then(callback);
-  });
-
-  Then('I should see header of table "{selector}" containing:', (selector, data, callback) => {
-    let rowCount = data.rawTable.length;
-    let counter = 0;
-    const cellCount = data.rawTable.length * data.rawTable[0].length;
-    for (var i = 0; i < data.rawTable.length; i++) {
-      for (var j = 0; j < data.rawTable[i].length; j++) {
-        waitForElemAndCheckItsText(`table.` + selector + ` thead tr:nth-child(${i + 1}) th:nth-child(${j + 1})`, data.rawTable[i][j], () => {
-          counter++;
-          if (counter == cellCount) {
-            callback();
-          }
-        });
-      }
-    }
+    checkTableContents(selector, data.rawTable, undefined, callback);
   });
 });
 
