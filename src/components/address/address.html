@@ -95,10 +95,10 @@
                 <button class="btn btn-default" data-ng-disabled="!vm.direction" data-ng-click="vm.filterTxs();vm.txs.loadData()">All</button>
             </div>
             <div class="btn-group" role="group">
-                <button class="btn btn-default" data-ng-disabled="vm.direction==='sent'" data-ng-click="vm.filterTxs('sent');vm.txs.loadData()">Sent</button>
+                <button class="btn btn-default sent-tab" data-ng-disabled="vm.direction==='sent'" data-ng-click="vm.filterTxs('sent');vm.txs.loadData()">Sent</button>
             </div>
             <div class="btn-group" role="group">
-                <button class="btn btn-default" data-ng-disabled="vm.direction==='received'" data-ng-click="vm.filterTxs('received');vm.txs.loadData()">Received</button>
+                <button class="btn btn-default received-tab" data-ng-disabled="vm.direction==='received'" data-ng-click="vm.filterTxs('received');vm.txs.loadData()">Received</button>
             </div>
         </div>
         <transactions-list data-txs="vm.txs" data-address="vm.address.address"></transactions-list>
