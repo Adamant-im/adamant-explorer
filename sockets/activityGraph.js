@@ -1,6 +1,7 @@
 'use strict';
 
 var api = require('../lib/api');
+var logger = require('../utils/logger');
 
 module.exports = function (app, connectionHandler, socket) {
     var statistics   = new api.statistics(app),
@@ -32,7 +33,7 @@ module.exports = function (app, connectionHandler, socket) {
     // Private
 
     var log = function (msg) {
-        console.log('Activity Graph:', msg);
+        logger.info('Activity Graph:', msg);
     };
 
     var getLastBlock = function (cb) {

@@ -1,7 +1,8 @@
 var request = require('request'),
     _ = require('underscore'),
     util = require('util'),
-    async = require('async');
+    async = require('async'),
+    logger = require('../logger');
 
 module.exports = function (config) {
     // No need to init if exchange rates are disabled
@@ -136,18 +137,18 @@ module.exports = function (config) {
                 return;
             }
             if (exchanges[pair].hasOwnProperty (exchange)) {
-                console.log('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
+                logger.info('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
                 config.exchangeRates.exchanges[key1][key2] = exchanges[pair][exchange];
                 config.exchangeRates.exchanges[key1][key2].pair = pair;
             } else if (exchanges[pair]) {
                 var ex_name = Object.keys(exchanges[pair])[0];
                 var ex = exchanges[pair][ex_name];
-                console.log('Exchange:', util.format('Unrecognized %s/%s exchange', key1, key2));
-                console.log('Exchange:', util.format('Defaulting to [%s]', ex_name));
+                logger.info('Exchange:', util.format('Unrecognized %s/%s exchange', key1, key2));
+                logger.info('Exchange:', util.format('Defaulting to [%s]', ex_name));
                 config.exchangeRates.exchanges[key1][key2] = ex;
                 config.exchangeRates.exchanges[key1][key2].pair = pair;
             } else {
-                console.log('Exchange:', util.format('Unrecognized %s/%s pair, deleted', key1, key2));
+                logger.info('Exchange:', util.format('Unrecognized %s/%s pair, deleted', key1, key2));
                 remove (config.exchangeRates.exchanges[key1][key2]);
             }
         });
@@ -182,7 +183,7 @@ module.exports = function (config) {
                         if (result && isNumeric (result)) {
                             currency[key1][key2] = result;
                         } else {
-                            console.log (util.format('Cannot receive exchange rates for %s/%s pair from [%s], ignored', key1, key2, exchange2[0]));
+                            logger.info (util.format('Cannot receive exchange rates for %s/%s pair from [%s], ignored', key1, key2, exchange2[0]));
                         }
                         seriesCb2 (null, currency);
                     });
@@ -192,7 +193,7 @@ module.exports = function (config) {
                 });
             },
             function(err) {
-                console.log ('Exchange rates:', currency);
+                logger.info ('Exchange rates:', currency);
                 cb (null, currency);
             });
         }

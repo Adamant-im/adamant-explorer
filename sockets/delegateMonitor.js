@@ -4,7 +4,8 @@ var api = require('../lib/api'),
     moment = require('moment'),
     _ = require('underscore'),
     async = require('async'),
-    request = require('request');
+    request = require('request'),
+    logger = require('../utils/logger');
 
 module.exports = function (app, connectionHandler, socket) {
     var delegates  = new api.delegates(app),
@@ -81,7 +82,7 @@ module.exports = function (app, connectionHandler, socket) {
     // Private
 
     var log = function (msg) {
-        console.log('Delegate Monitor:', msg);
+        logger.info('Delegate Monitor:', msg);
     };
 
     var cutNextForgers = function (count) {

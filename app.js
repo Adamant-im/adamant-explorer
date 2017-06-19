@@ -7,7 +7,9 @@ var express = require('express'),
     cache   = require('./cache'),
     program = require('commander'),
     async   = require('async'),
-    packageJson = require('./package.json');
+    packageJson = require('./package.json'),
+    split = require('split'),
+    logger = require('./utils/logger');
 
 var app = express(), utils = require('./utils');
 
@@ -59,7 +61,9 @@ app.use(function (req, res, next) {
 });
 
 var morgan = require('morgan');
-app.use(morgan('combined'));
+app.use(morgan('combined', {
+    stream: split().on('data', data => logger.info(data))
+}));
 var compression = require('compression');
 app.use(compression());
 var methodOverride = require('method-override');
@@ -84,7 +88,7 @@ app.use(function (req, res, next) {
         return next();
     }
 
-    console.log(req.originalUrl);
+    logger.info(req.originalUrl);
 
     if (req.originalUrl === undefined) {
         return next();
@@ -95,7 +99,7 @@ app.use(function (req, res, next) {
     } else {
         req.redis.get(req.originalUrl, function (err, json) {
             if (err) {
-                console.log(err);
+                logger.info(err);
                 return next();
             } else if (json) {
                 try {
@@ -112,14 +116,14 @@ app.use(function (req, res, next) {
     }
 });
 
-console.log('Loading routes...');
+logger.info('Loading routes...');
 
 routes(app);
 
-console.log('Routes loaded');
+logger.info('Routes loaded');
 
 app.use(function (req, res, next) {
-    console.log(req.originalUrl.split('/')[1]);
+    logger.info(req.originalUrl.split('/')[1]);
 
     if (req.originalUrl.split('/')[1] !== 'api') {
         return next();
@@ -134,13 +138,13 @@ app.use(function (req, res, next) {
     } else {
         req.redis.set(req.originalUrl, JSON.stringify(req.json), function (err) {
             if (err) {
-                console.log(err);
+                logger.info(err);
             } else {
                 var ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
 
                 req.redis.send_command('EXPIRE', [req.originalUrl, ttl], function (err) {
                     if (err) {
-                        console.log(err);
+                        logger.info(err);
                     }
                 });
             }
@@ -163,9 +167,9 @@ async.parallel([
 ], function (err) {
     var server = app.listen(app.get('port'), app.get('host'), function (err) {
         if (err) {
-            console.log(err);
+            logger.info(err);
         } else {
-            console.log('Lisk started at ' + app.get('host') + ':' + app.get('port'));
+            logger.info('Lisk started at ' + app.get('host') + ':' + app.get('port'));
 
             var io = require('socket.io').listen(server);
             require('./sockets')(app, io);

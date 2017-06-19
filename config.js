@@ -23,6 +23,9 @@ config.redis.password = '';
 
 config.cacheTTL = 20; // Time in seconds to store cache in Redis
 
+config.logFile = '/dev/stdout';
+config.logLevel = 1;
+
 // Header price tickers, Currency switcher
 config.exchangeRates.enabled = true;         // Exchange rates support (true - enabled, false - disabled)
 config.exchangeRates.updateInterval = 30000; // Interval in ms for checking exchange rates (default: 30 seconds)
