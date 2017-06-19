@@ -12,7 +12,6 @@
                                     <a class="glyphicon glyphicon-user" ng-if="vm.address.delegate.username | proposal:delegateProposals" href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:delegateProposals: 'description'}}" target="_blank"></a>
                                     &nbsp;
                                     <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
-                                    
                                 </td>
                             </tr>
                             <tr>
@@ -34,8 +33,12 @@
                                 <td class="text-right">{{vm.address.delegate.approval}}%</td>
                             </tr>
                             <tr>
+                                <td><strong>Vote weight</strong></td>
+                                <td class="text-right">{{vm.address.delegate.vote || 0 | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            </tr>
+                            <tr>
                                 <td><strong>Forged</strong></td>
-                                <td class="text-right">{{vm.address.delegate.forged || 0 | currency:$root.currency}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                                <td class="text-right">{{vm.address.delegate.forged || 0 | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Blocks</strong></td>

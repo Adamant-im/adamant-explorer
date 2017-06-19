@@ -41,7 +41,7 @@
                                         <a data-ng-href="/block/{{vm.lastBlock.id}}">{{vm.lastBlock.id}}</a>
                                     </p>
                                     <p class="text-muted">
-                                        <span class="lisk">{{vm.lastBlock.totalAmount + vm.lastBlock.totalFee || 0 | currency:$root.currency}} {{$root.currency.symbol}}</span>
+                                        <span class="lisk">{{vm.lastBlock.totalAmount + vm.lastBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
                                         <span class="num-trans">from {{vm.lastBlock.numberOfTransactions || 0}} transactions</span>
                                     </p>
                                     <p class="text-muted">{{vm.lastBlock.timestamp | timeAgo}}</p>
@@ -67,7 +67,7 @@
                                         <a data-ng-href="/block/{{vm.bestBlock.id}}">{{vm.bestBlock.id}}</a>
                                     </p>
                                     <p class="text-muted">
-                                        <span class="lisk">{{vm.bestBlock.totalAmount + vm.bestBlock.totalFee || 0 | currency:$root.currency}} {{$root.currency.symbol}}</span>
+                                        <span class="lisk">{{vm.bestBlock.totalAmount + vm.bestBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
                                         <span class="num-trans">from {{vm.bestBlock.numberOfTransactions || 0}} transactions</span>
                                     </p>
                                     <p class="text-muted">{{vm.bestBlock.timestamp | timeAgo}}</p>
@@ -83,7 +83,7 @@
                                 <p class="small-title">Volume <span class="text-muted">({{$root.currency.symbol}})</span></p>
 
                                 <p class="big-details">
-                                    <span class="volume-amount">{{vm.volume.amount || 0 | currency:$root.currency}}</span>
+                                    <span class="volume-amount">{{vm.volume.amount || 0 | currency:$root.currency:$root.decimalPlaces}}</span>
                                 </p>
                                 <div data-ng-if="!vm.volume.amount">
                                     <p class="text-muted">waiting for transactions <i class="fa fa-spinner fa-spin"></i></p>
