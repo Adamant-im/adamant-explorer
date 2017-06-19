@@ -8,6 +8,8 @@ const {
   checkAlertDialog,
   waitTime,
   urlChanged,
+  elementOccursXTimes,
+  scrollTo,
 } = require('../support/util.js');
 
 chai.use(chaiAsPromised);
@@ -44,6 +46,11 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     const elem = element(by.css(`.${fieldName.replace(/ /g, '-')}`));
     expect(elem.getAttribute('value')).to.eventually.equal(value)
       .and.notify(callback);
+  });
+
+  When('I scroll to "{elementName}"', (elementName, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    scrollTo(element(by.css(selector))).then(callback);
   });
 
   When('I click "{elementName}"', (elementName, callback) => {
@@ -110,6 +117,11 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
         }
       }
     }
+  });
+
+  Then('I should see table "{elementName}" with {rowCount} rows', (elementName, rowCount, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    browser.wait(elementOccursXTimes(`table${selector} tbody tr`, rowCount), waitTime, `waiting for ${rowCount} instances of 'table${selector} tbody tr'`).then(callback);
   });
 
   Then('I should see header of table "{selector}" containing:', (selector, data, callback) => {

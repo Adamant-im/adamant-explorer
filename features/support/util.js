@@ -37,10 +37,32 @@ function urlChanged(url) {
   };
 }
 
+function elementOccursXTimes(selector, count) {
+  return function () {
+    return element.all(by.css(selector)).count().then((actualCount) => {
+      console.log(selector, count, actualCount);
+      return count === actualCount;
+    });
+  };
+}
+
+/**
+ * Vertically scroll top-left corner of the given element (y-direction) into viewport.
+ * @param scrollToElement element to be scrolled into visible area
+ */
+function scrollTo(scrollToElement) {
+  const wd = browser.driver;
+  return scrollToElement.getLocation().then(function (loc) {
+      return wd.executeScript('window.scrollTo(0,arguments[0]);', loc.y);
+  });
+};
+
 module.exports = {
   waitForElemAndCheckItsText,
   waitForElemAndClickIt,
   waitForElemAndSendKeys,
   waitTime,
   urlChanged,
+  elementOccursXTimes,
+  scrollTo,
 };
