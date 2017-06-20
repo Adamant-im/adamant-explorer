@@ -46,18 +46,18 @@ node('lisk-explorer-01'){
         error('Stopping build, candles build failed')
       }
     }
-    
+
     stage ('Start Lisk ') {
       try {
         sh '''#!/bin/bash
-        bash ~/lisk-test/lisk.sh start
+        bash ~/lisk-test/lisk.sh rebuild -f ~/lisk-test/blockchain_explorer.db.gz
         '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
         error('Stopping build, lisk-core failed')
       }
     }
-    
+
     stage ('Start Explorer') {
       try {
       sh '''#!/bin/bash
@@ -82,7 +82,7 @@ node('lisk-explorer-01'){
         sh '''#!/bin/bash
             # Stop Lisk-Node
             bash ~/lisk-test/lisk.sh stop
-            
+
             # Stop Lisk-Explorer
             pkill -f $(pwd)/app.js || true
         '''
@@ -100,11 +100,10 @@ node('lisk-explorer-01'){
       sh '''#!/bin/bash
           # Stop Lisk-Node
           bash ~/lisk-test/lisk.sh stop
-          
+
           # Stop Lisk-Explorer
           pkill -f $(pwd)/app.js || true
       '''
     }
   }
 }
-
