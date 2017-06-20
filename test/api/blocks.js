@@ -5,9 +5,9 @@ var node = require('./../node.js');
 /*expecting testnet genesis block for tests*/
 var params = {
     height: 1,
-    id: '7807109686729042739',
-    id2: '16739814892588171993',
-    generatorPublicKey: '73ec4adbd8f99f0d46794aeda3c3d86b245bd9d27be2b282cdd38ad21988556b',
+    id: '6524861224470851795',
+    id2: '8757390707158788492',
+    generatorPublicKey: 'c96dec3595ff6041c3bd28b76b8cf75dce8225173d1bd00241624ee89b50f2a8',
     totalAmount: 100000000,
     totalFee: 0,
 };
