@@ -59,21 +59,6 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndClickIt(selector, callback);
   });
 
-  Then('I should see table with {lineCount} lines', (lineCount, callback) => {
-    browser.sleep(500);
-    expect(element.all(by.css('table tbody tr')).count()).to.eventually.equal(parseInt(lineCount, 10))
-      .and.notify(callback);
-  });
-
-  Then('I should see "{elementName}"', (elementName, callback) => {
-    expect(element.all(by.css(`.${elementName.replace(/ /g, '-')}`)).count()).to.eventually.equal(1)
-      .and.notify(callback);
-  });
-
-  Then('I should see "{text}" error message', (text, callback) => {
-    waitForElemAndCheckItsText('.md-input-message-animation', text, callback);
-  });
-
   Then('I should see "{text}" in "{elementName}" element', (text, elementName, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
     waitForElemAndCheckItsText(selector, text, callback);
