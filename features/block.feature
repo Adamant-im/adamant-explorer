@@ -28,3 +28,14 @@ Feature: Block page
     When I scroll to "more button"
     And I click "more button"
     Then I should see table "transactions" with 100 rows
+
+  # ignored because it the feature is broken
+  @ignore
+  Scenario: should allow to load more transactions
+    Given I'm on page "/block/6524861224470851795"
+    When I scroll to "more button"
+    And I click "more button"
+    And I should see table "transactions" with 100 rows
+    And I scroll to "less button"
+    And I click "less button"
+    Then I should see table "transactions" with 50 rows
