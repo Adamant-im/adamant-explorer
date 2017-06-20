@@ -91,6 +91,32 @@ node('lisk-explorer-01'){
       }
     }
 
+    stage ('Run e2e tests') {
+      try {
+        sh '''#!/bin/bash
+
+        # End to End test configuration
+        export DISPLAY=:99
+        Xvfb :99 -ac -screen 0 1280x1024x24 &
+        ./node_modules/protractor/bin/webdriver-manager update
+        ./node_modules/protractor/bin/webdriver-manager start &
+
+        # Run E2E Tests
+        npm run e2e-test
+        '''
+      } catch (err) {
+        sh '''#!/bin/bash
+            # Stop Lisk-Node
+            bash ~/lisk-test/lisk.sh stop
+
+            # Stop Lisk-Explorer
+            pkill -f $(pwd)/app.js || true
+        '''
+        currentBuild.result = 'FAILURE'
+        error('Stopping build, e2e tests failed')
+      }
+    }
+
     stage ('Set milestone') {
       milestone 1
       currentBuild.result = 'SUCCESS'
