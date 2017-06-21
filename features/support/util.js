@@ -83,7 +83,7 @@ function checkRowsContents(tableSelector, data, callback) {
         const elem = element(by.css(selector));
         elem.getText().then((text) => {
           text = text.trim();
-          if (value[0] === '/') {
+          if (value.startsWith('/') && value.endsWith('/')) {
             expect(text).to.match(new RegExp(`^${value.slice(1, -1)}$`), `inside element "${selector}"`);
           } else {
             expect(text).to.equal(value, `inside element "${selector}"`);
