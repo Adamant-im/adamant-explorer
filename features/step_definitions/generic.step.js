@@ -73,7 +73,7 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   Then('I should see "{elementName}" element with content that matches:', (elementName, text, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = `.${elementName.replace(/\s+/g, '-')}`.replace(/.(\d)/, '.\\3$1 ');
     const elem = element(by.css(selector));
     expect(elem.getText()).to.eventually.match(new RegExp(`^${text}$`), `inside element "${selector}"`)
       .and.notify(callback);

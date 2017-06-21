@@ -1,5 +1,5 @@
 Feature: Delegate Monitor
-  Scenario: should show delegates, last block, next forgers
+  Scenario: should show delegates, last block, next forgers, ...
     Given I'm on page "/delegateMonitor"
     Then I should see table "votes" containing:
       | Voter          | Transaction          | Time          |
