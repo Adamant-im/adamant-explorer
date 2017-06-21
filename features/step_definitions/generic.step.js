@@ -31,7 +31,8 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   Given('I should be on page "{pageAddess}"', (pageAddess, callback) => {
     const url = pageAddess.indexOf('http') === 0 ? pageAddess : baseURL + pageAddess;
     browser.wait(urlChanged(url), waitTime, `waiting for page ${pageAddess}`);
-    callback();
+    expect(browser.getCurrentUrl()).to.eventually.equal(url)
+      .and.notify(callback);
   });
 
   When('I fill in "{value}" to "{fieldName}" field', (value, fieldName, callback) => {
@@ -57,6 +58,17 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
 
   When('I click "{elementName}"', (elementName, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    waitForElemAndClickIt(selector, callback);
+  });
+
+  When('I click "{elementName}" no. {index}', (elementName, index, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const elem = element.all(by.css(selector)).get(index - 1);
+    elem.click().then(callback);
+  });
+
+  When('I click link on row no. {rowIndex} cell no. {cellIndex} of "{tableName}" table', (rowIndex, cellIndex, tableName, callback) => {
+    const selector = `table.${tableName.replace(/\s+/g, '-')} tbody tr:nth-child(${rowIndex}) td:nth-child(${cellIndex}) a`;
     waitForElemAndClickIt(selector, callback);
   });
 

@@ -32,7 +32,7 @@ function waitForElemAndSendKeys(selector, keys, callback) {
 function urlChanged(url) {
   return function () {
     return browser.getCurrentUrl().then(function(actualUrl) {
-      return url !== actualUrl;
+      return url === actualUrl;
     });
   };
 }
