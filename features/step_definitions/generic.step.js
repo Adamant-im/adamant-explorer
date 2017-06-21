@@ -3,6 +3,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const {
   waitForElemAndCheckItsText,
+  waitForElemAndCheckItsAttr,
   waitForElemAndClickIt,
   waitForElemAndSendKeys,
   checkAlertDialog,
@@ -75,6 +76,11 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   Then('I should see "{text}" in "{elementName}" element', (text, elementName, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
     waitForElemAndCheckItsText(selector, text, callback);
+  });
+
+  Then('I should see "{elementName}" element that links to "{url}"', (elementName, url, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    waitForElemAndCheckItsAttr(selector, 'href', url, callback);
   });
 
   Then('I should see "{text}" in "{selector}" html element', (text, selector, callback) => {

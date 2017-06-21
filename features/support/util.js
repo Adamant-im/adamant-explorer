@@ -13,6 +13,13 @@ function waitForElemAndCheckItsText(selector, text, callback) {
     .and.notify(callback || (() => {}));
 }
 
+function waitForElemAndCheckItsAttr(selector, attr, value, callback) {
+  const elem = element(by.css(selector));
+  browser.wait(EC.presenceOf(elem), waitTime, `waiting for element '${selector}'`);
+  expect(elem.getAttribute(attr)).to.eventually.equal(value, `in attribute "${attr}" of element "${selector}"`)
+    .and.notify(callback || (() => {}));
+}
+
 function waitForElemAndClickIt(selector, callback) {
   const elem = element(by.css(selector));
   browser.wait(EC.presenceOf(elem), waitTime, `waiting for element '${selector}'`);
@@ -100,6 +107,7 @@ function checkRowsContents(tableSelector, data, callback) {
 
 module.exports = {
   waitForElemAndCheckItsText,
+  waitForElemAndCheckItsAttr,
   waitForElemAndClickIt,
   waitForElemAndSendKeys,
   waitTime,
