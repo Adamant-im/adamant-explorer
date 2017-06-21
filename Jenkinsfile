@@ -4,6 +4,10 @@ node('lisk-explorer-01'){
       sh '''#!/bin/bash
       pkill -f app.js || true
       bash ~/lisk-test/lisk.sh stop
+      pkill -f selenium -9 || true
+      pkill -f Xvfb -9 || true
+      rm -rf /tmp/.X0-lock || true
+      pkill -f webpack -9 || true
       '''
       deleteDir()
       checkout scm
@@ -111,6 +115,12 @@ node('lisk-explorer-01'){
 
             # Stop Lisk-Explorer
             pkill -f $(pwd)/app.js || true
+
+            # Cleanup e2e processes
+            pkill -f selenium -9 || true
+            pkill -f Xvfb -9 || true
+            rm -rf /tmp/.X0-lock || true
+            pkill -f webpack -9 || true
         '''
         currentBuild.result = 'FAILURE'
         error('Stopping build, e2e tests failed')
@@ -129,6 +139,12 @@ node('lisk-explorer-01'){
 
           # Stop Lisk-Explorer
           pkill -f $(pwd)/app.js || true
+
+          # Cleanup e2e processes
+          pkill -f selenium -9 || true
+          pkill -f Xvfb -9 || true
+          rm -rf /tmp/.X0-lock || true
+          pkill -f webpack -9 || true
       '''
     }
   }
