@@ -22,3 +22,8 @@ Feature: Home page
       | /\d{18,20}/ | /\d+/  | /20\d\d/\d\d/\d\d \d\d?:\d\d:\d\d/ | 0            | /genesis_\d{1,3}/ | 0            | 0            |
       | /\d{18,20}/ | /\d+/  | /20\d\d/\d\d/\d\d \d\d?:\d\d:\d\d/ | 0            | /genesis_\d{1,3}/ | 0            | 0            |
       | /\d{18,20}/ | /\d+/  | /20\d\d/\d\d/\d\d \d\d?:\d\d:\d\d/ | 0            | /genesis_\d{1,3}/ | 0            | 0            |
+
+  Scenario: links to all blocks
+    Given I'm on page "/"
+    And I click "see all blocks"
+    Then I should be on page "/blocks/"
