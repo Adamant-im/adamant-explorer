@@ -7,7 +7,7 @@ Feature: Delegate page
       | Address       | 537318935439898807L |
       | Uptime        | /\d{1,3}(\.\d\d)?%/ |
       | Rank / Status | 50 / Active         |
-      | Approval      | 99.69%              |
+      | Approval      | /\d{1,3}(\.\d\d)?%/ |
       | Forged        | /1,172.\d{8} LSK/   |
       | Blocks        | /\d+ \(\d+ missed\)/|
 
