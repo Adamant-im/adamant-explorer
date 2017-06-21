@@ -34,50 +34,50 @@ Feature: Top menu
     When I click "LSK menu"
     And I click "BTC"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (BTC)           | Fee (BTC)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (BTC)           | Fee (BTC)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
 
   Scenario: should allow to switch currency to CNY
     Given I'm on page "/"
     When I click "LSK menu"
     And I click "CNY"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (CNY)           | Fee (CNY)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (CNY)           | Fee (CNY)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
 
   Scenario: should allow to switch currency to USD
     Given I'm on page "/"
     When I click "LSK menu"
     And I click "USD"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (USD)           | Fee (USD)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (USD)           | Fee (USD)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
 
   Scenario: should allow to switch currency to EUR
     Given I'm on page "/"
     When I click "LSK menu"
     And I click "EUR"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (EUR)           | Fee (EUR)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (EUR)           | Fee (EUR)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
 
   Scenario: should allow to switch currency to RUB
     Given I'm on page "/"
     When I click "LSK menu"
     And I click "RUB"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (RUB)           | Fee (RUB)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (RUB)           | Fee (RUB)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
   Scenario: should allow to switch currency to LSK
     Given I'm on page "/"
     When I click "LSK menu"
     And I click "LSK"
     And I should see table "latest transactions" with 20 rows starting with:
-      | Id                 | Timestamp           | Sender      | Recipient             | Amount (LSK)           | Fee (LSK)     |
-      |--------------------|---------------------|-------------|-----------------------|------------------------|---------------|
-      | 292176566870988581 | 2017/06/19 09:18:09 | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
+      | Id                 | Timestamp                 | Sender      | Recipient             | Amount (LSK)           | Fee (LSK)     |
+      |--------------------|---------------------------|-------------|-----------------------|------------------------|---------------|
+      | 292176566870988581 | /2017\/06\/19 \d\d:18:09/ | standby_301 | 18234943547133247982L | /\d+(,\d{3})?(\.\d+)?/ | /\d+(\.\d+)?/ |
