@@ -46,12 +46,6 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndSendKeys(`input${selectorClass}, textarea${selectorClass}`, protractor.Key.ENTER, callback);
   });
 
-  Then('I should see "{value}" in "{fieldName}" field', (value, fieldName, callback) => {
-    const elem = element(by.css(`.${fieldName.replace(/ /g, '-')}`));
-    expect(elem.getAttribute('value')).to.eventually.equal(value)
-      .and.notify(callback);
-  });
-
   When('I scroll to "{elementName}"', (elementName, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
     scrollTo(element(by.css(selector))).then(callback);
