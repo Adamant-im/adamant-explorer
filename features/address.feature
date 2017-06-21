@@ -9,13 +9,13 @@ Feature: Address page
       | Transactions  | 2 1329                                                           |
 
     And I should see table "transactions" with 50 rows starting with:
-      | Transaction ID | Date                      | Sender                | Recipient       | Amount    | Fee     | Confirmations |
-      |----------------|---------------------------|-----------------------|-----------------|-----------|---------|---------------|
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | Transaction ID | Date                      | Sender                | Recipient                | Amount    | Fee     | Confirmations |
+      |----------------|---------------------------|-----------------------|--------------------------|-----------|---------|---------------|
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
 
   Scenario: should link transaction id to transaction page
     Given I'm on page "/address/16313739661670634666L"
@@ -51,10 +51,12 @@ Feature: Address page
     Given I'm on page "/address/16313739661670634666L"
     When I click "sent tab"
     And I should see table "transactions" with 50 rows starting with:
-      | Transaction ID | Date                      | Sender                | Recipient       | Amount    | Fee     | Confirmations |
-      |----------------|---------------------------|-----------------------|-----------------|-----------|---------|---------------|
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
-      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | Transaction ID | Date                      | Sender                | Recipient                | Amount    | Fee     | Confirmations |
+      |----------------|---------------------------|-----------------------|--------------------------|-----------|---------|---------------|
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
+      | /\d{18,20}/    | /2017\/06\/16 \d\d:09:08/ | 16313739661670634666L | /standby_\d{3}\|\d{20}L/ | 1,000 LSK | 0.1 LSK | Confirmed     |
 
 
   Scenario: should allow to show only received transactions
