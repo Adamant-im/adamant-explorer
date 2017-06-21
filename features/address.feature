@@ -63,9 +63,9 @@ Feature: Address page
     Given I'm on page "/address/16313739661670634666L"
     And I click "received tab"
     Then I should see table "transactions" containing:
-      | Transaction ID      | Date                | Sender               | Recipient             | Amount          | Fee   | Confirmations |
-      |---------------------|---------------------|----------------------|-----------------------|-----------------|-------|---------------|
-      | 1465651642158264047 | 2016/05/24 19:00:00 | 1085993630748340485L | 16313739661670634666L | 100,000,000 LSK | 0 LSK | Confirmed     |
+      | Transaction ID      | Date                      | Sender               | Recipient             | Amount          | Fee   | Confirmations |
+      |---------------------|---------------------------|----------------------|-----------------------|-----------------|-------|---------------|
+      | 1465651642158264047 | /2016\/05\/24 \d\d:00:00/ | 1085993630748340485L | 16313739661670634666L | 100,000,000 LSK | 0 LSK | Confirmed     |
 
   Scenario: should allow to show votes
     Given I'm on page "/address/16313739661670634666L"
