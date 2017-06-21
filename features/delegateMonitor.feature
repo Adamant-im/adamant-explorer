@@ -1,7 +1,23 @@
 Feature: Delegate Monitor
   Scenario: should show delegates, last block, next forgers
     Given I'm on page "/delegateMonitor"
-    Then I should see "delegates" element with content that matches:
+    Then I should see table "votes" containing:
+      | Voter          | Transaction          | Time          |
+      |----------------|----------------------|---------------|
+      | standby_301    | 11267727202420741572 | /\d+ \w+ ago/ |
+      | gottavoteemall | 15390378815021944871 | /\d+ \w+ ago/ |
+      | gottavoteemall | 18294919898268153226 | /\d+ \w+ ago/ |
+      | gottavoteemall | 9211700107174373690  | /\d+ \w+ ago/ |
+      | standby_301    | 11200707554079032663 | /\d+ \w+ ago/ |
+    And I should see table "registrations" containing:
+      | Delegate       | Transaction          | Time          |
+      |----------------|----------------------|---------------|
+      | gottavoteemall | 2535943083975103126  | /\d+ \w+ ago/ |
+      | standby_256    | 16715526910305817229 | /\d+ \w+ ago/ |
+      | standby_257    | 4154808905851929406  | /\d+ \w+ ago/ |
+      | standby_258    | 13937166171748984472 | /\d+ \w+ ago/ |
+      | standby_259    | 7779164661594604013  | /\d+ \w+ ago/ |
+    And I should see "delegates" element with content that matches:
       """
       DELEGATES
       403
@@ -46,22 +62,6 @@ Feature: Delegate Monitor
       \d{1,3}(\.\d\d)?%
       by genesis_\d{1,3}
       """
-    And I should see table "votes" containing:
-      | Voter          | Transaction          | Time          |
-      |----------------|----------------------|---------------|
-      | standby_301    | 11267727202420741572 | /\d+ \w+ ago/ |
-      | gottavoteemall | 15390378815021944871 | /\d+ \w+ ago/ |
-      | gottavoteemall | 18294919898268153226 | /\d+ \w+ ago/ |
-      | gottavoteemall | 9211700107174373690  | /\d+ \w+ ago/ |
-      | standby_301    | 11200707554079032663 | /\d+ \w+ ago/ |
-    And I should see table "registrations" containing:
-      | Delegate       | Transaction          | Time          |
-      |----------------|----------------------|---------------|
-      | gottavoteemall | 2535943083975103126  | /\d+ \w+ ago/ |
-      | standby_256    | 16715526910305817229 | /\d+ \w+ ago/ |
-      | standby_257    | 4154808905851929406  | /\d+ \w+ ago/ |
-      | standby_258    | 13937166171748984472 | /\d+ \w+ ago/ |
-      | standby_259    | 7779164661594604013  | /\d+ \w+ ago/ |
     And I should see table "active delegates" with 101 rows starting with:
       | Rank | Name              | Address   | Forged              | Forging time | Status | Productivity         | Approval            |
       |------|-------------------|-----------|---------------------|--------------|--------|----------------------|---------------------|
