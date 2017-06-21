@@ -72,6 +72,13 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndCheckItsText(selector, text, callback);
   });
 
+  Then('I should see "{elementName}" element with content that matches:', (elementName, text, callback) => {
+    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const elem = element(by.css(selector));
+    expect(elem.getText()).to.eventually.match(new RegExp(`^${text}$`), `inside element "${selector}"`)
+      .and.notify(callback);
+  });
+
   Then('I should see "{elementName}" element that links to "{url}"', (elementName, url, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
     waitForElemAndCheckItsAttr(selector, 'href', url, callback);
