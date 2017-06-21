@@ -29,7 +29,8 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   Given('I should be on page "{pageAddess}"', (pageAddess, callback) => {
-    browser.wait(urlChanged(baseURL + pageAddess), waitTime, `waiting for page ${pageAddess}`);
+    const url = pageAddess.indexOf('http') === 0 ? pageAddess : baseURL + pageAddess;
+    browser.wait(urlChanged(url), waitTime, `waiting for page ${pageAddess}`);
     callback();
   });
 
