@@ -103,7 +103,7 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   
   Then('I should see table "{elementName}" with {rowCount} rows', (elementName, rowCount, callback) => {
     const selector = `.${elementName.replace(/\s+/g, '-')}`;
-    browser.wait(elementOccursXTimes(`table${selector} tbody tr`, rowCount), waitTime * 3, `waiting for ${rowCount} instances of 'table${selector} tbody tr'`).then(() => {
+    browser.wait(elementOccursXTimes(`table${selector} tbody tr`, rowCount), waitTime * 6, `waiting for ${rowCount} instances of 'table${selector} tbody tr'`).then(() => {
       callback();
     });
   });
