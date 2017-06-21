@@ -5,7 +5,7 @@ Feature: Transaction page
     And I should see table "summary" containing:
       | Sender        | 1085993630748340485L  |
       | Recipient     | 16313739661670634666L |
-      | Confirmations | 12141                 |
+      | Confirmations | /\d+/                 |
       | Amount        | 100,000,000 LSK       |
       | Fee           | 0 LSK                 |
       | Timestamp     | 2016/05/24 19:00:00   | 

@@ -68,12 +68,18 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndCheckItsText(selector, text, callback);
   });
 
-  Then('I should see table "{selector}" with {rowCount} rows starting with:', (selector, rowCount, data, callback) => {
-    checkTableContents(selector, data.rawTable, rowCount, callback);
+  Then('I should see "{text}" in "{selector}" html element no. {index}', (text, selector, index, callback) => {
+  const elem = element.all(by.css(selector)).get(parseInt(index, 10) - 1);
+  expect(elem.getText()).to.eventually.equal(text, `inside element "${selector}" no. ${index}`)
+    .and.notify(callback || (() => {}));
   });
 
-  Then('I should see table "{selector}" containing:', (selector, data, callback) => {
-    checkTableContents(selector, data.rawTable, undefined, callback);
+  Then('I should see table "{tableName}" with {rowCount} rows starting with:', (tableName, rowCount, data, callback) => {
+    checkTableContents(tableName, data.rawTable, rowCount, callback);
+  });
+
+  Then('I should see table "{tableName}" containing:', (tableName, data, callback) => {
+    checkTableContents(tableName, data.rawTable, undefined, callback);
   });
   
   Then('I should see table "{elementName}" with {rowCount} rows', (elementName, rowCount, callback) => {

@@ -56,7 +56,8 @@ function scrollTo(scrollToElement) {
   });
 }
 
-function checkTableContents(selector, data, rowCount, callback) {
+function checkTableContents(tableName, data, rowCount, callback) {
+  const selector = tableName.replace(/\s+/g, '-');
   const hasHeader = data[1] && data[1].join('').match(/^-+$/g);
   if (!rowCount) {
     rowCount = data.length - (hasHeader ? 2 : 0);
@@ -70,14 +71,23 @@ function checkTableContents(selector, data, rowCount, callback) {
   }
 }
 
-function checkRowsContents(selector, data, callback) {
+function checkRowsContents(tableSelector, data, callback) {
   let rowCount = data.length;
   if (rowCount > 0) {
     let counter = 0;
     const cellCount = data.length * data[0].length;
     for (var i = 0; i < data.length; i++) {
       for (var j = 0; j < data[i].length; j++) {
-        waitForElemAndCheckItsText(`${selector} tr:nth-child(${i + 1}) td:nth-child(${j + 1}), ${selector} tr:nth-child(${i + 1}) th:nth-child(${j + 1})`, data[i][j], () => {
+        const value = data[i][j];
+        const selector = `${tableSelector} tr:nth-child(${i + 1}) td:nth-child(${j + 1}), ${tableSelector} tr:nth-child(${i + 1}) th:nth-child(${j + 1})`;
+        const elem = element(by.css(selector));
+        elem.getText().then((text) => {
+          text = text.trim();
+          if (value[0] === '/') {
+            expect(text).to.match(new RegExp(`^${value.slice(1, -1)}$`), `inside element "${selector}"`);
+          } else {
+            expect(text).to.equal(value, `inside element "${selector}"`);
+          }
           counter++;
           if (counter == cellCount && callback) {
             callback();

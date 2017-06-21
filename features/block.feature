@@ -4,7 +4,7 @@ Feature: Block page
     Then I should see "Block  6524861224470851795" in "h1" html element
     And I should see table "summary" containing:
       | Transactions  | 103                  |
-      | Confirmations | 12425                |
+      | Confirmations | /\d+/                |
       | Height        | 1                    |
       | Reward        | 0 LSK                |
       | Total Fee     | 0 LSK                |

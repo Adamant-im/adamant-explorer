@@ -1,13 +1,13 @@
 <li class="dropdown" data-uib-dropdown>
-    <a class="dropdown-toggle" id="main-currency-selector" data-uib-dropdown-toggle data-aria-haspopup="true" role="button" data-aria-expanded="false">
+    <a class="dropdown-toggle LSK-menu" id="main-currency-selector" data-uib-dropdown-toggle data-aria-haspopup="true" role="button" data-aria-expanded="false">
         {{currency.symbol}} <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu" data-aria-labelledby="main-currency-selector">
         <li>
-            <a data-ng-click="cs.setCurrency('LSK')" data-ng-class="{active: currency.symbol == 'LSK'}">LSK</a>
+            <a data-ng-click="cs.setCurrency('LSK')" data-ng-class="{active: currency.symbol == 'LSK'}" class="LSK">LSK</a>
         </li>
         <li data-ng-if="currency.tickers.LSK" data-ng-repeat="(key, value) in currency.tickers.LSK">
-            <a data-ng-click="cs.setCurrency(key)" data-ng-class="{active: currency.symbol == {{key}}}">{{key}}</a>
+            <a data-ng-click="cs.setCurrency(key)" data-ng-class="{active: currency.symbol == {{key}}}" class="{{key}}">{{key}}</a>
         </li>
     </ul>
 </li>

@@ -1,4 +1,4 @@
-Feature: Account page
+Feature: Address page
   Scenario: should show title, summary, and transactions
     Given I'm on page "/address/16313739661670634666L"
     Then I should see "Address Summary " in "h2" html element
