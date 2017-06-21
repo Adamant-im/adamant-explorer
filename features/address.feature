@@ -32,12 +32,14 @@ Feature: Address page
     And I click link on row no. 1 cell no. 4 of "transactions" table
     Then I should be on page "/delegate/14706379298538803272L"
 
+  @ignore
   Scenario: should allow to load more transactions
     Given I'm on page "/address/16313739661670634666L"
     When I scroll to "more button"
     And I click "more button"
     Then I should see table "transactions" with 100 rows
 
+  @ignore
   Scenario: should allow to load less transactions
     Given I'm on page "/address/16313739661670634666L"
     When I scroll to "more button"

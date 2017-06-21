@@ -31,7 +31,7 @@ Feature: Block page
 
   # ignored because it the feature is broken
   @ignore
-  Scenario: should allow to load more transactions
+  Scenario: should allow to load less transactions
     Given I'm on page "/block/6524861224470851795"
     When I scroll to "more button"
     And I click "more button"

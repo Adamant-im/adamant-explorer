@@ -16,6 +16,7 @@ Feature: Top Accounts page
     And I click link on row no. 1 cell no. 2 of "top accounts" table
     Then I should be on page "/address/16313739661670634666L"
 
+  @ignore
   Scenario: should allow to load more accounts
     Given I'm on page "/topAccounts"
     And I should see table "top accounts" with 50 rows
@@ -23,6 +24,7 @@ Feature: Top Accounts page
     And I click "more button"
     Then I should see table "top accounts" with 100 rows
 
+  @ignore
   Scenario: should allow to load less accounts
     Given I'm on page "/topAccounts"
     And I should see table "top accounts" with 50 rows
