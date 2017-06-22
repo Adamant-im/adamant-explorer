@@ -81,6 +81,14 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
       .and.notify(callback);
   });
 
+  Then('I should see "{elementName}" element with content that does not match:', (elementName, text, callback) => {
+    const selector = nameToSelector(elementName);
+    const elem = element(by.css(selector));
+    browser.wait(EC.presenceOf(elem), waitTime, `waiting for element '${selector}'`);
+    expect(elem.getText()).to.eventually.not.match(new RegExp(`^${text}$`), `inside element "${selector}"`)
+      .and.notify(callback);
+  });
+
   Then('I should see "{elementName}" element that links to "{url}"', (elementName, url, callback) => {
     const selector = nameToSelector(elementName);
     waitForElemAndCheckItsAttr(selector, 'href', url, callback);
