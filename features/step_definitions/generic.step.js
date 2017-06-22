@@ -37,6 +37,13 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
       .and.notify(callback);
   });
 
+  Given('I should be on page that matches "{pageAddessRegexp}"', (pageAddessRegexp, callback) => {
+    const url = pageAddessRegexp.indexOf('http') === 0 ? pageAddessRegexp : baseURL + pageAddessRegexp;
+    browser.wait(urlChanged(new RegExp(`^${url}$`)), waitTime, `waiting for page ${pageAddessRegexp}`);
+    expect(browser.getCurrentUrl()).to.eventually.match(new RegExp(`^${url}$`))
+      .and.notify(callback);
+  });
+
   When('I fill in "{value}" to "{fieldName}" field', (value, fieldName, callback) => {
     const selector = nameToSelector(fieldName);
     waitForElemAndSendKeys(`input${selector}, textarea${selector}`, value, callback);

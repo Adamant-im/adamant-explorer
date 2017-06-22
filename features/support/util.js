@@ -39,7 +39,11 @@ function waitForElemAndSendKeys(selector, keys, callback) {
 function urlChanged(url) {
   return function () {
     return browser.getCurrentUrl().then(function(actualUrl) {
-      return url === actualUrl;
+      if (url instanceof RegExp) {
+        return actualUrl.match(url);
+      } else {
+        return url === actualUrl;
+      }
     });
   };
 }

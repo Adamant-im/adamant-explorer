@@ -71,3 +71,73 @@ Feature: Delegate Monitor
       | 3    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
       | 4    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
       | 5    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+
+  Scenario: latest votes should link to voter
+    Given I'm on page "/delegateMonitor"
+    When I click link on row no. 1 cell no. 1 of "votes" table
+    Then I should be on page "/delegate/14895491440237132212L"
+
+  Scenario: latest votes should link to transaction
+    Given I'm on page "/delegateMonitor"
+    When I click link on row no. 1 cell no. 2 of "votes" table
+    Then I should be on page "/tx/11267727202420741572"
+
+  Scenario: newest delegates should link to delegate
+    Given I'm on page "/delegateMonitor"
+    When I click link on row no. 1 cell no. 1 of "registrations" table
+    Then I should be on page "/delegate/4401082358022424760L"
+
+  Scenario: newest delegates should link to transaction
+    Given I'm on page "/delegateMonitor"
+    When I click link on row no. 1 cell no. 2 of "registrations" table
+    Then I should be on page "/tx/2535943083975103126"
+
+  Scenario: active delegates should link to delegate
+    Given I'm on page "/delegateMonitor"
+    And I click link on row no. 5 cell no. 2 of "active delegates" table
+    Then I should be on page that matches "/delegate/\d{19,20}L"
+
+  Scenario: allows to see standby delegates
+    Given I'm on page "/delegateMonitor"
+    When I click "standby delegates tab"
+    Then I should see table "standby delegates" with 20 rows starting with:
+      | Rank | Name              | Address      | Productivity | Approval |
+      |------|-------------------|--------------|--------------|----------|
+      | 102  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 103  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 104  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 105  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 106  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+
+  Scenario: allows to go to next page of standby delegates
+    Given I'm on page "/delegateMonitor"
+    When I click "standby delegates tab"
+    And I click "next page button"
+    Then I should see table "standby delegates" with 20 rows starting with:
+      | Rank | Name              | Address      | Productivity | Approval |
+      |------|-------------------|--------------|--------------|----------|
+      | 122  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 123  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 124  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 125  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 126  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+
+  Scenario: allows to go to previous page of standby delegates
+    Given I'm on page "/delegateMonitor"
+    When I click "standby delegates tab"
+    And I click "next page button"
+    And I click "previous page button"
+    Then I should see table "standby delegates" with 20 rows starting with:
+      | Rank | Name              | Address      | Productivity | Approval |
+      |------|-------------------|--------------|--------------|----------|
+      | 102  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 103  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 104  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 105  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 106  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+
+  Scenario: standby delegates should link to delegate
+    Given I'm on page "/delegateMonitor"
+    When I click "standby delegates tab"
+    And I click link on row no. 1 cell no. 2 of "standby delegates" table
+    Then I should be on page that matches "/delegate/\d{19,20}L"
