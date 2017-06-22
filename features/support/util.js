@@ -105,6 +105,10 @@ function checkRowsContents(tableSelector, data, callback) {
   }
 }
 
+function nameToSelector(elementName) {
+  return `.${elementName.replace(/\s+/g, '-')}`.replace(/\.(\d)/, '.\\3$1 ');
+}
+
 module.exports = {
   waitForElemAndCheckItsText,
   waitForElemAndCheckItsAttr,
@@ -115,4 +119,5 @@ module.exports = {
   elementOccursXTimes,
   scrollTo,
   checkTableContents,
+  nameToSelector,
 };

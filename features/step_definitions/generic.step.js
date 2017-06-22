@@ -12,6 +12,7 @@ const {
   elementOccursXTimes,
   scrollTo,
   checkTableContents,
+  nameToSelector,
 } = require('../support/util.js');
 
 chai.use(chaiAsPromised);
@@ -37,27 +38,27 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   When('I fill in "{value}" to "{fieldName}" field', (value, fieldName, callback) => {
-    const selectorClass = `.${fieldName.replace(/ /g, '-')}`;
-    waitForElemAndSendKeys(`input${selectorClass}, textarea${selectorClass}`, value, callback);
+    const selector = nameToSelector(fieldName);
+    waitForElemAndSendKeys(`input${selector}, textarea${selector}`, value, callback);
   });
 
   When('I hit "enter" in "{fieldName}" field', (fieldName, callback) => {
-    const selectorClass = `.${fieldName.replace(/ /g, '-')}`;
-    waitForElemAndSendKeys(`input${selectorClass}, textarea${selectorClass}`, protractor.Key.ENTER, callback);
+    const selector = nameToSelector(fieldName);
+    waitForElemAndSendKeys(`input${selector}, textarea${selector}`, protractor.Key.ENTER, callback);
   });
 
   When('I scroll to "{elementName}"', (elementName, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     scrollTo(element(by.css(selector))).then(callback);
   });
 
   When('I click "{elementName}"', (elementName, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     waitForElemAndClickIt(selector, callback);
   });
 
   When('I click "{elementName}" no. {index}', (elementName, index, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     const elem = element.all(by.css(selector)).get(index - 1);
     elem.click().then(callback);
   });
@@ -68,12 +69,12 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   Then('I should see "{text}" in "{elementName}" element', (text, elementName, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     waitForElemAndCheckItsText(selector, text, callback);
   });
 
   Then('I should see "{elementName}" element with content that matches:', (elementName, text, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`.replace(/.(\d)/, '.\\3$1 ');
+    const selector = nameToSelector(elementName);
     const elem = element(by.css(selector));
     browser.wait(EC.presenceOf(elem), waitTime, `waiting for element '${selector}'`);
     expect(elem.getText()).to.eventually.match(new RegExp(`^${text}$`), `inside element "${selector}"`)
@@ -81,7 +82,7 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
 
   Then('I should see "{elementName}" element that links to "{url}"', (elementName, url, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     waitForElemAndCheckItsAttr(selector, 'href', url, callback);
   });
 
@@ -104,7 +105,7 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
   });
   
   Then('I should see table "{elementName}" with {rowCount} rows', (elementName, rowCount, callback) => {
-    const selector = `.${elementName.replace(/\s+/g, '-')}`;
+    const selector = nameToSelector(elementName);
     browser.wait(elementOccursXTimes(`table${selector} tbody tr`, rowCount), waitTime * 6, `waiting for ${rowCount} instances of 'table${selector} tbody tr'`).then(() => {
       callback();
     });
