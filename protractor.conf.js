@@ -12,8 +12,6 @@ exports.config = {
   framework: 'custom',
   frameworkPath: require.resolve('protractor-cucumber-framework'),
 
-  baseURL: 'http://localhost:6040/',
-
   cucumberOpts: {
     require: 'features/step_definitions/*.js',
     tags: '~@ignore',
