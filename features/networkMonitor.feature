@@ -12,27 +12,27 @@ Feature: Network Monitor
       """
       \d{18,20}
       0 LSK from 0 transactions
-      a few seconds ago
+      (\d+|a few) \w+ ago
       """
     And I should see "last block" element with content that matches:
       """
       LAST BLOCK
       \d{18,20}
       0 LSK from 0 transactions
-      a few seconds ago
+      (\d+|a few) \w+ ago
       """
     And I should see "best block" element with content that matches:
       """
       BEST BLOCK
       \d{18,20}
       (\d{1,3},)?\d{1,3}\.\d{1,8} LSK from \d+ transactions
-      \d+ \w+ ago
+      (\d+|a few) \w+ ago
       """
     And I should see "volume" element with content that matches:
       """
       VOLUME \(LSK\)
       (\d{1,3},)?\d{1,3}\.\d{1,8}
-      transferred within \d+ minutes
+      transferred within (\d+|a few) \w+
       from \d+ transactions in \d+ / \d+ blocks
       """
     And I should see "platforms block" element with content that matches:
