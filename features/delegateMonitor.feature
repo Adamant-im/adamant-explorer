@@ -17,6 +17,7 @@ Feature: Delegate Monitor
       | standby_257    | 4154808905851929406  | /\d+ \w+ ago/ |
       | standby_258    | 13937166171748984472 | /\d+ \w+ ago/ |
       | standby_259    | 7779164661594604013  | /\d+ \w+ ago/ |
+    And I should see "Home Delegate Monitor" in "breadcrumb" element
     And I should see "delegates" element with content that matches:
       """
       DELEGATES

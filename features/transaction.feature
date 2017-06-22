@@ -2,6 +2,7 @@ Feature: Transaction page
   Scenario: should show title, summary, and details
     Given I'm on page "/tx/1465651642158264047"
     Then I should see "Transaction 1465651642158264047" in "h1" html element
+    And I should see "Home Transaction" in "breadcrumb" element
     And I should see table "summary" containing:
       | Sender        | 1085993630748340485L      |
       | Recipient     | 16313739661670634666L     |

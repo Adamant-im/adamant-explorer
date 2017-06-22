@@ -2,6 +2,7 @@ Feature: Delegate page
   Scenario: should show title, summary
     Given I'm on page "/delegate/537318935439898807L"
     Then I should see "Delegate" in "h2" html element
+    And I should see "Home Address Delegate" in "breadcrumb" element
     And I should see table "summary" containing:
       | Name          | genesis_17          |
       | Address       | 537318935439898807L |

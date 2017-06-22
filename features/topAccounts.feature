@@ -2,6 +2,7 @@ Feature: Top Accounts page
   Scenario: should show title, summary, and transactions
     Given I'm on page "/topAccounts"
     Then I should see "Top Accounts" in "h1" html element
+    And I should see "Home Top Accounts" in "breadcrumb" element
     And I should see table "top accounts" with 50 rows starting with:
       | Rank | Address               | ~ Balance             | Supply | Owner          |
       |------|-----------------------|-----------------------|--------|----------------|

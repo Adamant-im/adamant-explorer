@@ -2,6 +2,7 @@ Feature: Address page
   Scenario: should show title, summary, and transactions
     Given I'm on page "/address/16313739661670634666L"
     Then I should see "Address Summary " in "h2" html element
+    And I should see "Home Address" in "breadcrumb" element
     And I should see table "summary" containing:
       | Address       | 16313739661670634666L                                            |
       | Public Key    | c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f |
