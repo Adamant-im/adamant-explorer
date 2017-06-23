@@ -75,6 +75,19 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndClickIt(selector, callback);
   });
 
+  When('I hover "{elementName}" no. {index}', (elementName, index, callback) => {
+    const selector = nameToSelector(elementName);
+    browser.wait(EC.presenceOf(element(by.css(selector))), waitTime, `waiting for element '${selector}'`);
+    const elem = element.all(by.css(selector)).get(index - 1);
+    browser.actions().mouseMove(elem).perform();
+    browser.sleep(10).then(callback);
+  });
+
+  When('I click link on header cell no. {cellIndex} of "{tableName}" table', (cellIndex, tableName, callback) => {
+    const selector = `table.${tableName.replace(/\s+/g, '-')} thead tr th:nth-child(${cellIndex}) a`;
+    waitForElemAndClickIt(selector, callback);
+  });
+
   Then('I should see "{text}" in "{elementName}" element', (text, elementName, callback) => {
     const selector = nameToSelector(elementName);
     waitForElemAndCheckItsText(selector, text, callback);

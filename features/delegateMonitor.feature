@@ -10,13 +10,13 @@ Feature: Delegate Monitor
       | gottavoteemall | 9211700107174373690  | /\d+ \w+ ago/ |
       | standby_301    | 11200707554079032663 | /\d+ \w+ ago/ |
     And I should see table "registrations" containing:
-      | Delegate       | Transaction          | Time          |
-      |----------------|----------------------|---------------|
-      | gottavoteemall | 2535943083975103126  | /\d+ \w+ ago/ |
-      | standby_256    | 16715526910305817229 | /\d+ \w+ ago/ |
-      | standby_257    | 4154808905851929406  | /\d+ \w+ ago/ |
-      | standby_258    | 13937166171748984472 | /\d+ \w+ ago/ |
-      | standby_259    | 7779164661594604013  | /\d+ \w+ ago/ |
+      | Delegate          | Transaction          | Time          |
+      |-------------------|----------------------|---------------|
+      | gottavoteemall    | 2535943083975103126  | /\d+ \w+ ago/ |
+      | /standby_\d{1,3}/ | 16715526910305817229 | /\d+ \w+ ago/ |
+      | /standby_\d{1,3}/ | 4154808905851929406  | /\d+ \w+ ago/ |
+      | /standby_\d{1,3}/ | 13937166171748984472 | /\d+ \w+ ago/ |
+      | /standby_\d{1,3}/ | 7779164661594604013  | /\d+ \w+ ago/ |
     And I should see "Home Delegate Monitor" in "breadcrumb" element
     And I should see "delegates" element with content that matches:
       """
@@ -60,17 +60,39 @@ Feature: Delegate Monitor
     And I should see "worst productivity" element with content that matches:
       """
       WORST PRODUCTIVITY
-      \d{1,3}(\.\d\d)?%
+      \d{1,3}(\.\d\d?)?%
       by genesis_\d{1,3}
       """
     And I should see table "active delegates" with 101 rows starting with:
-      | Rank | Name              | Address   | Forged              | Forging time | Status | Productivity         | Approval            |
-      |------|-------------------|-----------|---------------------|--------------|--------|----------------------|---------------------|
-      | 1    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
-      | 2    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
-      | 3    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
-      | 4    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
-      | 5    | /genesis_\d{1,3}/ | /\d{19,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | Rank | Name              | Address      | Forged              | Forging time | Status | Productivity         | Approval            |
+      |------|-------------------|--------------|---------------------|--------------|--------|----------------------|---------------------|
+      | 1    | /genesis_\d{1,3}/ | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | 2    | /genesis_\d{1,3}/ | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | 3    | /genesis_\d{1,3}/ | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | 4    | /genesis_\d{1,3}/ | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | 5    | /genesis_\d{1,3}/ | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+
+  Scenario: should allow to sort active delegates
+    Given I'm on page "/delegateMonitor"
+    When I click link on header cell no. 2 of "active delegates" table
+    Then I should see table "active delegates" with 101 rows starting with:
+      | Rank      | Name      | Address      | Forged              | Forging time | Status | Productivity         | Approval            |
+      |-----------|-----------|--------------|---------------------|--------------|--------|----------------------|---------------------|
+      | /\d{1,3}/ | genesis_1 | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | /\d{1,3}/ | genesis_2 | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | /\d{1,3}/ | genesis_3 | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | /\d{1,3}/ | genesis_4 | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+      | /\d{1,3}/ | genesis_5 | /\d{10,20}L/ | /1,\d{3}.\d{8} LSK/ | /.+/         |        | /\d{2,3}(\.\d{2})?%/ |/\d{2,3}(\.\d{2})?%/ |
+
+  Scenario: should allow show delegate status tooltip
+    Given I'm on page "/delegateMonitor"
+    When I hover "forging status" no. 1
+    Then I should see "tooltip" element with content that matches:
+      """
+      \w+( \w+)*
+      Last block forged @ \d+
+      (\d+|a few|an|a) \w+ ago
+      """
 
   Scenario: latest votes should link to voter
     Given I'm on page "/delegateMonitor"
@@ -95,7 +117,7 @@ Feature: Delegate Monitor
   Scenario: active delegates should link to delegate
     Given I'm on page "/delegateMonitor"
     And I click link on row no. 5 cell no. 2 of "active delegates" table
-    Then I should be on page that matches "/delegate/\d{19,20}L"
+    Then I should be on page that matches "/delegate/\d{10,20}L"
 
   Scenario: allows to see standby delegates
     Given I'm on page "/delegateMonitor"
@@ -103,11 +125,11 @@ Feature: Delegate Monitor
     Then I should see table "standby delegates" with 20 rows starting with:
       | Rank | Name              | Address      | Productivity | Approval |
       |------|-------------------|--------------|--------------|----------|
-      | 102  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 103  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 104  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 105  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 106  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 102  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 103  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 104  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 105  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 106  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
 
   Scenario: allows to go to next page of standby delegates
     Given I'm on page "/delegateMonitor"
@@ -116,11 +138,11 @@ Feature: Delegate Monitor
     Then I should see table "standby delegates" with 20 rows starting with:
       | Rank | Name              | Address      | Productivity | Approval |
       |------|-------------------|--------------|--------------|----------|
-      | 122  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 123  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 124  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 125  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 126  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 122  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 123  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 124  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 125  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 126  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
 
   Scenario: allows to go to previous page of standby delegates
     Given I'm on page "/delegateMonitor"
@@ -130,14 +152,14 @@ Feature: Delegate Monitor
     Then I should see table "standby delegates" with 20 rows starting with:
       | Rank | Name              | Address      | Productivity | Approval |
       |------|-------------------|--------------|--------------|----------|
-      | 102  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 103  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 104  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 105  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
-      | 106  | /standby_\d{1,3}/ | /\d{19,20}L/ | 0%           | 0%       |
+      | 102  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 103  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 104  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 105  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
+      | 106  | /standby_\d{1,3}/ | /\d{10,20}L/ | 0%           | 0%       |
 
   Scenario: standby delegates should link to delegate
     Given I'm on page "/delegateMonitor"
     When I click "standby delegates tab"
     And I click link on row no. 1 cell no. 2 of "standby delegates" table
-    Then I should be on page that matches "/delegate/\d{19,20}L"
+    Then I should be on page that matches "/delegate/\d{10,20}L"
