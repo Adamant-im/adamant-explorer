@@ -163,6 +163,27 @@ npm test -- test/api/accounts.js
 npm test -- test/api/transactions.js
 ```
 
+## End-to-end Tests
+
+Setup for end-to-end tests:
+
+```
+./node_modules/protractor/bin/webdriver-manager update
+```
+
+Run end-to-end test suite (replace `~/git/lisk` with your path to lisk core):
+
+```
+./e2e-test-setup.sh ~/git/lisk
+npm run e2e-test -s
+```
+
+Run one end-to-end test feature file:
+
+```
+npm run e2e-test -s -- --specs=features/address.feature
+```
+
 ## License
 
 Copyright © 2016-2017 Lisk Foundation
