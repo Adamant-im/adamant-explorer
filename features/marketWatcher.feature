@@ -1,5 +1,5 @@
 Feature: Market Watcher
-  Scenario: should show stats
+  Scenario: should show statistics
     Given I'm on page "/marketWatcher"
     Then I should see "Market Watcher" in "h1" html element
     And I should see "Home Market Watcher" in "breadcrumb" element
@@ -52,6 +52,33 @@ Feature: Market Watcher
       LAST PRICE
       0\.0+
       """
+
+  Scenario: should allow to hide statistics
+    Given I'm on page "/marketWatcher"
+    When I click "toggle statistics button"
+    And I wait 1 seconds
+    Then I should not see "statistics" element
+
+  @ignore
+  Scenario: should show stock chart
+
+  @ignore
+  Scenario: should allow to switch stock chart interval to minutes
+
+  @ignore
+  Scenario: should allow to switch stock chart interval to hours
+
+  @ignore
+  Scenario: should allow to switch stock chart interval to days
+
+  @ignore
+  Scenario: should allow to change stock chart from/to
+
+  @ignore
+  Scenario: should allow to change stock chart zoom
+
+  @ignore
+  Scenario: should allow to switch to depth chart
 
   Scenario: should allow to switch to Order Book
     Given I'm on page "/marketWatcher"

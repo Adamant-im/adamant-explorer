@@ -55,12 +55,17 @@ Feature: Network Monitor
       """
 
   # so far there is no data for the following tests
+  @ignore
   Scenario: should allow to find a peer position on the map of the world
 
+  @ignore
   Scenario: should show table with connected peers
 
+  @ignore
   Scenario: should allow to sort the table with connected peers
 
+  @ignore
   Scenario: should allow to switch to table with disconnected peers
 
+  @ignore
   Scenario: should allow to sort the table with disconnected peers

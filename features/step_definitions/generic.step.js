@@ -80,6 +80,16 @@ defineSupportCode(({ Given, When, Then, setDefaultTimeout }) => {
     waitForElemAndCheckItsText(selector, text, callback);
   });
 
+  When('I wait {seconds} seconds', (seconds, callback) => {
+    browser.sleep(seconds * 1000).then(callback);
+  });
+
+  Then('I should not see "{elementName}" element', (elementName, callback) => {
+    const selector = nameToSelector(elementName);
+    expect(element(by.css(selector)).isDisplayed()).to.eventually.equal(false)
+      .and.notify(callback);
+  });
+
   Then('I should see "{elementName}" element with content that matches:', (elementName, text, callback) => {
     const selector = nameToSelector(elementName);
     const elem = element(by.css(selector));
