@@ -1,19 +1,16 @@
 import AppHeader from './header.module';
 import template from './header.html';
-import logo from '../../assets/img/logo.png';
 
 /**
- * 
+ *
  * @todo Fix the service usage
- * 
+ *
  */
 AppHeader.directive('mainHeader', ($socket, $rootScope, Header) => {
     const HeaderLink = () => {
         $rootScope.currency = {
             symbol: 'LSK'
         };
-
-        $rootScope.logo = logo;
 
         const header = new Header($rootScope);
         let ns = $socket('/header');
