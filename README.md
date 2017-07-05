@@ -1,14 +1,15 @@
 # Lisk Blockchain Explorer
 
-Lisk Explorer version 1.1.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Lisk Explorer version 1.2.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 ## Prerequisites
 
 These programs and resources are required to install and run Lisk Explorer
 
-- Nodejs v6.9.2 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
+- Nodejs v6.10.1 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
 
   ```
   curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
@@ -28,17 +29,20 @@ These programs and resources are required to install and run Lisk Explorer
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
 
-- Bower (<http://bower.io/>) -- Bower helps to install required JavaScript dependencies.
-
-  `sudo npm install -g bower`
-
-- Grunt.js (<http://gruntjs.com/>) -- Grunt is used to compile the frontend code and serves other functions.
+- Grunt.js (<http://gruntjs.com/>) -- Grunt is used to run eslint and unit tests.
 
   `sudo npm install -g grunt`
 
-- Forever (<https://github.com/foreverjs/forever>) -- Forever manages the node processes for Lisk Explorer
+- PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer and handles log rotation (Highly Recommended)
 
-  `sudo npm install -g forever`
+  `sudo npm install -g pm2`
+  
+- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) -- Manages PM2 logs
+
+  ```
+  pm2 install pm2-logrotate
+  pm2 set pm2-logrotate:max_size 100M
+  ```
 
 - Git (<https://github.com/git/git>) -- Used for cloning and updating Lisk Explorer
 
@@ -56,15 +60,21 @@ Clone the Lisk Explorer Repository:
 git clone https://github.com/LiskHQ/lisk-explorer.git
 cd lisk-explorer
 npm install
-bower install
 ```
 
 ## Build Steps
 
 #### Frontend
- The frontend must be built with Grunt before starting Lisk Explorer. Run the following command to compile the frontend components:
+ The frontend is using Webpack to create core bundles for Lisk Explorer.  
+ 
+ For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
 
-`grunt compile`
+`npm run start`
+ 
+ And for generating the minified bundles in production environment run:
+ 
+`npm run build`
+
 
 #### Market Watcher
  Candlestick data needs to be initialized prior to starting Lisk Explorer. During runtime candlestick data is updated automatically.
@@ -79,56 +89,7 @@ To update candlestick data manually run after initialization:
 
 ## Configuration
 
-The default `config.json` file contains all of the configuration settings for Lisk Explorer. These options can be modified and have been documented below.
-
-Example:
-
-```
-{
-    "host": "0.0.0.0",
-    "port": 6040,
-    "lisk" : {
-        "host" : "127.0.0.1",
-        "port" : 8000
-    },
-    "freegeoip" : {
-        "host" : "127.0.0.1",
-        "port" : 8080
-    },
-    "redis" : {
-        "host" : "127.0.0.1",
-        "port" : 6379,
-        "password" : ""
-    },
-    "exchangeRates": {
-        "enabled": true,
-        "updateInterval": 30000,
-        "exchanges": {
-            "LSK": {
-                "BTC": "poloniex",
-                "CNY": "jubi"
-            },
-            "BTC": {
-                "USD": "bitfinex",
-                "EUR": "bitstamp"
-            }
-        }
-    },
-    "cacheTTL" : 20,
-    "enableCandles" : true,
-    "updateCandlesInterval" : 30000,
-    "enableOrders" : true,
-    "updateOrdersInterval" : 15000
-}
-```
-
-- `cacheTTL` - time to live cache in redis.
-- `fixedPoint` - fixed point number of Lisk (10^8).
-- `enableCandles` - enable or disable updating of candlestick data.
-- `updateCandlesInterval` - time to update candlestick data.
-- `enableOrders` - enable or disable updating of order book data.
-- `updateOrdersInterval` - time to update order book data.
-- `updateInterval` - time to update exchange currency courses.
+The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
 
 #### Top Accounts
 
@@ -159,25 +120,25 @@ To test that Lisk Explorer is configured correctly, run the following command:
 
 Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
 
-Once the process is verified as running correctly, `CTRL+C` and start the process with `forever`. This will fork the process into the background and automatically recover the process if it fails.
+Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
 
-`forever start app.js`
+`pm2 start pm2-explorer.json`
 
 After the process is started its runtime status and log location can be found by issuing this statement:
 
-`forever list`
+`pm2 list`
 
-To stop Explorer after it has been started with `forever`, issue the following command:
+To stop Explorer after it has been started with `PM2`, issue the following command:
 
-`forever stop app.js`
+`pm2 stop lisk-explorer`
 
 ## Tests
 
 Before running any tests, please ensure Lisk Explorer and Lisk Client are configured to run on the Lisk Testnet.
 
-Replace **config.json** with the corresponding file under the **test** directory:
+Replace **config.js** with **config.test** file from the **test** directory:
 
-`cp test/config.json  .`
+`cp test/config.test ./config.js`
 
 Replace the **config.json** for the Lisk Client the corresponding file under the **test** directory:
 
@@ -189,7 +150,7 @@ Then restart the Lisk Client (example):
 
 Launch Lisk Explorer (runs on port 6040):
 
-`forever start app.js`
+`pm2 start pm2-explorer.json`
 
 Run the test suite:
 
@@ -204,10 +165,20 @@ npm test -- test/api/transactions.js
 
 ## License
 
-The MIT License (MIT)
+Copyright © 2016-2017 Lisk Foundation
 
-Copyright (c) 2016 Lisk<br>
-Copyright (c) 2015 Crypti
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the [GNU General Public License](https://github.com/LiskHQ/lisk-explorer/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+***
+
+This program also incorporates work previously released with lisk-explorer `1.1.0` (and earlier) versions under the [MIT License](https://opensource.org/licenses/MIT). To comply with the requirements of that license, the following permission notice, applicable to those parts of the code only, is included below:
+
+Copyright © 2016-2017 Lisk Foundation  
+Copyright © 2015 Crypti
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

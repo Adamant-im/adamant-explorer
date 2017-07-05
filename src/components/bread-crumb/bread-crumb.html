@@ -1,0 +1,6 @@
+<ol class="breadcrumb">
+    <li data-ng-repeat="section in sections">
+        <a class="text-capitalize" data-ng-if="section.url != '#'" href="{{section.url}}">{{section.name | alterWordSeparation: 'spaceSeparated'}}</a>
+        <span class="text-capitalize" data-ng-if="section.url == '#'">{{section.name | alterWordSeparation: 'spaceSeparated'}}</span>
+    </li>
+</ol>

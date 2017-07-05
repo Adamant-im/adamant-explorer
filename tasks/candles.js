@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('../config.json'),
+var config = require('../config'),
     client = require('../redis')(config),
     candles = require('../lib/candles'),
     async = require('async');
@@ -11,24 +11,34 @@ module.exports = function (grunt) {
 
         async.series([
             function (callback) {
-                var poloniex = new candles.poloniex(client, config);
+                // Skip exchange if not enabled
+                if (!config.marketWatcher.exchanges.poloniex) {
+                    return callback(null);
+                }
+
+                var poloniex = new candles.poloniex(client, config.marketWatcher.candles.poloniex);
 
                 poloniex.buildCandles(function (err, res) {
                     if (err) {
-                        callback(err);
+                        return callback(err);
                     } else {
-                        callback(null, res);
+                        return callback(null, res);
                     }
                 });
             },
             function (callback) {
+                // Skip exchange if not enabled
+                if (!config.marketWatcher.exchanges.bittrex) {
+                    return callback(null);
+                }
+
                 var bittrex = new candles.bittrex(client);
 
                 bittrex.buildCandles(function (err, res) {
                     if (err) {
-                        callback(err);
+                        return callback(err);
                     } else {
-                        callback(null, res);
+                        return callback(null, res);
                     }
                 });
             }
@@ -48,24 +58,34 @@ module.exports = function (grunt) {
 
         async.series([
             function (callback) {
+                // Skip exchange if not enabled
+                if (!config.marketWatcher.exchanges.poloniex) {
+                    return callback(null);
+                }
+
                 var poloniex = new candles.poloniex(client);
 
                 poloniex.updateCandles(function (err, res) {
                     if (err) {
-                        callback(err);
+                        return callback(err);
                     } else {
-                        callback(null, res);
+                        return callback(null, res);
                     }
                 });
             },
             function (callback) {
+                // Skip exchange if not enabled
+                if (!config.marketWatcher.exchanges.bittrex) {
+                    return callback(null);
+                }
+
                 var bittrex = new candles.bittrex(client);
 
                 bittrex.updateCandles(function (err, res) {
                     if (err) {
-                        callback(err);
+                        return callback(err);
                     } else {
-                        callback(null, res);
+                        return callback(null, res);
                     }
                 });
             }

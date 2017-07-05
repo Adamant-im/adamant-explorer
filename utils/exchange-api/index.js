@@ -66,6 +66,30 @@ module.exports = function (config) {
                 }
             ]
         },
+        'BTCRUB': {
+            'btce' : [
+                'Btc-e',
+                'https://btc-e.com/api/3/ticker/btc_rur',
+                function (res, cb) {
+                  if (res.error) {
+                      return cb(res.error);
+                  } else {
+                      return cb(null, res.btc_rur.last);
+                  }
+                }
+            ],
+            'exmo': [
+                'Exmo',
+                'https://api.exmo.com/v1/ticker/',
+                function (res, cb) {
+                    if (res.error) {
+                        return cb(res.error);
+                    } else {
+                        return cb(null, res.BTC_RUB.last_trade);
+                    }
+                }
+            ]
+        },
         'LSKBTC' : {
             'poloniex' : [
                 'Poloniex',
@@ -108,6 +132,9 @@ module.exports = function (config) {
     _.each(config.exchangeRates.exchanges, function (coin1, key1) {
         _.each(coin1, function (exchange, key2) {
             var pair = key1 + key2;
+            if (!exchange) {
+                return;
+            }
             if (exchanges[pair].hasOwnProperty (exchange)) {
                 console.log('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
                 config.exchangeRates.exchanges[key1][key2] = exchanges[pair][exchange];
@@ -159,11 +186,11 @@ module.exports = function (config) {
                         }
                         seriesCb2 (null, currency);
                     });
-                }, 
+                },
                 function(err) {
                     seriesCb (null, currency);
                 });
-            }, 
+            },
             function(err) {
                 console.log ('Exchange rates:', currency);
                 cb (null, currency);

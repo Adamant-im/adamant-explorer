@@ -11,24 +11,33 @@ module.exports = function (config, client) {
         } else {
             running = true;
         }
+
         async.series([
             function (callback) {
-                poloniex.updateOrders(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
+                if (!config.marketWatcher.exchanges.poloniex) {
+                    callback(null);
+                } else {
+                    poloniex.updateOrders(function (err, res) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, res);
+                        }
+                    });
+                }
             },
             function (callback) {
-                bittrex.updateOrders(function (err, res) {
-                    if (err) {
-                        callback(err);
-                    } else {
-                        callback(null, res);
-                    }
-                });
+                if (!config.marketWatcher.exchanges.bittrex) {
+                    callback(null);
+                } else {
+                    bittrex.updateOrders(function (err, res) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            callback(null, res);
+                        }
+                    });
+                }
             }
         ],
         function (err, results) {
@@ -43,8 +52,8 @@ module.exports = function (config, client) {
 
     // Interval
 
-    if (config.enableOrders) {
-        setInterval(this.updateOrders, config.updateOrdersInterval);
+    if (config.marketWatcher.enabled) {
+        setInterval(this.updateOrders, config.marketWatcher.orders.updateInterval);
     }
 
     // Private

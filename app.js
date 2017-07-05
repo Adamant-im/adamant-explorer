@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express'),
-    config  = require('./config.json'),
+    config  = require('./config'),
     routes  = require('./api'),
     path    = require('path'),
     cache   = require('./cache'),
@@ -40,8 +40,6 @@ app.set('strict routing', true);
 app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 app.set('exchange enabled', config.exchangeRates.enabled);
-app.set('candles enabled', config.enableCandles);
-app.set('orders enabled', config.enableOrders);
 
 app.use (function (req, res, next) {
     res.setHeader ('X-Frame-Options', 'DENY');
