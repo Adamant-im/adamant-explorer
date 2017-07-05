@@ -9,10 +9,8 @@
                             <tr>
                                 <td><strong>Name</strong></td>
                                 <td class="text-right">
-                                    <a class="glyphicon glyphicon-user" ng-if="vm.address.delegate.username | proposal:delegateProposals" href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:delegateProposals: 'description'}}" target="_blank"></a>
-                                    &nbsp;
+                                    <a class="glyphicon glyphicon-user" data-ng-if="vm.address.delegate.username | proposal:$root.delegateProposals" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:$root.delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:$root.delegateProposals: 'description'}}" target="_blank"></a>
                                     <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
-                                    
                                 </td>
                             </tr>
                             <tr>
