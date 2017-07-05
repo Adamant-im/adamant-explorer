@@ -5,7 +5,7 @@ module.exports = function (app, api) {
 
     this.getAccount = function (deferred) {
         accounts.getAccount(
-            {address: '12907382053545086321C'},
+            {address: '12907382053545086321L'},
             function (data) {
                 deferred.resolve();
                 console.log('accounts.getAccount ~>', 'Error retrieving account:', data.error);
