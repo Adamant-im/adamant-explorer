@@ -6,15 +6,19 @@ var node = require('./../node.js');
 var params = {
     address: '16313739661670634666L',
     address_delegate: '8273455169423958419L',
-    excessive_offset: '1000000'
+    excessive_offset: '1000000',
+    publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f'
 };
-
 
 describe('Accounts API', function() {
 
     /*Define functions for use within tests*/
     function getAccount(id, done) {
         node.get('/api/getAccount?address=' + id, done);
+    }
+
+    function getAccountByPublicKey(pk, done) {
+        node.get('/api/getAccount?publicKey=' + pk, done);
     }
 
     function getTopAccounts(id, id2, done) {
@@ -88,6 +92,38 @@ describe('Accounts API', function() {
 
         it('using no address should fail', function(done) {
             getAccount('', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
+                done();
+            });
+        });
+
+        it('using known pk should be ok', function(done) {
+            getAccountByPublicKey(params.publicKey, function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.ok;
+                checkAccount(res.body);
+                done();
+            });
+        });
+
+        it('using invalid pk should fail', function(done) {
+            getAccountByPublicKey('invalid_pk', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
+                done();
+            });
+        });
+
+        it('using unknown pk should fail', function(done) {
+            getAccountByPublicKey('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', function(err, res) {
+                node.expect(res.body).to.have.property('success').to.be.not.ok;
+                node.expect(res.body).to.have.property('error');
+                done();
+            });
+        });
+
+        it('using no pk should fail', function(done) {
+            getAccountByPublicKey('', function(err, res) {
                 node.expect(res.body).to.have.property('success').to.be.not.ok;
                 node.expect(res.body).to.have.property('error');
                 done();

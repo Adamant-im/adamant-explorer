@@ -7,7 +7,7 @@ module.exports = function (app) {
 
     app.get('/api/getAccount', function (req, res, next) {
         api.getAccount(
-            req.query.address,
+            req.query,
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
         );
@@ -22,4 +22,3 @@ module.exports = function (app) {
         );
     });
 };
-

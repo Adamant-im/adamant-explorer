@@ -6,6 +6,16 @@ import 'angular-ui-bootstrap';
 import 'angular-gettext';
 // import 'babel-polyfill';
 
+// styles
+import '../../node_modules/amstock3/amcharts/style.css';
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+import '../../node_modules/font-awesome/css/font-awesome.css';
+import '../../node_modules/leaflet/dist/leaflet.css';
+import '../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css';
+import '../assets/styles/common.css';
+import '../assets/styles/flags.css';
+import '../assets/styles/tableMobile.css';
+
 // submodules
 import '../components/blocks';
 import '../components/address';
@@ -28,15 +38,6 @@ import '../services';
 import '../directives';
 import './app-tools.module.js';
 import '../shared';
-
-import '../../node_modules/amstock3/amcharts/style.css';
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../../node_modules/font-awesome/css/font-awesome.css';
-import '../../node_modules/leaflet/dist/leaflet.css';
-import '../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css';
-import '../assets/styles/common.css';
-import '../assets/styles/flags.css';
-import '../assets/styles/tableMobile.css';
 
 const App = angular.module('lisk_explorer',[
     'ngAnimate',
