@@ -26,13 +26,13 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 data.lastBlock = res[0];
                 data.blocks    = res[1];
                 data.peers     = res[2];
 
-                log('Emitting new data');
+                log('info','Emitting new data');
                 socket.emit('data', data);
 
                 newInterval(0, 5000, emitData1);
@@ -44,7 +44,7 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     this.onConnect = function () {
-        log('Emitting existing data');
+        log('info','Emitting existing data');
         socket.emit('data', data);
     };
 
@@ -57,8 +57,8 @@ module.exports = function (app, connectionHandler, socket) {
 
     // Private
 
-    var log = function (msg) {
-        logger.info('Network Monitor:', msg);
+    var log = function (level, msg) {
+        logger[level]('Network Monitor:', msg);
     };
 
     var newInterval = function (i, delay, cb) {
@@ -111,11 +111,11 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 thisData.lastBlock = data.lastBlock = res[0];
 
-                log('Emitting data-1');
+                log('info','Emitting data-1');
                 socket.emit('data1', thisData);
             }
         }.bind(this));
@@ -129,11 +129,11 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 thisData.blocks = data.blocks = res[0];
 
-                log('Emitting data-2');
+                log('info','Emitting data-2');
                 socket.emit('data2', thisData);
             }
         }.bind(this));
@@ -147,11 +147,11 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 thisData.peers = data.peers = res[0];
 
-                log('Emitting data-3');
+                log('info','Emitting data-3');
                 socket.emit('data3', thisData);
             }
         }.bind(this));

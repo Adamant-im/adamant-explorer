@@ -20,8 +20,8 @@ module.exports = function (app, connectionHandler, socket) {
 
     // Private
 
-    var log = function (msg) {
-        logger.info('Market Watcher:', msg);
+    var log = function (level, msg) {
+        logger[level]('Market Watcher:', msg);
     };
 };
 

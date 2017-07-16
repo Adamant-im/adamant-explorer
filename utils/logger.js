@@ -3,8 +3,16 @@ var fs = require("fs");
 var flatstr = require("flatstr");
 var newConsole = require("console").Console;
 var config = require("../config");
-var output = fs.createWriteStream(config.logFile, { flags: "a" });
+var output = fs.createWriteStream(config.log.file, { flags: "a" });
 var myConsole = new newConsole(output, output);
+
+var levels = {
+  "verbose": 0,
+  "debug": 1,
+  "info": 2,
+  "warn": 3,
+  "error": 4,
+}
 
 var logger = {};
 
@@ -25,31 +33,31 @@ logger.doLog = function doLog(level, msg, extra) {
 };
 
 logger.verbose = function verbose(msg, extra) {
-  if (config.logLevel <= 0) {
+  if (levels[config.log.level] <= 0) {
     logger.doLog("VERBOSE", msg, extra);
   }
 };
 
 logger.debug = function debug(msg, extra) {
-  if (config.logLevel <= 1) {
+  if (levels[config.log.level] <= 1) {
     logger.doLog("DEBUG", msg, extra);
   }
 };
 
 logger.info = function info(msg, extra) {
-  if (config.logLevel <= 2) {
+  if (levels[config.log.level] <= 2) {
     logger.doLog("INFO", msg, extra);
   }
 };
 
 logger.warn = function warn(msg, extra) {
-  if (config.logLevel <= 3) {
+  if (levels[config.log.level] <= 3) {
     logger.doLog("WARN", msg, extra);
   }
 };
 
 logger.error = function error(msg, extra) {
-  if (config.logLevel <= 4) {
+  if (levels[config.log.level] <= 4) {
     logger.doLog("ERROR", msg, extra);
   }
 };

@@ -37,7 +37,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 tmpData.nextForgers = res[4];
 
@@ -47,7 +47,7 @@ module.exports = function (app, connectionHandler, socket) {
                 data.votes          = res[3];
                 data.nextForgers    = cutNextForgers (10);
 
-                log('Emitting new data');
+                log('info','Emitting new data');
                 socket.emit('data', data);
 
                 getLastBlocks(data.active, true);
@@ -59,7 +59,7 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     this.onConnect = function () {
-        log('Emitting existing data');
+        log('info','Emitting existing data');
         socket.emit('data', data);
     };
 
@@ -81,8 +81,8 @@ module.exports = function (app, connectionHandler, socket) {
 
     // Private
 
-    var log = function (msg) {
-        logger.info('Delegate Monitor:', msg);
+    var log = function (level, msg) {
+        logger[level]('Delegate Monitor:', msg);
     };
 
     var cutNextForgers = function (count) {
@@ -212,7 +212,7 @@ module.exports = function (app, connectionHandler, socket) {
         var limit = init ? 100 : 2;
 
         if (running.getLastBlocks) {
-            return log('getLastBlocks (already running)');
+            return log('error','getLastBlocks (already running)');
         }
         running.getLastBlocks = true;
 
@@ -274,7 +274,7 @@ module.exports = function (app, connectionHandler, socket) {
                         { publicKey : delegate.publicKey,
                           limit : 1 },
                         function (res) {
-                            log('Error retrieving last blocks for: ' + delegateName(delegate));
+                            log('error','Error retrieving last blocks for: ' + delegateName(delegate));
                             callback(res.error);
                         },
                         function (res) {
@@ -303,7 +303,7 @@ module.exports = function (app, connectionHandler, socket) {
             }
         ], function (err, callback) {
             if (err) {
-                log('Error retrieving LastBlocks: ' + err);
+                log('error','Error retrieving LastBlocks: ' + err);
             }
             running.getLastBlocks = false;
         });
@@ -336,7 +336,7 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 tmpData.nextForgers = res[3];
 
@@ -345,14 +345,14 @@ module.exports = function (app, connectionHandler, socket) {
                 data.votes          = res[2];
                 data.nextForgers    = cutNextForgers(10);
 
-                log('Emitting data');
+                log('info','Emitting data');
                 socket.emit('data', data);
             }
         }.bind(this));
     };
 
     var emitDelegate = function (delegate) {
-        log('Emitting last blocks for: ' + delegateName(delegate));
+        log('info','Emitting last blocks for: ' + delegateName(delegate));
         socket.emit('delegate', delegate);
     };
 };

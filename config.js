@@ -23,8 +23,8 @@ config.redis.password = '';
 
 config.cacheTTL = 20; // Time in seconds to store cache in Redis
 
-config.logFile = '/dev/stdout';
-config.logLevel = 1;
+config.log.file = '/dev/stdout';
+config.log.level = 'debug';
 
 // Header price tickers, Currency switcher
 config.exchangeRates.enabled = true;         // Exchange rates support (true - enabled, false - disabled)
