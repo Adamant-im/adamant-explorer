@@ -176,7 +176,7 @@ async.parallel([
         if (err) {
             logger.info(err);
         } else {
-            logger.info('Lisk started at ' + app.get('host') + ':' + app.get('port'));
+            logger.info('Lisk Explorer started at ' + app.get('host') + ':' + app.get('port'));
 
             var io = require('socket.io').listen(server);
             require('./sockets')(app, io);

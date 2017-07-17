@@ -7,7 +7,7 @@ var output = fs.createWriteStream(config.log.file, { flags: "a" });
 var myConsole = new newConsole(output, output);
 
 var levels = {
-  "verbose": 0,
+  "trace": 0,
   "debug": 1,
   "info": 2,
   "warn": 3,
@@ -17,24 +17,27 @@ var levels = {
 var logger = {};
 
 logger.doLog = function doLog(level, msg, extra) {
-  var timestamp = Date.now();
 
-  var stringMsg = typeof msg === "string" ? msg : JSON.stringify(msg);
-  var parsedMsg = stringMsg.replace(/(\r\n|\n|\r)/gm, " ");
+  if (config.log.enabled) {
+    var timestamp = Date.now();
 
-  if (extra) {
-    var stringExtra = typeof extra === "string" ? extra : JSON.stringify(extra);
-    var parsedExtra = stringExtra.replace(/(\r\n|\n|\r)/gm, " ");
-    myConsole.log(flatstr(safeStringify({ level, timestamp, message: msg + ' ' + parsedExtra})));
-  } else {
-    myConsole.log(flatstr(safeStringify({ level, timestamp, message: msg})));
+    var stringMsg = typeof msg === "string" ? msg : JSON.stringify(msg);
+    var parsedMsg = stringMsg.replace(/(\r\n|\n|\r)/gm, " ");
+
+    if (extra) {
+      var stringExtra = typeof extra === "string" ? extra : JSON.stringify(extra);
+      var parsedExtra = stringExtra.replace(/(\r\n|\n|\r)/gm, " ");
+      myConsole.log(flatstr(safeStringify({ level, timestamp, message: msg + ' ' + parsedExtra})));
+    } else {
+      myConsole.log(flatstr(safeStringify({ level, timestamp, message: msg})));
+    }
   }
 
 };
 
-logger.verbose = function verbose(msg, extra) {
+logger.trace = function trace(msg, extra) {
   if (levels[config.log.level] <= 0) {
-    logger.doLog("VERBOSE", msg, extra);
+    logger.doLog("TRACE", msg, extra);
   }
 };
 
