@@ -1,6 +1,4 @@
-node('lisk-explorer-01'){
-  lock(resource: "lisk-explorer-01", inversePrecedence: true) {
-    stage ('Prepare Workspace') {
+def cleanUp() {
       sh '''#!/bin/bash
       pkill -f app.js || true
       bash ~/lisk-test/lisk.sh stop
@@ -8,7 +6,13 @@ node('lisk-explorer-01'){
       pkill -f Xvfb -9 || true
       rm -rf /tmp/.X0-lock || true
       pkill -f webpack -9 || true
-      '''
+    '''
+}
+
+node('lisk-explorer-01'){
+  lock(resource: "lisk-explorer-01", inversePrecedence: true) {
+    stage ('Prepare Workspace') {
+      cleanUp()
       deleteDir()
       checkout scm
 
@@ -83,13 +87,7 @@ node('lisk-explorer-01'){
         npm run test
         '''
       } catch (err) {
-        sh '''#!/bin/bash
-            # Stop Lisk-Node
-            bash ~/lisk-test/lisk.sh stop
-
-            # Stop Lisk-Explorer
-            pkill -f $(pwd)/app.js || true
-        '''
+        cleanUp()
         currentBuild.result = 'FAILURE'
         error('Stopping build, tests failed')
       }
@@ -109,19 +107,7 @@ node('lisk-explorer-01'){
         npm run e2e-test
         '''
       } catch (err) {
-        sh '''#!/bin/bash
-            # Stop Lisk-Node
-            bash ~/lisk-test/lisk.sh stop
-
-            # Stop Lisk-Explorer
-            pkill -f $(pwd)/app.js || true
-
-            # Cleanup e2e processes
-            pkill -f selenium -9 || true
-            pkill -f Xvfb -9 || true
-            rm -rf /tmp/.X0-lock || true
-            pkill -f webpack -9 || true
-        '''
+        cleanUp()
         currentBuild.result = 'FAILURE'
         error('Stopping build, e2e tests failed')
       }
@@ -133,19 +119,7 @@ node('lisk-explorer-01'){
     }
 
     stage ('Cleanup') {
-      sh '''#!/bin/bash
-          # Stop Lisk-Node
-          bash ~/lisk-test/lisk.sh stop
-
-          # Stop Lisk-Explorer
-          pkill -f $(pwd)/app.js || true
-
-          # Cleanup e2e processes
-          pkill -f selenium -9 || true
-          pkill -f Xvfb -9 || true
-          rm -rf /tmp/.X0-lock || true
-          pkill -f webpack -9 || true
-      '''
+      cleanUp()
     }
   }
 }
