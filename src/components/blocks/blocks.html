@@ -27,7 +27,7 @@
                             <td class="text-right hidden-xs"><span class="ellipsis">{{block.timestamp | timestamp}}</span></td>
                             <td class="text-right hidden-xs">{{block.transactionsCount}}</td>
                             <td class="text-right hidden-xs hidden-sm">
-                                <a data-account-href="block.delegate" data-type="delegate" data-id="block.generator">{{block.delegate.username || block.generator}}</a>
+                                <a data-account-href="block.delegate">{{block.delegate.username || block.generator}}</a>
                             </td>
                             <td class="text-right hidden-xs hidden-sm">{{block.totalAmount | currency:$root.currency:$root.decimalPlaces}}</td>
                             <td class="text-right hidden-xs hidden-sm">{{block.totalForged | currency:$root.currency}}</td>
