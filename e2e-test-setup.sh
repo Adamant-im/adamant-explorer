@@ -13,12 +13,12 @@ fi
 
 pwd=`pwd`
 cd $1
-forever stop app.js
+pm2 stop app.js
 dropdb lisk_test && createdb lisk_test
 dropdb lisk_test
 createdb lisk_test
 gunzip -fcq "$pwd/blockchain_explorer.db.gz" | psql -d lisk_test
-forever start app.js
+pm2 start app.js
 sleep 5
 cd $pwd
 

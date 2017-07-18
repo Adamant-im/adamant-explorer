@@ -146,7 +146,7 @@ Replace the **config.json** for the Lisk Client the corresponding file under the
 
 Then restart the Lisk Client (example):
 
-`bash /PATH_TO_LISK_DIR/lisk.sh reload`
+`pm2 restart /PATH_TO_LISK_DIR/app.js`
 
 Launch Lisk Explorer (runs on port 6040):
 
@@ -171,10 +171,10 @@ Setup for end-to-end tests:
 ./node_modules/protractor/bin/webdriver-manager update
 ```
 
-Run end-to-end test suite (replace `~/git/lisk` with your path to lisk core):
+Run end-to-end test suite:
 
 ```
-./e2e-test-setup.sh ~/git/lisk
+./e2e-test-setup.sh /PATH_TO_LISK_DIR
 npm run e2e-test -s
 ```
 

@@ -1,5 +1,5 @@
 {
-    "port": 7000,
+    "port": 4000,
     "address": "0.0.0.0",
     "version": "0.8.2b",
     "minVersion": ">=0.5.0",
@@ -8,6 +8,7 @@
     "consoleLogLevel": "info",
     "trustProxy": false,
     "topAccounts": true,
+    "cacheEnabled": false,
     "db": {
         "host": "localhost",
         "port": 5432,
@@ -20,6 +21,13 @@
         "logEvents": [
             "error"
         ]
+    },
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6380,
+        "db": 0,
+        "user": "",
+        "password": "vgeuwrKZLYwNyZXNc7vTFbjJ4vQnMGrs"
     },
     "api": {
         "enabled": true,
