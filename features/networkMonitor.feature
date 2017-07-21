@@ -25,7 +25,7 @@ Feature: Network Monitor
       """
       BEST BLOCK
       \d{18,20}
-      (\d{1,3},)?\d{1,3}\.\d{1,8} LSK from \d+ transactions
+      \d{1,3}(,\d{1,3})*(\.\d{1,8})? LSK from \d+ transactions
       (\d+|a few|an|a) \w+ ago
       """
     And I should see "volume" element with content that matches:
