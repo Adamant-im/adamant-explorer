@@ -58,7 +58,7 @@ node('lisk-explorer-01'){
     stage ('Start Lisk ') {
       try {
         sh '''#!/bin/bash
-        cp test/config_lisk.json ~/lisk-test/congig.json
+        cp test/config_lisk.json ~/lisk-test/config.json
         bash ~/lisk-test/lisk.sh rebuild -f ~/lisk-test/blockchain_explorer.db.gz
         '''
       } catch (err) {
