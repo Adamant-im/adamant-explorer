@@ -32,6 +32,10 @@
                                 <td class="text-right">{{vm.address.delegate.approval}}%</td>
                             </tr>
                             <tr>
+                                <td><strong>Vote weight</strong></td>
+                                <td class="text-right">{{vm.address.delegate.vote || 0 | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
+                            </tr>
+                            <tr>
                                 <td><strong>Forged</strong></td>
                                 <td class="text-right">{{vm.address.delegate.forged || 0 | currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
                             </tr>
