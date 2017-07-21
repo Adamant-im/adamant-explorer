@@ -4,13 +4,14 @@ Feature: Delegate page
     Then I should see "Delegate" in "h2" html element
     And I should see "Home Address Delegate" in "breadcrumb" element
     And I should see table "summary" containing:
-      | Name          | genesis_17          |
-      | Address       | 537318935439898807L |
-      | Uptime        | /\d{1,3}(\.\d\d)?%/ |
-      | Rank / Status | 50 / Active         |
-      | Approval      | /\d{1,3}(\.\d\d)?%/ |
-      | Forged        | /1,172.\d{8} LSK/   |
-      | Blocks        | /\d+ \(\d+ missed\)/|
+      | Name          | genesis_17                |
+      | Address       | 537318935439898807L       |
+      | Uptime        | /\d{1,3}(\.\d\d)?%/       |
+      | Rank / Status | 50 / Active               |
+      | Approval      | /\d{1,3}(\.\d\d)?%/       |
+      | Vote weight   | /99(,\d{3})*.\d{1,8} LSK/ |
+      | Forged        | /1,172.\d{8} LSK/         |
+      | Blocks        | /\d+ \(\d+ missed\)/      |
 
   Scenario: should allow to show voters
     Given I'm on page "/delegate/537318935439898807L"
