@@ -1,17 +1,17 @@
 <div class="delegate-vote" data-ng-show="votes && votes.length > 0">
     <h2>
-        <a href="" data-ng-show="!showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-plus-square-o"></i></small></a>
-        <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes"><small><i class="fa fa-minus-square-o"></i></small></a> Votes <small>{{votes.length}}</small>
+        <a href="" data-ng-show="!showVotes" data-ng-click="showVotes=!showVotes" class="show-votes-button"><small><i class="fa fa-plus-square-o"></i></small></a>
+        <a href="" data-ng-show="showVotes" data-ng-click="showVotes=!showVotes" class="hide-votes-button"><small><i class="fa fa-minus-square-o"></i></small></a> Votes <small>{{votes.length}}</small>
     </h2>
-    <div class="row" data-ng-init="showVotes=false" data-ng-show="showVotes">
+    <div class="row votes" data-ng-init="showVotes=false" data-ng-show="showVotes">
         <div class="col-md-12">
             <span data-ng-repeat='vote in votes'>
                 <span data-ng-if="!$last">
-                    <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
+                    <a data-account-href="vote" data-type="vote" class="vote-link">{{vote | votes}}</a>
                     <span class="text-muted">&bull;</span>
                 </span>
                 <span data-ng-if="$last">
-                    <a data-account-href="vote" data-type="vote">{{vote | votes}}</a>
+                    <a data-account-href="vote" data-type="vote" class="vote-link">{{vote | votes}}</a>
                 </span>
             </span>
         </div>

@@ -4,10 +4,10 @@
 var node = require('./../node.js');
 
 var params = {
-    address: '16009998050678037905L',
-    address_delegate: '6307319849853921018L',
+    address: '16313739661670634666L',
+    address_delegate: '8273455169423958419L',
     excessive_offset: '1000000',
-    publicKey: 'a24416a05bef8874fb1c638105d892162f7d5736b7a2deda318e976fd80f64e9'
+    publicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f'
 };
 
 describe('Accounts API', function() {

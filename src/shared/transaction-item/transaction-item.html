@@ -6,10 +6,10 @@
 <td data-title="Sender">
     <a data-account-href="tx" data-type="sender">{{tx | txSender}}</a>
 </td>
-<td data-title="Recipient" data-ng-show="tx.type == 0">
+<td data-title="Recipient" data-ng-if="tx.type == 0">
     <a data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
 </td>
-<td data-title="Recipient" data-ng-show="tx.type >= 1">{{tx | txType}}</td>
+<td data-title="Recipient" data-ng-if="tx.type >= 1">{{tx | txType}}</td>
 <td data-title="Amount">
     <div class="txvalues" data-ng-class="{
     'txvalues-danger': tx.type == 0 && address == tx.senderId && tx.senderId != tx.recipientId,
