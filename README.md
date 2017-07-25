@@ -165,20 +165,29 @@ npm test -- test/api/transactions.js
 
 ## End-to-end Tests
 
-Setup for end-to-end tests:
+### Setup for end-to-end tests:
+
+Do all setup steps from "Test" section of this README
+
+Make sure you have `wget` installed (it's used in `./e2e-test-setup.sh`). On Linux by default. On MacOS:
+```
+brew install wget
+```
+
+Setup protractor
 
 ```
 ./node_modules/protractor/bin/webdriver-manager update
 ```
 
-Run end-to-end test suite:
+### Run end-to-end test suite:
 
 ```
 ./e2e-test-setup.sh /PATH_TO_LISK_DIR
 npm run e2e-test -s
 ```
 
-Run one end-to-end test feature file:
+### Run one end-to-end test feature file:
 
 ```
 npm run e2e-test -s -- --specs=features/address.feature
