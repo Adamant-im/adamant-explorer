@@ -71,7 +71,7 @@ app.use(morgan('combined', {
     skip: function(req, res) {
         return parseInt(res.statusCode) >= 400;
     }, stream: split().on('data', function(data) {
-        logger.info(data)
+        logger.info(data);
     })
 }));
 var compression = require('compression');
