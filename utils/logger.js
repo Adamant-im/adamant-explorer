@@ -22,11 +22,11 @@ logger.doLog = function doLog(level, msg, extra) {
   if (config.log.enabled) {
     var timestamp = Date.now();
 
-    var stringMsg = typeof msg === "string" ? msg : JSON.stringify(msg);
-    var parsedMsg = stringMsg.replace(/(\r\n|\n|\r)/gm, " ");
+    var stringMsg = typeof msg === 'string' ? msg : JSON.stringify(msg);
+    var parsedMsg = stringMsg.replace(/(\r\n|\n|\r)/gm, ' ');
 
     if (extra) {
-      var stringExtra = typeof extra === "string" ? extra : JSON.stringify(extra);
+      var stringExtra = typeof extra === 'string' ? extra : JSON.stringify(extra);
       var parsedExtra = stringExtra.replace(/(\r\n|\n|\r)/gm, ' ');
       myConsole.log(flatstr(safeStringify({ level: level, timestamp: timestamp, message: msg + ' ' + parsedExtra})));
     } else {
