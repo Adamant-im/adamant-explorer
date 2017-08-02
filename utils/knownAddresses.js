@@ -1,4 +1,5 @@
 'use strict';
+var logger = require('./logger');
 
 module.exports = function () {
     function KnownAddresses () {
@@ -39,15 +40,15 @@ module.exports = function () {
 
         this.load = function () {
             try {
-                console.log('KnownAddresses:', 'Loading known addresses...');
+                logger.info('KnownAddresses:', 'Loading known addresses...');
                 self.addresses = require('../known.json');
             } catch (err) {
-                console.error('KnownAddresses:', 'Error loading known.json:', err.message);
+                logger.error('KnownAddresses:', 'Error loading known.json:', err.message);
                 self.addresses = {};
             }
 
             var length = Object.keys(self.addresses).length.toString();
-            console.log('KnownAddresses:', length, 'known addresses loaded');
+            logger.info('KnownAddresses:', length, 'known addresses loaded');
             return self.addresses;
         };
 

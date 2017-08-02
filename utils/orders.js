@@ -1,12 +1,13 @@
 'use strict';
 
 var orders = require('../lib/orders'),
-    async = require('async');
+    async = require('async'),
+    logger = require('./logger');
 
 module.exports = function (config, client) {
     this.updateOrders = function () {
         if (running) {
-            console.error('Orders:', 'Update already in progress');
+            logger.error('Orders:', 'Update already in progress');
             return;
         } else {
             running = true;
@@ -42,9 +43,9 @@ module.exports = function (config, client) {
         ],
         function (err, results) {
             if (err) {
-                console.error('Orders:', 'Error updating orders:', err);
+                logger.error('Orders:', 'Error updating orders:', err);
             } else {
-                console.log('Orders:', 'Updated successfully');
+                logger.info('Orders:', 'Updated successfully');
             }
             running = false;
         });
