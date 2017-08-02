@@ -61,7 +61,7 @@
                         <tr>
                             <td><strong>Transactions</strong></td>
                             <td class="ellipsis text-right">
-                                <span title="Incoming"><i class="fa fa-arrow-down text-success"></i> {{vm.address.incoming_cnt}}</span> 
+                                <span title="Incoming"><i class="fa fa-arrow-down text-success"></i> {{vm.address.incoming_cnt}}</span>
                                 <span title="Outgoing"><i class="fa fa-arrow-up text-danger"></i> {{vm.address.outgoing_cnt}}</span>
                             </td>
                         </tr>
@@ -69,7 +69,7 @@
                             <td><strong>Delegate</strong></td>
                             <td class="text-right">
                                 <a class="glyphicon glyphicon-user" data-ng-if="vm.address.delegate.username | proposal:$root.delegateProposals" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:$root.delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:$root.delegateProposals: 'description'}}" target="_blank"></a>
-                                <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
+                                <a data-account-href="vm.address.delegate" data-type="delegate">{{vm.address.delegate.username}}</a>
                             </td>
                         </tr>
                     </tbody>

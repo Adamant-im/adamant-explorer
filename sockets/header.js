@@ -2,7 +2,8 @@
 
 var api = require('../lib/api'),
     config = require('../config'),
-    async = require('async');
+    async = require('async'),
+    logger = require('../utils/logger');
 
 module.exports = function (app, connectionHandler, socket) {
     var blocks     = new api.blocks(app),
@@ -28,12 +29,12 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 data.status = res[0];
                 data.ticker = res[1];
 
-                log('Emitting new data');
+                log('info','Emitting new data');
                 socket.emit('data', data);
 
                 newInterval(0, 10000, emitData);
@@ -46,10 +47,10 @@ module.exports = function (app, connectionHandler, socket) {
     };
 
     this.onConnect = function () {
-        log ('Emitting existing delegate proposals');
+        log('info','Emitting existing delegate proposals');
         socket.emit ('delegateProposals', tmpData.proposals);
 
-        log('Emitting existing data');
+        log('info','Emitting existing data');
         socket.emit('data', data);
     };
 
@@ -62,8 +63,8 @@ module.exports = function (app, connectionHandler, socket) {
 
     // Private
 
-    var log = function (msg) {
-        console.log('Header:', msg);
+    var log = function (level, msg) {
+        logger[level]('Header:', msg);
     };
 
     var newInterval = function (i, delay, cb) {
@@ -117,13 +118,13 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 thisData.status = res[0];
                 thisData.ticker = res[1];
 
                 data = thisData;
-                log('Emitting data');
+                log('info','Emitting data');
                 socket.emit('data', thisData);
             }
         }.bind(this));
@@ -139,12 +140,12 @@ module.exports = function (app, connectionHandler, socket) {
         ],
         function (err, res) {
             if (err) {
-                log ('Error retrieving: ' + err);
+                log('error','Error retrieving: ' + err);
             } else {
                 tmpData.proposals = res[0];
             }
 
-            log ('Emitting updated delegate proposals');
+            log('info','Emitting updated delegate proposals');
             socket.emit ('delegateProposals', tmpData.proposals);
         });
     };
