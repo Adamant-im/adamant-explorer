@@ -1,6 +1,7 @@
 'use strict';
 
 var redis = require('redis');
+var logger = require('./utils/logger');
 
 module.exports = function (config) {
     var client = redis.createClient(
@@ -11,8 +12,7 @@ module.exports = function (config) {
     if (config.redis.password) {
         client.auth(config.redis.password, function (err) {
             if (err) {
-                console.log(err);
-                console.log('Can\'t connect to redis');
+                logger.error('Can\'t connect to redis: ' + err);
             }
         });
     }

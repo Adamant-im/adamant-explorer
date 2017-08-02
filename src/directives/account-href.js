@@ -3,14 +3,23 @@ import AppTools from '../app/app-tools.module.js';
 const accountHref = AppTools.directive('accountHref', () => {
     /**
      * Joins all of the inputs and returns the resulting string in camelCase.
-     * @param {string} first - This word will join the rest in lower-case  
+     * @param {string} first - This word will join the rest in lower-case
      * @param {...string} rest - Each one will be joined in capitalized format.
-     * 
+     *
      * @return {string}
      */
     const joinCameCased = (first, ...rest) => {
         rest = rest.map(word => word.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()));
         return first.toLowerCase() + rest.join('');
+    }
+
+    const getUserName = (scope, attrs) => {
+        if (attrs.type === 'delegate') {
+            return scope.accountHref[joinCameCased(attrs.type, 'delegate')] &&
+                scope.accountHref[joinCameCased(attrs.type, 'delegate')].username;
+        } else {
+            return scope.accountHref[joinCameCased(attrs.type, 'username')];
+        }
     }
 
     return {
@@ -23,12 +32,10 @@ const accountHref = AppTools.directive('accountHref', () => {
             let id = null;
 
             if ($attrs.type === 'sender' || $attrs.type === 'recipient') {
-                username = ($scope.accountHref[joinCameCased($attrs.type, 'delegate')] &&
-                    $scope.accountHref[joinCameCased($attrs.type, 'delegate')].username) ||
-                    $scope.accountHref[joinCameCased($attrs.type, 'username')];
+                username = getUserName($scope, $attrs);
                 id = $scope.accountHref[joinCameCased($attrs.type, 'id')];
             } else {
-                username = $scope.accountHref.username;
+                username = $attrs.type === 'delegate' && $scope.accountHref.username;
                 id = $scope.id ? $scope.id : $scope.accountHref.address;
             }
 

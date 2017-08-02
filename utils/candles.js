@@ -1,12 +1,13 @@
 'use strict';
 
 var candles = require('../lib/candles'),
-    async = require('async');
+    async = require('async'),
+    logger = require('./logger');
 
 module.exports = function (config, client) {
     this.updateCandles = function () {
         if (running) {
-            console.error('Candles:', 'Update already in progress');
+            logger.error('Candles:', 'Update already in progress');
             return;
         } else {
             running = true;
@@ -42,9 +43,9 @@ module.exports = function (config, client) {
         ],
         function (err, results) {
             if (err) {
-                console.error('Candles:', 'Error updating candles:', err);
+                logger.error('Candles:', 'Error updating candles:', err);
             } else {
-                console.log('Candles:', 'Updated successfully');
+                logger.info('Candles:', 'Updated successfully');
             }
             running = false;
         });

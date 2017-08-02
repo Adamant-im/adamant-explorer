@@ -23,6 +23,10 @@ config.redis.password = '';
 
 config.cacheTTL = 20; // Time in seconds to store cache in Redis
 
+config.log.enabled = true;            // Collect logs (true - enabled, false - disabled)
+config.log.file = '/dev/stdout';      // Output for logs - can be device file or ordinary path
+config.log.level = 'info';            // Log level - (trace, debug, info, warn, error)
+
 // Header price tickers, Currency switcher
 config.exchangeRates.enabled = true;         // Exchange rates support (true - enabled, false - disabled)
 config.exchangeRates.updateInterval = 30000; // Interval in ms for checking exchange rates (default: 30 seconds)
