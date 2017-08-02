@@ -1,10 +1,18 @@
-node('lisk-explorer-01'){
-  lock(resource: "lisk-explorer-01", inversePrecedence: true) {
-    stage ('Prepare Workspace') {
+def cleanUp() {
       sh '''#!/bin/bash
       pkill -f app.js || true
       bash ~/lisk-test/lisk.sh stop
-      '''
+      pkill -f selenium -9 || true
+      pkill -f Xvfb -9 || true
+      rm -rf /tmp/.X0-lock || true
+      pkill -f webpack -9 || true
+    '''
+}
+
+node('lisk-explorer-01'){
+  lock(resource: "lisk-explorer-01", inversePrecedence: true) {
+    stage ('Prepare Workspace') {
+      cleanUp()
       deleteDir()
       checkout scm
 
@@ -46,25 +54,26 @@ node('lisk-explorer-01'){
         error('Stopping build, candles build failed')
       }
     }
-    
+
     stage ('Start Lisk ') {
       try {
         sh '''#!/bin/bash
-        bash ~/lisk-test/lisk.sh start
+        cp test/config_lisk.json ~/lisk-test/config.json
+        bash ~/lisk-test/lisk.sh rebuild -f ~/lisk-test/blockchain_explorer.db.gz
         '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
         error('Stopping build, lisk-core failed')
       }
     }
-    
+
     stage ('Start Explorer') {
       try {
       sh '''#!/bin/bash
 
       cp test/config.test ./config.js
       node $(pwd)/app.js &> ./explorer.log &
-      sleep 5
+      sleep 20
       '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
@@ -79,15 +88,29 @@ node('lisk-explorer-01'){
         npm run test
         '''
       } catch (err) {
-        sh '''#!/bin/bash
-            # Stop Lisk-Node
-            bash ~/lisk-test/lisk.sh stop
-            
-            # Stop Lisk-Explorer
-            pkill -f $(pwd)/app.js || true
-        '''
+        cleanUp()
         currentBuild.result = 'FAILURE'
         error('Stopping build, tests failed')
+      }
+    }
+
+    stage ('Run e2e tests') {
+      try {
+        sh '''#!/bin/bash
+
+        # End to End test configuration
+        export DISPLAY=:99
+        Xvfb :99 -ac -screen 0 1280x1024x24 &
+        ./node_modules/protractor/bin/webdriver-manager update
+        ./node_modules/protractor/bin/webdriver-manager start &
+
+        # Run E2E Tests
+        npm run e2e-test
+        '''
+      } catch (err) {
+        cleanUp()
+        currentBuild.result = 'FAILURE'
+        error('Stopping build, e2e tests failed')
       }
     }
 
@@ -97,14 +120,7 @@ node('lisk-explorer-01'){
     }
 
     stage ('Cleanup') {
-      sh '''#!/bin/bash
-          # Stop Lisk-Node
-          bash ~/lisk-test/lisk.sh stop
-          
-          # Stop Lisk-Explorer
-          pkill -f $(pwd)/app.js || true
-      '''
+      cleanUp()
     }
   }
 }
-

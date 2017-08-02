@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table summary">
                     <tbody>
                         <tr>
                             <td><strong>Transactions</strong></td>
@@ -76,7 +76,6 @@
     </div>
     <div data-ng-if="vm.block.height" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
-        <!--<div data-ng-include src="'/components/transactions/list.html'"></div>-->
-        <transactions-list txs="vm.txs"></transactions-list>
+        <transactions-list data-txs="vm.txs"></transactions-list>
     </div>
 </section>

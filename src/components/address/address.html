@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-md-10">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table summary">
                     <tbody>
                         <tr data-ng-if="vm.address.knowledge">
                             <td><strong>Owner</strong></td>
@@ -68,8 +68,7 @@
                         <tr ng-if="vm.address.delegate || proposal">
                             <td><strong>Delegate</strong></td>
                             <td class="text-right">
-                                <a class="glyphicon glyphicon-user" ng-if="vm.address.delegate.username | proposal:delegateProposals" href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:delegateProposals: 'description'}}" target="_blank"></a>
-                                &nbsp;
+                                <a class="glyphicon glyphicon-user" data-ng-if="vm.address.delegate.username | proposal:$root.delegateProposals" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:$root.delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:$root.delegateProposals: 'description'}}" target="_blank"></a>
                                 <a href="/delegate/{{vm.address.delegate.address}}">{{vm.address.delegate.username}}</a>
                             </td>
                         </tr>
@@ -86,7 +85,7 @@
         </div>
     </div>
 
-    <votes data-votes="vm.address.votes" data-ng-if="!vm.address.delegate"></votes>
+    <votes data-votes="vm.address.votes"></votes>
 
     <div data-ng-if="vm.address.balance" data-ng-init="vm.txs.loadData()">
         <h2>Transactions</h2>
@@ -95,10 +94,10 @@
                 <button class="btn btn-default" data-ng-disabled="!vm.direction" data-ng-click="vm.filterTxs();vm.txs.loadData()">All</button>
             </div>
             <div class="btn-group" role="group">
-                <button class="btn btn-default" data-ng-disabled="vm.direction==='sent'" data-ng-click="vm.filterTxs('sent');vm.txs.loadData()">Sent</button>
+                <button class="btn btn-default sent-tab" data-ng-disabled="vm.direction==='sent'" data-ng-click="vm.filterTxs('sent');vm.txs.loadData()">Sent</button>
             </div>
             <div class="btn-group" role="group">
-                <button class="btn btn-default" data-ng-disabled="vm.direction==='received'" data-ng-click="vm.filterTxs('received');vm.txs.loadData()">Received</button>
+                <button class="btn btn-default received-tab" data-ng-disabled="vm.direction==='received'" data-ng-click="vm.filterTxs('received');vm.txs.loadData()">Received</button>
             </div>
         </div>
         <transactions-list data-txs="vm.txs" data-address="vm.address.address"></transactions-list>

@@ -19,7 +19,7 @@
                 <div class="col-xs-12 col-sm-11">
                     <uib-tabset justified="true" class="exchanges">
                         <uib-tab data-ng-repeat='e in vm.exchanges' data-ng-click="vm.setExchange(e)">
-                            <uib-tab-heading>
+                            <uib-tab-heading class="{{e}}-tab">
                                 <img src="{{vm.exchangeLogos[e]}}" alt="{{e}}" />
                             </uib-tab-heading>
                         </uib-tab>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-1">
                     <div class="hidden-sm hidden-xs">
-                        <button type="button" class="btn btn-lg btn-default btn-collapse" data-ng-click="vm.isCollapsed = !vm.isCollapsed" title="Toggle Statistics">
+                        <button type="button" class="btn btn-lg btn-default btn-collapse toggle-statistics-button" data-ng-click="vm.isCollapsed = !vm.isCollapsed" title="Toggle Statistics">
                             <i class="fa" data-ng-class="{'fa-chevron-down': vm.isCollapsed, 'fa-chevron-up': !vm.isCollapsed}"></i>
                         </button>
                     </div>
@@ -111,7 +111,7 @@
                 <div class="col-xs-12">
                     <uib-tabset justified="true" class="sections" data-ng-class="{'collapsed': vm.isCollapsed}">
                         <uib-tab select="vm.setTab('stockChart')">
-                            <uib-tab-heading>
+                            <uib-tab-heading class="stock-chart-tab">
                                 <i class="fa fa-bar-chart"></i> Stock Chart
                             </uib-tab-heading>
                             <div class="btn-group btn-group-justified btn-durations" data-ng-if="vm.stockChart">
@@ -122,13 +122,13 @@
                             <stock-chart data="vm"></stock-chart>
                         </uib-tab>
                         <uib-tab select="vm.setTab('depthChart')">
-                            <uib-tab-heading>
+                            <uib-tab-heading class="depth-chart-tab">
                                 <i class="fa fa-area-chart"></i> Depth Chart
                             </uib-tab-heading>
                             <depth-chart data="vm"></depth-chart>
                         </uib-tab>
                         <uib-tab select="vm.setTab('orderBook')">
-                            <uib-tab-heading>
+                            <uib-tab-heading class="order-book-tab">
                                 <i class="fa fa-book"></i> Order Book
                             </uib-tab-heading>
                             <div class="row orders">

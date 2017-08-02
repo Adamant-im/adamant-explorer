@@ -36,7 +36,7 @@
                                     </p>
                                     <p class="text-muted">waiting for block <i class="fa fa-spinner fa-spin"></i></p>
                                 </div>
-                                <div data-ng-if="vm.lastBlock">
+                                <div data-ng-if="vm.lastBlock" class="last-block-loaded">
                                     <p class="big-details">
                                         <a data-ng-href="/block/{{vm.lastBlock.id}}">{{vm.lastBlock.id}}</a>
                                     </p>
@@ -104,7 +104,7 @@
         </div>
     </div>
     <div class="row" data-ng-if="vm.peers" data-ng-cloak>
-        <div class="col-xs-12 col-sm-6 big-info">
+        <div class="col-xs-12 col-sm-6 big-info platforms-block">
             <p class="small-title">Platforms</p>
 
             <div class="row platforms">
@@ -139,7 +139,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 big-info">
+        <div class="col-xs-12 col-sm-6 big-info versions-block">
             <p class="small-title">Versions</p>
 
             <div class="row versions">
@@ -172,7 +172,7 @@
         </div>
     </div>
     <div class="row" data-ng-if="vm.peers" data-ng-cloak>
-        <div class="col-xs-12 col-sm-12 big-info">
+        <div class="col-xs-12 col-sm-12 big-info best-heights-block">
             <p class="small-title">Best heights</p>
 
             <div class="row heights">

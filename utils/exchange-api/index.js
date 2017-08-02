@@ -29,17 +29,6 @@ module.exports = function (config) {
                 function (res, cb) {
                     return cb(null, res.last);
                 }
-            ],
-            'btce' : [
-                'Btc-e',
-                'https://btc-e.com/api/3/ticker/btc_usd',
-                function (res, cb) {
-                  if (res.error) {
-                      return cb(res.error);
-                  } else {
-                      return cb(null, res.btc_usd.last);
-                  }
-                }
             ]
         },
         'BTCEUR' : {
@@ -68,17 +57,6 @@ module.exports = function (config) {
             ]
         },
         'BTCRUB': {
-            'btce' : [
-                'Btc-e',
-                'https://btc-e.com/api/3/ticker/btc_rur',
-                function (res, cb) {
-                  if (res.error) {
-                      return cb(res.error);
-                  } else {
-                      return cb(null, res.btc_rur.last);
-                  }
-                }
-            ],
             'exmo': [
                 'Exmo',
                 'https://api.exmo.com/v1/ticker/',

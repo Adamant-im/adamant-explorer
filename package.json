@@ -1,6 +1,6 @@
 {
   "name": "lisk-explorer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Lisk blockchain explorer",
   "repository": {
     "type": "git",
@@ -12,9 +12,10 @@
   "main": "src/main.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose",
+    "e2e-test": "protractor protractor.conf.js",
     "start": "npm run copy-files && webpack -w",
     "validate": "webpack-validator webpack.config.js",
-    "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./public",
+    "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./public",
     "build": "npm run copy-files && webpack",
     "build:prod": "webpack --env.prod"
   },
@@ -31,10 +32,13 @@
     "benchmark": "^2.1.1",
     "body-parser": "^1.13.2",
     "bootstrap": "^3.3.7",
+    "clipboard": "=1.7.1",
     "commander": "=2.9.0",
     "compression": "^1.6.2",
     "express": "^4.14.0",
     "font-awesome": "^4.7.0",
+    "fast-safe-stringify": "^1.2.0",
+    "flatstr": "^1.0.5"
     "hiredis": "^0.5.0",
     "leaflet": "^1.0.3",
     "leaflet.markercluster": "^1.0.5",
@@ -49,11 +53,8 @@
     "request": "^2.75.0",
     "sigma": "https://github.com/goVanilla/sigma.js.git",
     "socket.io": "^1.4.8",
-    "underscore": "^1.8.3",
-    "zeroclipboard": "^2.3.0",
-    "fast-safe-stringify": "^1.2.0",
     "split": "^1.0.0",
-    "flatstr": "^1.0.5"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -62,8 +63,10 @@
     "babel-preset-es2015": "^6.4.3",
     "babel-preset-react": "^6.23.0",
     "chai": "^3.5.0",
+    "chai-as-promised": "=7.0.0",
     "clean-webpack-plugin": "^0.1.16",
     "css-loader": "^0.28.0",
+    "cucumber": "=2.3.1",
     "exports-loader": "^0.6.4",
     "file-loader": "^0.11.1",
     "grunt": "^1.0.1",
@@ -81,6 +84,8 @@
     "ng-annotate-webpack-plugin": "^0.2.1-pre",
     "optipng-bin": "=2.0.4",
     "pngquant-bin": "=2.0.0",
+    "protractor": "=5.1.2",
+    "protractor-cucumber-framework": "=3.1.2",
     "style-loader": "^0.16.1",
     "supertest": "^2.0.1",
     "webpack": "^2.4.1",

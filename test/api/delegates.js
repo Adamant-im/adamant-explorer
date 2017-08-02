@@ -3,11 +3,11 @@
 var node = require('./../node.js');
 
 var params = {
-    publicKey: 'a24416a05bef8874fb1c638105d892162f7d5736b7a2deda318e976fd80f64e9',
+    publicKey: '9d3058175acab969f41ad9b86f7a2926c74258670fe56b37c429c01fca9f2f0f',
     noBlocksKey: '1111111111111111111111111111111111111111111111111111111111111111',
     invalidPublicKey: 'abdefghijklmnopqrstuvwyxz',
     delegate: 'genesis_1',
-    address: '6307319849853921018L',
+    address: '8273455169423958419L',
     offset: 20,
     excessiveOffset: 10000
 };

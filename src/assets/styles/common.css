@@ -322,14 +322,14 @@ qrcode svg {
 .navbar-brand .logo {
   height: 55px;
   width: 100px;
-  background: url('/img/logo.png');
+  background: url('../img/logo.png');
 }
 @media (-webkit-min-device-pixel-ratio: 2),
        (min-device-pixel-ratio: 2),
        (min-resolution: 192dpi) {
 
   .navbar-brand .logo {
-    background: url('/img/logo2x.png') no-repeat top left;
+    background: url('../img/logo2x.png') no-repeat top left;
     background-size: 100px 55px;
   }
 }
@@ -352,7 +352,7 @@ qrcode svg {
 
 #search-form { color: #5f696e; }
 
-.navbar-default search .form-group input { 
+.navbar-default search .form-group input {
   width: 275px;
   line-height: normal;
 }
@@ -850,10 +850,7 @@ qrcode svg {
   border-right-color: #0288d1;
 }
 
-.btn-copy.zeroclipboard-is-hover {
-}
-
-.btn-copy.zeroclipboard-is-active .tooltip { opacity: 1; }
+.btn-copy.active .tooltip { opacity: 1; }
 
 @media (max-width: 991px) {
   .btn-copy {

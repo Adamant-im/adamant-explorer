@@ -47,7 +47,7 @@
                 <div class="col-xs-12 col-sm-4">
                     <div class="row big-info">
                         <div class="col-xs-12">
-                            <div class="latest-votes">
+                            <div class="latest-votes next-forgers">
                                 <p class="small-title">Next Forgers</p>
                                 <div>
                                     <div data-ng-if="!vm.nextForgers">
@@ -227,7 +227,7 @@
     <div class="row">
         <div class="col-xs-12 big-info">
             <uib-tabset vertical="true" type="pills">
-                <uib-tab heading="Active Delegates">
+                <uib-tab heading="Active Delegates" class="active-delegates-tab">
                     <p class="small-title">Active Delegates</p>
 
                     <div class="row forging-totals">
@@ -270,7 +270,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped active-delegates">
                             <thead>
                                 <tr>
                                     <th><a href="" data-ng-click="vm.tables.active.order('rate')" class="sort-order">Rank <span data-ng-show="vm.tables.active.predicate === 'rate'" data-ng-class="{reverse: vm.tables.active.reverse}"></span></a></th>
@@ -307,11 +307,11 @@
                         </table>
                     </div>
                 </uib-tab>
-                <uib-tab heading="Standby Delegates" data-ng-click="vm.getStandby(1)">
+                <uib-tab heading="Standby Delegates" data-ng-click="vm.getStandby(1)" class="standby-delegates-tab">
                     <p class="small-title">Standby Delegates</p>
 
                     <div class="table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped standby-delegates">
                             <thead>
                                 <tr>
                                     <th><a href="" data-ng-click="vm.tables.standby.order('rate')" class="sort-order">Rank <span data-ng-show="vm.tables.standby.predicate === 'rate'" data-ng-class="{reverse: vm.tables.standby.reverse}"></span></a></th>
@@ -343,8 +343,8 @@
                         </table>
                     </div>
                     <div data-ng-if="vm.pagination.more || vm.pagination.before">
-                        <button class="btn btn-primary" data-ng-click="vm.getStandby(vm.pagination.previousPage)" data-ng-if="vm.pagination.before">Previous page</button>
-                        <button class="btn btn-primary" data-ng-click="vm.getStandby(vm.pagination.nextPage)" data-ng-if="vm.pagination.more">Next page</button>
+                        <button class="btn btn-primary previous-page-button" data-ng-click="vm.getStandby(vm.pagination.previousPage)" data-ng-if="vm.pagination.before">Previous page</button>
+                        <button class="btn btn-primary next-page-button" data-ng-click="vm.getStandby(vm.pagination.nextPage)" data-ng-if="vm.pagination.more">Next page</button>
                     </div>
                 </uib-tab>
             </uib-tabset>

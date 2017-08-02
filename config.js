@@ -33,9 +33,9 @@ config.exchangeRates.updateInterval = 30000; // Interval in ms for checking exch
 // Configuration for different currency pairs, set false to disable pair
 config.exchangeRates.exchanges.LSK.BTC = 'poloniex'; // LSK/BTC pair, supported: poloniex
 config.exchangeRates.exchanges.LSK.CNY = 'jubi';     // LSK/CNY pair, supported: jubi, bitbays
-config.exchangeRates.exchanges.BTC.USD = 'bitfinex'; // BTC/USD pair, supported: bitfinex, bitstamp, btce
+config.exchangeRates.exchanges.BTC.USD = 'bitfinex'; // BTC/USD pair, supported: bitfinex, bitstamp
 config.exchangeRates.exchanges.BTC.EUR = 'bitstamp'; // BTC/EUR pair, supported: bitstamp, bitmarket
-config.exchangeRates.exchanges.BTC.RUB = 'btce';     // BTC/RUB pair, supported: btce, exmo
+config.exchangeRates.exchanges.BTC.RUB = 'exmo';     // BTC/RUB pair, supported: exmo
 config.exchangeRates.exchanges.BTC.PLN = false;      // BTC/PLN pair, supported: bitmarket
 
 // Market watcher
