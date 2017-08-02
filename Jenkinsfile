@@ -73,7 +73,7 @@ node('lisk-explorer-01'){
 
       cp test/config.test ./config.js
       node $(pwd)/app.js &> ./explorer.log &
-      sleep 5
+      sleep 20
       '''
       } catch (err) {
         currentBuild.result = 'FAILURE'
