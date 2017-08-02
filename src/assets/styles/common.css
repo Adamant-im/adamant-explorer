@@ -850,10 +850,7 @@ qrcode svg {
   border-right-color: #0288d1;
 }
 
-.btn-copy.zeroclipboard-is-hover {
-}
-
-.btn-copy.zeroclipboard-is-active .tooltip { opacity: 1; }
+.btn-copy.active .tooltip { opacity: 1; }
 
 @media (max-width: 991px) {
   .btn-copy {

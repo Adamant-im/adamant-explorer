@@ -15,7 +15,7 @@
     "e2e-test": "protractor protractor.conf.js",
     "start": "npm run copy-files && webpack -w",
     "validate": "webpack-validator webpack.config.js",
-    "copy-files": "cp ./node_modules/zeroclipboard/dist/ZeroClipboard.swf ./src/assets/swf && cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./public",
+    "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./public",
     "build": "npm run copy-files && webpack",
     "build:prod": "webpack --env.prod"
   },
@@ -32,6 +32,7 @@
     "benchmark": "^2.1.1",
     "body-parser": "^1.13.2",
     "bootstrap": "^3.3.7",
+    "clipboard": "=1.7.1",
     "commander": "=2.9.0",
     "compression": "^1.6.2",
     "express": "^4.14.0",
@@ -50,8 +51,7 @@
     "request": "^2.75.0",
     "sigma": "https://github.com/goVanilla/sigma.js.git",
     "socket.io": "^1.4.8",
-    "underscore": "^1.8.3",
-    "zeroclipboard": "^2.3.0"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
