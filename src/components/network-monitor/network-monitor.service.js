@@ -212,8 +212,8 @@ const NetworkMonitor = function (vm) {
         };
 
         this.calculatePercent = function (peers) {
-            for (let item of this.counter) {
-                item = Math.round((item / peers.length) * 100);
+            for (let i = 0; i < this.counter.length; i++) {
+                this.percent[i] = Math.round((this.counter[i] / peers.length) * 100);
             }
 
             return this.percent;
