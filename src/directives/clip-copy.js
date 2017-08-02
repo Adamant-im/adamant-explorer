@@ -1,28 +1,28 @@
 import AppTools from '../app/app-tools.module.js';
-import ZeroClipboard from 'zeroclipboard';
-import ZeroClipboardSwf from '../assets/swf/ZeroClipboard.swf';
-
+import Clipboard from 'clipboard';
 
 AppTools.directive('clipCopy', () => {
     return {
         restric: 'A',
         scope: { clipCopy: '=clipCopy' },
-        template: '<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">Copied!</div></div>',
+        template: '<div class="tooltip fade right in"><div class="tooltip-arrow"></div><div class="tooltip-inner">{{tooltipText}}</div></div>',
         link: function (scope, elm) {
-            const clip = new ZeroClipboard(elm);
-
-            clip.on('ready', clp => {
-                const onAfterCopy = client => {
-                    clp.client.setText(scope.clipCopy);
-                };
-
-                clp.client.on('aftercopy', onAfterCopy);
-                scope.$on('$destroy', () => {
-                    clp.client.off('aftercopy', onAfterCopy);
-                });
+            scope.tooltipText = 'Copied!'
+            const clip = new Clipboard(elm[0], {
+                text: (target) => scope.clipCopy
             });
-
-            clip.on('noFlash wrongflash', () => elm.remove());
+            clip.on('success', e => {
+               elm.addClass('active');
+            });
+            elm.on('mouseleave', e => {
+                elm.removeClass('active');
+            })
+            clip.on('error', function(e) {
+               scope.tooltipText = 'Press Ctrl+C to copy!';
+               scope.$apply();
+               elm.addClass('active');
+            });
+            scope.$on('$destroy', () => clip.desctroy());
         }
     };
 });
