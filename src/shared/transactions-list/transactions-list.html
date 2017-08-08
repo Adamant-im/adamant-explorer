@@ -3,17 +3,24 @@
     <table class="table transactions">
         <thead>
             <tr>
-                <th>Transaction ID</th>
-                <th>Date</th>
-                <th>Sender</th>
-                <th>Recipient</th>
-                <th>Amount</th>
-                <th>Fee</th>
-                <th>Confirmations</th>
+                <th role="button" data-ng-class="filter.predicate === 'id' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('id')">
+                    <span>Transaction ID</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-bottom' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'id'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'date' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('date')">
+                    <span>Date</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'date'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'senderId' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('senderId')">
+                    <span>Sender</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'senderId'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'recipientId' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('recipientId')">
+                    <span>Recipient</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'recipientId'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'amount' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('amount')">
+                    <span>Amount</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'amount'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'fee' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('fee')">
+                    <span>Fee</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'fee'" /></th>
+                <th role="button" data-ng-class="filter.predicate === 'confirmations' ? 'text-primary' : 'text-muted'" data-ng-click="filter.order('confirmations')">
+                    <span>Confirmations</span><i class="glyphicon pull-right" data-ng-class="filter.reverse ? 'glyphicon-triangle-top' : 'glyphicon-triangle-bottom'" ng-if="filter.predicate === 'confirmations'" /></th>
             </tr>
         </thead>
         <tbody>
-            <tr data-transaction-item data-address="address" data-tx="tx" data-ng-repeat="tx in txs.results track by tx.id"></tr>
+            <tr data-transaction-item data-address="address" data-tx="tx" data-ng-repeat="tx in txs.results | orderBy:$root.natural(filter.predicate):filter.reverse track by tx.id"></tr>
         </tbody>
     </table>
 </div>

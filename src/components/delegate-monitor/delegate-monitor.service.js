@@ -108,7 +108,8 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 
 AppDelegateMonitor.factory('delegateMonitor',
   ($socket, $rootScope, forgingMonitor) => vm => {
-      const delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor), ns = $socket('/delegateMonitor');
+      const delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor);
+      const ns = $socket('/delegateMonitor');
 
       ns.on('data', res => {
           if (res.active) {
