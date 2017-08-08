@@ -29,10 +29,7 @@ module.exports = function (app) {
 
     app.get('/api/getTransactionsByAddress', function (req, res, next) {
         api.getTransactionsByAddress(
-            { address   : req.query.address,
-              direction : req.query.direction,
-              offset    : req.query.offset,
-              limit     : req.query.limit },
+            req.query,
             function (data) { res.json(data); },
             function (data) { req.json = data; return next(); }
         );

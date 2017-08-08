@@ -61,6 +61,7 @@ module.exports = env => ({
         }),
         new Webpack.ProvidePlugin({
             app: `exports?exports.default!${Path.join(PATHS.app, 'app')}`,
+            $: Path.resolve(__dirname, "node_modules/jquery/dist/jquery.min.js"),
         }),
         new Webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
 

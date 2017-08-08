@@ -32,7 +32,7 @@ LessMore.prototype.disabled = function () {
 };
 
 LessMore.prototype.getData = function (offset, limit, cb) {
-    const params = angular.extend({offset, limit}, this.params);
+    const params = Object.assign({}, { offset, limit }, this.params);
     this.disable();
     this.loading = true;
     this.$http.get(this.url, {

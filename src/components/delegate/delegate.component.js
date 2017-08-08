@@ -32,11 +32,11 @@ const DelegateConstructor = function ($rootScope, $stateParams, $location, $http
     // Sets the filter for which transactions to display
     vm.filterTxs = direction => {
         vm.direction = direction;
-        vm.txs = addressTxs($stateParams.delegateId, direction);
+        vm.txs = addressTxs({ address: $stateParams.delegateId, direction });
     };
 
     vm.getAddress();
-    vm.txs = addressTxs($stateParams.delegateId);
+    vm.txs = addressTxs({ address: $stateParams.delegateId });
 };
 
 AppDelegate.component('delegate', {

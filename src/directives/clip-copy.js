@@ -22,7 +22,7 @@ AppTools.directive('clipCopy', () => {
                scope.$apply();
                elm.addClass('active');
             });
-            scope.$on('$destroy', () => clip.desctroy());
+            scope.$on('$destroy', () => clip.destroy());
         }
     };
 });
