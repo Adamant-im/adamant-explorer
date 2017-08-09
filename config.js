@@ -10,7 +10,7 @@ config.port = 6040;      // Port to listen on
 
 // LISK node
 config.lisk.host = '127.0.0.1';
-config.lisk.port = 8000;
+config.lisk.port = 8000; // Devnet: 4000, Testnet: 7000, Mainnet: 8000
 
 // FreeGeoIP server
 config.freegeoip.host = '127.0.0.1';
@@ -23,9 +23,9 @@ config.redis.password = '';
 
 config.cacheTTL = 20; // Time in seconds to store cache in Redis
 
-config.log.enabled = true;            // Collect logs (true - enabled, false - disabled)
-config.log.file = '/dev/stdout';      // Output for logs - can be device file or ordinary path
-config.log.level = 'info';            // Log level - (trace, debug, info, warn, error)
+config.log.enabled = true;               // Collect logs (true - enabled, false - disabled)
+config.log.file = './logs/explorer.log'; // Output for logs - can be device file or ordinary path
+config.log.level = 'info';               // Log level - (trace, debug, info, warn, error)
 
 // Header price tickers, Currency switcher
 config.exchangeRates.enabled = true;         // Exchange rates support (true - enabled, false - disabled)
