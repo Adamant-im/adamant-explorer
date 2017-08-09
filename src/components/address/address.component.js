@@ -79,6 +79,8 @@ const AddressConstructor = function ($rootScope, $stateParams, $location, $http,
         vm.txs.loadData();
     };
 
+    const isValidAddress = id => /([0-9]+)L$/.test(id);
+
     $rootScope.$on('advanced-searchbox:modelUpdated', function (event, model) {
         const params = {};
         Object.keys(model).forEach((key) => {
@@ -90,7 +92,7 @@ const AddressConstructor = function ($rootScope, $stateParams, $location, $http,
             }
         });
 
-        if (Object.keys(model).length > 0 && (model.recipientId !== undefined || model.senderId !== undefined)) {
+        if (Object.keys(model).length > 0 && (isValidAddress(model.recipientId) || isValidAddress(model.senderId))) {
             searchByParams(params);
         } else if (Object.keys(model).length === 0) {
             onSearchBoxCleaned();
