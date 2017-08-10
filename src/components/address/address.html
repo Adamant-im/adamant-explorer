@@ -96,7 +96,11 @@
                 parameters-display-limit="vm.parametersDisplayLimit"
                 placeholder="Search...">
             </nit-advanced-searchbox>
-            <p ng-if="vm.invalidParams">Please define Sender and/or Recipient.</p>
+            <div ng-if="vm.invalidParams" class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Please provide a valid address for sender id and/or recipient id. Username is not accepted.
+            </div>
         </section>
         <div class="btn-group btn-group-justified transactions-filter-header" role="group"
             aria-label="All/Sent/Received Transactions" data-ng-class="{disabled: vm.direction === 'search'}">
