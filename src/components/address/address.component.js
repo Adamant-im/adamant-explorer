@@ -87,12 +87,17 @@ const AddressConstructor = function ($rootScope, $stateParams, $location, $http,
             if (model[key] != undefined && model[key] !== '') {
                 params[key] = model[key];
             }
-            if (key === 'minAmount' || key === 'maxAmount') {
-                params[key] *= 1e8;
+            if ((key === 'minAmount' || key === 'maxAmount') && params[key] !== '') {
+                params[key] = Math.floor(parseFloat(params[key]) * 1e8);
             }
         });
 
-        if (Object.keys(model).length > 0 && (isValidAddress(model.recipientId) || isValidAddress(model.senderId))) {
+        if (Object.keys(params).length > 0 && !params.recipientId && !params.senderId) {
+            params.recipientId = $stateParams.address;
+            params.senderId = $stateParams.address;
+        }
+
+        if (Object.keys(params).length > 0 && (isValidAddress(params.recipientId) || isValidAddress(params.senderId))) {
             searchByParams(params);
         } else if (Object.keys(model).length === 0) {
             onSearchBoxCleaned();
