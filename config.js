@@ -10,7 +10,7 @@ config.port = 6040;      // Port to listen on
 
 // LISK node
 config.lisk.host = '127.0.0.1';
-config.lisk.port = 8000; // Devnet: 4000, Testnet: 7000, Mainnet: 8000
+config.lisk.port = 36666; // Devnet: 4000, Testnet: 36667, Mainnet: 36666
 
 // FreeGeoIP server
 config.freegeoip.host = '127.0.0.1';
@@ -28,7 +28,7 @@ config.log.file = './logs/explorer.log'; // Output for logs - can be device file
 config.log.level = 'info';               // Log level - (trace, debug, info, warn, error)
 
 // Header price tickers, Currency switcher
-config.exchangeRates.enabled = true;         // Exchange rates support (true - enabled, false - disabled)
+config.exchangeRates.enabled = false;         // Exchange rates support (true - enabled, false - disabled)
 config.exchangeRates.updateInterval = 30000; // Interval in ms for checking exchange rates (default: 30 seconds)
 // Configuration for different currency pairs, set false to disable pair
 config.exchangeRates.exchanges.LSK.BTC = 'poloniex'; // LSK/BTC pair, supported: poloniex
@@ -39,7 +39,7 @@ config.exchangeRates.exchanges.BTC.RUB = 'exmo';     // BTC/RUB pair, supported:
 config.exchangeRates.exchanges.BTC.PLN = false;      // BTC/PLN pair, supported: bitmarket
 
 // Market watcher
-config.marketWatcher.enabled = true; // Market watcher support (true - enabled, false - disabled)
+config.marketWatcher.enabled = false; // Market watcher support (true - enabled, false - disabled)
 config.marketWatcher.exchanges.poloniex = true; // Poloniex exchange support (true - enabled, false - disabled)
 config.marketWatcher.exchanges.bittrex  = true; // Bittrex exchange support (true - enabled, false - disabled)
 config.marketWatcher.candles.updateInterval = 30000; // Interval in ms for updating candlestick data (default: 30 seconds)
@@ -47,7 +47,7 @@ config.marketWatcher.candles.poloniex.buildTimeframe = 60*60*24*30; // Build can
 config.marketWatcher.orders.updateInterval  = 15000;  // Interval in ms for updating order book data (default: 15 seconds)
 
 // Delegate Proposals
-config.proposals.enabled = true; // Delegate proposals support (true - enabled, false - disabled)
+config.proposals.enabled = false; // Delegate proposals support (true - enabled, false - disabled)
 config.proposals.updateInterval = 600000; // Interval in ms for updating delegate proposals (default: 10 minutes)
 
 // =======================================================================================
