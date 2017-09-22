@@ -1,10 +1,10 @@
 {
-  "name": "lisk-explorer",
+  "name": "secu-explorer",
   "version": "1.3.0",
-  "description": "Lisk blockchain explorer",
+  "description": "Secu blockchain explorer",
   "repository": {
     "type": "git",
-    "url": "git@github.com:LiskHQ/lisk-explorer.git"
+    "url": "git@github.com:zyuhel/secu-explorer.git"
   },
   "private": true,
   "author": "Boris Povod <boris@crypti.me>, Oliver Beddows <oliver@lisk.io>,Ali Haghighatkhah <ali@lisk.io>",
