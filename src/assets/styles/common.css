@@ -425,6 +425,9 @@ qrcode svg {
   color: #eee;
   text-align: center;
   padding-top: 10px;
+
+  min-height: 36px;
+  margin-top: 22px;
 }
 
 .col-gray {
