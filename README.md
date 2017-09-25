@@ -1,6 +1,6 @@
-# Lisk Blockchain Explorer
+# Haze Blockchain Explorer
 
-Lisk Explorer version 1.3.0 works in conjunction with the Lisk Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Haze Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
@@ -54,18 +54,18 @@ These programs and resources are required to install and run Lisk Explorer
 
 ## Installation Steps
 
-Clone the Lisk Explorer Repository:
+Clone the Haze Explorer Repository:
 
 ```
-git clone https://github.com/LiskHQ/lisk-explorer.git
-cd lisk-explorer
+git clone https://github.com/zyuhel/haze-explorer.git
+cd haze-explorer
 npm install
 ```
 
 ## Build Steps
 
 #### Frontend
- The frontend is using Webpack to create core bundles for Lisk Explorer.  
+ The frontend is using Webpack to create core bundles for Haze Explorer.  
  
  For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
 
@@ -76,45 +76,14 @@ npm install
 `npm run build`
 
 
-#### Market Watcher
- Candlestick data needs to be initialized prior to starting Lisk Explorer. During runtime candlestick data is updated automatically.
-
-To build candlestick data for each exchange run:
-
-`grunt candles:build`
-
-To update candlestick data manually run after initialization:
-
-`grunt candles:update`
-
 ## Configuration
 
 The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
 
-#### Top Accounts
 
-To enable Top Accounts functionality, edit your Lisk Client config.json _(not the explorer)_:
+## Managing Haze Explorer
 
-```
-{
-    "port": 8000,
-    "address": "0.0.0.0",
-    "version": "0.5.0",
-    "minVersion": "~0.5.0",
-    "fileLogLevel": "info",
-    "logFileName": "logs/lisk.log",
-    "consoleLogLevel": "info",
-    "trustProxy": false,
-    "topAccounts": false, <--- This line needs to be changed to read true
-```
-
-After the change is made the Lisk Client will need to be restarted. (Example):
-
-`bash /PATH_TO_LISK_DIR/lisk.sh reload`
-
-## Managing Lisk Explorer
-
-To test that Lisk Explorer is configured correctly, run the following command:
+To test that Haze Explorer is configured correctly, run the following command:
 
 `node app.js`
 
