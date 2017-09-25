@@ -10,7 +10,7 @@ AppFilters.filter('currency', (numberFilter, liskFilter) => (amount, currency, d
       // Exchange rate not available for current symbol
       return 'N/A';
     }
-
+    factor = 1;
     let decimals = (currency.symbol === 'HAZE' || currency.symbol === 'BTC') ? decimal_places : 2;
     if (decimals && lisk > 0) {
       return numberFilter ((lisk * factor), decimals);
