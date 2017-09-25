@@ -9,7 +9,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">
-                    <div class="logo" title="Lisk"></div>
+                    <div class="logo" title="Haze">Haze</div>
                 </a>
             </div>
             <div class="navbar-collapse" data-ng-class="{collapse: $root.isCollapsed}">
@@ -17,11 +17,7 @@
                 <div class="status" data-ng-show="blockStatus">
                     <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>
                     <span class="supply">&middot; <strong>Supply: </strong> {{blockStatus.supply | lisk | number:0}}</span>
-                    <span class="lisk-nethash">&middot; <strong>Nethash: </strong> {{blockStatus.nethash | nethash}}</span>
-                    <p>
-                        <span class="lisk-btc"><strong>LSK/BTC: </strong> {{currency.tickers.LSK.BTC || 'N/A'}}</span>
-                        <span class="lisk-usd">&middot; <strong>LSK/{{currency.tickers.LSK[currency.symbol] && currency.symbol !== 'BTC' ? currency.symbol : 'USD'}}: </strong> {{currency.tickers.LSK[currency.symbol] && currency.symbol !== 'BTC' ? (currency.tickers.LSK[currency.symbol] | number:4) : (currency.tickers.LSK.USD | number:4) || 'N/A'}}</span>
-                    </p>
+                    <span class="haze-nethash">&middot; <strong>Nethash: </strong> {{blockStatus.nethash | nethash}}</span>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <currency-selector />

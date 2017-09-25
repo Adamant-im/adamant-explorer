@@ -323,6 +323,15 @@ qrcode svg {
   height: 55px;
   width: 100px;
   background: url('../img/logo.png');
+  background: url('../img/logo-haze.png') no-repeat top left;
+   background-size: 50px 55px;
+   line-height: 55px;
+   padding-left: 55px;
+   font-family: Roboto Bold;
+   font-size: 30px;
+   color: black;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
 }
 @media (-webkit-min-device-pixel-ratio: 2),
        (min-device-pixel-ratio: 2),
@@ -331,6 +340,13 @@ qrcode svg {
   .navbar-brand .logo {
     background: url('../img/logo2x.png') no-repeat top left;
     background-size: 100px 55px;
+      background: url('../img/logo-haze.png') no-repeat top left;
+      background-size: 50px 55px;
+      line-height: 55px;
+      padding-left: 55px;
+      font-family: Roboto Bold;
+      font-size: 30px;
+      color: black;
   }
 }
 
