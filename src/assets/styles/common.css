@@ -272,6 +272,10 @@ qrcode svg {
 
 .navbar-form {
   margin-top: 23px;
+  display: none;
+}
+#footer{
+  display: none;
 }
 
 @media (max-width: 1200px) {
@@ -425,9 +429,8 @@ qrcode svg {
   color: #eee;
   text-align: center;
   padding-top: 10px;
+  display: none;
 
-  min-height: 36px;
-  margin-top: 22px;
 }
 
 .col-gray {
