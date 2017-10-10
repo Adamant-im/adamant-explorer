@@ -7,6 +7,7 @@ AppServices.value('txTypes', {
     3 : 'Delegate vote',
     4 : 'Multi-signature creation',
     5 : 'Dapp registration',
-    7 : 'Dapp deposit',
-    8 : 'Dapp withdrawal'
+    6 : 'Dapp deposit',
+    7 : 'Dapp withdrawal',
+    8 : 'Chat message'
 });
