@@ -206,13 +206,17 @@ qrcode svg {
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #393C3E;}
 
 .navbar-default {
-  background-color: #9c27b0;
+  background-color: #fefefe;
   margin: 0;
   border: 0;
 }
+.navbar-default.navbar-fixed-top {
+  border-bottom: 1px solid lightgray;
+}
+
 
 .navbar-default .navbar-nav>li>a {
-  color: white;
+  color: #4A4A4A;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   margin-left: 1px;
   padding-left: 25px;
@@ -222,25 +226,25 @@ qrcode svg {
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus {
-  background-color: #27292A;
-  color: white;
+  background-color: #BAD3FF;
+  color: #4A4A4A;
 }
 
 .navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>.active>a:hover {
-  background-color: #27292A;
-  color: white;
+  background-color: #BAD3FF;
+  color: #4A4A4A;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
-  background-color: #27292A;
-  color: white;
+  background-color: #BAD3FF;
+  color: #4A4A4A;
 }
 
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
   background-color: #27292A;
-  color: white;
+  color: #4A4A4A;
 }
 
 .navbar-nav li.open>a>.caret {
@@ -254,12 +258,12 @@ qrcode svg {
     margin-bottom: 1px;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
-    background-color: white;
+    background-color: fefefe;
     color: #333;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
-    background-color: #27292A;
-    color: white;
+    background-color: #BAD3FF;
+    color: #4A4A4A;
   }
   .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
     max-height: none;
@@ -313,22 +317,23 @@ qrcode svg {
 }
 
 .navbar-default .navbar-header {
-  height: 79px;
-  line-height: 79px;
+  height: 120px;
+  line-height: 120px;
 }
 
 .navbar-default .navbar-brand {
   color: white;
   padding: 13px;
+  padding-top:0;
   height: 76px;
 }
 
 .navbar-brand .logo {
-  height: 55px;
-  width: 100px;
+  height: 120px;
+  width: 240px;
   background: url('../img/logo.png');
-  background: url('../img/adamant-blockchain-explorer-logo-512x256-white-bg.png') no-repeat top left;
-   background-size: 50px 55px;
+  background: url('../img/adamant-blockchain-explorer-logo-512x256-transparent.png') no-repeat top left;
+   background-size: 240px 120px;
    line-height: 55px;
    padding-left: 55px;
    font-family: Roboto Bold;
@@ -344,8 +349,8 @@ qrcode svg {
   .navbar-brand .logo {
     background: url('../img/logo2x.png') no-repeat top left;
     background-size: 100px 55px;
-      background: url('../img/adamant-blockchain-explorer-logo-512x256-white-bg.png') no-repeat top left;
-      background-size: 50px 55px;
+      background: url('../img/adamant-blockchain-explorer-logo-512x256-transparent.png') no-repeat top left;
+      background-size: 240px 120x;
       line-height: 55px;
       padding-left: 55px;
       font-family: Roboto Bold;
