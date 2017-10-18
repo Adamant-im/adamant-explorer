@@ -278,9 +278,6 @@ qrcode svg {
   margin-top: 23px;
   display: none;
 }
-#footer{
-  display: none;
-}
 
 @media (max-width: 1200px) {
   .status {
@@ -656,8 +653,8 @@ qrcode svg {
 
 /* Set the fixed height of the footer here */
 #footer {
-  background-color: #393C3E;
-  color: white;
+  background-color: #BAD3FF;
+  color: #4A4A4A;
   height: 48px;
   /*overflow: hidden;*/
   padding-top: 8px;
@@ -683,7 +680,7 @@ qrcode svg {
 }
 
 #footer a.link, #footer a.link:focus, #footer a.link:active {
-  color: white;
+  color: #4A4A4A;
   line-height: 32px;
   display: inline-block;
   font-size: 14px;
