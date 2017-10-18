@@ -350,7 +350,7 @@ qrcode svg {
     background: url('../img/logo2x.png') no-repeat top left;
     background-size: 100px 55px;
       background: url('../img/adamant-blockchain-explorer-logo-512x256-transparent.png') no-repeat top left;
-      background-size: 240px 120x;
+      background-size: 240px 120px;
       line-height: 55px;
       padding-left: 55px;
       font-family: Roboto Bold;
@@ -711,7 +711,7 @@ qrcode svg {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-#wrap > .container { padding: 70px 15px 0; }
+#wrap > .container { padding: 120px 15px 0; }
 
 #footer > .container {
   padding-left: 30px;
@@ -1099,6 +1099,12 @@ a.sort-order span.reverse:after {
     vertical-align: middle;
     margin-top: -5px;
 }
+
+.container .breadcrumb
+{
+    background-color: #BAD3FF;
+}
+
 .breadcrumb > li + li:before {
     padding: 0 0 0 7px;
 }
