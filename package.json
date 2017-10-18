@@ -1,7 +1,7 @@
 {
-  "name": "haze-explorer",
+  "name": "adamant-explorer",
   "version": "1.3.0",
-  "description": "Haze blockchain explorer",
+  "description": "Adamant blockchain explorer",
   "repository": {
     "type": "git",
     "url": "git@github.com:zyuhel/haze-explorer.git"

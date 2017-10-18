@@ -327,7 +327,7 @@ qrcode svg {
   height: 55px;
   width: 100px;
   background: url('../img/logo.png');
-  background: url('../img/logo-haze.png') no-repeat top left;
+  background: url('../img/adamant-blockchain-explorer-logo-512x256-white-bg.png') no-repeat top left;
    background-size: 50px 55px;
    line-height: 55px;
    padding-left: 55px;
@@ -344,7 +344,7 @@ qrcode svg {
   .navbar-brand .logo {
     background: url('../img/logo2x.png') no-repeat top left;
     background-size: 100px 55px;
-      background: url('../img/logo-haze.png') no-repeat top left;
+      background: url('../img/adamant-blockchain-explorer-logo-512x256-white-bg.png') no-repeat top left;
       background-size: 50px 55px;
       line-height: 55px;
       padding-left: 55px;
