@@ -206,7 +206,7 @@ qrcode svg {
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #393C3E;}
 
 .navbar-default {
-  background-color: #fefefe;
+  background-color: #4A4A4A;
   margin: 0;
   border: 0;
 }
@@ -216,7 +216,7 @@ qrcode svg {
 
 
 .navbar-default .navbar-nav>li>a {
-  color: #4A4A4A;
+  color: white;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   margin-left: 1px;
   padding-left: 25px;
@@ -243,8 +243,8 @@ qrcode svg {
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
-  background-color: #27292A;
-  color: #4A4A4A;
+  background-color: #4A4A4A;
+  color: white;
 }
 
 .navbar-nav li.open>a>.caret {
@@ -258,7 +258,7 @@ qrcode svg {
     margin-bottom: 1px;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a {
-    background-color: fefefe;
+    background-color: #4A4A4A;
     color: #333;
   }
   .navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
@@ -653,8 +653,8 @@ qrcode svg {
 
 /* Set the fixed height of the footer here */
 #footer {
-  background-color: #BAD3FF;
-  color: #4A4A4A;
+  background-color: #4A4A4A;
+  color: white;
   height: 48px;
   /*overflow: hidden;*/
   padding-top: 8px;
@@ -680,14 +680,14 @@ qrcode svg {
 }
 
 #footer a.link, #footer a.link:focus, #footer a.link:active {
-  color: #4A4A4A;
+  color: white;
   line-height: 32px;
   display: inline-block;
   font-size: 14px;
 }
 
 #footer a.link:hover {
-  color: white;
+  color: #BAD3FF;
 }
 
 .line-footer { border-top: 2px dashed #ccc; }
