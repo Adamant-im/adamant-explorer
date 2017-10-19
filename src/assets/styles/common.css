@@ -37,12 +37,12 @@ h1>small {
 }
 
 a, a:visited, a:focus {
-  color: #0288d1;
+  color: #4A4A4A;
   text-decoration: none;
 }
 
 a:hover {
-  color: #f57c00;
+  color: #BAD3FF;
   text-decoration: none;
   transition: color 0.3s ease 0s;
 }
