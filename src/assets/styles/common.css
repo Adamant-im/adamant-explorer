@@ -1101,9 +1101,14 @@ a.sort-order span.reverse:after {
 
 .container .breadcrumb
 {
-    background-color: #BAD3FF;
     background-color: #4A4A4A;
-    color: white;
+    color: #b5b5b5;
+}
+.breadcrumb a {
+    color: #b5b5b5;
+}
+.breadcrumb a:hover {
+    color: #BAD3FF;
 }
 
 .breadcrumb > li + li:before {
