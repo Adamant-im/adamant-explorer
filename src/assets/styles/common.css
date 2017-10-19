@@ -275,7 +275,7 @@ qrcode svg {
 }
 
 .navbar-form {
-  margin-top: 23px
+  margin-top: 43px
 }
 
 @media (max-width: 1200px) {
@@ -1007,6 +1007,9 @@ a.v_highlight_more {
 
 @media (min-width: 768px) {
   #search { color: #5f696e; }
+    .nav.navbar-nav {
+        margin-top: 18px;
+    }
 }
 
 .big-info {
