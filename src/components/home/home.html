@@ -27,7 +27,7 @@
                         </tr>
                         <tr data-ng-repeat='tx in vm.txs track by $index'>
                             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
-                            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}<span></td>
+                            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}</span></td>
                             <td class="text-right hidden-xs"><a class="ellipsis" data-account-href="tx" data-type="sender">{{tx | txSender}}</a></td>
                             <td class="text-right hidden-xs">
                                 <a class="ellipsis" data-ng-show="tx.type == 0" data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
