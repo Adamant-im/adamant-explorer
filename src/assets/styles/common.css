@@ -216,7 +216,7 @@ qrcode svg {
 
 
 .navbar-default .navbar-nav>li>a {
-  color: white;
+  color: #b5b5b5;
   font-family: 'Roboto', 'Ubuntu', sans-serif;
   margin-left: 1px;
   padding-left: 25px;
@@ -244,7 +244,7 @@ qrcode svg {
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
   background-color: #4A4A4A;
-  color: white;
+    color: #b5b5b5;
 }
 
 .navbar-nav li.open>a>.caret {
@@ -318,7 +318,7 @@ qrcode svg {
 }
 
 .navbar-default .navbar-brand {
-  color: white;
+    color: #b5b5b5;
   padding: 13px;
   padding-top:0;
   height: 76px;
@@ -653,7 +653,7 @@ qrcode svg {
 /* Set the fixed height of the footer here */
 #footer {
   background-color: #4A4A4A;
-  color: white;
+    color: #b5b5b5;
   height: 48px;
   /*overflow: hidden;*/
   padding-top: 8px;
@@ -674,12 +674,12 @@ qrcode svg {
 }
 
 #footer .col-right a.link {
-  color: #27292A;
+    color: #b5b5b5;
   margin-left: 10px;
 }
 
 #footer a.link, #footer a.link:focus, #footer a.link:active {
-  color: white;
+    color: #b5b5b5;
   line-height: 32px;
   display: inline-block;
   font-size: 14px;
