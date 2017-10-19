@@ -4,7 +4,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" data-aria-labelledby="main-currency-selector">
         <li>
-            <a data-ng-click="cs.setCurrency('HAZE')" data-ng-class="{active: currency.symbol == 'HAZE'}" class="LSK">HAZE</a>
+            <a data-ng-click="cs.setCurrency('ADM')" data-ng-class="{active: currency.symbol == 'ADM'}" class="LSK">ADM</a>
         </li>
         <li data-ng-if="currency.tickers.LSK" data-ng-repeat="(key, value) in currency.tickers.LSK">
             <a data-ng-click="cs.setCurrency(key)" data-ng-class="{active: currency.symbol == {{key}}}" class="{{key}}">{{key}}</a>

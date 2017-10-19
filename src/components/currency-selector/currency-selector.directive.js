@@ -5,7 +5,7 @@ import template from './currency-selector.html';
 AppCurrency.directive ('currencySelector', ($rootScope, $timeout) => {
     const CurrencySelectorLink = () => {
         $timeout(() => {
-            $rootScope.currency.symbol = localStorage && localStorage.getItem ('lisk_explorer-currency') || 'HAZE';
+            $rootScope.currency.symbol = localStorage && localStorage.getItem ('lisk_explorer-currency') || 'ADM';
         });
     };
 

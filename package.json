@@ -4,7 +4,7 @@
   "description": "Adamant blockchain explorer",
   "repository": {
     "type": "git",
-    "url": "git@github.com:zyuhel/haze-explorer.git"
+    "url": "git@github.com:zyuhel/adamant-explorer.git"
   },
   "private": true,
   "author": "Boris Povod <boris@crypti.me>, Oliver Beddows <oliver@lisk.io>,Ali Haghighatkhah <ali@lisk.io>",

@@ -1,6 +1,6 @@
-# Haze Blockchain Explorer
+# Adamant Blockchain Explorer
 
-Haze Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Adamant Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
@@ -54,18 +54,18 @@ These programs and resources are required to install and run Lisk Explorer
 
 ## Installation Steps
 
-Clone the Haze Explorer Repository:
+Clone the Adamant Explorer Repository:
 
 ```
-git clone https://github.com/zyuhel/haze-explorer.git
-cd haze-explorer
+git clone https://github.com/zyuhel/adamant-explorer.git
+cd adamant-explorer
 npm install
 ```
 
 ## Build Steps
 
 #### Frontend
- The frontend is using Webpack to create core bundles for Haze Explorer.  
+ The frontend is using Webpack to create core bundles for Adamant Explorer.  
  
  For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
 
@@ -81,9 +81,9 @@ npm install
 The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
 
 
-## Managing Haze Explorer
+## Managing Adamant Explorer
 
-To test that Haze Explorer is configured correctly, run the following command:
+To test that Adamant Explorer is configured correctly, run the following command:
 
 `node app.js`
 

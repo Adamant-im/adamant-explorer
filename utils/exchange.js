@@ -13,8 +13,8 @@ module.exports = function (config) {
         api.getPriceTicker(function (err, result) {
             if (result) {
                 _.each(result.BTC, function (ticker, key) {
-                    if (!result.HAZE[key]) {
-                        result.HAZE[key] = result.HAZE.BTC * ticker;
+                    if (!result.ADM[key]) {
+                        result.ADM[key] = result.ADM.BTC * ticker;
                     }
                 });
                 exchange.tickers = result;
