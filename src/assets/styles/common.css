@@ -1101,6 +1101,7 @@ a.sort-order span.reverse:after {
 
 .container .breadcrumb
 {
+    display:none;
     background-color: #4A4A4A;
     color: #b5b5b5;
 }
