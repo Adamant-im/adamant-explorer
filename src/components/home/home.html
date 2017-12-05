@@ -30,8 +30,8 @@
                             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}</span></td>
                             <td class="text-right hidden-xs"><a class="ellipsis" data-account-href="tx" data-type="sender">{{tx | txSender}}</a></td>
                             <td class="text-right hidden-xs">
-                                <a class="ellipsis" data-ng-show="tx.type == 0" data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
-                                <span class="ellipsis" data-ng-show="tx.type >= 1">{{tx | txRecipient}}</span>
+                                <a class="ellipsis" data-ng-show="tx.type == 0 || tx.type == 8" data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
+                                <span class="ellipsis" data-ng-show="tx.type >= 1 && tx.type !=8">{{tx | txRecipient}}</span>
                             </td>
                             <td class="text-right"><span class="ellipsis">{{tx.amount | currency:$root.currency:$root.decimalPlaces}}</span></td>
                             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee | currency:$root.currency}}</span></td>
