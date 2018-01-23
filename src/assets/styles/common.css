@@ -327,7 +327,6 @@ qrcode svg {
 .navbar-brand .logo {
   height: 120px;
   width: 240px;
-  background: url('../img/logo.png');
   background: url('../img/adamant-blockchain-explorer-logo-512x256-transparent.png') no-repeat top left;
    background-size: 240px 120px;
    line-height: 55px;
@@ -343,8 +342,6 @@ qrcode svg {
        (min-resolution: 192dpi) {
 
   .navbar-brand .logo {
-    background: url('../img/logo2x.png') no-repeat top left;
-    background-size: 100px 55px;
       background: url('../img/adamant-blockchain-explorer-logo-512x256-transparent.png') no-repeat top left;
       background-size: 240px 120px;
       line-height: 55px;
