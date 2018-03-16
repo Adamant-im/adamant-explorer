@@ -1,7 +1,7 @@
 {
   "name": "adamant-explorer",
   "version": "1.3.0",
-  "description": "Adamant blockchain explorer",
+  "description": "ADAMANT blockchain explorer",
   "repository": {
     "type": "git",
     "url": "git@github.com:zyuhel/adamant-explorer.git"

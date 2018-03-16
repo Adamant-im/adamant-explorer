@@ -1,6 +1,6 @@
-# Adamant Blockchain Explorer
+# ADAMANT Blockchain Explorer
 
-Adamant Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
@@ -54,7 +54,7 @@ These programs and resources are required to install and run Lisk Explorer
 
 ## Installation Steps
 
-Clone the Adamant Explorer Repository:
+Clone the ADAMANT Explorer Repository:
 
 ```
 git clone https://github.com/zyuhel/adamant-explorer.git
@@ -81,9 +81,9 @@ npm install
 The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
 
 
-## Managing Adamant Explorer
+## Managing ADAMANT Explorer
 
-To test that Adamant Explorer is configured correctly, run the following command:
+To test that ADAMANT Explorer is configured correctly, run the following command:
 
 `node app.js`
 
@@ -103,21 +103,21 @@ To stop Explorer after it has been started with `PM2`, issue the following comma
 
 ## Tests
 
-Before running any tests, please ensure Lisk Explorer and Lisk Client are configured to run on the Lisk Testnet.
+Before running any tests, please ensure ADAMANT Explorer and ADAMANT Node are configured to run on the ADAMANT Testnet.
 
 Replace **config.js** with **config.test** file from the **test** directory:
 
 `cp test/config.test ./config.js`
 
-Replace the **config.json** for the Lisk Client the corresponding file under the **test** directory:
+Replace the **config.json** for the ADAMANT Node the corresponding file under the **test** directory:
 
-`cp test/config_lisk.json  /PATH_TO_LISK_DIR/config.json`
+`cp test/config_lisk.json  /PATH_TO_ADAMANT_DIR/config.json`
 
-Then restart the Lisk Client (example):
+Then restart the ADAMANT Node (example):
 
-`pm2 restart /PATH_TO_LISK_DIR/app.js`
+`pm2 restart /PATH_TO_ADAMANT_DIR/app.js`
 
-Launch Lisk Explorer (runs on port 6040):
+Launch ADAMANT Explorer (runs on port 6040):
 
 `pm2 start pm2-explorer.json`
 
@@ -164,13 +164,13 @@ npm run e2e-test -s -- --specs=features/address.feature
 
 ## License
 
-Copyright © 2016-2017 Lisk Foundation
+Copyright © 2016-2017 Lisk Foundation ©2017-2018 ADAMANT Tech Labs
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the [GNU General Public License](https://github.com/LiskHQ/lisk-explorer/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License](https://github.com/adamant/adamant-explorer/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***
 
