@@ -6,7 +6,6 @@ More info abot ADAMANT at https://adamant.im
 
 ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
-[![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 ## Prerequisites
@@ -181,6 +180,7 @@ You should have received a copy of the [GNU General Public License](https://gith
 This program also incorporates work previously released with lisk-explorer `1.1.0` (and earlier) versions under the [MIT License](https://opensource.org/licenses/MIT). To comply with the requirements of that license, the following permission notice, applicable to those parts of the code only, is included below:
 
 Copyright © 2018 ADAMANT TECH LABS LP
+
 Copyright © 2016-2017 Lisk Foundation  
 Copyright © 2015 Crypti
 
