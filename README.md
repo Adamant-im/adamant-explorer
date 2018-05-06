@@ -1,5 +1,9 @@
 # ADAMANT Blockchain Explorer
 
+ADAMANT Messenger is a fully open source Blockchain Messenger. Explorer at https://explorer.adamant.im shows ADAMANT blockchain transactions. You can deploy your own ADAMANT explorer using this repository.
+
+More info abot ADAMANT at https://adamant.im
+
 ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
 
 [![Build Status](https://travis-ci.org/LiskHQ/lisk-explorer.svg?branch=development)](https://travis-ci.org/LiskHQ/lisk-explorer)
@@ -7,20 +11,20 @@ ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It u
 
 ## Prerequisites
 
-These programs and resources are required to install and run Lisk Explorer
+These programs and resources are required to install and run ADAMANT Explorer
 
-- Nodejs v6.10.1 or higher (<https://nodejs.org/>) -- Nodejs serves as the underlying engine for code execution.
+- Nodejs v6.10.1 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
 
   ```
   curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
   sudo apt-get install -y nodejs
   ```
 
-- Redis (<http://redis.io>) -- Redis is used for caching parsed exchange data.
+- Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
 
   `sudo apt-get install -y redis-server`
 
-- Freegeoip (<https://github.com/fiorix/freegeoip>) -- Freegeoip is used by the Network Monitor for IP address geo-location.
+- Freegeoip (<https://github.com/fiorix/freegeoip>) — Freegeoip is used by the Network Monitor for IP address geo-location.
 
   ```
   wget https://github.com/fiorix/freegeoip/releases/download/v3.1.5/freegeoip-3.1.5-linux-amd64.tar.gz
@@ -29,26 +33,26 @@ These programs and resources are required to install and run Lisk Explorer
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
 
-- Grunt.js (<http://gruntjs.com/>) -- Grunt is used to run eslint and unit tests.
+- Grunt.js (<http://gruntjs.com/>) — Grunt is used to run eslint and unit tests.
 
   `sudo npm install -g grunt`
 
-- PM2 (https://github.com/Unitech/pm2) -- PM2 manages the node process for Lisk Explorer and handles log rotation (Highly Recommended)
+- PM2 (https://github.com/Unitech/pm2) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Highly Recommended)
 
   `sudo npm install -g pm2`
   
-- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) -- Manages PM2 logs
+- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) — Manages PM2 logs
 
   ```
   pm2 install pm2-logrotate
   pm2 set pm2-logrotate:max_size 100M
   ```
 
-- Git (<https://github.com/git/git>) -- Used for cloning and updating Lisk Explorer
+- Git (<https://github.com/git/git>) — Used for cloning and updating ADAMANT Explorer
 
   `sudo apt-get install -y git`
 
-- Tool chain components -- Used for compiling dependencies
+- Tool chain components — Used for compiling dependencies
 
   `sudo apt-get install -y python build-essential automake autoconf libtool`
 
@@ -65,7 +69,7 @@ npm install
 ## Build Steps
 
 #### Frontend
- The frontend is using Webpack to create core bundles for Adamant Explorer.  
+ The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
  
  For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
 
@@ -78,7 +82,7 @@ npm install
 
 ## Configuration
 
-The default `config.js` file contains all of the configuration settings for Lisk Explorer. These options can be modified according to comments included in configuration file.
+The default `config.js` file contains all of the configuration settings for ADAMANT Explorer. These options can be modified according to comments included in configuration file.
 
 
 ## Managing ADAMANT Explorer
@@ -176,6 +180,7 @@ You should have received a copy of the [GNU General Public License](https://gith
 
 This program also incorporates work previously released with lisk-explorer `1.1.0` (and earlier) versions under the [MIT License](https://opensource.org/licenses/MIT). To comply with the requirements of that license, the following permission notice, applicable to those parts of the code only, is included below:
 
+Copyright © 2018 ADAMANT TECH LABS LP
 Copyright © 2016-2017 Lisk Foundation  
 Copyright © 2015 Crypti
 
