@@ -102,7 +102,7 @@ After the process is started its runtime status and log location can be found by
 
 To stop Explorer after it has been started with `PM2`, issue the following command:
 
-`pm2 stop lisk-explorer`
+`pm2 stop adamant-explorer`
 
 ## Tests
 
