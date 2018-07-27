@@ -172,12 +172,9 @@ const NetworkMonitor = function (vm) {
 
     function Heights (peers) {
         const inspect = () => {
-            function sortNumber(a,b) {
-                return b - a;
-            }
             if (angular.isArray(peers)) {
                 return uniq(peers.map(p => p.height)
-                            .sort()).reverse().slice(0, 4); 
+                            .sort((a, b) => (a - b))).reverse().slice(0, 4);
             } else {
                 return [];
             }
