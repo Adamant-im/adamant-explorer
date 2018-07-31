@@ -12,10 +12,10 @@ ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It u
 
 These programs and resources are required to install and run ADAMANT Explorer
 
-- Nodejs v6.10.1 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
+- Nodejs v8.11.3 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
 
   ```
-  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
   sudo apt-get install -y nodejs
   ```
 
@@ -35,6 +35,11 @@ These programs and resources are required to install and run ADAMANT Explorer
 - Grunt.js (<http://gruntjs.com/>) — Grunt is used to run eslint and unit tests.
 
   `sudo npm install -g grunt`
+  
+- Bower (<https://bower.io/>) — used for building dependencies.
+
+  `sudo npm install -g bower`
+
 
 - PM2 (https://github.com/Unitech/pm2) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Highly Recommended)
 
