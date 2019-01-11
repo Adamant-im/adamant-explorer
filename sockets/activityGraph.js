@@ -33,7 +33,7 @@ module.exports = function (app, connectionHandler, socket) {
     // Private
 
     var log = function (level, msg) {
-        logger[level]('Activity Graph:', msg);
+        // logger[level]('Activity Graph:', msg);
     };
 
     var getLastBlock = function (cb) {

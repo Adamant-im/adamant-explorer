@@ -6,12 +6,15 @@ const TransactionsConstructor = function ($rootScope, $stateParams, $location, $
     const vm = this;
     vm.getTransaction = () => {
         $http.get('/api/getTransaction', {
-            params : {
-                transactionId : $stateParams.txId
+            params: {
+                transactionId: $stateParams.txId
             }
         }).then(resp => {
-            if (resp.data.success) {
-                vm.tx = resp.data.transaction;
+            const data = resp.data;
+            if (data.success) {
+                if (data.transaction.amount === 0) throw 'Transaction is 0 ADM!';
+
+                vm.tx = data.transaction;
             } else {
                 throw 'Transaction was not found!';
             }
@@ -28,4 +31,3 @@ AppTransactions.component('transactions', {
     controller: TransactionsConstructor,
     controllerAs: 'vm'
 });
-

@@ -111,6 +111,7 @@ const AddressConstructor = function ($rootScope, $stateParams, $location, $http,
 
     vm.getAddress();
     vm.txs = addressTxs({ address: $stateParams.address });
+    window.VM=vm;
 };
 
 AppAddress.component('address', {

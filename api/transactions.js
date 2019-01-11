@@ -27,6 +27,13 @@ module.exports = function (app) {
         );
     });
 
+    app.get('/api/getLastTransfers', function (req, res, next) {
+        api.getLastTransfers(
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); }
+        );
+    });
+
     app.get('/api/getTransactionsByAddress', function (req, res, next) {
         api.getTransactionsByAddress(
             req.query,
@@ -34,8 +41,16 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+    app.get('/api/getTransfersByAddress', function (req, res, next) {
+        api.getTransactionsByAddress(
+            req.query,
+            function (data) { res.json(data); },
+            function (data) { req.json = data; return next(); },
+            1
+        );
+    });
 
-    app.get('/api/getTransactionsByBlock', function (req, res, next) {
+      app.get('/api/getTransactionsByBlock', function (req, res, next) {
         api.getTransactionsByBlock(
           { blockId : req.query.blockId,
             offset  : req.query.offset,

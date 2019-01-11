@@ -27,10 +27,10 @@
 
 .forging-total {
   color: white;
-  padding: 1em;
+  padding: 2em;
   margin-top: 1em;
   margin-bottom: 1em;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 .forging-total.grey {
@@ -49,8 +49,23 @@
   background-color: #d32f2f;
 }
 
+.progress {
+	height: 30px;
+  border-radius: 0;
+}
+
+.progress-bar {
+	line-height: 30px;
+}
+
 .progress-bar-forging {
-  background-color: #0288d1;
+  	background: -moz-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(45,108,162,1)), color-stop(100%, rgba(2,136,209,1))); /* safari4+,chrome */
+	background: -webkit-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* ie10+ */
+	background: linear-gradient(125deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d6ca2', endColorstr='#0288d1',GradientType=1 ); /* ie6-9 */
 }
 
 .forging-status {
@@ -105,4 +120,18 @@
 
 .tooltip-red.left .tooltip-arrow {
   border-left-color:  #d32f2f;
+}
+
+.best-productivity {
+  width: 100%;
+}
+
+.best-productivity-input {
+  width: 50%;
+  float: left;
+}
+
+.big-details .lisk, .total-delegates, .best-productivity-input .ng-binding {
+  color: #5f696e;
+  font-weight: 700;
 }

@@ -1,10 +1,14 @@
 import AppDelegateMonitor from './delegate-monitor.module';
 
 const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
+    const SAT= 100000000;
     this.updateActive = active => {
         active.delegates.forEach(d => {
+            d.votesWeight = +Number(d.votesWeight / SAT).toFixed(0) * SAT;
+            d.forged = +Number(d.forged / SAT).toFixed(4) * SAT;
             d.forgingStatus = forgingMonitor.getStatus(d);
             d.proposal = $rootScope.delegateProposals[d.username.toLowerCase()];
+            d.forgingTime /= 2;
         });
         $scope.activeDelegates = active.delegates;
 
@@ -14,7 +18,7 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 
     this.updateTotals = active => {
         $scope.totalDelegates = active.totalCount || 0;
-        $scope.totalActive    = 101;
+        $scope.totalActive = 101;
 
         if ($scope.totalDelegates > $scope.totalActive) {
             $scope.totalStandby = ($scope.totalDelegates - $scope.totalActive);
@@ -22,9 +26,9 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
             $scope.totalStandby = 0;
         }
 
-        $scope.bestForger  = bestForger(active.delegates);
+        $scope.bestForger = bestForger(active.delegates);
         $scope.totalForged = totalForged(active.delegates);
-        $scope.bestProductivity  = bestProductivity(active.delegates);
+        $scope.bestProductivity = bestProductivity(active.delegates);
         $scope.worstProductivity = worstProductivity(active.delegates);
     };
 
@@ -78,8 +82,8 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     };
 
     var totalForged = delegates => delegates
-            .map(d => parseInt(d.forged))
-            .reduce((memo, num) => parseInt(memo) + parseInt(num), 0);
+        .map(d => parseInt(d.forged))
+        .reduce((memo, num) => parseInt(memo) + parseInt(num), 0);
 
     var bestProductivity = delegates => {
         if (delegates.length > 0) {
@@ -107,36 +111,46 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
 };
 
 AppDelegateMonitor.factory('delegateMonitor',
-  ($socket, $rootScope, forgingMonitor) => vm => {
-      const delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor);
-      const ns = $socket('/delegateMonitor');
+    ($socket, $rootScope, forgingMonitor) => vm => {
+        const delegateMonitor = new DelegateMonitor(vm, $rootScope, forgingMonitor);
+        const ns = $socket('/delegateMonitor');
 
-      ns.on('data', res => {
-          if (res.active) {
-              delegateMonitor.updateActive(res.active);
-              delegateMonitor.updateTotals(res.active);
-          }
-          if (res.lastBlock) { delegateMonitor.updateLastBlock(res.lastBlock); }
-          if (res.registrations) { delegateMonitor.updateRegistrations(res.registrations); }
-          if (res.nextForgers) { delegateMonitor.updateNextForgers(res.nextForgers); }
-          if (res.votes) { delegateMonitor.updateVotes(res.votes); }
-          if (res.approval) { delegateMonitor.updateApproval(res.approval); }
-      });
+        ns.on('data', res => {
+            if (res.active) {
+                delegateMonitor.updateActive(res.active);
+                delegateMonitor.updateTotals(res.active);
+            }
+            if (res.lastBlock) {
+                delegateMonitor.updateLastBlock(res.lastBlock);
+            }
+            if (res.registrations) {
+                delegateMonitor.updateRegistrations(res.registrations);
+            }
+            if (res.nextForgers) {
+                delegateMonitor.updateNextForgers(res.nextForgers);
+            }
+            if (res.votes) {
+                delegateMonitor.updateVotes(res.votes);
+            }
+            if (res.approval) {
+                delegateMonitor.updateApproval(res.approval);
+            }
+        });
 
-      ns.on('delegate', res => {
-          if (res.publicKey) {
-              delegateMonitor.updateLastBlocks(res);
-          }
-      });
+        ns.on('delegate', res => {
+            if (res.publicKey) {
+                delegateMonitor.updateLastBlocks(res);
+            }
+        });
 
-      $rootScope.$on('$destroy', event => {
-          ns.removeAllListeners();
-      });
+        $rootScope.$on('$destroy', event => {
+            ns.removeAllListeners();
+        });
 
-      $rootScope.$on('$stateChangeStart', (event, next, current) => {
-          ns.emit('forceDisconnect');
-      });
+        $rootScope.$on('$stateChangeStart', (event, next, current) => {
+            ns.emit('forceDisconnect');
+        });
 
-      return delegateMonitor;
-  }
+        return delegateMonitor;
+    }
 );

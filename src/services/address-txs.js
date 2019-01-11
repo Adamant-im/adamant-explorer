@@ -4,7 +4,7 @@ import LessMore from './less-more';
 AppServices.factory('addressTxs',
   ($http, $q) => (data) => {
       const params = Object.assign({}, data, {
-        url : '/api/getTransactionsByAddress',
+        url : '/api/getTransfersByAddress',
         parent : 'address',
         key : 'transactions',
       });

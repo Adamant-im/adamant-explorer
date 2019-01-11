@@ -1,0 +1,12 @@
+2019-01-07 18:11:06 893: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=1&and:recipientId=U2436693483291920564&or:senderId=U2436693483291920564
+2019-01-07 18:11:07 145: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=50&limit=51&and:recipientId=U2436693483291920564&or:senderId=U2436693483291920564
+2019-01-07 18:11:17 904: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=0
+2019-01-07 18:11:25 159: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:recipientId=U2436693483291920564&and:type=0
+2019-01-07 18:11:38 466: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=1
+2019-01-07 18:11:38 466: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=2
+2019-01-07 18:11:38 466: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=3
+2019-01-07 18:11:38 466: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=4
+2019-01-07 18:11:38 467: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=5
+2019-01-07 18:11:38 467: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=6
+2019-01-07 18:11:38 467: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:senderId=U2436693483291920564&and:type=7
+2019-01-07 18:11:43 889: URI! /api/transactions?minAmount=1&orderBy=timestamp:desc&offset=0&limit=51&and:recipientId=U2436693483291920564&or:senderId=U2436693483291920564

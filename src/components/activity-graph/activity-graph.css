@@ -3,8 +3,8 @@
   height: 512px;
   position: relative;
   margin-top: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #393C3E;
+  margin-bottom: 40px;
+  border: 1px solid #eeeeee;
 }
 
 #sigma-canvas div.hud {
@@ -40,4 +40,10 @@ span.label-credit {
 
 span.label-debit {
   background-color: #d32f2f;
+}
+
+.label {
+  padding: 5px 10px;
+  font-weight: 400;
+  border-radius: 0;
 }

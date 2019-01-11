@@ -34,6 +34,7 @@
     "benchmark": "^2.1.1",
     "body-parser": "^1.13.2",
     "bootstrap": "^3.3.7",
+    "build": "^0.1.4",
     "clipboard": "=1.7.1",
     "commander": "=2.9.0",
     "compression": "^1.6.2",

@@ -1,0 +1,1391 @@
+2018-12-27 20:33:57 642: TypeError: logger[level] is not a function
+2018-12-27 20:33:57 643:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:33:57 643:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:33:57 643:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:33:57 643:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:33:57 643:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:33:57 643:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:33:57 643:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:33:57 643:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:01 641: TypeError: logger[level] is not a function
+2018-12-27 20:34:01 641:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:01 641:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:01 642:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:01 642:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:01 642:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:01 642:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:01 642:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:01 642:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:04 122: TypeError: logger[level] is not a function
+2018-12-27 20:34:04 122:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:04 122:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:04 122:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:04 122:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:04 122:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:04 123:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:04 123:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:04 123:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:08 388: TypeError: logger[level] is not a function
+2018-12-27 20:34:08 388:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:08 388:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:08 388:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:08 388:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:08 388:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:08 388:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:08 389:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:08 389:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:11 545: TypeError: logger[level] is not a function
+2018-12-27 20:34:11 546:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:11 546:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:11 546:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:11 546:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:11 546:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:11 546:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:11 546:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:11 546:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:14 282: TypeError: logger[level] is not a function
+2018-12-27 20:34:14 282:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:14 282:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:14 283:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:14 283:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:14 283:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:14 283:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:14 283:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:14 283:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:17 918: TypeError: logger[level] is not a function
+2018-12-27 20:34:17 918:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:17 918:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:17 918:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:17 918:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:17 918:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:17 918:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:17 918:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:17 918:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:22 044: TypeError: logger[level] is not a function
+2018-12-27 20:34:22 044:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:22 044:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:22 044:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:22 044:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:22 044:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:22 044:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:22 045:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:22 045:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:25 915: TypeError: logger[level] is not a function
+2018-12-27 20:34:25 915:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:25 915:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:25 915:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:25 915:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:25 915:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:25 915:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:25 915:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:25 915:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:29 325: TypeError: logger[level] is not a function
+2018-12-27 20:34:29 325:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:29 325:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:29 325:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:29 325:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:29 325:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:29 325:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:29 325:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:29 325:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:32 188: TypeError: logger[level] is not a function
+2018-12-27 20:34:32 188:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:32 188:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:32 188:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:32 188:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:32 188:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:32 188:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:32 188:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:32 188:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:34 723: TypeError: logger[level] is not a function
+2018-12-27 20:34:34 723:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:34 723:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:34 723:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:34 723:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:34 723:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:34 724:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:34 724:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:34 724:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:37 230: TypeError: logger[level] is not a function
+2018-12-27 20:34:37 230:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:37 230:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:37 230:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:37 230:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:37 230:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:37 230:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:37 230:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:37 231:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:41 282: TypeError: logger[level] is not a function
+2018-12-27 20:34:41 282:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:41 282:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:41 282:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:41 282:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:41 282:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:41 282:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:41 282:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:41 282:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:44 164: TypeError: logger[level] is not a function
+2018-12-27 20:34:44 165:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:44 165:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:44 165:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:44 165:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:44 165:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:44 165:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:44 165:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:44 165:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:48 814: TypeError: logger[level] is not a function
+2018-12-27 20:34:48 815:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:48 815:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:48 815:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:48 815:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:48 815:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:48 815:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:48 815:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:48 815:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:51 857: TypeError: logger[level] is not a function
+2018-12-27 20:34:51 857:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:51 857:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:51 857:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:51 857:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:51 857:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:51 857:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:51 857:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:51 857:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:54 176: TypeError: logger[level] is not a function
+2018-12-27 20:34:54 176:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:54 176:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:54 176:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:54 176:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:54 176:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:54 176:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:54 176:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:54 176:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:34:57 329: TypeError: logger[level] is not a function
+2018-12-27 20:34:57 329:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:34:57 329:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:34:57 329:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:34:57 329:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:34:57 329:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:34:57 329:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:34:57 329:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:34:57 329:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:35:00 965: TypeError: logger[level] is not a function
+2018-12-27 20:35:00 965:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:35:00 965:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:35:00 965:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:35:00 965:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:35:00 966:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:35:00 966:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:35:00 966:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:35:00 966:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:35:06 281: TypeError: logger[level] is not a function
+2018-12-27 20:35:06 281:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:35:06 281:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:35:06 282:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:35:06 282:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:35:06 282:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:35:06 282:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:35:06 282:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:35:06 282:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-27 20:35:10 367: TypeError: logger[level] is not a function
+2018-12-27 20:35:10 367:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-27 20:35:10 367:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-27 20:35:10 367:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-27 20:35:10 367:     at Namespace.emit (events.js:182:13)
+2018-12-27 20:35:10 367:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-27 20:35:10 367:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-27 20:35:10 367:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-27 20:35:10 367:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:19 432: TypeError: logger[level] is not a function
+2018-12-28 19:44:19 432:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:19 432:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:19 432:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:19 432:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:19 432:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:19 432:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:19 432:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:19 432:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:23 110: TypeError: logger[level] is not a function
+2018-12-28 19:44:23 110:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:23 110:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:23 110:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:23 110:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:23 110:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:23 110:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:23 110:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:23 110:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:27 016: TypeError: logger[level] is not a function
+2018-12-28 19:44:27 017:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:27 017:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:27 017:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:27 017:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:27 017:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:27 017:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:27 017:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:27 017:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:30 028: TypeError: logger[level] is not a function
+2018-12-28 19:44:30 028:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:30 028:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:30 028:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:30 028:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:30 028:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:30 028:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:30 028:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:30 028:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:33 311: TypeError: logger[level] is not a function
+2018-12-28 19:44:33 312:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:33 312:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:33 312:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:33 312:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:33 312:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:33 312:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:33 312:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:33 312:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:34 669: (node:11562) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2018-12-28 19:44:34 725: TypeError: logger[level] is not a function
+2018-12-28 19:44:34 725:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:34 725:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:34 726:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:34 726:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:34 726:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:34 726:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:34 726:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:34 726:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:36 402: TypeError: logger[level] is not a function
+2018-12-28 19:44:36 403:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:36 403:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:36 403:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:36 403:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:36 403:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:36 403:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:36 403:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:36 403:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:39 220: TypeError: logger[level] is not a function
+2018-12-28 19:44:39 220:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:39 220:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:39 221:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:39 221:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:39 221:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:39 221:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:39 221:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:39 221:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:42 224: TypeError: logger[level] is not a function
+2018-12-28 19:44:42 224:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:42 224:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:42 224:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:42 224:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:42 224:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:42 224:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:42 224:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:42 224:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:45 736: TypeError: logger[level] is not a function
+2018-12-28 19:44:45 736:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:45 736:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:45 736:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:45 736:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:45 736:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:45 736:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:45 736:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:45 736:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:53 139: TypeError: logger[level] is not a function
+2018-12-28 19:44:53 139:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:53 139:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:53 139:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:53 139:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:53 140:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:53 140:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:53 140:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:53 140:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:56 219: TypeError: logger[level] is not a function
+2018-12-28 19:44:56 219:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:56 219:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:56 219:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:56 220:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:56 220:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:56 220:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:56 220:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:56 220:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:57 734: TypeError: logger[level] is not a function
+2018-12-28 19:44:57 735:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:57 735:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:57 735:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:57 735:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:57 735:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:57 735:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:57 735:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:57 735:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:44:59 406: TypeError: logger[level] is not a function
+2018-12-28 19:44:59 407:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:44:59 407:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:44:59 407:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:44:59 407:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:44:59 419:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:44:59 419:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:44:59 419:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:44:59 419:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:02 038: TypeError: logger[level] is not a function
+2018-12-28 19:45:02 039:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:02 039:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:02 039:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:02 039:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:02 039:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:02 039:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:02 039:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:02 039:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:06 234: TypeError: logger[level] is not a function
+2018-12-28 19:45:06 234:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:06 234:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:06 234:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:06 234:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:06 234:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:06 234:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:06 234:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:06 234:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:10 599: TypeError: logger[level] is not a function
+2018-12-28 19:45:10 599:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:10 599:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:10 599:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:10 599:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:10 599:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:10 599:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:10 600:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:10 600:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:13 887: TypeError: logger[level] is not a function
+2018-12-28 19:45:13 887:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:13 887:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:13 887:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:13 887:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:13 887:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:13 887:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:13 887:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:13 887:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:17 795: TypeError: logger[level] is not a function
+2018-12-28 19:45:17 795:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:17 795:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:17 795:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:17 795:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:17 795:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:17 795:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:17 795:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:17 795:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:22 230: TypeError: logger[level] is not a function
+2018-12-28 19:45:22 230:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:22 230:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:22 230:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:22 230:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:22 230:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:22 230:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:22 230:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:22 230:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:26 290: TypeError: logger[level] is not a function
+2018-12-28 19:45:26 290:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:26 290:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:26 290:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:26 290:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:26 290:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:26 290:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:26 290:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:26 291:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:33 464: TypeError: logger[level] is not a function
+2018-12-28 19:45:33 464:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:33 464:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:33 464:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:33 464:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:33 464:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:33 478:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:33 478:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:33 478:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:37 769: TypeError: logger[level] is not a function
+2018-12-28 19:45:37 770:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:37 770:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:37 770:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:37 770:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:37 770:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:37 770:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:37 770:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:37 770:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:42 266: TypeError: logger[level] is not a function
+2018-12-28 19:45:42 266:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:42 266:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:42 266:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:42 266:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:42 266:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:42 266:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:42 266:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:42 266:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:46 136: TypeError: logger[level] is not a function
+2018-12-28 19:45:46 137:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:46 137:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:46 137:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:46 137:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:46 137:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:46 137:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:46 137:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:46 137:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:48 471: TypeError: logger[level] is not a function
+2018-12-28 19:45:48 471:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:48 471:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:48 471:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:48 471:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:48 471:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:48 471:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:48 471:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:48 471:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:52 701: TypeError: logger[level] is not a function
+2018-12-28 19:45:52 701:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:52 701:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:52 701:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:52 701:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:52 701:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:52 701:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:52 701:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:52 701:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:56 375: TypeError: logger[level] is not a function
+2018-12-28 19:45:56 375:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:56 375:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:56 375:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:56 375:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:56 375:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:56 375:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:56 375:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:56 375:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:45:58 776: TypeError: logger[level] is not a function
+2018-12-28 19:45:58 777:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:45:58 777:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:45:58 777:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:45:58 777:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:45:58 777:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:45:58 777:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:45:58 777:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:45:58 777:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:02 596: TypeError: logger[level] is not a function
+2018-12-28 19:46:02 596:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:02 596:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:02 596:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:02 596:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:02 596:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:02 596:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:02 596:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:02 596:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:05 301: TypeError: logger[level] is not a function
+2018-12-28 19:46:05 301:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:05 301:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:05 301:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:05 301:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:05 301:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:05 301:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:05 301:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:05 301:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:08 593: TypeError: logger[level] is not a function
+2018-12-28 19:46:08 594:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:08 594:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:08 594:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:08 594:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:08 594:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:08 594:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:08 594:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:08 594:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:11 507: TypeError: logger[level] is not a function
+2018-12-28 19:46:11 507:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:11 507:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:11 507:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:11 507:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:11 507:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:11 507:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:11 507:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:11 507:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:13 201: TypeError: logger[level] is not a function
+2018-12-28 19:46:13 201:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:13 201:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:13 201:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:13 201:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:13 201:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:13 201:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:13 201:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:13 201:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:15 937: TypeError: logger[level] is not a function
+2018-12-28 19:46:15 937:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:15 937:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:15 937:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:15 937:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:15 937:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:15 938:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:15 938:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:15 938:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:17 615: TypeError: logger[level] is not a function
+2018-12-28 19:46:17 615:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:17 615:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:17 615:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:17 615:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:17 615:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:17 615:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:17 615:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:17 615:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:19 242: TypeError: logger[level] is not a function
+2018-12-28 19:46:19 242:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:19 242:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:19 242:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:19 242:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:19 242:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:19 242:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:19 242:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:19 242:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:20 656: TypeError: logger[level] is not a function
+2018-12-28 19:46:20 656:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:20 657:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:20 657:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:20 657:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:20 657:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:20 657:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:20 657:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:20 657:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:22 237: TypeError: logger[level] is not a function
+2018-12-28 19:46:22 237:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:22 237:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:22 237:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:22 237:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:22 237:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:22 237:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:22 237:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:22 238:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:24 753: TypeError: logger[level] is not a function
+2018-12-28 19:46:24 753:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:24 753:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:24 753:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:24 753:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:24 753:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:24 753:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:24 753:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:24 753:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:27 880: TypeError: logger[level] is not a function
+2018-12-28 19:46:27 880:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:27 880:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:27 881:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:27 881:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:27 881:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:27 881:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:27 881:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:27 881:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:32 367: TypeError: logger[level] is not a function
+2018-12-28 19:46:32 367:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:32 367:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:32 367:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:32 367:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:32 367:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:32 367:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:32 367:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:32 367:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:33 946: TypeError: logger[level] is not a function
+2018-12-28 19:46:33 947:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:33 947:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:33 947:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:33 947:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:33 947:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:33 947:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:33 947:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:33 947:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:37 350: TypeError: logger[level] is not a function
+2018-12-28 19:46:37 350:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:37 350:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:37 350:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:37 350:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:37 350:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:37 350:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:37 350:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:37 350:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:39 036: TypeError: logger[level] is not a function
+2018-12-28 19:46:39 036:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:39 037:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:39 037:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:39 037:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:39 037:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:39 037:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:39 037:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:39 037:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:43 195: TypeError: logger[level] is not a function
+2018-12-28 19:46:43 195:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:43 195:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:43 195:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:43 195:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:43 195:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:43 195:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:43 195:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:43 195:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:46 290: TypeError: logger[level] is not a function
+2018-12-28 19:46:46 290:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:46 290:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:46 290:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:46 290:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:46 290:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:46 291:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:46 291:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:46 291:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:50 216: TypeError: logger[level] is not a function
+2018-12-28 19:46:50 216:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:50 216:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:50 216:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:50 216:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:50 216:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:50 216:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:50 217:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:50 217:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:52 855: TypeError: logger[level] is not a function
+2018-12-28 19:46:52 855:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:52 855:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:52 855:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:52 855:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:52 855:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:52 855:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:52 855:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:52 855:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:46:56 997: TypeError: logger[level] is not a function
+2018-12-28 19:46:56 998:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:46:56 998:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:46:56 998:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:46:56 998:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:46:56 998:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:46:56 998:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:46:56 998:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:46:56 998:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:00 830: TypeError: logger[level] is not a function
+2018-12-28 19:47:00 830:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:00 830:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:00 830:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:00 830:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:00 830:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:00 830:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:00 831:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:00 831:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:04 592: TypeError: logger[level] is not a function
+2018-12-28 19:47:04 592:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:04 592:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:04 592:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:04 592:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:04 592:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:04 592:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:04 592:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:04 592:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:12 240: TypeError: logger[level] is not a function
+2018-12-28 19:47:12 241:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:12 241:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:12 241:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:12 241:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:12 241:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:12 241:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:12 241:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:12 241:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:15 758: TypeError: logger[level] is not a function
+2018-12-28 19:47:15 758:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:15 758:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:15 758:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:15 758:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:15 758:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:15 758:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:15 758:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:15 758:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:18 899: TypeError: logger[level] is not a function
+2018-12-28 19:47:18 899:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:18 899:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:18 899:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:18 899:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:18 899:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:18 899:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:18 899:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:18 899:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:20 346: TypeError: logger[level] is not a function
+2018-12-28 19:47:20 346:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:20 347:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:20 347:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:20 347:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:20 347:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:20 347:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:20 347:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:20 347:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:22 916: TypeError: logger[level] is not a function
+2018-12-28 19:47:22 916:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:22 916:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:22 916:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:22 916:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:22 916:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:22 916:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:22 916:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:22 916:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:24 553: TypeError: logger[level] is not a function
+2018-12-28 19:47:24 554:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:24 554:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:24 554:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:24 554:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:24 554:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:24 554:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:24 554:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:24 554:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:26 688: TypeError: logger[level] is not a function
+2018-12-28 19:47:26 688:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:26 688:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:26 688:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:26 688:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:26 688:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:26 688:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:26 688:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:26 689:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:29 380: TypeError: logger[level] is not a function
+2018-12-28 19:47:29 380:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:29 380:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:29 380:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:29 380:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:29 380:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:29 380:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:29 380:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:29 380:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:31 414: TypeError: logger[level] is not a function
+2018-12-28 19:47:31 414:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:31 414:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:31 414:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:31 414:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:31 414:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:31 414:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:31 414:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:31 415:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:34 520: TypeError: logger[level] is not a function
+2018-12-28 19:47:34 520:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:34 520:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:34 520:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:34 520:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:34 520:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:34 520:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:34 520:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:34 520:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:37 839: TypeError: logger[level] is not a function
+2018-12-28 19:47:37 839:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:37 839:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:37 839:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:37 839:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:37 839:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:37 839:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:37 839:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:37 839:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:43 450: TypeError: logger[level] is not a function
+2018-12-28 19:47:43 450:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:43 450:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:43 450:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:43 450:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:43 450:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:43 450:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:43 450:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:43 450:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:47 052: TypeError: logger[level] is not a function
+2018-12-28 19:47:47 052:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:47 052:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:47 052:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:47 052:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:47 052:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:47 052:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:47 052:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:47 052:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:47:54 807: TypeError: logger[level] is not a function
+2018-12-28 19:47:54 807:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:47:54 807:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:47:54 807:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:47:54 807:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:47:54 807:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:47:54 807:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:47:54 808:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:47:54 808:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:02 041: TypeError: logger[level] is not a function
+2018-12-28 19:48:02 041:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:02 041:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:02 041:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:02 041:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:02 041:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:02 041:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:02 041:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:02 041:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:08 904: TypeError: logger[level] is not a function
+2018-12-28 19:48:08 904:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:08 904:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:08 904:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:08 904:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:08 904:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:08 904:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:08 904:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:08 904:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:12 187: TypeError: logger[level] is not a function
+2018-12-28 19:48:12 187:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:12 187:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:12 187:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:12 187:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:12 187:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:12 187:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:12 187:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:12 187:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:16 809: TypeError: logger[level] is not a function
+2018-12-28 19:48:16 809:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:16 809:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:16 809:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:16 809:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:16 809:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:16 809:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:16 809:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:16 809:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:20 551: TypeError: logger[level] is not a function
+2018-12-28 19:48:20 551:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:20 551:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:20 551:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:20 551:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:20 551:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:20 551:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:20 551:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:20 551:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:25 026: TypeError: logger[level] is not a function
+2018-12-28 19:48:25 026:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:25 026:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:25 026:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:25 027:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:25 027:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:25 027:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:25 027:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:25 027:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:28 790: TypeError: logger[level] is not a function
+2018-12-28 19:48:28 790:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:28 790:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:28 790:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:28 790:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:28 790:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:28 790:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:28 790:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:28 790:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:32 183: TypeError: logger[level] is not a function
+2018-12-28 19:48:32 183:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:32 183:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:32 183:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:32 183:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:32 183:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:32 184:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:32 184:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:32 184:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:33 607: TypeError: logger[level] is not a function
+2018-12-28 19:48:33 607:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:33 607:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:33 607:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:33 607:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:33 607:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:33 607:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:33 607:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:33 607:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:36 205: TypeError: logger[level] is not a function
+2018-12-28 19:48:36 205:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:36 205:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:36 205:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:36 205:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:36 206:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:36 206:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:36 206:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:36 206:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:39 770: TypeError: logger[level] is not a function
+2018-12-28 19:48:39 770:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:39 770:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:39 770:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:39 770:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:39 770:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:39 770:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:39 770:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:39 770:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:43 808: TypeError: logger[level] is not a function
+2018-12-28 19:48:43 808:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:43 808:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:43 808:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:43 809:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:43 809:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:43 809:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:43 809:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:43 809:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:47 835: TypeError: logger[level] is not a function
+2018-12-28 19:48:47 835:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:47 835:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:47 835:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:47 835:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:47 835:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:47 835:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:47 835:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:47 835:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:50 951: TypeError: logger[level] is not a function
+2018-12-28 19:48:50 951:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:50 951:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:50 951:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:50 951:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:50 951:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:50 951:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:50 951:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:50 951:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:54 483: TypeError: logger[level] is not a function
+2018-12-28 19:48:54 483:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:54 483:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:54 483:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:54 483:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:54 484:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:54 484:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:54 484:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:54 484:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:48:58 619: TypeError: logger[level] is not a function
+2018-12-28 19:48:58 619:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:48:58 619:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:48:58 619:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:48:58 619:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:48:58 619:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:48:58 619:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:48:58 619:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:48:58 619:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:02 345: TypeError: logger[level] is not a function
+2018-12-28 19:49:02 345:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:02 345:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:02 345:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:02 345:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:02 345:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:02 345:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:02 345:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:02 345:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:05 495: TypeError: logger[level] is not a function
+2018-12-28 19:49:05 495:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:05 495:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:05 495:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:05 495:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:05 495:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:05 495:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:05 495:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:05 496:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:09 877: TypeError: logger[level] is not a function
+2018-12-28 19:49:09 877:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:09 877:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:09 877:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:09 877:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:09 877:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:09 877:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:09 877:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:09 877:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:11 536: TypeError: logger[level] is not a function
+2018-12-28 19:49:11 536:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:11 536:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:11 536:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:11 536:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:11 536:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:11 536:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:11 536:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:11 536:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:12 887: TypeError: logger[level] is not a function
+2018-12-28 19:49:12 887:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:12 887:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:12 887:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:12 887:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:12 887:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:12 887:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:12 887:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:12 887:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:15 325: TypeError: logger[level] is not a function
+2018-12-28 19:49:15 325:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:15 325:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:15 325:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:15 325:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:15 326:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:15 326:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:15 326:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:15 326:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:18 116: TypeError: logger[level] is not a function
+2018-12-28 19:49:18 117:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:18 117:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:18 117:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:18 117:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:18 117:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:18 117:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:18 117:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:18 117:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:21 488: TypeError: logger[level] is not a function
+2018-12-28 19:49:21 488:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:21 488:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:21 488:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:21 488:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:21 488:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:21 488:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:21 488:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:21 488:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:35 901: TypeError: logger[level] is not a function
+2018-12-28 19:49:35 901:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:35 901:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:35 901:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:35 901:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:35 901:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:35 901:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:35 901:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:35 901:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:38 629: TypeError: logger[level] is not a function
+2018-12-28 19:49:38 629:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:38 629:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:38 629:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:38 629:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:38 629:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:38 629:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:38 629:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:38 629:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:42 564: TypeError: logger[level] is not a function
+2018-12-28 19:49:42 565:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:42 565:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:42 565:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:42 565:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:42 565:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:42 565:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:42 565:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:42 565:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:49 574: TypeError: logger[level] is not a function
+2018-12-28 19:49:49 574:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:49 574:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:49 574:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:49 574:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:49 575:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:49 575:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:49 575:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:49 575:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:49:53 614: TypeError: logger[level] is not a function
+2018-12-28 19:49:53 614:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:49:53 614:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:49:53 614:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:49:53 614:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:49:53 614:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:49:53 614:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:49:53 614:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:49:53 614:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:00 937: TypeError: logger[level] is not a function
+2018-12-28 19:50:00 937:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:00 937:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:00 937:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:00 937:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:00 938:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:00 938:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:00 938:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:00 938:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:04 988: TypeError: logger[level] is not a function
+2018-12-28 19:50:04 989:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:04 989:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:04 989:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:04 989:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:04 989:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:04 989:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:04 989:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:04 989:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:08 088: TypeError: logger[level] is not a function
+2018-12-28 19:50:08 088:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:08 088:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:08 088:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:08 088:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:08 088:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:08 088:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:08 088:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:08 088:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:12 197: TypeError: logger[level] is not a function
+2018-12-28 19:50:12 197:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:12 197:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:12 197:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:12 197:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:12 197:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:12 197:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:12 197:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:12 198:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:15 671: TypeError: logger[level] is not a function
+2018-12-28 19:50:15 671:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:15 671:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:15 671:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:15 671:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:15 672:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:15 672:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:15 672:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:15 672:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:18 235: TypeError: logger[level] is not a function
+2018-12-28 19:50:18 235:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:18 235:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:18 235:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:18 235:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:18 235:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:18 236:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:18 236:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:18 236:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:19 624: TypeError: logger[level] is not a function
+2018-12-28 19:50:19 624:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:19 624:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:19 624:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:19 624:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:19 624:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:19 624:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:19 624:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:19 624:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:21 227: TypeError: logger[level] is not a function
+2018-12-28 19:50:21 227:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:21 227:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:21 227:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:21 227:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:21 227:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:21 227:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:21 227:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:21 227:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:22 883: TypeError: logger[level] is not a function
+2018-12-28 19:50:22 883:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:22 883:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:22 883:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:22 883:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:22 883:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:22 883:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:22 883:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:22 883:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:24 520: TypeError: logger[level] is not a function
+2018-12-28 19:50:24 520:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:24 521:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:24 521:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:24 521:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:24 521:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:24 521:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:24 521:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:24 521:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:27 257: TypeError: logger[level] is not a function
+2018-12-28 19:50:27 257:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:27 257:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:27 257:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:27 257:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:27 257:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:27 257:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:27 258:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:27 258:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:28 854: TypeError: logger[level] is not a function
+2018-12-28 19:50:28 854:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:28 854:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:28 854:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:28 854:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:28 854:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:28 854:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:28 854:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:28 854:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:31 983: TypeError: logger[level] is not a function
+2018-12-28 19:50:31 983:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:31 983:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:31 983:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:31 983:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:31 983:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:31 983:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:31 983:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:31 983:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:38 979: TypeError: logger[level] is not a function
+2018-12-28 19:50:38 979:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:38 979:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:38 979:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:38 979:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:38 979:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:38 979:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:38 979:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:38 979:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:42 447: TypeError: logger[level] is not a function
+2018-12-28 19:50:42 447:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:42 447:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:42 447:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:42 447:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:42 447:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:42 447:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:42 447:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:42 447:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:45 533: TypeError: logger[level] is not a function
+2018-12-28 19:50:45 533:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:45 533:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:45 533:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:45 533:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:45 533:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:45 533:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:45 533:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:45 534:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:48 851: TypeError: logger[level] is not a function
+2018-12-28 19:50:48 851:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:48 851:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:48 851:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:48 852:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:48 852:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:48 852:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:48 852:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:48 852:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:52 624: TypeError: logger[level] is not a function
+2018-12-28 19:50:52 624:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:52 624:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:52 624:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:52 624:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:52 624:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:52 624:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:52 624:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:52 624:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:56 540: TypeError: logger[level] is not a function
+2018-12-28 19:50:56 540:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:56 540:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:56 540:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:56 540:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:56 540:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:56 540:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:56 540:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:56 540:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:50:59 216: TypeError: logger[level] is not a function
+2018-12-28 19:50:59 216:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:50:59 216:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:50:59 216:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:50:59 216:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:50:59 216:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:50:59 216:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:50:59 216:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:50:59 217:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:51:02 656: TypeError: logger[level] is not a function
+2018-12-28 19:51:02 656:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:51:02 656:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:51:02 656:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:51:02 656:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:51:02 656:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:51:02 656:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:51:02 656:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:51:02 656:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:51:06 362: TypeError: logger[level] is not a function
+2018-12-28 19:51:06 362:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:51:06 362:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:51:06 362:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:51:06 362:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:51:06 362:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:51:06 363:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:51:06 363:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:51:06 363:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:51:10 865: TypeError: logger[level] is not a function
+2018-12-28 19:51:10 865:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:51:10 865:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:51:10 865:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:51:10 865:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:51:10 865:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:51:10 865:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:51:10 865:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:51:10 865:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:51:15 091: TypeError: logger[level] is not a function
+2018-12-28 19:51:15 091:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:51:15 091:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:51:15 100:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:51:15 100:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:51:15 100:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:51:15 100:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:51:15 100:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:51:15 100:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:51:19 104: TypeError: logger[level] is not a function
+2018-12-28 19:51:19 104:     at log (/home/adamant/adamant-explorer/sockets/activityGraph.js:36:22)
+2018-12-28 19:51:19 104:     at module.exports.onConnect (/home/adamant/adamant-explorer/sockets/activityGraph.js:23:9)
+2018-12-28 19:51:19 104:     at Namespace.<anonymous> (/home/adamant/adamant-explorer/sockets/index.js:26:24)
+2018-12-28 19:51:19 104:     at Namespace.emit (events.js:182:13)
+2018-12-28 19:51:19 104:     at Namespace.emit (/home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:209:10)
+2018-12-28 19:51:19 104:     at /home/adamant/adamant-explorer/node_modules/socket.io/lib/namespace.js:177:14
+2018-12-28 19:51:19 104:     at args.(anonymous function) (/usr/lib/node_modules/pm2/node_modules/event-loop-inspector/index.js:138:29)
+2018-12-28 19:51:19 104:     at process._tickCallback (internal/process/next_tick.js:61:11)
+2018-12-28 19:52:50 726: (node:13854) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2019-01-06 22:55:24 772: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:55:24 772: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:55:24 772: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:55:49 476: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:55:49 476: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:55:49 476: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:56:19 589: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:56:19 589: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:56:19 589: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:56:49 550: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:56:49 550: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:56:49 550: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:57:19 562: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:57:19 562: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:57:19 562: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:57:49 472: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:57:49 472: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:57:49 472: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:58:19 562: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:58:19 562: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:58:19 562: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:58:49 527: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:58:49 527: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:58:49 527: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:59:19 468: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:59:19 468: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:59:19 468: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 22:59:49 474: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 22:59:49 475: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 22:59:49 475: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:00:19 541: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:00:19 541: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:00:19 541: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:22:19 673: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:22:19 673: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:22:19 673: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:22:49 244: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:22:49 244: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:22:49 244: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:32:49 739: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:32:49 739: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:32:49 739: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:33:19 437: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:33:19 437: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:33:19 437: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:33:49 436: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:33:49 436: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:33:49 436: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:34:19 420: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:34:19 420: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:34:19 420: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:34:49 754: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:34:49 754: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:34:49 754: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-06 23:35:19 909: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-06 23:35:19 909: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-06 23:35:19 909: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 03:42:29 959: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 03:42:29 959: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 03:42:29 959: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 03:42:59 556: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 03:42:59 556: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 03:42:59 556: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:10:27 062: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:10:27 062: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:10:27 062: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:10:58 489: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:10:58 489: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:10:58 490: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:11:28 535: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:11:28 535: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:11:28 535: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:11:57 223: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:11:57 223: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:11:57 223: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:12:28 488: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:12:28 489: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:12:28 489: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:12:58 490: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:12:58 490: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:12:58 490: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:13:28 485: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:13:28 485: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:13:28 485: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:13:57 562: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:13:57 562: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:13:57 562: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:14:27 065: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:14:27 065: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:14:27 065: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:14:57 511: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:14:57 511: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:14:57 511: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:15:27 893: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:15:27 893: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:15:27 893: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:15:57 061: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:15:57 061: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:15:57 061: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:16:27 114: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:16:27 114: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:16:27 114: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-07 14:17:15 049: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-07 14:17:15 049: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-07 14:17:15 049: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-08 18:35:18 127: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-08 18:35:18 128: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-08 18:35:18 128: Please handle this in your code to make sure everything works as you intended it to.
+2019-01-08 18:36:17 073: node_redis: Deprecated: The SET command contains a "undefined" argument.
+2019-01-08 18:36:17 073: This is converted to a "undefined" string now and will return an error from v.3.0 on.
+2019-01-08 18:36:17 073: Please handle this in your code to make sure everything works as you intended it to.
