@@ -35,4 +35,11 @@ module.exports = function (app) {
             function (data) { req.json = data; return next(); }
         );
     });
+
+    app.get('/api/totalSupply', function (req, res, next) {
+        api.getBlockStatus(
+            function (data) { res.json(data); },
+            function (data) {  req.json = data.supply / 100000000; return next(); }
+        );
+    });
 };

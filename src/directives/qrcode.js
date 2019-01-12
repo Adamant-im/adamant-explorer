@@ -9,15 +9,25 @@ AppTools.directive('qrcode', () => {
         window.can = myCanvas;
         QrCodeWithLogo.toCanvas({
             canvas: myCanvas,
-            content: $attrs.data,
+            content: $attrs.data.toUpperCase(),
             width: 220,
             logo: {
-                logoSize: 0.25,
-                borderSize:0.02,
-                src: $attrs.img_logo || 'https://newexplorer.adamant.im/9633cf0868a9a6e61fba65bc3d43aa8c.png',
-                radius: 50
+                src: $attrs.imd_src || 'https://newexplorer.adamant.im/9633cf0868a9a6e61fba65bc3d43aa8c.png',
+                borderSize: 0,
+                borderRadius: 50,
+                logoSize: 0.25
             }
         })
+        window.qr = (opt) => {
+            opt.src = 'https://newexplorer.adamant.im/9633cf0868a9a6e61fba65bc3d43aa8c.png';
+            QrCodeWithLogo.toCanvas({
+                canvas: myCanvas,
+                content: $attrs.data.toUpperCase(),
+                width: 220,
+                logo: opt
+            })
+            console.log('Ok')
+        }
 
     }
     return {
