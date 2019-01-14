@@ -34,32 +34,33 @@
 }
 
 .forging-total.grey {
-  background-color: #5f696e;
+  background-color: rgba(95, 105, 110, 0.9);
 }
 
 .forging-total.green {
-  background-color: #7CB342;
+  background-color: rgba(124, 179, 66, 0.9);
 }
 
 .forging-total.orange {
-  background-color: #f57c00;
+  background-color: rgba(245, 124, 0, 0.9);
 }
 
 .forging-total.red {
-  background-color: #d32f2f;
+  background-color: rgba(211, 47, 47, 0.9);
 }
 
 .progress {
-	height: 30px;
+	height: 40px;
   border-radius: 0;
 }
 
 .progress-bar {
-	line-height: 30px;
+	line-height: 40px;
+  background-color: rgba(3, 136, 208, 0.9);
 }
 
-.progress-bar-forging {
-  	background: -moz-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* ff3.6+ */
+.progress {
+  background: -moz-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* ff3.6+ */
 	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(45,108,162,1)), color-stop(100%, rgba(2,136,209,1))); /* safari4+,chrome */
 	background: -webkit-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* safari5.1+,chrome10+ */
 	background: -o-linear-gradient(325deg, rgba(45,108,162,1) 0%, rgba(2,136,209,1) 100%); /* opera 11.10+ */

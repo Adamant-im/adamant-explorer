@@ -63,6 +63,7 @@ div.platforms .os-icon {
   height: 48px;
   line-height: 48px;
   background-size: 48px 48px;
+  opacity:0.9;
 }
 
 div.platforms span.windows-counter {
@@ -103,7 +104,7 @@ div.versions span.version-num {
   padding: 0px 10px;
   border-radius: 50px;
   color: white;
-  background-color: #35393B;
+  background-color: rgba(95, 105, 110, 0.9);
   font-weight: 400;
 }
 
@@ -116,7 +117,7 @@ div.heights span.counter {
 }
 
 div.heights span.height-num {
-  background-color: #35393b;
+  background-color: rgba(95, 105, 110, 0.9);
   border-radius: 50px;
   color: #fff;
   display: inline-block;

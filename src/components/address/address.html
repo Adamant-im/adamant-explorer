@@ -88,7 +88,7 @@
     <votes data-votes="vm.address.votes"></votes>
 
     <div data-ng-if="vm.address.balance" data-ng-init="vm.txs.loadData()">
-        <h2>Transactions</h2>
+                    <div style="display: flex;align-items: baseline;"><div><h2>Transactions</h2></div> <div style="margin-left: 10px; font-weight: 100;">Note: Messaging and service transactions are hidden</div></div>
         <section>
             <nit-advanced-searchbox
                 ng-model="vm.searchParams"
