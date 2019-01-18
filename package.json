@@ -51,6 +51,7 @@
     "morgan": "^1.7.0",
     "ngprogress": "https://github.com/VictorBjelkholm/ngProgress.git",
     "popsicle": "=8.2.0",
+    "qr-code-with-logo": "^1.1.0",
     "qrcode": "^0.8.1",
     "qrcode-generator": "^1.2.0",
     "redis": "^2.6.2",
