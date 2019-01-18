@@ -30,6 +30,7 @@ import '../components/header';
 import '../components/footer';
 import '../components/currency-selector';
 import '../components/activity-graph';
+import '../components/reserved-wallets';
 import '../components/home';
 import '../components/bread-crumb';
 import '../components/market-watcher';
@@ -64,6 +65,7 @@ const App = angular.module('lisk_explorer',[
     'lisk_explorer.activityGraph',
     'lisk_explorer.delegateMonitor',
     'lisk_explorer.home',
+    'lisk_explorer.reservedWallets',
     'lisk_explorer.networkMonitor',
     'lisk_explorer.marketWatcher'
 ]);

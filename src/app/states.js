@@ -58,6 +58,11 @@ App.config(($stateProvider, $urlRouterProvider, $locationProvider) => {
         parentDir: 'address',
         component: 'delegate',
     })
+    .state('reserved-wallets', {
+        url: '/reservedWallets',
+        parentDir: 'home',
+        component: 'reservedWallets',
+    })
     .state('error', {
         url: '404',
         parentDir: 'home',
