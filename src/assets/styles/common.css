@@ -271,7 +271,7 @@ qrcode canvas {
 
 @media (max-width: 767px) {
   #header {
-    margin-left: -9px;
+    margin-left: 0px;
     margin-right: 0px;
   }
   .table-responsive {
@@ -287,8 +287,8 @@ qrcode canvas {
 
 .navbar-default .navbar-toggle {
   border-color: #bbb;
-  margin-top: 12px;
-  margin-right: 1px;
+  margin-top: 20px;
+  margin-right: 10px;
   padding: 7px;
   border-radius: 2px;
   width: 40px;  
@@ -296,6 +296,11 @@ qrcode canvas {
   background: #eee;
   border-radius: 50px;
   border-width: 2px;
+}
+
+.mobile-search-container {
+	position: relative;
+	margin: 20px 90px;
 }
 
 .navbar-default .navbar-toggle .icon-bar { background-color: #888; }
@@ -467,7 +472,7 @@ qrcode canvas {
        (min-device-pixel-ratio: 2),
        (min-resolution: 192dpi) {
 
-  .navbar-brand .logo {
+  	.navbar-brand .logo {
       background: url('../img/adm-exp-logo-light-256x256.png') no-repeat top left;
       background-size: 64px 64px;
       line-height: 55px;
@@ -475,13 +480,14 @@ qrcode canvas {
       font-family: Roboto Bold;
       font-size: 30px;
       color: black;
-  }
-  .navbar-default .navbar-header, .navbar-default .navbar-brand {
-    height: 64px;
-    line-height: 64px;
-	}
-	.navbar {
-		min-height: 64px;
+      height: 64px;
+	  width: 64px;
+	  margin-top: 8px;
+  	}
+
+	.mobile-search-container {
+		position: relative;
+		margin: 20px 70px;
 	}
 
 }
@@ -502,7 +508,7 @@ qrcode canvas {
 #search-form { color: #5f696e; }
 
 .navbar-default search .form-group input {
-  width: 360px;
+  width: 284px;
   line-height: normal;
   border-radius: 3px;
 }
@@ -587,6 +593,9 @@ qrcode canvas {
 @media (max-width: 768px) {
   .col-gray-fixed {
     width:100%;
+  }
+  .navbar-default search .form-group input {
+  	width:100%;
   }
 }
 
@@ -798,7 +807,7 @@ qrcode canvas {
 }
 
 #footer .col-left a.link {
-  margin-right: 20px;
+  margin: 0 10px;
 }
 
 #footer .col-right {

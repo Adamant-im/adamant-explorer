@@ -12,8 +12,7 @@ const TransactionsConstructor = function ($rootScope, $stateParams, $location, $
         }).then(resp => {
             const data = resp.data;
             if (data.success) {
-                if (data.transaction.amount === 0) throw 'Transaction is 0 ADM!';
-
+                if (data.transaction.amount === 0 && data.transaction.fee < 300000000) throw 'Transaction is 0 ADM!';
                 vm.tx = data.transaction;
             } else {
                 throw 'Transaction was not found!';
