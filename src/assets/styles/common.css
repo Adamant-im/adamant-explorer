@@ -596,6 +596,7 @@ qrcode canvas {
   }
   .navbar-default search .form-group input {
   	width:100%;
+  	text-overflow: ellipsis;
   }
 }
 
