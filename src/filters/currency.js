@@ -15,6 +15,6 @@ AppFilters.filter('currency', (numberFilter, liskFilter) => (amount, currency, d
     if (decimals && lisk > 0) {
       return numberFilter ((lisk * factor), decimals);
     } else {
-      return numberFilter ((lisk * factor), 8).replace (/\.?0+$/, '');
+      return numberFilter ((lisk * factor), 3).replace (/\.?0+$/, '');
     }
 });

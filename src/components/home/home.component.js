@@ -26,6 +26,7 @@ const HomeConstructor = function ($scope, $http, $interval) {
 
   vm.getLastTransfers = () => {
     $http.get('/api/getLastTransfers').then(resp => {
+      console.log({resp})
       if (resp.data.success) {
         if (vm.txs && vm.txs.length > 0) {
           if (vm.txs[0] !== resp.data.transactions[0]) {

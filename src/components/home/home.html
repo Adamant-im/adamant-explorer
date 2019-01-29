@@ -24,7 +24,7 @@
                         <tr data-ng-if="!vm.txs.length">
                             <td colspan="6">Waiting for transactions...</td>
                         </tr>
-                        <tr data-ng-repeat='tx in vm.txs track by $index'  data-ng-if="tx.amount">
+                        <tr data-ng-repeat='tx in vm.txs track by $index'>
                             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
                             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}</span></td>
                             <td class="text-right hidden-xs"><a class="ellipsis" data-account-href="tx" href="/address/{{tx.senderId}}"
