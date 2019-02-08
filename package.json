@@ -15,7 +15,7 @@
     "e2e-test": "protractor protractor.conf.js",
     "start": "npm run copy-files && webpack -w",
     "validate": "webpack-validator webpack.config.js",
-    "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./public",
+    "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./src/assets/icons/img ./src/assets/icons/adm-qr-invert.png ./public",
     "build": "npm run copy-files && webpack",
     "build:prod": "webpack --env.prod"
   },
