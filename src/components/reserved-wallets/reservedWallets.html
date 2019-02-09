@@ -1,0 +1,37 @@
+<div class="alert alert-danger" data-ng-if="flashMessage">
+    {{$root.flashMessage}}
+</div>
+<section>
+    <div id="home" class="row">
+        <div class="col-xs-12 col-md-12">
+            
+
+            <div class="latest-h1">
+                <div>
+                    <h1>Reserved ADAMANT Wallets</h1>
+                </div>
+            </div>
+            <hr>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped latest-transactions">
+                    <thead>
+                        <tr>
+                            <th class="text-left hidden-xs">Id</th>
+                            <th class="text-right">Name</th>
+                            <th class="text-right">Address</th>
+                            <th class="text-right">Balance (ADM)</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat='w in vm.wallets track by $index'>
+                            <td class="text-left   hidden-xs">#{{$index+1}}</td>
+                            <td class="text-right">{{w.name}}</td>
+                            <td class="text-right"><a  href="/address/{{w.address}}">{{w.address}}</a></td>
+                            <td class="text-right">{{w.balance | currency:$root.currency:$root.decimalPlaces}}<td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

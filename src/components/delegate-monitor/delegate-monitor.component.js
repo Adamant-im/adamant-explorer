@@ -13,16 +13,15 @@ const DelegateMonitorConstructor = function (delegateMonitor, orderBy, $rootScop
         if (n) {
             offset = (n - 1) * 20;
         }
-
         vm.standbyDelegates = null;
-
         $http.get(`/api/delegates/getStandby?n=${offset}`).then(resp => {
             if (resp.data.success) {
                 resp.data.delegates.forEach(deligate => {
                     deligate.proposal = $rootScope.delegateProposals[deligate.username.toLowerCase()];
                 });
-
+                const SAT = 100000000;
                 vm.standbyDelegates = resp.data.delegates;
+                vm.standbyDelegates.forEach(d => d.votesWeight = +Number(d.votesWeight / SAT).toFixed(4) * SAT);
             }
             if (resp.data.pagination) {
                 vm.pagination = resp.data.pagination;

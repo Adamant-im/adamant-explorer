@@ -4,11 +4,10 @@
 <section>
     <div id="home" class="row">
         <div class="col-xs-12 col-md-12">
-            <!-- Search component -->
-            <search class="visible-xs"></search>
+            
 
-            <h1>Latest Operations</h1>
-
+            <div class="latest-h1"><div><h1>Latest Operations</h1></div> <div class="latest-note">Note: Messaging and service transactions are hidden</div></div>
+            <hr>
             <div class="table-responsive">
                 <table class="table table-hover table-striped latest-transactions">
                     <thead>
@@ -28,13 +27,17 @@
                         <tr data-ng-repeat='tx in vm.txs track by $index'>
                             <td><a class="ellipsis" href="/tx/{{tx.id}}">{{tx.id}}</a></td>
                             <td class="text-right hidden-xs"><span class="ellipsis">{{tx.timestamp | timestamp}}</span></td>
-                            <td class="text-right hidden-xs"><a class="ellipsis" data-account-href="tx" data-type="sender">{{tx | txSender}}</a></td>
+                            <td class="text-right hidden-xs"><a class="ellipsis" data-account-href="tx" href="/address/{{tx.senderId}}"
+                                    data-type="sender">{{tx | txSender}}</a></td>
                             <td class="text-right hidden-xs">
-                                <a class="ellipsis" data-ng-show="tx.type == 0 || tx.type == 8" data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
+                                <a class="ellipsis" href="/address/{{tx.recipientId}}" data-ng-show="tx.type == 0 || tx.type == 8"
+                                    data-account-href="tx" data-type="recipient">{{tx | txRecipient}}</a>
                                 <span class="ellipsis" data-ng-show="tx.type >= 1 && tx.type !=8">{{tx | txRecipient}}</span>
                             </td>
-                            <td class="text-right"><span class="ellipsis">{{tx.amount | currency:$root.currency:$root.decimalPlaces}}</span></td>
-                            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee | currency:$root.currency}}</span></td>
+                            <td class="text-right"><span class="ellipsis">{{tx.amount |
+                                    currency:$root.currency:$root.decimalPlaces}}</span></td>
+                            <td class="text-right hidden-xs"><span class="ellipsis">{{tx.fee |
+                                    currency:$root.currency}}</span></td>
                         </tr>
                     </tbody>
                 </table>

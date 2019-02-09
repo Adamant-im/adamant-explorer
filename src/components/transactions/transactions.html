@@ -49,14 +49,14 @@
                 <tr>
                     <td><strong>Recipient</strong></td>
                     <td class="text-right">
-                        <div data-ng-if="vm.tx.type == 0">
+                        <div data-ng-if="vm.tx.type == 0 || vm.tx.amount">
                             <a href="/address/{{vm.tx.recipientId}}">{{vm.tx.recipientId}}</a>
                             <div data-ng-if="vm.tx.knownRecipient">
                                 <span class="owner-name">{{vm.tx.knownRecipient.owner}}</span>
                                 <span class="owner-desc text-muted">{{vm.tx.knownRecipient.description}}</span>
                             </div>
                         </div>
-                        <div data-ng-if="vm.tx.type >= 1">{{vm.tx | txType}}</div>
+                        <div data-ng-if="vm.tx.type >= 1 && !vm.tx.amount">{{vm.tx | txType}}</div>
                     </td>
                 </tr>
                 <tr>

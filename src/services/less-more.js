@@ -2,23 +2,23 @@ import AppServices from './services.module';
 
 const LessMore = function ($http, $q, params) {
     this.$http = $http;
-    this.$q    = $q;
+    this.$q = $q;
 
-    this.url     = params.url     || '';
-    this.parent  = params.parent  || 'parent';
-    this.key     = params.key     || '';
-    this.offset  = params.offset  || 0;
+    this.url = params.url || '';
+    this.parent = params.parent || 'parent';
+    this.key = params.key || '';
+    this.offset = params.offset || 0;
     this.maximum = params.maximum || 2000;
-    this.limit   = params.limit   || 50;
+    this.limit = params.limit || 50;
 
     for (let key in ['url', 'parent', 'key', 'offset', 'maximum', 'limit']) {
         delete params[key];
     }
 
-    this.params   = params;
-    this.results  = [];
-    this.splice   = 0;
-    this.loading  = true;
+    this.params = params;
+    this.results = [];
+    this.splice = 0;
+    this.loading = true;
     this.moreData = false;
     this.lessData = false;
 };
@@ -32,7 +32,10 @@ LessMore.prototype.disabled = function () {
 };
 
 LessMore.prototype.getData = function (offset, limit, cb) {
-    const params = Object.assign({}, { offset, limit }, this.params);
+    const params = Object.assign({}, {
+        offset,
+        limit
+    }, this.params);
     this.disable();
     this.loading = true;
     this.$http.get(this.url, {
@@ -60,7 +63,9 @@ LessMore.prototype.spliceData = function (data) {
 };
 
 LessMore.prototype.acceptData = function (data) {
-    if (!angular.isArray(data)) { data = []; }
+    if (!angular.isArray(data)) {
+        data = [];
+    }
     this.spliceData(data);
 
     if (this.results.length > 0) {
@@ -78,9 +83,10 @@ LessMore.prototype.acceptData = function (data) {
     this.nextOffset();
 };
 
-LessMore.prototype.loadData = function () {
+LessMore.prototype.loadData = function (transferOnly) {
     this.getData(0, (this.limit + 1),
         data => {
+            if (transferOnly) data = data.filter(t => t.amount);
             this.acceptData(data);
         });
 };
@@ -93,14 +99,21 @@ LessMore.prototype.loadMore = function () {
 };
 
 LessMore.prototype.reloadMore = function () {
-    const maxOffset = (this.offset + this.limit), promises = [], self = this;
+    const maxOffset = (this.offset + this.limit),
+        promises = [],
+        self = this;
 
-    self.offset  = 0;
+    self.offset = 0;
     self.results = [];
 
     for (let o = 0; o < maxOffset; o += self.limit) {
-        const params = angular.extend({ offset : o, limit : self.limit + 1 }, self.params);
-        promises.push(self.$http.get(self.url, { params : params }));
+        const params = angular.extend({
+            offset: o,
+            limit: self.limit + 1
+        }, self.params);
+        promises.push(self.$http.get(self.url, {
+            params: params
+        }));
     }
 
     self.$q.all(promises).then(responses => {
@@ -144,6 +157,6 @@ LessMore.prototype.loadLess = function () {
 };
 
 AppServices.factory('lessMore',
-  ($http, $q) => params => new LessMore($http, $q, params));
+    ($http, $q) => params => new LessMore($http, $q, params));
 
 export default LessMore;
