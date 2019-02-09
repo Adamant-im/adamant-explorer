@@ -238,7 +238,25 @@ const NetworkMonitor = function (vm) {
     };
 
     this.updatePeers = function (peers) {
-        vm.peers   = peers.list;
+        const connected = peers.list.connected;
+        const disconnected = peers.list.disconnected;
+
+        connected.forEach((p, i) => {
+            const count = connected.filter(pp => pp.id == p.id).length;
+            if (count === 1) return;
+            connected[i].id = false;
+        });
+
+        disconnected.forEach((p, i) => {
+            const count = disconnected.filter(pp => pp.id == p.id).length;
+            if (count === 1) return;
+            disconnected[i].id = false;
+        });
+        
+        peers.list.connected = connected.filter(p => p.id);
+        peers.list.disconnected = disconnected.filter(p => p.id);
+
+        vm.peers = peers.list;
         vm.counter = this.counter(peers.list);
         this.map.addConnected(peers.list);
     };
