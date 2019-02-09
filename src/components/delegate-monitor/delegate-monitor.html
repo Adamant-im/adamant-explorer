@@ -102,7 +102,8 @@
                             <div class="pull-left best-forger">
                                 <p class="small-title">Best Forger</p>
                                 <p class="big-details" data-ng-switch="!!vm.bestForger">
-                                    <a href="/delegate/{{vm.bestForger.address}}" data-type="delegate" data-ng-switch-when="true">{{vm.bestForger.username}}</a>
+                                    <a href="/delegate/{{vm.bestForger.address}}" data-type="delegate"
+                                        data-ng-switch-when="true">{{vm.bestForger.username}}</a>
                                     <span class="text-muted" data-ng-switch-when="false">N/A</span>
                                 </p>
                                 <p class="text-muted lisk">{{vm.bestForger.forged || 0 |
