@@ -323,7 +323,7 @@
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
                                     <td class="hidden-xs hidden-sm">{{d.forged |
                                         currency:$root.currency:$root.decimalPlaces}} <span class="text-muted">{{$root.currency.symbol}}</span></td>
-                                    <td class="hidden-xs hidden-sm">{{d.forgingTime | forgingTime}}</td>
+                                    <td class="hidden-xs hidden-sm">{{d.forgingTime/2 | forgingTime}}</td>
                                     <td><i forging-status="d.forgingStatus"></i></td>
                                     <td>{{d.productivity || 0}}%</td>
                                     <td class="hidden-xs"><span data-uib-tooltip="{{d.votesWeight  | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}">{{d.approval}}%</span></td>

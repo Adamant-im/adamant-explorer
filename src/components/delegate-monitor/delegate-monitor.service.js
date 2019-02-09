@@ -8,7 +8,7 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
             d.forged = +Number(d.forged / SAT).toFixed(4) * SAT;
             d.forgingStatus = forgingMonitor.getStatus(d);
             d.proposal = $rootScope.delegateProposals[d.username.toLowerCase()];
-            d.forgingTime /= 2;
+            // d.forgingTime /= 2;
         });
         $scope.activeDelegates = active.delegates;
 
@@ -98,7 +98,7 @@ const DelegateMonitor = function ($scope, $rootScope, forgingMonitor) {
     };
 
     var updateForgingTotals = delegates => {
-        $scope.forgingTotals = forgingMonitor.getforgingTotals(delegates);
+       $scope.forgingTotals = forgingMonitor.getforgingTotals(delegates);
     };
 
     var updateForgingProgress = totals => {
