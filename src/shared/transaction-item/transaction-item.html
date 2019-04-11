@@ -12,9 +12,9 @@
 <td data-title="Recipient" data-ng-if="tx.type >= 1 && false">{{tx | txType}}</td>
 <td data-title="Amount">
     <div class="txvalues" data-ng-class="{
-    'txvalues-danger': tx.type == 0 && address == tx.senderId && tx.senderId != tx.recipientId,
-    'txvalues-success': tx.type == 0 && address && tx.senderId != address,
-    'txvalues-default': tx.type != 0 || address === undefined || tx.senderId === tx.recipientId
+    'txvalues-danger': tx.amount > 0 && address == tx.senderId && tx.senderId != tx.recipientId,
+    'txvalues-success': tx.amount > 0 && address && tx.senderId != address,
+    'txvalues-default': tx.amount == 0 || address === undefined || tx.senderId === tx.recipientId
   }">{{tx.amount | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}
     </div>
 </td>
