@@ -4,7 +4,7 @@ import 'angular-resource';
 import 'angular-animate';
 import 'angular-ui-bootstrap';
 import 'angular-gettext';
-import 'angular-advanced-searchbox'
+// import 'angular-advanced-searchbox'
 // import 'babel-polyfill';
 
 // styles
@@ -13,7 +13,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css'
+// import 'angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css'
 import '../assets/styles/common.css';
 import '../assets/styles/flags.css';
 import '../assets/styles/tableMobile.css';
@@ -48,7 +48,7 @@ const App = angular.module('lisk_explorer',[
     'ui.router',
     'ui.bootstrap',
     'gettext',
-    'angular-advanced-searchbox',
+    // 'angular-advanced-searchbox',
     'lisk_explorer.breadCrumb',
     'lisk_explorer.filters',
     'lisk_explorer.services',

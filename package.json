@@ -1,6 +1,6 @@
 {
   "name": "adamant-explorer",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "ADAMANT blockchain explorer",
   "repository": {
     "type": "git",
@@ -22,7 +22,6 @@
   "dependencies": {
     "amstock3": "github:amcharts/amstock3",
     "angular": "^1.4.0",
-    "angular-advanced-searchbox": "github:reyraa/angular-advanced-searchbox",
     "angular-animate": "^1.6.4",
     "angular-gettext": "^2.3.9",
     "angular-naturalsort": "https://github.com/isabello/angular-naturalsort.git",
@@ -42,7 +41,6 @@
     "fast-safe-stringify": "^1.2.0",
     "flatstr": "^1.0.5",
     "font-awesome": "^4.7.0",
-    "hiredis": "^0.5.0",
     "jquery": "^3.2.1",
     "leaflet": "^1.0.3",
     "leaflet.markercluster": "^1.0.5",
@@ -58,6 +56,7 @@
     "request": "^2.75.0",
     "sigma": "https://github.com/goVanilla/sigma.js.git",
     "socket.io": "^1.4.8",
+    "socket.io-client": "^2.0.3",
     "split": "^1.0.0",
     "underscore": "^1.8.3"
   },
