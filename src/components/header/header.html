@@ -14,7 +14,9 @@
                 <div class="mobile-search-container visible-xs"><search class="visible-xs" /></div>
             </div>
             <div class="navbar-collapse" data-ng-class="{collapse: $root.isCollapsed}">
-                <search class="navbar-form navbar-left hidden-xs" />
+                <div>
+                    <search class="navbar-form navbar-left hidden-xs" />
+                </div>
                 <div class="status" data-ng-show="blockStatus">
                     <span class="height"><strong>Height: </strong> {{blockStatus.height}}</span>
                     <span class="supply">&middot; <strong>Supply: </strong> {{blockStatus.supply | lisk | number:0}}</span>
@@ -24,7 +26,8 @@
                     <li>
                         <a href="/blocks/" class="">All Blocks</a>
                     </li>
-                    <currency-selector />
+                    <!-- <currency-selector /> -->
+                    <li class="dropdown" data-uib-dropdown><a>ADM</a></li>
                     <li class="dropdown" data-uib-dropdown>
                         <a href id="main-menu-dropdown" class="dropdown-toggle tools-menu" data-uib-dropdown-toggle data-aria-haspopup="true" role="button" data-aria-expanded="false">Tools <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu" data-aria-labelledby="main-menu-dropdown">
