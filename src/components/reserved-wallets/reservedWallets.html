@@ -4,8 +4,6 @@
 <section>
     <div id="home" class="row">
         <div class="col-xs-12 col-md-12">
-            
-
             <div class="latest-h1">
                 <div>
                     <h1>Reserved ADAMANT Wallets</h1>
@@ -17,17 +15,19 @@
                     <thead>
                         <tr>
                             <th class="text-left hidden-xs">Id</th>
-                            <th class="text-right">Name</th>
                             <th class="text-right">Address</th>
                             <th class="text-right">Balance (ADM)</th>
+                            <th class="text-right">Name</th>
                         </tr> 
                     </thead>
                     <tbody>
                         <tr data-ng-repeat='w in vm.wallets track by $index'>
-                            <td class="text-left   hidden-xs">#{{$index+1}}</td>
-                            <td class="text-right">{{w.name}}</td>
-                            <td class="text-right"><a  href="/address/{{w.address}}">{{w.address}}</a></td>
-                            <td class="text-right">{{w.balance | currency:$root.currency:$root.decimalPlaces}}<td>
+                            <td class="text-left hidden-xs">#{{$index+1}}</td>
+                            <td class="text-right"><a href="/address/{{w.address}}">{{w.address}}</a></td>
+                            <td class="text-right">
+                                <span>{{w.balance | currency:$root.currency:$root.decimalPlaces:2}} <span class="text-muted">{{$root.currency.symbol}}</span></span>
+                            </td>
+                            <td class="text-right"><span>{{w.name}}</span> <span class="owner-desc text-muted">{{w.description}}</span></td>
                         </tr>
                     </tbody>
                 </table>
