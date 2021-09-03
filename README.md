@@ -1,22 +1,26 @@
 # ADAMANT Blockchain Explorer
 
-ADAMANT Messenger is a fully open source Blockchain Messenger. Explorer at https://explorer.adamant.im shows ADAMANT blockchain transactions. You can deploy your own ADAMANT explorer using this repository.
+ADAMANT is a Decentralized Blockchain Messenger. This repository holds an Explorer for ADAMANT blockchain. Deployed at:
 
-More info abot ADAMANT at https://adamant.im
+- [Clear web](https://explorer.adamant.im)
+- [Tor](http://srovpmanmrbmbqe63vp5nycsa3j3g6be3bz46ksmo35u5pw7jjtjamid.onion)
 
-ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+Read [more about ADAMANT](https://adamant.im).
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 ## Prerequisites
 
-These programs and resources are required to install and run ADAMANT Explorer
+These programs and resources are required to install and run ADAMANT Explorer:
 
-- Nodejs v8.11.3 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
+- Node.js v10 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
 
   ```
-  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-  sudo apt-get install -y nodejs
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  source ~/.nvm/nvm.sh
+  source ~/.profile
+  source ~/.bashrc
+  nvm i --lts=dubnium
   ```
 
 - Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
@@ -26,9 +30,9 @@ These programs and resources are required to install and run ADAMANT Explorer
 - Freegeoip (<https://github.com/fiorix/freegeoip>) — Freegeoip is used by the Network Monitor for IP address geo-location.
 
   ```
-  wget https://github.com/fiorix/freegeoip/releases/download/v3.1.5/freegeoip-3.1.5-linux-amd64.tar.gz
-  tar -zxf freegeoip-3.1.5-linux-amd64.tar.gz
-  ln -s freegeoip-3.1.5-linux-amd64 freegeoip
+  wget https://github.com/fiorix/freegeoip/releases/download/v3.4.1/freegeoip-3.4.1-linux-amd64.tar.gz
+  tar -zxf freegeoip-3.4.1-linux-amd64.tar.gz
+  ln -s freegeoip-3.4.1-linux-amd64 freegeoip
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
 
@@ -40,12 +44,11 @@ These programs and resources are required to install and run ADAMANT Explorer
 
   `sudo npm install -g bower`
 
-
-- PM2 (https://github.com/Unitech/pm2) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Highly Recommended)
+- PM2 (<https://github.com/Unitech/pm2>) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Recommended)
 
   `sudo npm install -g pm2`
   
-- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) — Manages PM2 logs
+- PM2-logrotate (<https://github.com/pm2-hive/pm2-logrotate>) — Manages PM2 logs
 
   ```
   pm2 install pm2-logrotate
@@ -58,36 +61,34 @@ These programs and resources are required to install and run ADAMANT Explorer
 
 - Tool chain components — Used for compiling dependencies
 
-  `sudo apt-get install -y python build-essential automake autoconf libtool`
+  `sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev`
 
 ## Installation Steps
 
 Clone the ADAMANT Explorer Repository:
 
 ```
-git clone https://github.com/zyuhel/adamant-explorer.git
+git clone https://github.com/Adamant-im/adamant-explorer.git
 cd adamant-explorer
 npm install
 ```
 
 ## Build Steps
 
-#### Frontend
- The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
- 
- For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
+### Frontend
+
+The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
+For having a watcher to generate bundles continuously for all the changes of the code, run:
 
 `npm run start`
- 
- And for generating the minified bundles in production environment run:
- 
-`npm run build`
 
+And for generating the minified bundles in production environment run:
+
+`npm run build`
 
 ## Configuration
 
 The default `config.js` file contains all of the configuration settings for ADAMANT Explorer. These options can be modified according to comments included in configuration file.
-
 
 ## Managing ADAMANT Explorer
 
