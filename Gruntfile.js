@@ -67,8 +67,34 @@ module.exports = function (grunt) {
                 ]
             }
         },
+		eslint: {
+			options: {
+				configFile: '.eslintrc.json',
+				format: 'codeframe',
+				fix: false
+			},
+			target: [
+				'api',
+				'benchmarks',
+				'features',
+				'lib',
+				'sockets',
+				'src',
+				'tasks',
+				'test',
+				'utils'
+			]
+		}        
     });
 
     // Register tasks for travis.
     grunt.registerTask('travis', ['jshint', 'mochaTest']);
+    grunt.loadNpmTasks('grunt-eslint');
+	grunt.registerTask('eslint-nofix', ['eslint']);
+	grunt.registerTask('test', ['eslint', 'exec:coverage']);
+
+	grunt.registerTask('eslint-fix', 'Run eslint and fix formatting', function () {
+		grunt.config.set('eslint.options.fix', true);
+		grunt.task.run('eslint');
+	});
 };

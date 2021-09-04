@@ -12,6 +12,8 @@
   "main": "src/main.js",
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose",
+    "eslint": "./node_modules/.bin/grunt eslint-nofix --verbose",
+    "eslint-fix": "./node_modules/.bin/grunt eslint-fixrule --verbose --no-eslintrc --fix --rule 'semi:[\"error\", \"always\"]'",
     "e2e-test": "protractor protractor.conf.js",
     "start": "npm run copy-files && webpack -w",
     "validate": "webpack-validator webpack.config.js",
@@ -77,6 +79,7 @@
     "grunt-cli": "^1.2.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^1.1.0",
+    "grunt-eslint": "=19.0.0",
     "grunt-markdown": "^0.7.0",
     "grunt-mocha-test": "=0.13.2",
     "html-loader": "^0.4.5",
