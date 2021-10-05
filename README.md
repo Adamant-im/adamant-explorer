@@ -61,7 +61,7 @@ These programs and resources are required to install and run ADAMANT Explorer:
 
 - Tool chain components — Used for compiling dependencies
 
-  `sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev`
+  `sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev pngquant pkg-config redis`
 
 ## Installation Steps
 
