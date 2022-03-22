@@ -1,6 +1,7 @@
 const Path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const Webpack = require("webpack");
+const Webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const NgAnnotatePlugin = require('ng-annotate-webpack-plugin');
@@ -15,59 +16,79 @@ const removeEmpty = arr => arr.filter((p) => !!p);
  */
 const PATHS = {
     app: Path.join(__dirname, 'src'),
-    dev: Path.resolve(__dirname, 'public'),
+    dev: Path.join(__dirname, 'public'),
     build: Path.join(__dirname, 'dist'),
     test: Path.join(__dirname, 'test'),
+    assets: Path.join(__dirname, 'src/assets'),
     vendors: /node_modules|bower_components/
 };
 
 process.traceDeprecation = true;
 
 module.exports = env => ({
-    devtool: 'hidden',
+    mode: 'development',
+    devtool: 'source-map',
+    watch: true,
     entry: Path.resolve(__dirname, PATHS.app + '/main.js'),
     output: {
         filename: '[name].bundle.js',
-        path: Path.resolve(__dirname, PATHS.dev),
+        path: PATHS.dev,
+        publicPath: PATHS.dev,
         sourceMapFilename: '[name].map'
     },
     devServer: {
-        contentBase: PATHS.dev,
+        static: {
+            directory: PATHS.dev,
+        },
         compress: true,
         port: 9001,
         proxy: {
-            "/socket.io": "http://localhost:6040",
-            "/api": "http://localhost:6040"
+            '/socket.io': 'http://localhost:6040',
+            '/api': 'http://localhost:6040'
+        },
+        historyApiFallback: {
+            index: 'index.html'
         }
     },
     resolve: {
         alias: {
-            sigma: Path.resolve(__dirname, "node_modules/sigma/build/sigma.require.js")
+            sigma: Path.resolve(__dirname, 'node_modules/sigma/build/sigma.require.js')
+        }
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            minSize: 1,
+            minChunks: 2
         }
     },
     plugins: removeEmpty([
+        // new HtmlWebpackPlugin({
+        //     template: Path.resolve(__dirname, PATHS.app, 'index.html'),
+        //     publicPath: PATHS.dev,
+        //     filename: 'index.html',
+        // }),
+        new CopyPlugin({
+            patterns: [
+                { from: `${PATHS.assets}/icons/adm-qr-invert.png`, to: PATHS.dev },
+                { from: `${PATHS.assets}/img/favicon.ico`, to: PATHS.dev },
+                { from: `${PATHS.assets}/img/leaflet/`, to: PATHS.dev },
+                { from: `${PATHS.assets}/icons/img/`, to: PATHS.dev },
+                { from: `${PATHS.app}/index.html`, to: PATHS.dev },
+            ],
+        }),
         new BundleAnalyzerPlugin({
             openAnalyzer: false,
             analyzerMode: 'static'
         }),
-        new Webpack.optimize.UglifyJsPlugin({
-            sourceMap: false,
-            mangle: false
-        }),
-        new Webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            chunks: ['main'],
-            minChunks: module => PATHS.vendors.test(module.resource)
-        }),
         new Webpack.ProvidePlugin({
             app: `exports?exports.default!${Path.join(PATHS.app, 'app')}`,
-            $: Path.resolve(__dirname, "node_modules/jquery/dist/jquery.min.js"),
+            $: Path.resolve(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
         }),
         new Webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
 
         new NgAnnotatePlugin({
             add: true,
-            // other ng-annotate options here
         }),
     ]),
     module: {
@@ -78,7 +99,7 @@ module.exports = env => ({
                 use: [{
                     loader: 'babel-loader',
                     options: {
-                        presets: ['react', 'es2015']
+                        presets: ['@babel/preset-env']
                     }
                 }/* , {
                     loader: 'ng-annotate-loader',
@@ -94,7 +115,7 @@ module.exports = env => ({
             }, {
                 test: /\.css$/,
                 // exclude: PATHS.vendors,
-                use: ["style-loader", 'css-loader']
+                use: ['style-loader', 'css-loader']
             }, {
                 test: /\.html$/,
                 exclude: /node_modules/,
@@ -106,33 +127,43 @@ module.exports = env => ({
                 }],
             }, {
                 test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-                loader: 'file-loader?name=fonts/[name].[ext]'
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        esModule: false,
+                        name:'fonts/[name].[ext]'
+                    }
+                }]
             }, {
                 test: /\.(swf)$/,
-                loader: 'file-loader?name=[name].[ext]'
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        esModule: false,
+                        name:'[name].[ext]'
+                    }
+                }]
             }, {
                 test: /\.(png|jpg|gif|svg)$/,
                 use: [{
                         loader: 'file-loader',
                         options: {
-                            query: {
+                            esModule: false,
                             name:'img/[name].[ext]'
-                            }
                         }
                     },
                     {
                         loader: 'image-webpack-loader',
                         options: {
-                            query: {
-                                mozjpeg: {
-                                    progressive: true,
-                                },
-                                gifsicle: {
-                                    interlaced: true,
-                                },
-                                optipng: {
-                                    optimizationLevel: 7,
-                                }
+                            esModule: false,
+                            mozjpeg: {
+                                progressive: true,
+                            },
+                            gifsicle: {
+                                interlaced: true,
+                            },
+                            optipng: {
+                                optimizationLevel: 7,
                             }
                         }
                 }]
@@ -149,5 +180,4 @@ module.exports = env => ({
             }, */
         ]
     }
-
 });

@@ -7,7 +7,7 @@
   "newcap" : false,
   "node": true,
   "quotmark": "single",
-  "strict" : true,
+  "strict" : false,
   "globals": {
     "_": true,
     "angular": true,

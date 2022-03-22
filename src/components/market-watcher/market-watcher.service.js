@@ -77,7 +77,7 @@ const MarketWatcher = function ($q, $http, $rootScope, vm) {
             if (result.data.success) {
                 vm.exchangeLogos = {};
                 vm.exchanges = Object.keys(result.data.exchanges).filter((key, idx) => {
-                    System.import('../../assets/img/exchanges/' + key + '.png').then((value) => {
+                    import('../../assets/img/exchanges/' + key + '.png').then((value) => {
                         vm.exchangeLogos[key] = value;
                     });
                     if (result.data.exchanges[key]) return key;
