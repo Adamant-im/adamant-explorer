@@ -11,5 +11,10 @@ module.exports = {
   },
   rules: {
     'require-jsdoc': ['off'],
+    'new-cap': ['off'],
+    'camelcase': ['off'],
+    'max-len': ['error', {
+      'code': 200,
+    }],
   },
 };
