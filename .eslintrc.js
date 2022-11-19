@@ -4,7 +4,7 @@ module.exports = {
     node: true,
   },
   extends: [
-    'google',
+    'eslint:recommended',
   ],
   parserOptions: {
     ecmaVersion: 12,
@@ -14,7 +14,9 @@ module.exports = {
     'new-cap': ['off'],
     'camelcase': ['off'],
     'max-len': ['error', {
-      'code': 200,
+      'code': 300,
     }],
+    'comma-dangle': ['error', 'always-multiline'],
+    'no-unused-vars': ['off'],
   },
 };
