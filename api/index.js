@@ -1,19 +1,19 @@
 'use strict';
 
-var accounts = require('./accounts.js'),
-    blocks = require('./blocks.js'),
-    exchanges = require('./exchanges.js'),
-    common = require('./common.js'),
-    delegates = require('./delegates.js'),
-    statistics = require('./statistics.js'),
-    transactions = require('./transactions.js');
+const accounts = require('./accounts.js');
+const blocks = require('./blocks.js');
+const exchanges = require('./exchanges.js');
+const common = require('./common.js');
+const delegates = require('./delegates.js');
+const statistics = require('./statistics.js');
+const transactions = require('./transactions.js');
 
-module.exports = function (app) {
-    accounts(app);
-    blocks(app);
-    exchanges(app);
-    common(app);
-    delegates(app);
-    statistics(app);
-    transactions(app);
+module.exports = (app) => {
+  accounts(app);
+  blocks(app);
+  exchanges(app);
+  common(app);
+  delegates(app);
+  statistics(app);
+  transactions(app);
 };
