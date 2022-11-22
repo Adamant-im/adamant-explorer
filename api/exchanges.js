@@ -1,8 +1,8 @@
 'use strict';
 
 const config = require('../config');
-const  candles = require('../lib/api/candles');
-const  orders = require('../lib/api/orders');
+const candles = require('../lib/api/candles');
+const orders = require('../lib/api/orders');
 
 module.exports = function (app) {
   const ordersApi = new orders(app);
