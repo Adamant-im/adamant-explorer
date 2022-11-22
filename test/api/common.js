@@ -4,9 +4,9 @@ const node = require('./../node.js');
 
 const params = {
   blockId: '7621909812231456129',
-  address: 'U1946714209456091685',
+  address: 'U9466395914658764774',
   tx: '9557655214057042533',
-  username: 'buterin_pool',
+  username: 'adm_official_pool',
 };
 
 describe('Common API', function () {
@@ -34,7 +34,7 @@ describe('Common API', function () {
   });
 
   // Exchange rates are disabled. Expect it to fail
-  describe('GET /api/getPriceTicker', function () {
+  describe.skip('GET /api/getPriceTicker', function () {
     it('should be ok', function (done) {
       getPriceTicker((err, res) => {
         node.expect(res.body).to.have.property('success').to.be.ok;
@@ -108,7 +108,7 @@ describe('Common API', function () {
     });
 
     it('using partial known delegate should be ok', function (done) {
-      getSearch('gene', (err, res) => {
+      getSearch('adm_official', (err, res) => {
         node.expect(res.body).to.have.property('success').to.be.ok;
         node.expect(res.body.type).to.equal('address');
         node.expect(res.body.id).to.equal(params.address);
