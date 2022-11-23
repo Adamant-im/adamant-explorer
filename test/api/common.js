@@ -4,7 +4,7 @@ const node = require('./../node.js');
 
 const params = {
   blockId: '7621909812231456129',
-  address: 'U9466395914658764774',
+  address: 'U1946714209456091685',
   tx: '9557655214057042533',
   username: 'adm_official_pool',
 };

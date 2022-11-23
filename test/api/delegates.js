@@ -20,7 +20,7 @@ describe('Delegates API', function () {
   }
 
   function getStandby(id, done) {
-    node.get('/api/delegates/getStandby?n=' + id, done);
+    node.get(id ? '/api/delegates/getStandby?n=' + id : '/api/delegates/getStandby', done);
   }
 
   function getLatestRegistrations(done) {
