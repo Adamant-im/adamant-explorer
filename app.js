@@ -48,7 +48,7 @@ app.set('strict routing', true);
 app.set('lisk address', `http://${config.lisk.host}:${config.lisk.port}`);
 app.set(
   'freegeoip address',
-  `http://${config.freegeoip.host}:${config.freegeoip.port}`
+  `http://${config.freegeoip.host}:${config.freegeoip.port}`,
 );
 app.set('exchange enabled', config.exchangeRates.enabled);
 
@@ -60,8 +60,8 @@ app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
     "frame-ancestors 'none'; default-src 'self'; connect-src 'self' " +
-      ws_src +
-      "; img-src 'self' https://*.tile.openstreetmap.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
+    ws_src +
+    "; img-src 'self' https://*.tile.openstreetmap.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
   );
   return next();
 });
@@ -82,7 +82,7 @@ app.use(
     stream: split().on('data', (data) => {
       logger.error(data);
     }),
-  })
+  }),
 );
 app.use(
   morgan('combined', {
@@ -92,7 +92,7 @@ app.use(
     stream: split().on('data', (data) => {
       logger.info(data);
     }),
-  })
+  }),
 );
 
 app.use(compression());
@@ -103,7 +103,7 @@ app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
-  })
+  }),
 );
 
 app.use((req, res, next) => {
@@ -206,14 +206,14 @@ async.parallel(
       } else {
         logger.info(
           'Adamant Explorer started at ' +
-            app.get('host') +
-            ':' +
-            app.get('port')
+          app.get('host') +
+          ':' +
+          app.get('port'),
         );
 
         const io = require('socket.io').listen(server);
         require('./sockets')(app, io);
       }
     });
-  }
+  },
 );
