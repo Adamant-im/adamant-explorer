@@ -1,9 +1,9 @@
 'use strict';
 
 const api = require('../lib/api');
-const config = require('../config');
+const config = require('../modules/configReader');
 const async = require('async');
-const logger = require('../utils/logger');
+const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
@@ -12,7 +12,7 @@ module.exports = function (app, connectionHandler, socket) {
   const blocks = new api.blocks(app);
   const common = new api.common(app);
   const delegates = new api.delegates(app);
-  const connection = new connectionHandler('Header:', socket, this);
+  const connection = new connectionHandler('Header: ', socket, this);
 
   const running = {
     'getBlockStatus': false,
@@ -64,7 +64,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Header:', msg);
+    logger[level]('Header: ' + msg);
   };
 
   const newInterval = function (i, delay, cb) {

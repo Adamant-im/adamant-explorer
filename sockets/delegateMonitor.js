@@ -5,7 +5,7 @@ const axios = require("axios");
 const moment = require('moment');
 const _ = require('underscore');
 const api = require('../lib/api');
-const logger = require('../utils/logger');
+const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
@@ -82,7 +82,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Delegate Monitor:', msg);
+    logger[level]('Delegate Monitor:' + msg);
   };
 
   const cutNextForgers = function (count) {
@@ -245,7 +245,7 @@ module.exports = function (app, connectionHandler, socket) {
     async.waterfall([
       (callback) => {
         return axios({
-          url: app.get('lisk address') + '/api/blocks?orderBy=height:desc&limit=' + limit,
+          url: app.get('adamant address') + '/api/blocks?orderBy=height:desc&limit=' + limit,
           method: 'get',
         })
           .then((response) => {

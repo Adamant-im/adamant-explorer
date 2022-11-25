@@ -1,13 +1,15 @@
 'use strict';
 
+// This is an example for Candles update function
+
 const candles = require('../lib/candles');
 const async = require('async');
-const logger = require('./logger');
+const logger = require('./log');
 
 module.exports = function (config, client) {
   this.updateCandles = function () {
     if (running) {
-      logger.error('Candles:', 'Update already in progress');
+      logger.error('Candles:' + 'Update already in progress');
       return;
     } else {
       running = true;
@@ -43,9 +45,9 @@ module.exports = function (config, client) {
       ],
       (err, results) => {
         if (err) {
-          logger.error('Candles:', 'Error updating candles:', err);
+          logger.error('Candles:' + 'Error updating candles:' + err);
         } else {
-          logger.info('Candles:', 'Updated successfully');
+          logger.info('Candles:' + 'Updated successfully');
         }
         running = false;
       });

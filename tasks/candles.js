@@ -1,6 +1,6 @@
 'use strict';
 
-const config = require('../config');
+const config = require('../modules/configReader');
 const client = require('../redis')(config);
 const candles = require('../lib/candles');
 const async = require('async');

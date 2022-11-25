@@ -1,13 +1,15 @@
 'use strict';
 
+// This is an example for Orders update function
+
 const orders = require('../lib/orders');
 const async = require('async');
-const logger = require('./logger');
+const logger = require('./log');
 
 module.exports = function (config, client) {
   this.updateOrders = function () {
     if (running) {
-      logger.error('Orders:', 'Update already in progress');
+      logger.error('Orders: ' + 'Update already in progress');
       return;
     } else {
       running = true;
@@ -43,9 +45,9 @@ module.exports = function (config, client) {
       ],
       (err, results) => {
         if (err) {
-          logger.error('Orders:', 'Error updating orders:', err);
+          logger.error('Orders: ' + 'Error updating orders:' + err);
         } else {
-          logger.info('Orders:', 'Updated successfully');
+          logger.info('Orders: ' + 'Updated successfully');
         }
         running = false;
       });

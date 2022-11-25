@@ -7,7 +7,7 @@ module.exports = function (app, connectionHandler, socket) {
   let data = {};
   const statistics = new api.statistics(app);
   const transactions = new api.transactions(app);
-  const connection = new connectionHandler('Activity Graph:', socket, this);
+  const connection = new connectionHandler('Activity Graph: ', socket, this);
   const running = {'getlastBlock': false};
 
   this.onInit = function () {
@@ -32,7 +32,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    // logger[level]('Activity Graph:', msg);
+    // logger[level]('Activity Graph: ', msg);
   };
 
   const getLastBlock = function (cb) {

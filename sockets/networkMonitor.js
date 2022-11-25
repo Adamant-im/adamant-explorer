@@ -2,7 +2,7 @@
 
 const api = require('../lib/api');
 const async = require('async');
-const logger = require('../utils/logger');
+const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
@@ -58,7 +58,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Network Monitor:', msg);
+    logger[level]('Network Monitor:' + msg);
   };
 
   const newInterval = function (i, delay, cb) {

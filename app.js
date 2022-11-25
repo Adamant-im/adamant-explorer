@@ -14,8 +14,8 @@ const routes = require('./api');
 const cache = require('./cache');
 const packageJson = require('./package.json');
 const utils = require('./utils');
-const logger = require('./utils/logger');
-let config = require('./config');
+const logger = require('./utils/log');
+const config = require('./modules/configReader');
 
 const app = express();
 
@@ -26,10 +26,6 @@ program
   .option('-h, --host <ip>', 'listening host name or ip')
   .option('-rp, --redisPort <port>', 'redis port')
   .parse(process.argv);
-
-if (program?.config) {
-  config = require(path.resolve(process.cwd(), program.config));
-}
 
 app.set('host', program?.host ?? config.host);
 app.set('port', program?.port ?? config.port);
@@ -46,7 +42,7 @@ app.orders = new utils.orders(config, client);
 
 app.set('version', '0.3');
 app.set('strict routing', true);
-app.set('lisk address', `http://${config.lisk.host}:${config.lisk.port}`);
+app.set('adamant address', `http://${config.adamant.host}:${config.adamant.port}`);
 app.set(
   'freegeoip address',
   `http://${config.freegeoip.host}:${config.freegeoip.port}`,

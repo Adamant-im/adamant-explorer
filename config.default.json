@@ -1,0 +1,40 @@
+{
+  "host": "0.0.0.0", // Interface to listen on
+  "port": 6040, // Port to listen on
+  // ADAMANT node
+  "adamant": {
+    "host": "127.0.0.1",
+    "port": 36666 // Mainnet: 36666, Testnet: 36667, Devnet: 4000
+  },
+  // FreeGeoIP server
+  "freegeoip": {
+    "host": "127.0.0.1",
+    "port": 8080
+  },
+  // Redis server
+  "redis": {
+    "username": "",
+    "password": "",
+    "host": "127.0.0.1",
+    "port": 6379,
+    "cacheTTL": 20 // Time in seconds to store cache in Redis
+  },
+  "log_level": "log",
+  "exchangeRates": {
+    "enabled": false,
+    "updateInterval": 30000
+  },
+  "marketWatcher": {
+    "enabled": false,
+    "candles": {
+      "updateInterval": 30000
+    },
+    "orders": {
+      "updateInterval": 15000
+    }
+  },
+  "proposals": {
+    "enabled": false,
+    "updateInterval": 600000
+  }
+}

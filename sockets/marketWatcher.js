@@ -1,7 +1,7 @@
 'use strict';
 
 const api = require('../lib/api');
-const logger = require('../utils/logger');
+const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   const candles = new api.candles(app);
@@ -21,7 +21,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Market Watcher:', msg);
+    logger[level]('Market Watcher:' + msg);
   };
 };
 

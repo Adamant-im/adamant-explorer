@@ -1,6 +1,6 @@
 'use strict';
 
-const config = require('../config');
+const config = require('../modules/configReader');
 const candles = require('../lib/api/candles');
 const orders = require('../lib/api/orders');
 

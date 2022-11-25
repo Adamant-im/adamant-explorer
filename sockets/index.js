@@ -1,6 +1,6 @@
 'use strict';
 
-const logger = require('../utils/logger');
+const logger = require('../utils/log');
 
 module.exports = function (app, io) {
   const ns = {
@@ -21,15 +21,15 @@ module.exports = function (app, io) {
     ns.on('connection', (socket) => {
       if (clients() <= 1) {
         object.onInit();
-        logger.info(name, 'First connection');
+        logger.info(name + 'First connection');
       } else {
         object.onConnect();
-        logger.info(name, 'New connection');
+        logger.info(name + 'New connection');
       }
       socket.on('disconnect', () => {
         if (clients() <= 0) {
           object.onDisconnect();
-          logger.info(name, 'Closed connection');
+          logger.info(name + 'Closed connection');
         }
       });
       socket.on('forceDisconnect', () => {

@@ -2,7 +2,7 @@ var request = require('request'),
   _ = require('underscore'),
   util = require('util'),
   async = require('async'),
-  logger = require('../logger');
+  logger = require('../log');
 
 module.exports = function (config) {
   // No need to init if exchange rates are disabled
@@ -114,7 +114,7 @@ module.exports = function (config) {
       if (!exchange) {
         return;
       }
-      if (exchanges[pair].hasOwnProperty(exchange)) {
+      if (exchanges[pair].hasOwn(exchange)) {
         logger.info('Exchange:', util.format('Configured [%s] as %s/%s exchange', exchange, key1, key2));
         config.exchangeRates.exchanges[key1][key2] = exchanges[pair][exchange];
         config.exchangeRates.exchanges[key1][key2].pair = pair;

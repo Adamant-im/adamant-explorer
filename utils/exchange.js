@@ -1,5 +1,7 @@
 'use strict';
 
+// This is an example for Exchange rates update function
+
 const _ = require('underscore');
 
 module.exports = function (config) {
