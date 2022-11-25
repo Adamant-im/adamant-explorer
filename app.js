@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
+const { Server } = require('socket.io');
 const routes = require('./api');
 const cache = require('./cache');
 const packageJson = require('./package.json');
@@ -210,8 +211,7 @@ async.parallel(
           ':' +
           app.get('port'),
         );
-
-        const io = require('socket.io').listen(server);
+        const io = new Server(server);
         require('./sockets')(app, io);
       }
     });

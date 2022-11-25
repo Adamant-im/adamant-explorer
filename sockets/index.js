@@ -40,7 +40,7 @@ module.exports = function (app, io) {
     // Private
 
     const clients = function () {
-      return Object.keys(ns.connected).length;
+      return ns.sockets.size;
     };
   };
 
