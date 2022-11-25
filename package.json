@@ -47,6 +47,7 @@
     "flatstr": "^1.0.12",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.1",
+    "jsonminify": "^0.4.2",
     "leaflet": "^1.9.3",
     "leaflet.markercluster": "^1.5.3",
     "method-override": "^3.0.0",
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-env": "^7.16.11",
     "babel-loader": "^8.0.0",
     "chai": "^4.3.7",
