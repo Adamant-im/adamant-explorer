@@ -3,11 +3,12 @@ module.exports = {
     browser: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:mocha/recommended'],
-  plugins: ['mocha'],
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 12,
   },
+  extends: ['eslint:recommended', 'plugin:mocha/recommended'],
+  plugins: ['mocha'],
   rules: {
     'require-jsdoc': ['off'],
     'new-cap': ['off'],
@@ -20,5 +21,6 @@ module.exports = {
     ],
     'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': ['off'],
+    'semi': ['error', 'always'],
   },
 };
