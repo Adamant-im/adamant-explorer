@@ -1,27 +1,27 @@
 'use strict';
 
-var api = require('../lib/api');
-var logger = require('../utils/logger');
+const api = require('../lib/api');
+const logger = require('../utils/logger');
 
 module.exports = function (app, connectionHandler, socket) {
-    var candles    = new api.candles(app),
-        connection = new connectionHandler('Market Watcher:', socket, this),
-        interval   = null,
-        data       = {};
+  const candles = new api.candles(app);
+  const connection = new connectionHandler('Market Watcher:', socket, this);
+  const interval = null;
+  const data = {};
 
-    this.onInit = function () {
-    };
+  this.onInit = function () {
+  };
 
-    this.onConnect = function () {
-    };
+  this.onConnect = function () {
+  };
 
-    this.onDisconnect = function () {
-    };
+  this.onDisconnect = function () {
+  };
 
-    // Private
+  // Private
 
-    var log = function (level, msg) {
-        logger[level]('Market Watcher:', msg);
-    };
+  const log = function (level, msg) {
+    logger[level]('Market Watcher:', msg);
+  };
 };
 
