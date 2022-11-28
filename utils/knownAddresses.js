@@ -43,12 +43,12 @@ module.exports = function () {
         logger.info('Known Addresses: ' + 'Loading known addresses...');
         self.addresses = require('../known.json');
       } catch (err) {
-        logger.error('Known Addresses: ' + 'Error loading known.json:' + err.message);
+        logger.error('Known Addresses: ' + 'Error loading known.json: ' + err.message);
         self.addresses = {};
       }
 
       const length = Object.keys(self.addresses).length.toString();
-      logger.info('Known Addresses: ' + length + 'known addresses loaded');
+      logger.info('Known Addresses: ' + length + ' known addresses loaded');
       return self.addresses;
     };
 
