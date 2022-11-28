@@ -169,7 +169,7 @@ app.use((req, res, next) => {
       } else {
         const ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
 
-        req.redis.send_command('EXPIRE', [req.originalUrl, ttl], (err) => {
+        req.redis.sendCommand('EXPIRE', [req.originalUrl, ttl], (err) => {
           if (err) {
             logger.info(err);
           }
