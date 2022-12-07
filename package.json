@@ -13,13 +13,12 @@
   "scripts": {
     "test": "./node_modules/.bin/grunt travis --verbose",
     "eslint": "./node_modules/.bin/grunt eslint-nofix --verbose",
-    "eslint-fix": "./node_modules/.bin/grunt eslint-fixrule --verbose --no-eslintrc --fix --rule 'semi:[\"error\", \"always\"]'",
+    "eslint-fix": "./node_modules/.bin/grunt eslint-fix --verbose",
     "e2e-test": "protractor protractor.conf.js",
-    "benchmark" : "node benchmark.js",
+    "benchmark": "node benchmark.js",
     "start": "npm run copy-files && webpack -w",
     "run": "node app.js",
-    "run:testnet": "node app.js --config test/config.test",
-    "validate": "webpack-validator webpack.config.js",
+    "webpack-validate": "webpack configtest webpack.config.js",
     "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./src/assets/icons/img ./src/assets/icons/adm-qr-invert.png ./public",
     "build": "webpack",
     "build:prod": "webpack --env.prod"
@@ -56,7 +55,6 @@
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "ngprogress": "https://github.com/VictorBjelkholm/ngProgress.git",
-    "popsicle": "=8.2.0",
     "qr-code-with-logo": "^1.1.0",
     "qrcode": "^1.5.1",
     "qrcode-generator": "^1.4.4",
@@ -103,7 +101,7 @@
     "supertest": "^6.3.2",
     "webpack": "^5.75.0",
     "webpack-bundle-analyzer": "^4.7.0",
-    "webpack-cli": "^5.0.0",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
   }

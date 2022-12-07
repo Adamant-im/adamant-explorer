@@ -33,7 +33,7 @@ describe('Common API', function () {
     });
   });
 
-  // Exchange rates are disabled. Expect it to fail
+  // Exchange functions are disabled. Expect it to fail
   describe.skip('GET /api/getPriceTicker', function () {
     it('should be ok', function (done) {
       getPriceTicker((err, res) => {

@@ -5,7 +5,7 @@ const node = {};
 
 // Requires
 node.async = require('async');
-node.popsicle = require('popsicle');
+node.axios = require('axios');
 node.expect = require('chai').expect;
 node.chai = require('chai');
 node.chai.config.includeStack = true;
