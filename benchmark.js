@@ -1,62 +1,71 @@
 'use strict';
 
-var Benchmark = require('benchmark'),
-    suite = new Benchmark.Suite('api');
+const Benchmark = require('benchmark');
+const suite = new Benchmark.Suite('api');
 
-var express = require('express'),
-    config = require('./config');
-    config.enableExchange = false;
+const express = require('express');
+const _ = require('lodash');
+const logger = require('./utils/log');
+const config = require('./modules/configReader');
+config.enableExchange = false;
 
-var api = require('./lib/api'),
-    benchmarks = require('./benchmarks'),
-    utils = require('./utils');
+const api = require('./lib/api');
+const benchmarks = require('./benchmarks');
+const utils = require('./utils');
 
-var app = express();
+const app = express();
 app.exchange = new utils.exchange(config);
 app.knownAddresses = new utils.knownAddresses();
 app.knownAddresses.load();
 
-app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
+app.set('adamant address', 'http://' + config.adamant.host + ':' + config.adamant.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 
-////////////////////////////////////////////////////////////////////////////////
+const tests = new benchmarks(app, api);
 
-var tests = new benchmarks(app, api);
+suite
+  .add('accounts.getAccount', tests.accounts.getAccount, {defer: true})
+  .add('accounts.getTopAccounts', tests.accounts.getTopAccounts, {defer: true});
 
-suite.add('accounts.getAccount', tests.accounts.getAccount, { defer : true })
-     .add('accounts.getTopAccounts', tests.accounts.getTopAccounts, { defer : true });
+suite
+  .add('blocks.getLastBlocks', tests.blocks.getLastBlocks, {defer: true})
+  .add('blocks.getBlock', tests.blocks.getBlock, {defer: true})
+  .add('blocks.getBlockStatus', tests.blocks.getBlockStatus, {defer: true});
 
-suite.add('blocks.getLastBlocks', tests.blocks.getLastBlocks, { defer : true })
-     .add('blocks.getBlock', tests.blocks.getBlock, { defer : true })
-     .add('blocks.getBlockStatus', tests.blocks.getBlockStatus, { defer : true });
 
-suite.add('common.getTicker', tests.common.getTicker, { defer : true })
-     .add('common.search', tests.common.search, { defer : true });
+//  common.getTicker is disabled as all exchange functions are disabled
+suite
+  // .add('common.getTicker', tests.common.getTicker, {defer: true})
+  .add('common.search', tests.common.search, {defer: true});
 
-suite.add('delegates.getActive', tests.delegates.getActive, { defer : true })
-     .add('delegates.getStandby', tests.delegates.getStandby, { defer : true })
-     .add('delegates.getLatestRegistrations', tests.delegates.getLatestRegistrations, { defer : true })
-     .add('delegates.getLatestVotes', tests.delegates.getLatestVotes, { defer : true })
-     .add('delegates.getLastBlock', tests.delegates.getLastBlock, { defer : true });
+suite
+  .add('delegates.getActive', tests.delegates.getActive, {defer: true})
+  .add('delegates.getStandby', tests.delegates.getStandby, {defer: true})
+  .add('delegates.getLatestRegistrations', tests.delegates.getLatestRegistrations, {defer: true})
+  .add('delegates.getLatestVotes', tests.delegates.getLatestVotes, {defer: true})
+  .add('delegates.getLastBlock', tests.delegates.getLastBlock, {defer: true});
 
-suite.add('statistics.getBlocks', tests.statistics.getBlocks, { defer : true, minSamples : 3 })
-     .add('statistics.getLastBlock', tests.statistics.getLastBlock, { defer : true })
-     .add('statistics.getPeers', tests.statistics.getPeers, { defer : true, minSamples : 3 });
+suite
+  .add('statistics.getBlocks', tests.statistics.getBlocks, {defer: true, minSamples: 3})
+  .add('statistics.getLastBlock', tests.statistics.getLastBlock, {defer: true})
+  .add('statistics.getPeers', tests.statistics.getPeers, {defer: true, minSamples: 3});
 
-suite.add('transactions.getTransaction', tests.transactions.getTransaction, { defer : true })
-     .add('transactions.getUnconfirmedTransactions', tests.transactions.getUnconfirmedTransactions, { defer : true })
-     .add('transactions.getLastTransactions', tests.transactions.getLastTransactions, { defer : true })
-     .add('transactions.getTransactionsByAddress', tests.transactions.getTransactionsByAddress, { defer : true })
-     .add('transactions.getTransactionsByBlock', tests.transactions.getTransactionsByBlock, { defer : true });
+suite
+  .add('transactions.getTransaction', tests.transactions.getTransaction, {defer: true})
+  .add('transactions.getUnconfirmedTransactions', tests.transactions.getUnconfirmedTransactions, {defer: true})
+  .add('transactions.getLastTransactions', tests.transactions.getLastTransactions, {defer: true})
+  .add('transactions.getTransactionsByAddress', tests.transactions.getTransactionsByAddress, {defer: true})
+  .add('transactions.getTransactionsByBlock', tests.transactions.getTransactionsByBlock, {defer: true});
 
-suite.on('cycle', function (event) {
-   console.log(String(event.target));
-})
-.on('complete', function () {
-   console.log('Slowest is ' + this.filter('slowest').pluck('name'));
-   console.log('Fastest is ' + this.filter('fastest').pluck('name'));
-   console.log('Done :)');
-});
+suite
+  .on('cycle', (event) => {
+    logger.log(String(event.target));
+  })
+  .on('complete', function () {
+    logger.log('Slowest is ' + _.map(this.filter('slowest'), 'name'));
+    logger.log('Fastest is ' + _.map(this.filter('fastest'), 'name'));
+    logger.log('Done :)');
+  });
 
-console.log('Running benchmarks...');
-suite.run({ 'async': false });
+logger.log('Running benchmarks...');
+suite.run({'async': false});

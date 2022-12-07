@@ -1,72 +1,73 @@
 'use strict';
 
+const logger = require('../utils/log');
+
 module.exports = function (app, api) {
-    var delegates = new api.delegates(app);
+  const delegates = new api.delegates(app);
 
-    this.getActive = function (deferred) {
-        delegates.getActive(
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getActive ~>', 'Error retrieving delegates:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getActive ~>', data.delegates.length, 'delegates retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
+  this.getActive = (deferred) => {
+    delegates.getActive(
+      (data) => {
+        deferred.resolve();
+        logger.warn('delegates.getActive ~> ' + 'Error retrieving delegates: ' + data.error);
+      },
+      (data) => {
+        deferred.resolve();
+        logger.log('delegates.getActive ~> ' + data.delegates.length + ' delegates retrieved in ' + String(deferred.elapsed) + ' seconds');
+      },
+    );
+  };
 
-    this.getStandby = function (deferred) {
-        delegates.getStandby(
-            0,
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getStandby ~>', 'Error retrieving delegates:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getStandby ~>', data.delegates.length, 'delegates retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
+  this.getStandby = (deferred) => {
+    delegates.getStandby(
+      0,
+      (data) => {
+        deferred.resolve();
+        logger.warn('delegates.getStandby ~> ' + ' Error retrieving delegates: ' + data.error);
+      },
+      (data) => {
+        deferred.resolve();
+        logger.log('delegates.getStandby ~> ' + data.delegates.length + ' delegates retrieved in ' + String(deferred.elapsed) + ' seconds');
+      },
+    );
+  };
 
-    this.getLatestRegistrations = function (deferred) {
-        delegates.getLatestRegistrations(
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLatestRegistrations ~>', 'Error retrieving registrations:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLatestRegistrations ~>', data.transactions.length, 'registrations retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
+  this.getLatestRegistrations = (deferred) => {
+    delegates.getLatestRegistrations(
+      (data) => {
+        deferred.resolve();
+        logger.warn('delegates.getLatestRegistrations ~> ' + ' Error retrieving registrations: ' + data.error);
+      },
+      (data) => {
+        deferred.resolve();
+        logger.log('delegates.getLatestRegistrations ~> ' + data.transactions.length + ' registrations retrieved in ' + String(deferred.elapsed) + ' seconds');
+      },
+    );
+  };
 
-    this.getLatestVotes = function (deferred) {
-        delegates.getLatestVotes(
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLatestVotes ~>', 'Error retrieving votes:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLatestVotes ~>', data.transactions.length, 'votes retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
+  this.getLatestVotes = (deferred) => {
+    delegates.getLatestVotes(
+      (data) => {
+        deferred.resolve();
+        logger.warn('delegates.getLatestVotes ~> ' + ' Error retrieving votes: ' + data.error);
+      },
+      (data) => {
+        deferred.resolve();
+        logger.log('delegates.getLatestVotes ~> ' + data.transactions.length + ' votes retrieved in ' + String(deferred.elapsed) + ' seconds');
+      },
+    );
+  };
 
-    this.getLastBlock = function (deferred) {
-        delegates.getLastBlock(
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLastBlock ~>', 'Error retrieving block:', data.error);
-            },
-            function (data) {
-                deferred.resolve();
-                console.log('delegates.getLastBlock ~>', 'block retrieved in', String(deferred.elapsed), 'seconds');
-            }
-        );
-    };
+  this.getLastBlock = (deferred) => {
+    delegates.getLastBlock(
+      (data) => {
+        deferred.resolve();
+        logger.warn('delegates.getLastBlock ~> ' + ' Error retrieving block: ' + data.error);
+      },
+      (data) => {
+        deferred.resolve();
+        logger.log('delegates.getLastBlock ~> ' + ' block retrieved in ' + String(deferred.elapsed) + ' seconds');
+      },
+    );
+  };
 };
-
