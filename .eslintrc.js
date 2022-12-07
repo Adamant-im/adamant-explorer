@@ -7,12 +7,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
-  extends: ['eslint:recommended', 'plugin:mocha/recommended'],
   plugins: ['mocha'],
+  extends: ['eslint:recommended', 'plugin:mocha/recommended'],
   rules: {
     'require-jsdoc': ['off'],
     'new-cap': ['off'],
-    camelcase: ['off'],
+    'camelcase': ['off'],
     'max-len': [
       'error',
       {
@@ -22,5 +22,6 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': ['off'],
     'semi': ['error', 'always'],
+    'mocha/no-skipped-tests': ['off'],
   },
 };
