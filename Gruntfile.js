@@ -73,8 +73,17 @@ module.exports = function (grunt) {
   });
 
   // Register tasks for travis.
-  grunt.registerTask('travis', ['eslint', 'mochaTest']);
-  grunt.registerTask('eslint-nofix', ['eslint']);
+  grunt.registerTask('travis', () => {
+    grunt.option('force', true);
+
+    grunt.task.run('eslint');
+    grunt.task.run('mochaTest');
+  });
+  grunt.registerTask('eslint-nofix', () => {
+    grunt.option('force', true);
+
+    grunt.task.run('eslint');
+  });
   grunt.registerTask('test', ['mochaTest']);
 
   grunt.registerTask('eslint-fix', 'Run eslint and fix formatting', () => {
