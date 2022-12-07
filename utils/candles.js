@@ -29,7 +29,7 @@ module.exports = function (config, client) {
           }
 
         },
-        function (callback) {
+        (callback) => {
           if (!config.marketWatcher.exchanges.bittrex) {
             callback(null);
           } else {
