@@ -167,13 +167,9 @@ app.use((req, res, next) => {
       if (err) {
         logger.info(err);
       } else {
-        const ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
+        const ttl = cache.cacheTTLOverride[req.originalUrl] || config.redis.cacheTTL;
 
-        req.redis.sendCommand('EXPIRE', [req.originalUrl, ttl], (err) => {
-          if (err) {
-            logger.info(err);
-          }
-        });
+        req.redis.sendCommand(['EXPIRE', req.originalUrl, ttl]);
       }
     });
 
