@@ -59,10 +59,8 @@ module.exports = function (grunt) {
       target: [
         'api',
         'benchmarks',
-        'features',
         'lib',
         'sockets',
-        'src',
         'tasks',
         'test',
         'utils',
