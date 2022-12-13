@@ -48,7 +48,7 @@ try {
   if (isDev) {
     config = JSON.parse(jsonminify(fs.readFileSync('./config.test', 'utf-8')));
   } else {
-    const configFile = fs.existsSync('./config.json') ? './config.json' : './config.default.jsonc';
+    const configFile = fs.existsSync('./config.jsonc') ? './config.jsonc' : './config.default.jsonc';
     config = JSON.parse(jsonminify(fs.readFileSync(configFile, 'utf-8')));
   }
 

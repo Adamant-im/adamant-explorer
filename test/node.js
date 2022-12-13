@@ -1,5 +1,7 @@
 'use strict';
 
+const config = require('../modules/configReader');
+
 // Root object
 const node = {};
 
@@ -12,7 +14,7 @@ node.chai.config.includeStack = true;
 node.supertest = require('supertest');
 
 // Node configuration
-node.baseUrl = 'http://localhost:6040';
+node.baseUrl = `http://${config.host}:${config.port}`;
 node.api = node.supertest(node.baseUrl);
 
 function abstractRequest(options, done) {

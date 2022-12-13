@@ -9,6 +9,7 @@ Read [more about ADAMANT](https://adamant.im).
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
+# Usage and installation
 ## Prerequisites
 
 These programs and resources are required to install and run ADAMANT Explorer:
@@ -88,7 +89,15 @@ And for generating the minified bundles in production environment run:
 
 ## Configuration
 
-The default `config.js` file contains all of the configuration settings for ADAMANT Explorer. These options can be modified according to comments included in configuration file.
+The explorer will use `config.jsonc`, if available, or `config.default.jsonc` otherwise.
+
+
+```
+cp config.default.jsonc config.jsonc
+nano config.jsonc
+```
+
+Parameters: see comments in config file.
 
 ## Managing ADAMANT Explorer
 
@@ -114,13 +123,6 @@ To stop Explorer after it has been started with `PM2`, issue the following comma
 
 Before running any tests, please ensure ADAMANT Explorer and ADAMANT Node are configured to run on the ADAMANT Testnet.
 
-Replace **config.js** with **config.test** file from the **test** directory:
-
-`cp test/config.test ./config.js`
-
-Replace the **config.json** for the ADAMANT Node the corresponding file under the **test** directory:
-
-`cp test/config_lisk.json  /PATH_TO_ADAMANT_DIR/config.json`
 
 Then restart the ADAMANT Node (example):
 

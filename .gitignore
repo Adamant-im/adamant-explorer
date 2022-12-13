@@ -15,4 +15,4 @@ logs
 package-lock.json
 tests.js
 config.test
-config.json
+config.jsonc
