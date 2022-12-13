@@ -60,7 +60,7 @@
     "qrcode-generator": "^1.4.4",
     "redis": "^4.5.1",
     "request": "^2.75.0",
-    "sigma": "^1.2.0",
+    "sigma": "https://github.com/goVanilla/sigma.js.git",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
     "split": "^1.0.1",
