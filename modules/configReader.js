@@ -9,22 +9,31 @@ const fields = {
   host: {
     type: String,
     default: '0.0.0.0',
+    isRequired: true,
   },
   port: {
     type: Number,
     default: 6040,
+    isRequired: true,
   },
   adamant: {
     type: Object,
     default: {host: '127.0.0.1', port: 36666},
+    isRequired: true,
+  },
+  nodes_adm: {
+    type: Array,
+    isRequired: true,
   },
   freegeoip: {
     type: Object,
     default: {host: '127.0.0.1', port: 8080},
+    isRequired: true,
   },
   redis: {
     type: Object,
     default: {username: '', password: '', host: '127.0.0.1', port: 6379, cacheTTL: 20},
+    isRequired: true,
   },
   log_level: {
     type: String,
