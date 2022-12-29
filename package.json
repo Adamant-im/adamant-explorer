@@ -24,6 +24,7 @@
     "build:prod": "webpack --env.prod"
   },
   "dependencies": {
+    "adamant-api": "^1.6.0",
     "amstock3": "^3.21.15",
     "angular": "^1.8.3",
     "angular-animate": "^1.8.3",
