@@ -46,10 +46,6 @@ describe('Delegates API', function () {
     node.get('/api/delegates/getNextForgers', done);
   }
 
-  function getDelegateProposals(done) {
-    node.get('/api/delegates/getDelegateProposals', done);
-  }
-
   /*Testing functions */
   function checkBlocks(id) {
     for (let i = 0; i < id.length; i++) {
@@ -104,14 +100,6 @@ describe('Delegates API', function () {
         'rate',
         'approval',
       );
-  }
-
-  function checkDelegateProposals(id) {
-    for (let i = 0; i < id.length; i++) {
-      if (id[i + 1]) {
-        node.expect(id[i]).to.contain.all.keys('topic', 'name', 'description');
-      }
-    }
   }
 
   function checkPublicKeys(id) {
@@ -335,18 +323,5 @@ describe('Delegates API', function () {
         done();
       });
     });
-  });
-
-  /* This is pending until getDelegateProposals is implemented */
-  describe.skip('GET /api/delegates/getDelegateProposals', function () {
-    it('should be ok', function (done) {
-      getDelegateProposals((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('proposals');
-        node.expect(res.body).to.have.property('count');
-        checkDelegateProposals(res.body.proposals);
-        done();
-      });
-    }).timeout(10000);
   });
 });

@@ -103,16 +103,4 @@ module.exports = function (app) {
       },
     );
   });
-
-  app.get('/api/delegates/getDelegateProposals', (req, res, next) => {
-    api.getDelegateProposals(
-      (data) => {
-        res.json(data);
-      },
-      (data) => {
-        req.json = data;
-        return next();
-      },
-    );
-  });
 };
