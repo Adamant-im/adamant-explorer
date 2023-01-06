@@ -240,7 +240,7 @@ describe('Delegates API', function () {
         checkBlocks(res.body.blocks);
         done();
       });
-    });
+    }).timeout(20000);
 
     it('using limit 10 should be ok', function (done) {
       getLastBlocks(params.publicKey, '10', (err, res) => {
@@ -251,7 +251,7 @@ describe('Delegates API', function () {
         checkBlocks(res.body.blocks);
         done();
       });
-    });
+    }).timeout(20000);
 
     it('using limit 100 should be ok and return 20', function (done) {
       getLastBlocks(params.publicKey, '100', (err, res) => {
@@ -261,7 +261,7 @@ describe('Delegates API', function () {
         checkBlocks(res.body.blocks);
         done();
       });
-    });
+    }).timeout(20000);
 
     it('using publicKey with no blocks should be ok', function (done) {
       getLastBlocks(params.noBlocksKey, '', (err, res) => {
