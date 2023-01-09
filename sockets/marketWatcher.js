@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('../api/lib/api');
+const api = require('../api/lib/adamant');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {

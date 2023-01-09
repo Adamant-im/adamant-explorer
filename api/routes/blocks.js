@@ -1,6 +1,6 @@
 'use strict';
 
-const blocks = require('../lib/api/blocks');
+const blocks = require('../lib/adamant/blocks');
 
 module.exports = function (app) {
   const api = new blocks(app);

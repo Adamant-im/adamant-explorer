@@ -2,7 +2,7 @@
 
 // This is an example for Orders update function
 
-const orders = require('../api/lib/orders');
+const orders = require('../api/lib/exchanges/orders');
 const async = require('async');
 const logger = require('./log');
 

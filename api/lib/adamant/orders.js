@@ -1,6 +1,6 @@
 'use strict';
 
-const orders = require('../orders');
+const orders = require('../exchanges/orders');
 const config = require('../../../modules/configReader');
 const _ = require('underscore');
 

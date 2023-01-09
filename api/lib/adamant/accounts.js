@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('./api');
+const api = require('./requests/api');
 const logger = require("../../../utils/log");
 const _ = require('underscore');
 
@@ -184,59 +184,6 @@ module.exports = function (app) {
       });
     };
 
-    /**
-     * Get incoming transactions count by address
-     * @param {Object} account
-     * @returns {Promise<Number>} incoming_cnt or 0
-     */
-    this.getIncomingTxsCnt = function (account) {
-      return new Promise((resolve, reject) => {
-        if (!account.address) {
-          resolve(undefined);
-        }
-
-        api.get('api/transactions', {recipientId: account.address, limit: 1})
-          .then((response) => {
-            if (response.details.status !== 200) {
-              reject(response.errorMessage);
-            }
-
-            const incoming_cnt = response.data.success ? response.data.count : 0;
-
-            resolve(incoming_cnt);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    };
-
-    /**
-     * Get outgoing transactions count by address
-     * @param {Object} account
-     * @returns {Promise<Number>} outgoing_cnt or 0
-     */
-    this.getOutgoingTxsCnt = function (account) {
-      return new Promise((resolve, reject) => {
-        if (!account.address) {
-          resolve(undefined);
-        }
-
-        api.get('api/transactions', {senderId: account.address, limit: 1})
-          .then((response) => {
-            if (response.details.status !== 200) {
-              reject(response.errorMessage);
-            }
-
-            const outgoing_cnt = response.data.success ? response.data.count : 0;
-
-            resolve(outgoing_cnt);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    };
 
     /**
      * Get forging activity of delegate by public key

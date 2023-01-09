@@ -1,6 +1,6 @@
 'use strict';
 
-const delegates = require('../lib/api/delegates');
+const delegates = require('../lib/adamant/delegates');
 
 module.exports = function (app) {
   const api = new delegates(app);

@@ -1,6 +1,6 @@
 'use strict';
 
-const statistics = require('../lib/api/statistics');
+const statistics = require('../lib/adamant/statistics');
 
 module.exports = function (app) {
   const api = new statistics(app);

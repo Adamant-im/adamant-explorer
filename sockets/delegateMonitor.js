@@ -4,7 +4,7 @@ const async = require('async');
 const axios = require("axios");
 const moment = require('moment');
 const _ = require('underscore');
-const api = require('../api/lib/api');
+const api = require('../api/lib/adamant');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {

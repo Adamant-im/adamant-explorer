@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('./api');
+const api = require('./requests/api');
 const logger = require('../../../utils/log');
 const _ = require('underscore');
 

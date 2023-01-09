@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('../api/lib/api');
+const api = require('../api/lib/adamant');
 const config = require('../modules/configReader');
 const async = require('async');
 const logger = require('../utils/log');

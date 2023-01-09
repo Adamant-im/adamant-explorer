@@ -1,6 +1,6 @@
 'use strict';
 
-const transactions = require('../lib/api/transactions');
+const transactions = require('../lib/adamant/transactions');
 
 module.exports = function (app) {
   const api = new transactions(app);

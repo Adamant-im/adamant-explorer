@@ -1,6 +1,6 @@
 'use strict';
 
-const candles = require('../candles');
+const candles = require('../exchanges/candles');
 const moment = require('moment');
 const config = require('../../../modules/configReader');
 const _ = require('underscore');

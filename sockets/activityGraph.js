@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('../api/lib/api');
+const api = require('../api/lib/adamant');
 
 module.exports = function (app, connectionHandler, socket) {
   let interval = null;

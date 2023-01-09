@@ -1,6 +1,6 @@
 'use strict';
 
-const api = require('../lib/api');
+const api = require('../lib/adamant');
 
 module.exports = function (app) {
   app.get('/api/version', (req, res) => {
