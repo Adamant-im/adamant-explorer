@@ -23,7 +23,7 @@ function getAccountByAddress(address) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get account by public key
@@ -46,7 +46,7 @@ function getAccountByPublicKey(publicKey) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get top accounts
@@ -86,8 +86,6 @@ function getIncomingTxsCnt(address) {
           reject(response.errorMessage);
         }
 
-        console.log(response);
-
         const incoming_cnt = response.data.success ? response.data.count : 0;
 
         resolve(incoming_cnt);
@@ -96,7 +94,7 @@ function getIncomingTxsCnt(address) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get outgoing transactions count by address
@@ -123,7 +121,7 @@ function getOutgoingTxsCnt(address) {
         reject(err);
       });
   });
-};
+}
 
 module.exports = {
   getAccountByAddress,

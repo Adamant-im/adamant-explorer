@@ -51,16 +51,20 @@ async function getAccount(params, error, success) {
     }
 
     result.votes = await delegates.getVotes(result.address);
-    result.votes = result.votes.map((d) => {
-      d.knowledge = knownAddresses.inAccount(d);
-      return d;
-    });
+    if (result.votes) {
+      result.votes = result.votes.map((d) => {
+        d.knowledge = knownAddresses.inAccount(d);
+        return d;
+      });
+    }
 
     result.voters = await delegates.getVoters(result.publicKey);
-    result.voters = result.voters.map((d) => {
-      d.knowledge = knownAddresses.inAccount(d);
-      return d;
-    });
+    if (result.voters) {
+      result.voters = result.voters.map((d) => {
+        d.knowledge = knownAddresses.inAccount(d);
+        return d;
+      });
+    }
 
     result.incoming_cnt = await accounts.getIncomingTxsCnt(result.address);
 
