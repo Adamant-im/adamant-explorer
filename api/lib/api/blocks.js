@@ -1,7 +1,7 @@
 'use strict';
 
 const api = require('./api');
-const logger = require("../../utils/log");
+const logger = require("../../../utils/log");
 const _ = require('underscore');
 
 module.exports = function (app) {

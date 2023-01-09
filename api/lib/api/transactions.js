@@ -2,7 +2,7 @@
 
 const _ = require('underscore');
 const async = require('async');
-const logger = require('../../utils/log');
+const logger = require('../../../utils/log');
 const axios = require("axios");
 
 module.exports = function (app) {

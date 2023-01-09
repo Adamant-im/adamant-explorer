@@ -2,7 +2,7 @@
 
 // This is an example for Candles update function
 
-const candles = require('../lib/candles');
+const candles = require('../api/lib/candles');
 const async = require('async');
 const logger = require('./log');
 

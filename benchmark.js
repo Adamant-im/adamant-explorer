@@ -9,7 +9,7 @@ const logger = require('./utils/log');
 const config = require('./modules/configReader');
 config.enableExchange = false;
 
-const api = require('./lib/api');
+const api = require('./api/lib/api');
 const benchmarks = require('./benchmarks');
 const utils = require('./utils');
 

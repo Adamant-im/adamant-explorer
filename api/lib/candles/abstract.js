@@ -4,7 +4,7 @@ const async = require('async');
 const axios = require("axios");
 const moment = require('moment');
 const _ = require('underscore');
-const logger = require('../../utils/log');
+const logger = require('../../../utils/log');
 
 function AbstractCandles(client) {
   const self = this;
