@@ -5,9 +5,10 @@ const api = require("./api");
 /**
  * Get delegate info by public key
  * @param {String} publicKey
+ * @param {Boolean} rejectUnsuccessful
  * @returns {Promise<Object|null>}
  */
-function getDelegate(publicKey) {
+function getDelegate(publicKey, rejectUnsuccessful) {
   return new Promise((resolve, reject) => {
     if (!publicKey) {
       resolve(undefined);
@@ -20,6 +21,10 @@ function getDelegate(publicKey) {
         }
 
         const delegate = response.data.success ? response.data.delegate : null;
+
+        if (rejectUnsuccessful && delegate === null) {
+          reject(response.errorMessage);
+        }
 
         resolve(delegate);
       })
@@ -121,9 +126,104 @@ function getForged(publicKey) {
   });
 }
 
+/**
+ * Get active delegates
+ * @returns {Promise<Object>}
+ */
+function getActive() {
+  return new Promise((resolve, reject) => {
+    api.get('delegates', {orderBy: "rate:asc", limit: 101})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.success
+          ? resolve(response.data)
+          : reject(response.errorMessage);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Get 20 standby delegates with given offset
+ * @param {Number} offset
+ * @param {Number} limit
+ * @returns {Promise<Array>}
+ */
+function getStandby(offset, limit) {
+  return new Promise((resolve, reject) => {
+    api.get('delegates', {orderBy: 'rate:asc', limit, offset})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.success
+          ? resolve(response.data)
+          : reject(response.errorMessage);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Get delegate address by username
+ * @param {String} params e.g. 'adm_official_pool'
+ * @returns {Promise<String>}
+ */
+function getSearch(params) {
+  return new Promise((resolve, reject) => {
+    api.get('delegates/search', {q: params, limit: 1})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        !response.data.delegates || !response.data.delegates[0]
+          ? reject('Delegate not found')
+          : resolve(response.data.delegates[0].address);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Get next forgers
+ * @returns {Promise<Array>}
+ */
+function getNextForgers() {
+  return new Promise((resolve, reject) => {
+    api.get('delegates/getNextForgers', {limit: 101})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.success
+          ? resolve(response.data.delegates)
+          : reject(response.errorMessage);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 module.exports = {
   getDelegate,
   getVotes,
   getVoters,
   getForged,
+  getActive,
+  getStandby,
+  getSearch,
+  getNextForgers,
 };

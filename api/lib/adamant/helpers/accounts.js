@@ -1,6 +1,5 @@
 'use strict';
 
-
 /**
  * Validate account address
  * @param {String} address

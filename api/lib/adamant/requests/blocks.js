@@ -1,4 +1,7 @@
+'use strict';
+
 const api = require("./api");
+const _ = require("underscore");
 
 /**
  * Get the latest block height
@@ -113,6 +116,50 @@ function getBlockStatus() {
   });
 }
 
+/**
+ * Get last block
+ * @returns {Promise<Object>}
+ */
+function getLastBlock() {
+  return new Promise((resolve, reject) => {
+    api.get('blocks', {orderBy: 'height:desc'})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.success
+          ? resolve(response.data.blocks[0])
+          : reject(response.errorMessage);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Get last blocks for given generator public key and limit
+ * @param {String} publicKey
+ * @returns {Promise<Array>}
+ */
+function getLastBlocksByGeneratorPublicKey(publicKey) {
+  return new Promise((resolve, reject) => {
+    api.get('blocks', {orderBy: 'height:desc', generatorPublicKey: publicKey})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.blocks = _.isArray(response.data.blocks) ? response.data.blocks : [];
+
+        resolve(response.data.blocks);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
 
 module.exports = {
   getBlockHeight,
@@ -120,4 +167,6 @@ module.exports = {
   getBlockByHeight,
   getBlocks,
   getBlockStatus,
+  getLastBlock,
+  getLastBlocksByGeneratorPublicKey,
 };
