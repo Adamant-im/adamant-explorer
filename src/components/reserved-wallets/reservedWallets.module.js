@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppHome = angular.module('lisk_explorer.reservedWallets', []);
+const AppHome = angular.module('adamant_explorer.reservedWallets', []);
 
 export default AppHome;

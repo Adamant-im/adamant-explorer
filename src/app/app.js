@@ -42,32 +42,32 @@ import '../directives';
 import './app-tools.module.js';
 import '../shared';
 
-const App = angular.module('lisk_explorer',[
+const App = angular.module('adamant_explorer',[
     'ngAnimate',
     'ngResource',
     'ui.router',
     'ui.bootstrap',
     'gettext',
     // 'angular-advanced-searchbox',
-    'lisk_explorer.breadCrumb',
-    'lisk_explorer.filters',
-    'lisk_explorer.services',
-    'lisk_explorer.header',
-    'lisk_explorer.footer',
-    'lisk_explorer.blocks',
-    'lisk_explorer.transactions',
-    'lisk_explorer.address',
-    'lisk_explorer.delegate',
-    'lisk_explorer.topAccounts',
-    'lisk_explorer.search',
-    'lisk_explorer.tools',
-    'lisk_explorer.currency',
-    'lisk_explorer.activityGraph',
-    'lisk_explorer.delegateMonitor',
-    'lisk_explorer.home',
-    'lisk_explorer.reservedWallets',
-    'lisk_explorer.networkMonitor',
-    'lisk_explorer.marketWatcher'
+    'adamant_explorer.breadCrumb',
+    'adamant_explorer.filters',
+    'adamant_explorer.services',
+    'adamant_explorer.header',
+    'adamant_explorer.footer',
+    'adamant_explorer.blocks',
+    'adamant_explorer.transactions',
+    'adamant_explorer.address',
+    'adamant_explorer.delegate',
+    'adamant_explorer.topAccounts',
+    'adamant_explorer.search',
+    'adamant_explorer.tools',
+    'adamant_explorer.currency',
+    'adamant_explorer.activityGraph',
+    'adamant_explorer.delegateMonitor',
+    'adamant_explorer.home',
+    'adamant_explorer.reservedWallets',
+    'adamant_explorer.networkMonitor',
+    'adamant_explorer.marketWatcher'
 ]);
 
 export default App;

@@ -1,6 +1,6 @@
 import 'angular';
 import 'angular-naturalsort';
 
-const AppTools = angular.module('lisk_explorer.tools', ['naturalSort']);
+const AppTools = angular.module('adamant_explorer.tools', ['naturalSort']);
 
 export default AppTools;

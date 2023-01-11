@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppBreadCrumb = angular.module('lisk_explorer.breadCrumb', []);
+const AppBreadCrumb = angular.module('adamant_explorer.breadCrumb', []);
 
 export default AppBreadCrumb;
