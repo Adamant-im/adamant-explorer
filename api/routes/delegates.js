@@ -1,10 +1,8 @@
 'use strict';
 
-const delegates = require('../lib/adamant/delegates');
 const delegatesHandler = require('../lib/adamant/handlers/delegates');
 
 module.exports = function (app) {
-  const api = new delegates(app);
 
   app.get('/api/delegates/getActive', (req, res, next) => {
     delegatesHandler.getActive(
