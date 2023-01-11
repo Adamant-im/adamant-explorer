@@ -1,10 +1,10 @@
 'use strict';
 
-const accounts = require('../lib/adamant/handlers/accounts');
+const accountsHandler = require('../lib/adamant/handlers/accounts');
 
 module.exports = function (app) {
   app.get('/api/getAccount', (req, res, next) => {
-    accounts.getAccount(
+    accountsHandler.getAccount(
       req.query,
       (data) => {
         res.json(data);
@@ -17,7 +17,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getTopAccounts', (req, res, next) => {
-    accounts.getTopAccounts(
+    accountsHandler.getTopAccounts(
       {
         offset: req.query.offset,
         limit: req.query.limit,

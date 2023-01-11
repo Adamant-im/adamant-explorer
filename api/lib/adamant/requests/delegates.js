@@ -7,7 +7,7 @@ const api = require("./api");
  * @param {String} publicKey
  * @returns {Promise<Object|null>}
  */
-const getDelegate = function (publicKey) {
+function getDelegate(publicKey) {
   return new Promise((resolve, reject) => {
     if (!publicKey) {
       resolve(undefined);
@@ -27,14 +27,14 @@ const getDelegate = function (publicKey) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get votes info by address
  * @param {String} address
  * @returns {Promise<Array|null>}
  */
-const getVotes = function (address) {
+function getVotes(address) {
   return new Promise((resolve, reject) => {
     if (!address) {
       resolve(undefined);
@@ -63,14 +63,14 @@ const getVotes = function (address) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get voters info by public key
  * @param {String} publicKey
  * @returns {Promise<Array|null>}
  */
-const getVoters = function (publicKey) {
+function getVoters(publicKey) {
   return new Promise((resolve, reject) => {
     api.get('delegates/voters', {publicKey})
       .then((response) => {
@@ -96,14 +96,14 @@ const getVoters = function (publicKey) {
         reject(err);
       });
   });
-};
+}
 
 /**
  * Get forging activity of delegate by public key
  * @param {String} publicKey
  * @returns {Promise<Number>} forged or 0
  */
-function getForged (publicKey) {
+function getForged(publicKey) {
   return new Promise((resolve, reject) => {
     api.get('delegates/forging/getForgedByAccount', {generatorPublicKey: publicKey})
       .then((response) => {
@@ -119,7 +119,7 @@ function getForged (publicKey) {
         reject(err);
       });
   });
-};
+}
 
 module.exports = {
   getDelegate,

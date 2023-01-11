@@ -6,7 +6,7 @@
  * @param {String} address
  * @returns {Boolean}
  */
-function validateAddress (address) {
+function validateAddress(address) {
   return (
     typeof address === 'string' && address.match(/^[U|u][0-9]{1,21}$/g)
   );
@@ -17,7 +17,7 @@ function validateAddress (address) {
  * @param {String} publicKey
  * @returns {Boolean}
  */
-function validatePublicKey (publicKey) {
+function validatePublicKey(publicKey) {
   return (
     typeof publicKey === 'string' &&
     publicKey.match(/^([A-Fa-f0-9]{2}){32}$/g)
@@ -30,7 +30,7 @@ function validatePublicKey (publicKey) {
  * @param {Number} d default value
  * @returns {Number}
  */
- function param(p, d) {
+function param(p, d) {
   p = parseInt(p);
 
   if (isNaN(p) || p < 0) {
