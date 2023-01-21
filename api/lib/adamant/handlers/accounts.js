@@ -3,7 +3,7 @@
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const helpers = require('../helpers/accounts');
-const knownAddresses = require('../../../../utils/knownAddresses');
+const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
 
 /**
@@ -42,7 +42,7 @@ async function getAccount(params, error, success) {
       });
     }
 
-    result.knowledge = knownAddresses.inAccount(result);
+    result.knowledge = knowledge.inAccount(result);
 
     result.delegate = await delegates.getDelegate(result.publicKey);
 
@@ -53,7 +53,7 @@ async function getAccount(params, error, success) {
     result.votes = await delegates.getVotes(result.address);
     if (result.votes) {
       result.votes = result.votes.map((d) => {
-        d.knowledge = knownAddresses.inAccount(d);
+        d.knowledge = knowledge.inAccount(d);
         return d;
       });
     }
@@ -61,7 +61,7 @@ async function getAccount(params, error, success) {
     result.voters = await delegates.getVoters(result.publicKey);
     if (result.voters) {
       result.voters = result.voters.map((d) => {
-        d.knowledge = knownAddresses.inAccount(d);
+        d.knowledge = knowledge.inAccount(d);
         return d;
       });
     }
@@ -91,11 +91,11 @@ async function getTopAccounts(query, error, success) {
 
     result.accounts = await accounts.getTopAccounts(query);
     result.accounts = await Promise.all(result.accounts.map(async (account) => {
-      const knowledge = knownAddresses.inAccount(account);
+      const knowledge = knowledge.inAccount(account);
 
       if (!knowledge && account.publicKey) {
         account.knowledge = await delegates.getDelegate(account.publicKey);
-        account.knowledge = knownAddresses.inDelegate(account.knowledge);
+        account.knowledge = knowledge.inDelegate(account.knowledge);
       } else {
         account.knowledge = knowledge;
       }
