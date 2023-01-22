@@ -112,4 +112,5 @@ module.exports = {
   getLastBlock,
   getBlocks,
   getPeers,
+  locator,
 };

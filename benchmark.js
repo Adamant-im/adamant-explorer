@@ -9,19 +9,16 @@ const logger = require('./utils/log');
 const config = require('./modules/configReader');
 config.enableExchange = false;
 
-const api = require('./api/lib/adamant');
 const benchmarks = require('./benchmarks');
 const utils = require('./utils');
 
 const app = express();
 app.exchange = new utils.exchange(config);
-app.knownAddresses = new utils.knownAddresses();
-app.knownAddresses.load();
+app.knownAddresses = utils.knownAddresses;
 
-app.set('adamant address', 'http://' + config.adamant.host + ':' + config.adamant.port);
 app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
 
-const tests = new benchmarks(app, api);
+const tests = new benchmarks(app);
 
 suite
   .add('accounts.getAccount', tests.accounts.getAccount, {defer: true})
