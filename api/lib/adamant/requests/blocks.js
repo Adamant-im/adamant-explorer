@@ -72,13 +72,14 @@ function getBlockByHeight(height) {
 }
 
 /**
- * Get 20 latest blocks with given offset in descending order
+ * Get latest blocks with given offset in descending order
+ * @param {Number} limit default is 20
  * @param {Number} offset
  * @returns {Promise<Array>}
  */
-function getBlocks(offset) {
+function getBlocks(offset, limit = 20) {
   return new Promise((resolve, reject) => {
-    api.get('blocks', {orderBy: "height:desc", limit: 20, offset})
+    api.get('blocks', {orderBy: "height:desc", offset, limit})
       .then((response) => {
         if (response.details.status !== 200) {
           reject(response.errorMessage);
@@ -125,6 +126,10 @@ function getLastBlock() {
     api.get('blocks', {orderBy: 'height:desc'})
       .then((response) => {
         if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        if (response.data.blocks < 1) {
           reject(response.errorMessage);
         }
 
