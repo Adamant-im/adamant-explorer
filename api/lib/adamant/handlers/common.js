@@ -26,7 +26,7 @@ function version(app) {
  */
 async function search(id, error, success) {
   try {
-    if (id === null) {
+    if (!id) {
       return error({
         success: false,
         error: 'Missing/Invalid search criteria',

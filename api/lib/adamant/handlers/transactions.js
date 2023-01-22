@@ -120,7 +120,6 @@ async function getLastTransfers(error, success) {
 
     result.transactions = await transactions.getLastTransfers();
 
-
     result.transactions = result.transactions.map((transaction) => {
       return knowledge.inTx(transaction);
     });
@@ -129,11 +128,9 @@ async function getLastTransfers(error, success) {
 
     result.transactions = helpers.concatenateTransactions(result.transactions, unconfirmedTransactions);
 
-
     result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
       return await helpers.processTransaction(transaction);
     }));
-
 
     result.success = true;
 

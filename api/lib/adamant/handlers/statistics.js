@@ -74,7 +74,7 @@ async function getBlocks(error, success) {
  */
 async function getPeers(error, success) {
   try {
-    const peersStatistics = new helpers.PeersStatistics();
+    const peersStatistics = new helpers.PeersStatistics(locator);
     const limit = 100;
 
     let offset = 0;

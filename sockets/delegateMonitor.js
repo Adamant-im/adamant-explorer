@@ -4,12 +4,12 @@ const async = require('async');
 const axios = require("axios");
 const moment = require('moment');
 const _ = require('underscore');
-const api = require('../api/lib/adamant');
+const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
+const blocks = require('../api/lib/adamant/requests/blocks');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
-  const delegates = new api.delegates(app);
   const connection = new connectionHandler('Delegate Monitor:', socket, this);
   const data = {};
   // Only used in various calculations, will not be emited directly
@@ -101,7 +101,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getActive (already running)');
     }
     running.getActive = true;
-    delegates.getActive(
+    delegatesHandler.getActive(
       (res) => {
         running.getActive = false;
         cb('Active');
@@ -171,7 +171,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getLastBlock (already running)');
     }
     running.getLastBlock = true;
-    delegates.getLastBlock(
+    delegatesHandler.getLastBlock(
       (res) => {
         running.getLastBlock = false;
         cb('LastBlock');
@@ -188,7 +188,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getRegistrations (already running)');
     }
     running.getRegistrations = true;
-    delegates.getLatestRegistrations(
+    delegatesHandler.getLatestRegistrations(
       (res) => {
         running.getRegistrations = false;
         cb('Registrations');
@@ -205,7 +205,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getVotes (already running)');
     }
     running.getVotes = true;
-    delegates.getLatestVotes(
+    delegatesHandler.getLatestVotes(
       (res) => {
         running.getVotes = false;
         cb('Votes');
@@ -222,7 +222,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getNextForgers (already running)');
     }
     running.getNextForgers = true;
-    delegates.getNextForgers(
+    delegatesHandler.getNextForgers(
       (res) => {
         running.getNextForgers = false;
         cb('NextForgers');
@@ -301,7 +301,7 @@ module.exports = function (app, connectionHandler, socket) {
           if (delegate.blocks) {
             return cb(null);
           }
-          delegates.getLastBlocks(
+          delegatesHandler.getLastBlocks(
             {
               publicKey: delegate.publicKey,
               limit: 1,

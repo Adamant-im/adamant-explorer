@@ -1,13 +1,12 @@
 'use strict';
 
-const api = require('../api/lib/adamant');
 const async = require('async');
+const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
   let intervals = [];
-  const statistics = new api.statistics(app);
   const connection = new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
@@ -75,7 +74,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getLastBlock (already running)');
     }
     running.getLastBlock = true;
-    statistics.getLastBlock(
+    statisticsHandler.getLastBlock(
       (res) => {
         running.getLastBlock = false;
         cb('LastBlock');
@@ -92,7 +91,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getBlocks (already running)');
     }
     running.getBlocks = true;
-    statistics.getBlocks(
+    statisticsHandler.getBlocks(
       (res) => {
         running.getBlocks = false;
         cb('Blocks');
@@ -109,7 +108,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getPeers (already running)');
     }
     running.getPeers = true;
-    statistics.getPeers(
+    statisticsHandler.getPeers(
       (res) => {
         running.getPeers = false;
         cb('Peers');

@@ -1,8 +1,8 @@
 'use strict';
 
 const config = require('../../modules/configReader');
-const candles = require('../lib/adamant/candles');
-const orders = require('../lib/adamant/orders');
+const candles = require('../lib/exchanges/handlers/candles');
+const orders = require('../lib/exchanges/handlers/orders');
 
 module.exports = function (app) {
   const ordersApi = new orders(app);
