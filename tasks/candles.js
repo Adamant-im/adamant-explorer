@@ -2,7 +2,7 @@
 
 const config = require('../modules/configReader');
 const client = require('../redis')(config);
-const candles = require('../lib/candles');
+const candles = require('../api/lib/exchanges/candles');
 const async = require('async');
 
 module.exports = function (grunt) {

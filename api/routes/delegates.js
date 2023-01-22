@@ -1,12 +1,11 @@
 'use strict';
 
-const delegates = require('../lib/api/delegates');
+const delegatesHandler = require('../lib/adamant/handlers/delegates');
 
 module.exports = function (app) {
-  const api = new delegates(app);
 
   app.get('/api/delegates/getActive', (req, res, next) => {
-    api.getActive(
+    delegatesHandler.getActive(
       (data) => {
         res.json(data);
       },
@@ -18,7 +17,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getStandby', (req, res, next) => {
-    api.getStandby(
+    delegatesHandler.getStandby(
       req.query.n,
       (data) => {
         res.json(data);
@@ -31,7 +30,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getLatestRegistrations', (req, res, next) => {
-    api.getLatestRegistrations(
+    delegatesHandler.getLatestRegistrations(
       (data) => {
         res.json(data);
       },
@@ -43,7 +42,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getLatestVotes', (req, res, next) => {
-    api.getLatestVotes(
+    delegatesHandler.getLatestVotes(
       (data) => {
         res.json(data);
       },
@@ -55,7 +54,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getLastBlock', (req, res, next) => {
-    api.getLastBlock(
+    delegatesHandler.getLastBlock(
       (data) => {
         res.json(data);
       },
@@ -67,7 +66,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getLastBlocks', (req, res, next) => {
-    api.getLastBlocks(
+    delegatesHandler.getLastBlocks(
       { publicKey: req.query.publicKey, limit: req.query.limit },
       (data) => {
         res.json(data);
@@ -80,7 +79,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getSearch', (req, res, next) => {
-    api.getSearch(
+    delegatesHandler.getSearch(
       req.query.q,
       (data) => {
         res.json(data);
@@ -93,7 +92,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/delegates/getNextForgers', (req, res, next) => {
-    api.getNextForgers(
+    delegatesHandler.getNextForgers(
       (data) => {
         res.json(data);
       },

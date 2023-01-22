@@ -1,7 +1,7 @@
 'use strict';
 
 const orders = require('../orders');
-const config = require('../../modules/configReader');
+const config = require('../../../../modules/configReader');
 const _ = require('underscore');
 
 module.exports = function (app) {

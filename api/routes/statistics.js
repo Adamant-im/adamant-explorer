@@ -1,12 +1,10 @@
 'use strict';
 
-const statistics = require('../lib/api/statistics');
+const statisticsHandler = require('../lib/adamant/handlers/statistics');
 
 module.exports = function (app) {
-  const api = new statistics(app);
-
   app.get('/api/statistics/getLastBlock', (req, res) => {
-    api.getLastBlock(
+    statisticsHandler.getLastBlock(
       (data) => {
         res.json(data);
       },
@@ -17,7 +15,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/statistics/getBlocks', (req, res) => {
-    api.getBlocks(
+    statisticsHandler.getBlocks(
       (data) => {
         res.json(data);
       },
@@ -28,7 +26,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/statistics/getPeers', (req, res) => {
-    api.getPeers(
+    statisticsHandler.getPeers(
       (data) => {
         res.json(data);
       },

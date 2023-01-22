@@ -1,12 +1,10 @@
 'use strict';
 
-const transactions = require('../lib/api/transactions');
+const transactionsHandler = require('../lib/adamant/handlers/transactions');
 
 module.exports = function (app) {
-  const api = new transactions(app);
-
   app.get('/api/getTransaction', (req, res, next) => {
-    api.getTransaction(
+    transactionsHandler.getTransaction(
       req.query.transactionId,
       (data) => {
         res.json(data);
@@ -19,7 +17,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getUnconfirmedTransactions', (req, res, next) => {
-    api.getUnconfirmedTransactions(
+    transactionsHandler.getUnconfirmedTransactions(
       (data) => {
         res.json(data);
       },
@@ -31,7 +29,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getLastTransactions', (req, res, next) => {
-    api.getLastTransactions(
+    transactionsHandler.getLastTransactions(
       (data) => {
         res.json(data);
       },
@@ -43,7 +41,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getLastTransfers', (req, res, next) => {
-    api.getLastTransfers(
+    transactionsHandler.getLastTransfers(
       (data) => {
         res.json(data);
       },
@@ -55,7 +53,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getTransactionsByAddress', (req, res, next) => {
-    api.getTransactionsByAddress(
+    transactionsHandler.getTransactionsByAddress(
       req.query,
       (data) => {
         res.json(data);
@@ -66,8 +64,9 @@ module.exports = function (app) {
       },
     );
   });
+
   app.get('/api/getTransfersByAddress', (req, res, next) => {
-    api.getTransactionsByAddress(
+    transactionsHandler.getTransfersByAddress(
       req.query,
       (data) => {
         res.json(data);
@@ -76,12 +75,11 @@ module.exports = function (app) {
         req.json = data;
         return next();
       },
-      1,
     );
   });
 
   app.get('/api/getTransactionsByBlock', (req, res, next) => {
-    api.getTransactionsByBlock(
+    transactionsHandler.getTransactionsByBlock(
       {
         blockId: req.query.blockId,
         offset: req.query.offset,

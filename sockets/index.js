@@ -7,14 +7,12 @@ module.exports = function (app, io) {
     header: io.of('/header'),
     activityGraph: io.of('/activityGraph'),
     delegateMonitor: io.of('/delegateMonitor'),
-    marketWatcher: io.of('/marketWatcher'),
     networkMonitor: io.of('/networkMonitor'),
   };
 
   const header = require('./header');
   const activityGraph = require('./activityGraph');
   const delegateMonitor = require('./delegateMonitor');
-  const marketWatcher = require('./marketWatcher');
   const networkMonitor = require('./networkMonitor');
 
   const connectionHandler = function (name, ns, object) {
@@ -47,7 +45,6 @@ module.exports = function (app, io) {
   new header(app, connectionHandler, ns.header);
   new activityGraph(app, connectionHandler, ns.activityGraph);
   new delegateMonitor(app, connectionHandler, ns.delegateMonitor);
-  new marketWatcher(app, connectionHandler, ns.marketWatcher);
   new networkMonitor(app, connectionHandler, ns.networkMonitor);
 };
 

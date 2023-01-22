@@ -5,7 +5,7 @@
 const AbstractOrders = require('./abstract');
 const util = require('util');
 const _ = require('underscore');
-const logger = require('../../utils/log');
+const logger = require('../../../../utils/log');
 const axios = require("axios");
 
 function BittrexOrders(client) {

@@ -9,8 +9,8 @@ const morgan = require('morgan');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-const { Server } = require('socket.io');
-const routes = require('./api');
+const {Server} = require('socket.io');
+const routes = require('./api/routes');
 const cache = require('./cache');
 const packageJson = require('./package.json');
 const utils = require('./utils');
@@ -37,7 +37,7 @@ const client = require('./redis')(config);
 
 app.candles = new utils.candles(config, client);
 app.exchange = new utils.exchange(config);
-app.knownAddresses = new utils.knownAddresses();
+app.knownAddresses = utils.knownAddresses;
 app.orders = new utils.orders(config, client);
 
 app.set('version', '0.3');

@@ -1,7 +1,7 @@
 'use strict';
 
-const api = require('../lib/api');
-const config = require('../modules/configReader');
+const blocksHandler = require('../api/lib/adamant/handlers/blocks');
+const commonHandler = require('../api/lib/adamant/handlers/common');
 const async = require('async');
 const logger = require('../utils/log');
 
@@ -9,9 +9,6 @@ module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
   let data = {};
   let tmpData = {};
-  const blocks = new api.blocks(app);
-  const common = new api.common(app);
-  const delegates = new api.delegates(app);
   const connection = new connectionHandler('Header: ', socket, this);
 
   const running = {
@@ -38,12 +35,9 @@ module.exports = function (app, connectionHandler, socket) {
           socket.emit('data', data);
 
           newInterval(0, 10000, emitData);
-          // Update and emit delegate proposals every 10 minutes by default
-          newInterval(1, config.proposals.updateInterval || 600000, emitDelegateProposals);
         }
       }.bind(this));
 
-    emitDelegateProposals();
   };
 
   this.onConnect = function () {
@@ -81,7 +75,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getBlockStatus (already running)');
     }
     running.getBlockStatus = true;
-    blocks.getBlockStatus(
+    blocksHandler.getBlockStatus(
       (res) => {
         running.getBlockStatus = false;
         cb('Status');
@@ -98,30 +92,15 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getPriceTicker (already running)');
     }
     running.getPriceTicker = true;
-    common.getPriceTicker(
+    commonHandler.getPriceTicker(
+      app.get('exchange enabled'),
+      app.exchange,
       (res) => {
         running.getPriceTicker = false;
         cb('PriceTicker');
       },
       (res) => {
         running.getPriceTicker = false;
-        cb(null, res);
-      },
-    );
-  };
-
-  const getDelegateProposals = function (cb) {
-    if (running.getDelegateProposals) {
-      return cb('getDelegateProposals (already running)');
-    }
-    running.getDelegateProposals = true;
-    return delegates.getDelegateProposals(
-      (res) => {
-        running.getDelegateProposals = false;
-        cb('DelegateProposals');
-      },
-      (res) => {
-        running.getDelegateProposals = false;
         cb(null, res);
       },
     );
@@ -146,25 +125,5 @@ module.exports = function (app, connectionHandler, socket) {
           socket.emit('data', thisData);
         }
       }.bind(this));
-  };
-
-  const emitDelegateProposals = function () {
-    if (!config.proposals.enabled) {
-      return false;
-    }
-
-    async.parallel([
-        getDelegateProposals,
-      ],
-      (err, res) => {
-        if (err) {
-          log('error', 'Error retrieving: ' + err);
-        } else {
-          tmpData.proposals = res[0];
-        }
-
-        log('info', 'Emitting updated delegate proposals');
-        socket.emit('delegateProposals', tmpData.proposals);
-      });
   };
 };

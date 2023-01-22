@@ -1,12 +1,11 @@
 'use strict';
 
-const api = require('../lib/api');
+const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
 
 module.exports = function (app, connectionHandler, socket) {
   let interval = null;
   let data = {};
-  const statistics = new api.statistics(app);
-  const transactions = new api.transactions(app);
   const connection = new connectionHandler('Activity Graph: ', socket, this);
   const running = {'getlastBlock': false};
 
@@ -40,7 +39,7 @@ module.exports = function (app, connectionHandler, socket) {
       return cb('getLastBlock (already running)');
     }
     running.getLastBlock = true;
-    statistics.getLastBlock(
+    statisticsHandler.getLastBlock(
       (res) => {
         running.getLastBlock = false;
         cb('LastBlock');
@@ -57,7 +56,7 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const getBlockTransactions = function (resBlock, cb) {
-    transactions.getTransactionsByBlock(
+    transactionsHandler.getTransactionsByBlock(
       {
         blockId: resBlock.block.id,
         offset: 0,

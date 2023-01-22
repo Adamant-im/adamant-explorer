@@ -1,12 +1,10 @@
 'use strict';
 
-const blocks = require('../lib/api/blocks');
+const blocksHandler = require('../lib/adamant/handlers/blocks');
 
 module.exports = function (app) {
-  const api = new blocks(app);
-
   app.get('/api/getLastBlocks', (req, res, next) => {
-    api.getLastBlocks(
+    blocksHandler.getLastBlocks(
       req.query.n,
       (data) => {
         res.json(data);
@@ -19,8 +17,8 @@ module.exports = function (app) {
   });
 
   app.get('/api/getBlock', (req, res, next) => {
-    api.getBlock(
-      req.query.blockId,
+    blocksHandler.getBlock(
+      req.query,
       (data) => {
         res.json(data);
       },
@@ -32,8 +30,8 @@ module.exports = function (app) {
   });
 
   app.get('/api/getHeight', (req, res, next) => {
-    api.getHeight(
-      req.query.height,
+    blocksHandler.getBlock(
+      req.query,
       (data) => {
         res.json(data);
       },
@@ -45,7 +43,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/getBlockStatus', (req, res, next) => {
-    api.getBlockStatus(
+    blocksHandler.getBlockStatus(
       (data) => {
         res.json(data);
       },
@@ -57,7 +55,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/totalSupply', (req, res, next) => {
-    api.getBlockStatus(
+    blocksHandler.getBlockStatus(
       (data) => {
         res.json(data);
       },

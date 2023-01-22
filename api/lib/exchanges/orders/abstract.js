@@ -3,7 +3,7 @@
 const async = require('async');
 const axios = require("axios");
 const _ = require('underscore');
-const logger = require('../../utils/log');
+const logger = require('../../../../utils/log');
 
 function AbstractOrders(client) {
   const self = this;

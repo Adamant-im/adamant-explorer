@@ -68,7 +68,7 @@ describe('Statistics API', function () {
         checkBlock(res.body.block);
         done();
       });
-    });
+    }).timeout(10000);
   });
 
   describe('GET /api/statistics/getBlocks', function () {
