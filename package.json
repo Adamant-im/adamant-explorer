@@ -24,7 +24,7 @@
     "build:prod": "webpack --env.prod"
   },
   "dependencies": {
-    "adamant-api": "^1.7.0",
+    "adamant-api": "^1.8.0",
     "amstock3": "^3.21.15",
     "angular": "^1.8.3",
     "angular-animate": "^1.8.3",
@@ -35,7 +35,7 @@
     "angular-ui-bootstrap": "^2.5.6",
     "angular-ui-router": "=1.0.30",
     "async": "^3.2.4",
-    "axios": "^1.2.2",
+    "axios": "^1.2.3",
     "benchmark": "^2.1.4",
     "body-parser": "^1.20.1",
     "bootstrap": "^3.3.7",
@@ -47,7 +47,7 @@
     "fast-safe-stringify": "^2.1.1",
     "flatstr": "^1.0.12",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.3",
     "jsonminify": "^0.4.2",
     "leaflet": "^1.9.3",
     "leaflet.markercluster": "^1.5.3",
@@ -71,9 +71,10 @@
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-env": "^7.20.2",
-    "babel-loader": "^9.1.0",
+    "babel-loader": "^9.1.2",
+    "babel-plugin-angularjs-annotate": "^0.10.0",
     "chai": "^4.3.7",
-    "chai-as-promised": "=7.0.0",
+    "chai-as-promised": "^7.1.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.2",
@@ -95,8 +96,7 @@
     "imports-loader": "^0.7.1",
     "mocha": "^10.2.0",
     "ng-annotate": "^1.2.2",
-    "ng-annotate-webpack-plugin": "^0.3.0",
-    "protractor": "=5.1.2",
+    "protractor": "^5.4.4",
     "protractor-cucumber-framework": "=3.1.2",
     "style-loader": "^3.3.1",
     "supertest": "^6.3.3",
@@ -105,5 +105,15 @@
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
+  },
+  "overrides": {
+    "semver-regex": "^4.0.5",
+    "got": "^11.8.5",
+    "yargs-parser": "^21.1.1",
+    "minimist": "^1.2.7",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "marked": "^4.2.12",
+    "timespan": "^2.3.0"
   }
 }

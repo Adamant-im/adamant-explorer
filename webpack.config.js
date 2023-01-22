@@ -4,7 +4,6 @@ const Webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const NgAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 /**
  * Utils
@@ -55,13 +54,13 @@ module.exports = (env) => ({
       sigma: Path.resolve(__dirname, 'node_modules/sigma/build/sigma.require.js'),
     },
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      minSize: 1,
-      minChunks: 2,
-    },
-  },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //     minSize: 1,
+  //     minChunks: 2,
+  //   },
+  // },
   plugins: removeEmpty([
     // new HtmlWebpackPlugin({
     //     template: Path.resolve(__dirname, PATHS.app, 'index.html'),
@@ -86,10 +85,6 @@ module.exports = (env) => ({
       $: Path.resolve(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
     }),
     new Webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-
-    new NgAnnotatePlugin({
-      add: true,
-    }),
   ]),
   module: {
     rules: [
