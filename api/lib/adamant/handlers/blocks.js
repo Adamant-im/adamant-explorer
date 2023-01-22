@@ -48,7 +48,6 @@ async function getLastBlocks(n, error, success) {
  */
 async function getBlock(params, error, success) {
   try {
-
     let result;
     if (params.blockId) {
       result = await blocks.getBlockById(params.blockId);

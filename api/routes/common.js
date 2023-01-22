@@ -1,15 +1,17 @@
 'use strict';
 
-const api = require('../lib/adamant');
+const commonHandler = require('../lib/adamant/handlers/common');
 
 module.exports = function (app) {
   app.get('/api/version', (req, res) => {
-    const data = common.version();
+    const data = commonHandler.version(app);
     return res.json(data);
   });
 
   app.get('/api/getPriceTicker', (req, res, next) => {
-    common.getPriceTicker(
+    commonHandler.getPriceTicker(
+      app.get('exchange enabled'),
+      app.exchange,
       (data) => {
         res.json(data);
       },
@@ -21,7 +23,7 @@ module.exports = function (app) {
   });
 
   app.get('/api/search', (req, res, next) => {
-    common.search(
+    commonHandler.search(
       req.query.id,
       (data) => {
         res.json(data);
@@ -32,8 +34,4 @@ module.exports = function (app) {
       },
     );
   });
-
-  // Private
-
-  const common = new api.common(app, api);
 };
