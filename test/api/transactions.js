@@ -118,11 +118,14 @@ describe('Transactions API', function () {
     });
   });
 
-  /* We are skipping this temporarily, theres a call back error that needs to be fixed */
   describe('GET /api/getUnconfirmedTransactions', function () {
-    it.skip('should be ok', function (done) {
+    it('should be ok', function (done) {
       getUnconfirmedTransactions((err, res) => {
         node.expect(res.body).to.have.property('success').to.be.ok;
+        node
+          .expect(res.body)
+          .to.have.property('transactions')
+          .that.is.an('array');
         done();
       });
     });
@@ -158,7 +161,7 @@ describe('Transactions API', function () {
           done();
         },
       );
-    });
+    }).timeout(5000);
 
     it('using known address and offset of 20 should be ok', function (done) {
       getTransactionsByAddress(
@@ -175,7 +178,7 @@ describe('Transactions API', function () {
           done();
         },
       );
-    });
+    }).timeout(5000);
 
     it('using invalid address should fail', function (done) {
       getTransactionsByAddress('', '0', params.limit, (err, res) => {

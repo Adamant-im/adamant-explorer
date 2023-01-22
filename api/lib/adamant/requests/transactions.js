@@ -111,6 +111,21 @@ function getLastTransfers() {
  * @returns {Promise<Array>}
  */
 function getTransactions(params) {
+  return new Promise((resolve, reject) => {
+    api.get('transactions', params)
+      .then((response) => {
+        if (response.details.status !== 200) {
+          reject(response.errorMessage);
+        }
+
+        response.data.success
+          ? resolve(response.data.transactions)
+          : reject(response.errorMessage);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 /**

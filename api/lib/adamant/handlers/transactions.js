@@ -162,7 +162,14 @@ async function getTransactionsByAddress(query, error, success) {
     const data = helpers.normalizeTransactionParams(query);
 
     await Promise.all(data.map((async (query, i) => {
-      const txs = await transactions.getTransactions(query);
+      let errorMessage;
+      let txs;
+
+      try {
+        txs = await transactions.getTransactions(query);
+      } catch (err) {
+        errorMessage = err;
+      }
 
       txs.forEach((transaction) => {
         if (helpers.indexOfById(result.transactions, transaction) < 0) {
@@ -171,7 +178,7 @@ async function getTransactionsByAddress(query, error, success) {
       });
 
       if (i === data.length - 1) {
-        if (result.transactions <= 0) {
+        if (!(result.transactions > 0 || !errorMessage)) {
           return error({
             success: false,
             error: 'Response was unsuccessful',
@@ -216,7 +223,14 @@ async function getTransfersByAddress(query, error, success) {
         query['and:inId'] = query['and:senderId'];
       }
 
-      const txs = await transactions.getTransfers(query);
+      let errorMessage;
+      let txs;
+
+      try {
+        txs = await transactions.getTransactions(query);
+      } catch (err) {
+        errorMessage = err;
+      }
 
       txs.forEach((transaction) => {
         if (helpers.indexOfById(result.transactions, transaction) < 0) {
@@ -225,7 +239,7 @@ async function getTransfersByAddress(query, error, success) {
       });
 
       if (i === data.length - 1) {
-        if (result.transactions <= 0) {
+        if (!(result.transactions > 0 || !errorMessage)) {
           return error({
             success: false,
             error: 'Response was unsuccessful',
