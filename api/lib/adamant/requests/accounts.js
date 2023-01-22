@@ -123,10 +123,34 @@ function getOutgoingTxsCnt(address) {
   });
 }
 
+/**
+ * Get public key by address
+ * @param {String} address
+ * @returns {Promise<String|null>}
+ */
+function getPublicKey(address) {
+  return new Promise((resolve) => {
+    api.get('accounts/getPublicKey', {address})
+      .then((response) => {
+        if (response.details.status !== 200) {
+          resolve(null);
+        }
+
+        response.data.success
+          ? resolve(response.data.publicKey)
+          : resolve(null);
+      })
+      .catch((err) => {
+        resolve(err);
+      });
+  });
+}
+
 module.exports = {
   getAccountByAddress,
   getAccountByPublicKey,
   getTopAccounts,
   getIncomingTxsCnt,
   getOutgoingTxsCnt,
+  getPublicKey,
 };
