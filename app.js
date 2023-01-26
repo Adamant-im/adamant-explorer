@@ -21,10 +21,8 @@ const app = express();
 
 program
   .version(packageJson.version)
-  .option('-c, --config <path>', 'config file path')
   .option('-p, --port <port>', 'listening port number')
   .option('-h, --host <ip>', 'listening host name or ip')
-  .option('-rp, --redisPort <port>', 'redis port')
   .parse(process.argv);
 
 app.set('host', program?.host ?? config.host);
