@@ -1,4 +1,4 @@
-const Path = require('path');
+const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const Webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -14,11 +14,11 @@ const removeEmpty = arr => arr.filter((p) => !!p);
  * Path and env configs
  */
 const PATHS = {
-  app: Path.join(__dirname, 'src'),
-  dev: Path.join(__dirname, 'public'),
-  build: Path.join(__dirname, 'dist'),
-  test: Path.join(__dirname, 'test'),
-  assets: Path.join(__dirname, 'src/assets'),
+  app: path.join(__dirname, 'src'),
+  dev: path.join(__dirname, 'public'),
+  build: path.join(__dirname, 'dist'),
+  test: path.join(__dirname, 'test'),
+  assets: path.join(__dirname, 'src/assets'),
   vendors: /node_modules|bower_components/,
 };
 
@@ -28,7 +28,7 @@ module.exports = (env) => ({
   mode: 'development',
   devtool: 'source-map',
   watch: true,
-  entry: Path.resolve(__dirname, PATHS.app + '/main.js'),
+  entry: path.resolve(__dirname, PATHS.app + '/main.js'),
   output: {
     filename: '[name].bundle.js',
     path: PATHS.dev,
@@ -51,7 +51,7 @@ module.exports = (env) => ({
   },
   resolve: {
     alias: {
-      sigma: Path.resolve(__dirname, 'node_modules/sigma/build/sigma.require.js'),
+      sigma: path.resolve(__dirname, 'node_modules/sigma/build/sigma.require.js'),
     },
   },
   // optimization: {
@@ -81,8 +81,8 @@ module.exports = (env) => ({
       analyzerMode: 'static',
     }),
     new Webpack.ProvidePlugin({
-      app: `exports?exports.default!${Path.join(PATHS.app, 'app')}`,
-      $: Path.resolve(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
+      app: `exports?exports.default!${path.join(PATHS.app, 'app')}`,
+      $: path.resolve(__dirname, 'node_modules/jquery/dist/jquery.min.js'),
     }),
     new Webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
   ]),
