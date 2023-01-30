@@ -14,14 +14,10 @@
     "test": "./node_modules/.bin/grunt travis --verbose",
     "eslint": "./node_modules/.bin/grunt eslint-nofix --verbose",
     "eslint-fix": "./node_modules/.bin/grunt eslint-fix --verbose",
-    "e2e-test": "protractor protractor.conf.js",
     "benchmark": "node benchmark.js",
-    "start": "npm run copy-files && webpack -w",
     "run": "node app.js",
-    "webpack-validate": "webpack configtest webpack.config.js",
-    "copy-files": "cp -r ./src/assets/img/favicon.ico ./src/index.html ./src/assets/img/leaflet ./src/assets/icons/img ./src/assets/icons/adm-qr-invert.png ./public",
-    "build": "webpack",
-    "build:prod": "webpack --env.prod"
+    "start": "webpack --config webpack/webpack.dev.js -w",
+    "build": "webpack --config webpack/webpack.prod.js"
   },
   "dependencies": {
     "adamant-api": "^1.8.0",
