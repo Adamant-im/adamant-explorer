@@ -90,23 +90,6 @@ module.exports = {
       {
         test: /\.(png|jpg|gif|svg)$/,
         type: 'asset/resource',
-        use: [
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              esModule: false,
-              mozjpeg: {
-                progressive: true,
-              },
-              gifsicle: {
-                interlaced: true,
-              },
-              optipng: {
-                optimizationLevel: 7,
-              },
-            },
-          },
-        ],
       },
       {
         test: /\/sigma.*\.js?$/,
