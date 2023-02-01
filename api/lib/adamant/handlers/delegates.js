@@ -233,7 +233,7 @@ async function getNextForgers(error, success) {
     return success(result);
   } catch (err) {
     logger.error(err);
-    return err({
+    return error({
       success: false,
       error: err,
     });
