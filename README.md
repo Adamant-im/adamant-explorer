@@ -41,10 +41,6 @@ These programs and resources are required to install and run ADAMANT Explorer:
 
   `sudo npm install -g grunt`
   
-- Bower (<https://bower.io/>) — used for building dependencies.
-
-  `sudo npm install -g bower`
-
 - PM2 (<https://github.com/Unitech/pm2>) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Recommended)
 
   `sudo npm install -g pm2`
@@ -103,7 +99,7 @@ Parameters: see comments in config file.
 
 To test that ADAMANT Explorer is configured correctly, run the following command:
 
-`node app.js`
+`npm run run`
 
 Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
 

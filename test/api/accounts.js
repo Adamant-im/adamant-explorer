@@ -130,7 +130,7 @@ describe('Accounts API', function () {
     });
   });
 
-  /* -- if all fail, check lisk for topAccounts = true */
+  /* -- if all fail, check adamant for topAccounts = true */
   describe('GET /api/getTopAccounts', function () {
     it('using offset 0 and limit 100 should return 100', function (done) {
       getTopAccounts('0', '100', (err, res) => {
