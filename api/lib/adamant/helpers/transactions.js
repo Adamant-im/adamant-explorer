@@ -130,14 +130,15 @@ function normalizeTransactionParams(params) {
     }
 
     if (params.recipientId === params.senderId) {
-      directionQueries = directionQueries.map((query) => {
-        if (query['and:senderId']) {
-          query['and:senderId'] = query['recipientId'];
-          query['and:senderId'] = undefined;
+      const queriesAmount = directionQueries.length;
+      for (let i = 0; i < queriesAmount; ++i) {
+        const query = directionQueries[i];
 
-          return query;
-        }
-      });
+        query['and:recipientId'] = query['and:senderId'];
+        query['and:recipientId'] = undefined;
+
+        directionQueries.push(query);
+      }
     } else if (params.recipientId && !params.senderId) {
       directionQueries = directionQueries.map((query) => {
         return {

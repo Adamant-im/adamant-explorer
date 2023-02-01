@@ -215,16 +215,17 @@ async function getTransfersByAddress(query, error, success) {
     const data = helpers.normalizeTransactionParams(query);
 
     await Promise.all(data.map((async (query, i) => {
-      if (query.senderId && query.recipientId) {
+      if (query['or:senderId'] && query['and:recipientId']) {
+        query['and:inId'] = query['or:senderId'];
         query['and:recipientId'] = undefined;
-        query['and:inId'] = query['and:senderId'];
+        query['or:senderId'] = undefined;
       }
 
       let errorMessage;
       let txs;
 
       try {
-        txs = await transactions.getTransactions(query);
+        txs = await transactions.getTransfers(query);
       } catch (err) {
         errorMessage = err;
       }
@@ -236,7 +237,7 @@ async function getTransfersByAddress(query, error, success) {
       });
 
       if (i === data.length - 1) {
-        if (!(result.transactions > 0 || !errorMessage)) {
+        if (!(result.transactions.length > 0 || !errorMessage)) {
           return error({
             success: false,
             error: 'Response was unsuccessful',
