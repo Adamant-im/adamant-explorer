@@ -91,13 +91,13 @@ async function getTopAccounts(query, error, success) {
 
     result.accounts = await accounts.getTopAccounts(query);
     result.accounts = await Promise.all(result.accounts.map(async (account) => {
-      const knowledge = knowledge.inAccount(account);
+      const accountKnowledge = knowledge.inAccount(account);
 
-      if (!knowledge && account.publicKey) {
+      if (!accountKnowledge && account.publicKey) {
         account.knowledge = await delegates.getDelegate(account.publicKey);
         account.knowledge = knowledge.inDelegate(account.knowledge);
       } else {
-        account.knowledge = knowledge;
+        account.knowledge = accountKnowledge;
       }
 
       return account;

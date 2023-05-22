@@ -5,7 +5,6 @@ const axios = require("axios");
 const moment = require('moment');
 const _ = require('underscore');
 const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
-const blocks = require('../api/lib/adamant/requests/blocks');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -137,7 +136,7 @@ module.exports = function (app, connectionHandler, socket) {
       delegate.forgingTime = tmpData.nextForgers.delegates.indexOf(delegate.publicKey) * 10;
     }
 
-    // Update delegate with info if should forge in current round
+    // Update delegate with info if it should forge in current round
     delegate.isRoundDelegate = tmpData.roundDelegates.indexOf(delegate.publicKey) !== -1;
     return delegate;
   };

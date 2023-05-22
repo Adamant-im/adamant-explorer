@@ -5,7 +5,7 @@ const api = require("./api");
 /**
  * Get delegate info by public key
  * @param {String} publicKey
- * @param {Boolean} rejectUnsuccessful
+ * @param {Boolean?} rejectUnsuccessful
  * @returns {Promise<Object|null>}
  */
 function getDelegate(publicKey, rejectUnsuccessful) {

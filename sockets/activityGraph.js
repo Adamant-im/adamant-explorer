@@ -7,7 +7,7 @@ module.exports = function (app, connectionHandler, socket) {
   let interval = null;
   let data = {};
   const connection = new connectionHandler('Activity Graph: ', socket, this);
-  const running = {'getlastBlock': false};
+  const running = { getlastBlock: false };
 
   this.onInit = function () {
     emitLastBlock();
