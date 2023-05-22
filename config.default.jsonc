@@ -5,12 +5,6 @@
   /** Port to listen on **/
   "port": 6040,
 
-  /** ADAMANT node **/
-  "adamant": {
-    "host": "127.0.0.1",
-    "port": 36666 /** Mainnet: 36666, Testnet: 36667, Devnet: 4000 **/
-  },
-
   /** ADAMANT node list **/
   "nodes_adm": [
     "https://bid.adamant.im",

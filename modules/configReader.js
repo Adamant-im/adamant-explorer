@@ -16,11 +16,6 @@ const fields = {
     default: 6040,
     isRequired: true,
   },
-  adamant: {
-    type: Object,
-    default: {host: '127.0.0.1', port: 36666},
-    isRequired: true,
-  },
   nodes_adm: {
     type: Array,
     isRequired: true,
