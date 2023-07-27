@@ -1,8 +1,8 @@
 const accounts = require('./accounts.js');
 const blocks = require('./blocks.js');
-const exchanges = require('./exchanges.js');
 const common = require('./common.js');
 const delegates = require('./delegates.js');
+const exchanges = require('./exchanges.js');
 const statistics = require('./statistics.js');
 const transactions = require('./transactions.js');
 
