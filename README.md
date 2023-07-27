@@ -9,14 +9,15 @@ Read [more about ADAMANT](https://adamant.im).
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-# Usage and installation
-## Prerequisites
+## Usage and installation
+
+### Prerequisites
 
 These programs and resources are required to install and run ADAMANT Explorer:
 
 - Node.js v10 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
 
-  ```
+  ```bash
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
   source ~/.nvm/nvm.sh
   source ~/.profile
@@ -26,147 +27,137 @@ These programs and resources are required to install and run ADAMANT Explorer:
 
 - Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
 
-  `sudo apt-get install -y redis-server`
+  ```bash
+  sudo apt-get install -y redis-server
+  ```
 
 - Freegeoip (<https://github.com/fiorix/freegeoip>) — Freegeoip is used by the Network Monitor for IP address geo-location.
 
-  ```
+  ```bash
   wget https://github.com/fiorix/freegeoip/releases/download/v3.4.1/freegeoip-3.4.1-linux-amd64.tar.gz
   tar -zxf freegeoip-3.4.1-linux-amd64.tar.gz
   ln -s freegeoip-3.4.1-linux-amd64 freegeoip
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
-
-- Grunt.js (<http://gruntjs.com/>) — Grunt is used to run eslint and unit tests.
-
-  `sudo npm install -g grunt`
   
 - PM2 (<https://github.com/Unitech/pm2>) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Recommended)
 
-  `sudo npm install -g pm2`
+  ```bash
+  sudo npm install -g pm2
+  ```
   
 - PM2-logrotate (<https://github.com/pm2-hive/pm2-logrotate>) — Manages PM2 logs
 
-  ```
+  ```bash
   pm2 install pm2-logrotate
   pm2 set pm2-logrotate:max_size 100M
   ```
 
 - Git (<https://github.com/git/git>) — Used for cloning and updating ADAMANT Explorer
 
-  `sudo apt-get install -y git`
+  ```bash
+  sudo apt-get install -y git
+  ```
 
 - Tool chain components — Used for compiling dependencies
 
-  `sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev pngquant pkg-config redis`
+  ```bash
+  sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev pngquant pkg-config redis
+  ```
 
-## Installation Steps
+### Installation Steps
 
 Clone the ADAMANT Explorer Repository:
 
-```
+```bash
 git clone https://github.com/Adamant-im/adamant-explorer.git
 cd adamant-explorer
 npm install
 ```
 
-## Build Steps
+### Build Steps
 
-### Frontend
+#### Frontend
 
 The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
 For having a watcher to generate bundles continuously for all the changes of the code, run:
 
-`npm run start`
+```bash
+npm run start
+```
 
 And for generating the minified bundles in production environment run:
 
-`npm run build`
+```bash
+npm run build
+```
 
-## Configuration
+#### Configuration
 
 The explorer will use `config.jsonc`, if available, or `config.default.jsonc` otherwise.
 
-
-```
+```bash
 cp config.default.jsonc config.jsonc
 nano config.jsonc
 ```
 
 Parameters: see comments in config file.
 
-## Managing ADAMANT Explorer
+#### Managing ADAMANT Explorer
 
 To test that ADAMANT Explorer is configured correctly, run the following command:
 
-`npm run run`
+```bash
+npm run run
+```
 
 Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
 
 Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
 
-`pm2 start pm2-explorer.json`
+```bash
+pm2 start pm2-explorer.json
+```
 
 After the process is started its runtime status and log location can be found by issuing this statement:
 
-`pm2 list`
+```bash
+pm2 list
+```
 
 To stop Explorer after it has been started with `PM2`, issue the following command:
 
-`pm2 stop adamant-explorer`
+```bash
+pm2 stop adamant-explorer
+```
 
-## Tests
+#### Tests
 
 Before running any tests, please ensure ADAMANT Explorer and ADAMANT Node are configured to run on the ADAMANT Testnet.
 
-
 Then restart the ADAMANT Node (example):
 
-`pm2 restart /PATH_TO_ADAMANT_DIR/app.js`
+```bash
+pm2 restart /PATH_TO_ADAMANT_DIR/app.js
+```
 
 Launch ADAMANT Explorer (runs on port 6040):
 
-`pm2 start pm2-explorer.json`
+```bash
+pm2 start pm2-explorer.json
+```
 
 Run the test suite:
 
-`npm test`
+```bash
+npm test
+```
 
 Run individual tests:
 
-```
+```bash
 npm test -- test/api/accounts.js
 npm test -- test/api/transactions.js
-```
-
-## End-to-end Tests
-
-### Setup for end-to-end tests:
-
-Do all setup steps from "Test" section of this README
-
-Make sure you have `wget` installed (it's used in `./e2e-test-setup.sh`). On Linux by default. On MacOS:
-```
-brew install wget
-```
-
-Setup protractor
-
-```
-./node_modules/protractor/bin/webdriver-manager update
-```
-
-### Run end-to-end test suite:
-
-```
-./e2e-test-setup.sh /PATH_TO_LISK_DIR
-npm run e2e-test -s
-```
-
-### Run one end-to-end test feature file:
-
-```
-npm run e2e-test -s -- --specs=features/address.feature
 ```
 
 ## License
