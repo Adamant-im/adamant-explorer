@@ -9,7 +9,7 @@ const infoStr = fs.createWriteStream('./logs/' + date() + '.log', {
   flags: 'a',
 });
 
-infoStr.write(`\n\n[The bot started] _________________${fullTime()}_________________\n`);
+infoStr.write(`\n\n[The explorer started] _________________${fullTime()}_________________\n`);
 
 module.exports = {
   error(str) {
