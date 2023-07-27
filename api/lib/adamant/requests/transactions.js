@@ -1,4 +1,4 @@
-const api = require("./api");
+const api = require('./api');
 
 /**
  * Get confirmed transaction by id

@@ -1,5 +1,5 @@
-const api = require("./api");
-const _ = require("underscore");
+const api = require('./api');
+const _ = require('underscore');
 
 /**
  * Get the latest block height
@@ -77,7 +77,7 @@ function getBlockByHeight(height) {
  */
 function getBlocks(offset, limit = 20) {
   return new Promise((resolve, reject) => {
-    api.get('blocks', {orderBy: "height:desc", offset, limit})
+    api.get('blocks', {orderBy: 'height:desc', offset, limit})
       .then((response) => {
         if (response.details.status !== 200) {
           reject(response.errorMessage);

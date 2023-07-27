@@ -1,6 +1,6 @@
-const accounts = require("../requests/accounts");
-const delegates = require("../requests/delegates");
-const knowledge = require("../../../../utils/knownAddresses");
+const accounts = require('../requests/accounts');
+const delegates = require('../requests/delegates');
+const knowledge = require('../../../../utils/knownAddresses');
 
 /**
  * Get knowledge, senderDelegate, recipientPublicKey, recipientDelegate information for transaction

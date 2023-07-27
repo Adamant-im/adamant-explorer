@@ -1,10 +1,8 @@
+const _ = require('underscore');
+const { promises: dnsPromises } = require('dns');
+const logger = require('../../../../utils/log');
+const statistics = require('../requests/statistics');
 
-const _ = require("underscore");
-const axios = require("axios");
-const dns = require("dns");
-const async = require("async");
-const logger = require("../../../../utils/log");
-const config = require("../../../../modules/configReader");
 
 function BlocksStatistics() {
   this.maxOffset = 8600; // 8700

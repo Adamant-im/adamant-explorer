@@ -1,4 +1,4 @@
-const api = require("./api");
+const api = require('./api');
 
 /**
  * Get delegate info by public key
@@ -130,7 +130,7 @@ function getForged(publicKey) {
  */
 function getActive() {
   return new Promise((resolve, reject) => {
-    api.get('delegates', {orderBy: "rate:asc", limit: 101})
+    api.get('delegates', {orderBy: 'rate:asc', limit: 101})
       .then((response) => {
         if (response.details.status !== 200) {
           reject(response.errorMessage);
