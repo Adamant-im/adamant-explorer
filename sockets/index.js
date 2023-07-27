@@ -1,5 +1,3 @@
-'use strict';
-
 const logger = require('../utils/log');
 
 module.exports = function (app, io) {

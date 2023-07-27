@@ -1,5 +1,3 @@
-'use strict';
-
 const api = require("./api");
 const _ = require("underscore");
 

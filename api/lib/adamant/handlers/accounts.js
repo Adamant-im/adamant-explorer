@@ -1,5 +1,3 @@
-'use strict';
-
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const helpers = require('../helpers/accounts');

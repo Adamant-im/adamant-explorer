@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('../../modules/configReader');
 const candles = require('../lib/exchanges/handlers/candles');
 const orders = require('../lib/exchanges/handlers/orders');

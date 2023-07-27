@@ -1,5 +1,3 @@
-'use strict';
-
 const blocks = require('../requests/blocks');
 const statistics = require('../requests/statistics');
 const helpers = require('../helpers/statistics');

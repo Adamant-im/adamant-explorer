@@ -1,5 +1,3 @@
-'use strict';
-
 const transactionsHandler = require('../lib/adamant/handlers/transactions');
 
 module.exports = function (app) {

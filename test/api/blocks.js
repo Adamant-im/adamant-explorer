@@ -1,5 +1,3 @@
-'use strict';
-
 const node = require('./../node.js');
 
 /*expecting testnet genesis block for tests*/

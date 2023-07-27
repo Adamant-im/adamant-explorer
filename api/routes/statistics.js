@@ -1,5 +1,3 @@
-'use strict';
-
 const statisticsHandler = require('../lib/adamant/handlers/statistics');
 
 module.exports = function (app) {

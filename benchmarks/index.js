@@ -1,5 +1,3 @@
-'use strict';
-
 const accounts = require('./accounts');
 const blocks = require('./blocks');
 const common = require('./common');

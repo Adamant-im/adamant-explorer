@@ -1,5 +1,3 @@
-'use strict';
-
 const transactions = require('../requests/transactions');
 const helpers = require('../helpers/transactions');
 const knowledge = require('../../../../utils/knownAddresses');

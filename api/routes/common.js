@@ -1,5 +1,3 @@
-'use strict';
-
 const commonHandler = require('../lib/adamant/handlers/common');
 
 module.exports = function (app) {

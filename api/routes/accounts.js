@@ -1,5 +1,3 @@
-'use strict';
-
 const accountsHandler = require('../lib/adamant/handlers/accounts');
 
 module.exports = function (app) {

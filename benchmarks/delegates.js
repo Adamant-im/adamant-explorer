@@ -1,5 +1,3 @@
-'use strict';
-
 const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
 const logger = require('../utils/log');
 

@@ -1,5 +1,3 @@
-'use strict';
-
 const async = require('async');
 const axios = require("axios");
 const moment = require('moment');

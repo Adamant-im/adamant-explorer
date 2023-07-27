@@ -1,5 +1,3 @@
-'use strict';
-
 const logger = require('./log');
 
 let addresses = {};

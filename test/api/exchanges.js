@@ -1,5 +1,3 @@
-'use strict'; /*jslint mocha:true, expr:true */
-
 const node = require('./../node.js');
 
 describe.skip('Exchanges API (Market Watcher)', function () {

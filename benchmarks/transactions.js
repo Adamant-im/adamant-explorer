@@ -1,5 +1,3 @@
-'use strict';
-
 const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
 const logger = require('../utils/log');
 

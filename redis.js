@@ -1,5 +1,3 @@
-'use strict';
-
 const redis = require('redis');
 const logger = require('./utils/log');
 

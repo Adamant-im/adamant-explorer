@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('../../../../modules/configReader');
 const logger = require('../../../../utils/log');
 

@@ -1,5 +1,3 @@
-'use strict';
-
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
 

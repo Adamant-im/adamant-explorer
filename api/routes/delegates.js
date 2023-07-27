@@ -1,5 +1,3 @@
-'use strict';
-
 const delegatesHandler = require('../lib/adamant/handlers/delegates');
 
 module.exports = function (app) {

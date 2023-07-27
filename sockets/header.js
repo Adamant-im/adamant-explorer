@@ -1,5 +1,3 @@
-'use strict';
-
 const blocksHandler = require('../api/lib/adamant/handlers/blocks');
 const commonHandler = require('../api/lib/adamant/handlers/common');
 const async = require('async');

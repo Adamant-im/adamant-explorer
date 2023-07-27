@@ -1,5 +1,3 @@
-'use strict';
-
 const commonHandler = require('../api/lib/adamant/handlers/common');
 const logger = require('../utils/log');
 

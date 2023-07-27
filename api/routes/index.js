@@ -1,5 +1,3 @@
-'use strict';
-
 const accounts = require('./accounts.js');
 const blocks = require('./blocks.js');
 const exchanges = require('./exchanges.js');

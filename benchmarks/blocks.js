@@ -1,5 +1,3 @@
-'use strict';
-
 const blocksHandler = require('../api/lib/adamant/handlers/blocks');
 const logger = require('../utils/log');
 

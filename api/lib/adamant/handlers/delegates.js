@@ -1,5 +1,3 @@
-'use strict';
-
 const blocks = require('../requests/blocks');
 const delegates = require('../requests/delegates');
 const transactions = require('../requests/transactions');

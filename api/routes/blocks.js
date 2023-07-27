@@ -1,5 +1,3 @@
-'use strict';
-
 const blocksHandler = require('../lib/adamant/handlers/blocks');
 
 module.exports = function (app) {

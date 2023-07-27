@@ -1,5 +1,3 @@
-'use strict';
-
 const accountsHandler = require('../api/lib/adamant/handlers/accounts');
 const logger = require('../utils/log');
 

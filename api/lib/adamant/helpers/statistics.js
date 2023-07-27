@@ -1,4 +1,3 @@
-'use strict';
 
 const _ = require("underscore");
 const axios = require("axios");

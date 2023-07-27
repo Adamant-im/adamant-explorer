@@ -1,5 +1,3 @@
-'use strict';
-
 const accountsHandler = require('./accounts');
 const blocksHandler = require('./blocks');
 const delegatesHandler = require('./delegates');
