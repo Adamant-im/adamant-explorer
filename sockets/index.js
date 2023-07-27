@@ -1,7 +1,7 @@
 const logger = require('../utils/log');
 
 module.exports = function (app, io) {
-  const ns = {
+  const namespaces = {
     header: io.of('/header'),
     activityGraph: io.of('/activityGraph'),
     delegateMonitor: io.of('/delegateMonitor'),
@@ -40,9 +40,9 @@ module.exports = function (app, io) {
     };
   };
 
-  new header(app, connectionHandler, ns.header);
-  new activityGraph(app, connectionHandler, ns.activityGraph);
-  new delegateMonitor(app, connectionHandler, ns.delegateMonitor);
-  new networkMonitor(app, connectionHandler, ns.networkMonitor);
+  new header(app, connectionHandler, namespaces.header);
+  new activityGraph(app, connectionHandler, namespaces.activityGraph);
+  new delegateMonitor(app, connectionHandler, namespaces.delegateMonitor);
+  new networkMonitor(app, connectionHandler, namespaces.networkMonitor);
 };
 
