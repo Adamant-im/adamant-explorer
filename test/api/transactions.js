@@ -1,4 +1,4 @@
-const node = require('./../node.js');
+const testUtils = require('../testUtils');
 
 const params = {
   blockId: '13096746075322409574',
@@ -11,19 +11,19 @@ const params = {
 describe('Transactions API', function () {
   /*Define functions for use within tests*/
   function getTransaction(id, done) {
-    node.get('/api/getTransaction?transactionId=' + id, done);
+    testUtils.httpRequest.get('/api/getTransaction?transactionId=' + id, done);
   }
 
   function getUnconfirmedTransactions(done) {
-    node.get('/api/getUnconfirmedTransactions', done);
+    testUtils.httpRequest.get('/api/getUnconfirmedTransactions', done);
   }
 
   function getLastTransactions(done) {
-    node.get('/api/getLastTransactions', done);
+    testUtils.httpRequest.get('/api/getLastTransactions', done);
   }
 
   function getTransactionsByAddress(id, id2, id3, done) {
-    node.get(
+    testUtils.httpRequest.get(
       '/api/getTransactionsByAddress?address=' +
         id +
         '&offset=' +
@@ -35,7 +35,7 @@ describe('Transactions API', function () {
   }
 
   function getTransactionsByBlock(id, id2, id3, done) {
-    node.get(
+    testUtils.httpRequest.get(
       '/api/getTransactionsByBlock?blockId=' +
         id +
         '&offset=' +
@@ -49,7 +49,7 @@ describe('Transactions API', function () {
   function checkTransactionsBody(id) {
     for (let i = 0; i < id.length; i++) {
       if (id[i + 1]) {
-        node
+        testUtils
           .expect(id[i])
           .to.contain.all.keys(
             'recipientId',
@@ -80,9 +80,9 @@ describe('Transactions API', function () {
   describe('GET /api/getTransaction', function () {
     it('should be ok with Genesis transaction', function (done) {
       getTransaction(params.transactionId, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('transaction');
-        node
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transaction');
+        testUtils
           .expect(res.body.transaction)
           .to.contain.all.keys(
             'recipientId',
@@ -109,8 +109,8 @@ describe('Transactions API', function () {
 
     it('should be not ok with no transaction', function (done) {
       getTransaction('', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
@@ -119,8 +119,8 @@ describe('Transactions API', function () {
   describe('GET /api/getUnconfirmedTransactions', function () {
     it('should be ok', function (done) {
       getUnconfirmedTransactions((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils
           .expect(res.body)
           .to.have.property('transactions')
           .that.is.an('array');
@@ -132,8 +132,8 @@ describe('Transactions API', function () {
   describe('GET /api/getLastTransactions', function () {
     it('should be ok', function (done) {
       getLastTransactions((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils
           .expect(res.body)
           .to.have.property('transactions')
           .that.is.an('array');
@@ -150,8 +150,8 @@ describe('Transactions API', function () {
         '0',
         params.limit,
         (err, res) => {
-          node.expect(res.body).to.have.property('success').to.be.ok;
-          node
+          testUtils.expect(res.body).to.have.property('success').to.be.ok;
+          testUtils
             .expect(res.body)
             .to.have.property('transactions')
             .that.is.an('array');
@@ -167,8 +167,8 @@ describe('Transactions API', function () {
         params.offset,
         params.limit,
         (err, res) => {
-          node.expect(res.body).to.have.property('success').to.be.ok;
-          node
+          testUtils.expect(res.body).to.have.property('success').to.be.ok;
+          testUtils
             .expect(res.body)
             .to.have.property('transactions')
             .that.is.an('array');
@@ -180,8 +180,8 @@ describe('Transactions API', function () {
 
     it('using invalid address should fail', function (done) {
       getTransactionsByAddress('', '0', params.limit, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
@@ -194,8 +194,8 @@ describe('Transactions API', function () {
         '0',
         params.limit,
         (err, res) => {
-          node.expect(res.body).to.have.property('success').to.be.ok;
-          node
+          testUtils.expect(res.body).to.have.property('success').to.be.ok;
+          testUtils
             .expect(res.body)
             .to.have.property('transactions')
             .that.is.an('array');
@@ -211,8 +211,8 @@ describe('Transactions API', function () {
         params.offset,
         params.limit,
         (err, res) => {
-          node.expect(res.body).to.have.property('success').to.be.ok;
-          node.expect(res.body).to.have.property('transactions');
+          testUtils.expect(res.body).to.have.property('success').to.be.ok;
+          testUtils.expect(res.body).to.have.property('transactions');
           checkTransactionsBody(res.body.transactions);
           done();
         },
@@ -221,8 +221,8 @@ describe('Transactions API', function () {
 
     it('using invalid block should fail', function (done) {
       getTransactionsByBlock('', '0', params.limit, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });

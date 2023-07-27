@@ -1,4 +1,4 @@
-const node = require('./../node.js');
+const testUtils = require('../testUtils');
 
 /*expecting testnet genesis block for tests*/
 const params = {
@@ -14,27 +14,27 @@ const params = {
 describe('Blocks API', function () {
   /*Define functions for use within tests*/
   function getLastBlocks(id, done) {
-    node.get('/api/getLastBlocks?n=' + id, done);
+    testUtils.httpRequest.get('/api/getLastBlocks?n=' + id, done);
   }
 
   function getBlockStatus(done) {
-    node.get('/api/getBlockStatus', done);
+    testUtils.httpRequest.get('/api/getBlockStatus', done);
   }
 
   function getBlock(id, done) {
-    node.get('/api/getBlock?blockId=' + id, done);
+    testUtils.httpRequest.get('/api/getBlock?blockId=' + id, done);
   }
 
   function getHeight(id, done) {
-    node.get('/api/getHeight?height=' + id, done);
+    testUtils.httpRequest.get('/api/getHeight?height=' + id, done);
   }
 
   function checkPagination(id) {
-    node.expect(id).to.have.property('currentPage');
-    node.expect(id).to.have.property('more');
-    node.expect(id).to.have.property('previousPage');
-    node.expect(id).to.have.property('before');
-    node.expect(id).to.have.property('nextPage');
+    testUtils.expect(id).to.have.property('currentPage');
+    testUtils.expect(id).to.have.property('more');
+    testUtils.expect(id).to.have.property('previousPage');
+    testUtils.expect(id).to.have.property('before');
+    testUtils.expect(id).to.have.property('nextPage');
   }
 
   function checkLastBlocks(id) {
@@ -47,7 +47,7 @@ describe('Blocks API', function () {
   }
 
   function checkLastBlock(id) {
-    node
+    testUtils
       .expect(id)
       .to.contain.all.keys(
         'delegate',
@@ -64,7 +64,7 @@ describe('Blocks API', function () {
   }
 
   function checkDelegate(id) {
-    node
+    testUtils
       .expect(id)
       .to.contain.all.keys(
         'productivity',
@@ -80,7 +80,7 @@ describe('Blocks API', function () {
   }
 
   function checkBlock(id) {
-    node
+    testUtils
       .expect(id)
       .to.have.all.keys(
         'delegate',
@@ -107,10 +107,10 @@ describe('Blocks API', function () {
   describe('GET /api/getLastBlocks', function () {
     it('should be ok', function (done) {
       getLastBlocks('0', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks').to.be.an('array');
-        node.expect(res.body.blocks.length).to.equal(20);
-        node.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks').to.be.an('array');
+        testUtils.expect(res.body.blocks.length).to.equal(20);
+        testUtils.expect(res.body).to.have.property('pagination');
         checkLastBlocks(res.body.blocks);
         checkPagination(res.body.pagination);
         done();
@@ -119,10 +119,10 @@ describe('Blocks API', function () {
 
     it('using offset of 20 should be ok', function (done) {
       getLastBlocks('20', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks').to.be.an('array');
-        node.expect(res.body).to.have.property('pagination');
-        node.expect(res.body.blocks.length).to.equal(20);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks').to.be.an('array');
+        testUtils.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body.blocks.length).to.equal(20);
         checkLastBlocks(res.body.blocks);
         checkPagination(res.body.pagination);
         done();
@@ -133,15 +133,15 @@ describe('Blocks API', function () {
   describe('GET /api/getBlockStatus', function () {
     it('should be ok', function (done) {
       getBlockStatus((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('broadhash').to.be.a('string');
-        node.expect(res.body).to.have.property('epoch').to.be.a('string');
-        node.expect(res.body).to.have.property('height').to.be.a('number');
-        node.expect(res.body).to.have.property('fee').to.be.a('number');
-        node.expect(res.body).to.have.property('milestone').to.be.a('number');
-        node.expect(res.body).to.have.property('nethash').to.be.a('string');
-        node.expect(res.body).to.have.property('reward').to.be.a('number');
-        node.expect(res.body).to.have.property('supply').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('broadhash').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('epoch').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('height').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('fee').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('milestone').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('nethash').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('reward').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('supply').to.be.a('number');
         done();
       });
     });
@@ -150,9 +150,9 @@ describe('Blocks API', function () {
   describe('GET /api/getBlock', function () {
     it('using known blockId should be ok', function (done) {
       getBlock(params.id, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('block').to.be.a('object');
-        node.expect(res.body.block.delegate).to.be.null;
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('block').to.be.a('object');
+        testUtils.expect(res.body.block.delegate).to.be.null;
         checkBlock(res.body.block);
         done();
       });
@@ -160,8 +160,8 @@ describe('Blocks API', function () {
 
     it('using known blockId @ Height 2 should be ok', function (done) {
       getBlock(params.id2, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('block').to.be.a('object');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('block').to.be.a('object');
         checkBlock(res.body.block);
         checkDelegate(res.body.block.delegate);
         done();
@@ -170,16 +170,16 @@ describe('Blocks API', function () {
 
     it('using unknown blockId should fail', function (done) {
       getBlock('9928719876370886655', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();
       });
     });
 
     it('using no blockId should fail', function (done) {
       getBlock('', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();
       });
     });
@@ -188,25 +188,25 @@ describe('Blocks API', function () {
   describe('GET /api/getHeight', function () {
     it('using known height be ok', function (done) {
       getHeight(params.height, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('block').to.be.a('object');
-        node.expect(res.body.block.id).to.equal(params.id);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('block').to.be.a('object');
+        testUtils.expect(res.body.block.id).to.equal(params.id);
         done();
       });
     });
 
     it('using invalid height should fail', function (done) {
       getHeight('-1', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();
       });
     });
 
     it('using no height should fail', function (done) {
       getHeight('', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error').to.be.a('string');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();
       });
     });

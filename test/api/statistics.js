@@ -1,23 +1,23 @@
-const node = require('./../node.js');
+const testUtils = require('../testUtils');
 
 describe('Statistics API', function () {
   /*Define functions for use within tests*/
   function getLastBlock(done) {
-    node.get('/api/statistics/getLastBlock', done);
+    testUtils.httpRequest.get('/api/statistics/getLastBlock', done);
   }
 
   function getBlocks(done) {
-    node.get('/api/statistics/getBlocks', done);
+    testUtils.httpRequest.get('/api/statistics/getBlocks', done);
   }
 
   function getPeers(done) {
-    node.get('/api/statistics/getPeers', done);
+    testUtils.httpRequest.get('/api/statistics/getPeers', done);
   }
 
   function checkPeersList(id) {
     for (let i = 0; i < id.length; i++) {
       if (id[i + 1]) {
-        node
+        testUtils
           .expect(id[i])
           .to.contain.all.keys(
           'ip',
@@ -35,7 +35,7 @@ describe('Statistics API', function () {
   }
 
   function checkBlock(id) {
-    node
+    testUtils
       .expect(id)
       .to.contain.all.keys(
       'totalForged',
@@ -61,8 +61,8 @@ describe('Statistics API', function () {
   describe('GET /api/statistics/getLastBlock', function () {
     it('should be ok', function (done) {
       getLastBlock((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('block');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('block');
         checkBlock(res.body.block);
         done();
       });
@@ -72,15 +72,15 @@ describe('Statistics API', function () {
   describe('GET /api/statistics/getBlocks', function () {
     it('should be ok', function (done) {
       getBlocks((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('volume');
-        node.expect(res.body.volume).to.have.property('end');
-        node.expect(res.body.volume).to.have.property('beginning');
-        node.expect(res.body.volume).to.have.property('withTxs');
-        node.expect(res.body.volume).to.have.property('txs');
-        node.expect(res.body.volume).to.have.property('blocks');
-        node.expect(res.body.volume).to.have.property('amount');
-        node.expect(res.body).to.have.property('best');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('volume');
+        testUtils.expect(res.body.volume).to.have.property('end');
+        testUtils.expect(res.body.volume).to.have.property('beginning');
+        testUtils.expect(res.body.volume).to.have.property('withTxs');
+        testUtils.expect(res.body.volume).to.have.property('txs');
+        testUtils.expect(res.body.volume).to.have.property('blocks');
+        testUtils.expect(res.body.volume).to.have.property('amount');
+        testUtils.expect(res.body).to.have.property('best');
         checkBlock(res.body.best);
         done();
       });
@@ -90,8 +90,8 @@ describe('Statistics API', function () {
   describe('GET /api/statistics/getPeers', function () {
     it('should be ok', function (done) {
       getPeers((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('list');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('list');
         checkPeersList(res.body.list.connected);
         checkPeersList(res.body.list.disconnected);
         done();

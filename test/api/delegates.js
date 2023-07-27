@@ -1,4 +1,4 @@
-const node = require('./../node.js');
+const testUtils = require('../testUtils');
 
 const params = {
   publicKey: '054ac27e10b11dc4b894837558bd964a2df6cb90fcebe0b0f6e15909a7128310',
@@ -14,34 +14,34 @@ const params = {
 describe('Delegates API', function () {
   /*Define functions for use within tests*/
   function getActive(done) {
-    node.get('/api/delegates/getActive', done);
+    testUtils.httpRequest.get('/api/delegates/getActive', done);
   }
 
   function getStandby(id, done) {
-    node.get(id ? '/api/delegates/getStandby?n=' + id : '/api/delegates/getStandby', done);
+    testUtils.httpRequest.get(id ? '/api/delegates/getStandby?n=' + id : '/api/delegates/getStandby', done);
   }
 
   function getLatestRegistrations(done) {
-    node.get('/api/delegates/getLatestRegistrations', done);
+    testUtils.httpRequest.get('/api/delegates/getLatestRegistrations', done);
   }
 
   function getLastBlock(done) {
-    node.get('/api/delegates/getLastBlock', done);
+    testUtils.httpRequest.get('/api/delegates/getLastBlock', done);
   }
 
   function getLastBlocks(id1, id2, done) {
-    node.get(
+    testUtils.httpRequest.get(
       '/api/delegates/getLastBlocks?publicKey=' + id1 + '&limit=' + id2,
       done,
     );
   }
 
   function getSearch(id, done) {
-    node.get('/api/getSearch?q=' + id, done);
+    testUtils.httpRequest.get('/api/getSearch?q=' + id, done);
   }
 
   function getNextForgers(done) {
-    node.get('/api/delegates/getNextForgers', done);
+    testUtils.httpRequest.get('/api/delegates/getNextForgers', done);
   }
 
   /*Testing functions */
@@ -54,7 +54,7 @@ describe('Delegates API', function () {
   }
 
   function checkBlock(id) {
-    node
+    testUtils
       .expect(id)
       .to.contain.all.keys(
         'totalForged',
@@ -85,7 +85,7 @@ describe('Delegates API', function () {
   }
 
   function checkDelegate(id) {
-    node
+    testUtils
       .expect(id)
       .to.contain.all.keys(
         'productivity',
@@ -103,7 +103,7 @@ describe('Delegates API', function () {
   function checkPublicKeys(id) {
     for (let i = 0; i < id.length; i++) {
       if (id[i + 1]) {
-        node.expect(id[i]).to.be.a.string;
+        testUtils.expect(id[i]).to.be.a.string;
       }
     }
   }
@@ -111,7 +111,7 @@ describe('Delegates API', function () {
   function checkTransactions(id) {
     for (let i = 0; i < id.length; i++) {
       if (id[i + 1]) {
-        node
+        testUtils
           .expect(id[i])
           .to.contain.all.keys(
             'asset',
@@ -139,9 +139,9 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getActive', function () {
     it('should be ok', function (done) {
       getActive((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
-        node.expect(res.body).to.have.property('totalCount');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('totalCount');
         checkDelegates(res.body.delegates);
         done();
       });
@@ -151,57 +151,57 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getStandby', function () {
     it('using no offset should be ok', function (done) {
       getStandby('', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
         checkDelegates(res.body.delegates);
-        node.expect(res.body).to.have.property('pagination');
-        node.expect(res.body).to.have.property('totalCount');
-        node.expect(res.body.pagination).to.have.property('currentPage');
-        node.expect(res.body.pagination.currentPage).to.be.null;
+        testUtils.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body).to.have.property('totalCount');
+        testUtils.expect(res.body.pagination).to.have.property('currentPage');
+        testUtils.expect(res.body.pagination.currentPage).to.be.null;
         done();
       });
     });
 
     it('using offset of 1 should be ok', function (done) {
       getStandby('1', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
         checkDelegates(res.body.delegates);
-        node.expect(res.body).to.have.property('pagination');
-        node.expect(res.body).to.have.property('totalCount');
-        node.expect(res.body.pagination).to.have.property('currentPage');
-        node.expect(res.body.pagination).to.have.property('more');
-        node.expect(res.body.pagination).to.have.property('nextPage');
+        testUtils.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body).to.have.property('totalCount');
+        testUtils.expect(res.body.pagination).to.have.property('currentPage');
+        testUtils.expect(res.body.pagination).to.have.property('more');
+        testUtils.expect(res.body.pagination).to.have.property('nextPage');
         done();
       });
     });
 
     it('using offset of 20 should be ok', function (done) {
       getStandby(params.offset, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
         checkDelegates(res.body.delegates);
-        node.expect(res.body).to.have.property('pagination');
-        node.expect(res.body).to.have.property('totalCount');
-        node.expect(res.body.pagination).to.have.property('currentPage');
-        node.expect(res.body.pagination).to.have.property('before');
-        node.expect(res.body.pagination).to.have.property('previousPage');
-        node.expect(res.body.pagination).to.have.property('more');
-        node.expect(res.body.pagination).to.have.property('nextPage');
+        testUtils.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body).to.have.property('totalCount');
+        testUtils.expect(res.body.pagination).to.have.property('currentPage');
+        testUtils.expect(res.body.pagination).to.have.property('before');
+        testUtils.expect(res.body.pagination).to.have.property('previousPage');
+        testUtils.expect(res.body.pagination).to.have.property('more');
+        testUtils.expect(res.body.pagination).to.have.property('nextPage');
         done();
       });
     });
 
     it('using offset of 100000 should be ok', function (done) {
       getStandby(params.excessiveOffset, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
         checkDelegates(res.body.delegates);
-        node.expect(res.body).to.have.property('pagination');
-        node.expect(res.body).to.have.property('totalCount');
-        node.expect(res.body.pagination).to.have.property('currentPage');
-        node.expect(res.body.pagination).to.have.property('before');
-        node.expect(res.body.pagination).to.have.property('previousPage');
+        testUtils.expect(res.body).to.have.property('pagination');
+        testUtils.expect(res.body).to.have.property('totalCount');
+        testUtils.expect(res.body.pagination).to.have.property('currentPage');
+        testUtils.expect(res.body.pagination).to.have.property('before');
+        testUtils.expect(res.body.pagination).to.have.property('previousPage');
         done();
       });
     });
@@ -210,8 +210,8 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getLatestRegistrations', function () {
     it('should be ok', function (done) {
       getLatestRegistrations((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('transactions');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transactions');
         checkTransactions(res.body.transactions);
         done();
       });
@@ -221,8 +221,8 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getLastBlock', function () {
     it('should be ok', function (done) {
       getLastBlock((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('block');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('block');
         checkBlock(res.body.block);
         checkDelegate(res.body.block.delegate);
         done();
@@ -233,8 +233,8 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getLastBlocks', function () {
     it('should be ok', function (done) {
       getLastBlocks(params.publicKey, '', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks');
         checkBlocks(res.body.blocks);
         done();
       });
@@ -242,10 +242,10 @@ describe('Delegates API', function () {
 
     it('using limit 10 should be ok', function (done) {
       getLastBlocks(params.publicKey, '10', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks').to.be.an('array');
-        node.expect(res.body).to.have.property('blocks');
-        node.expect(res.body.blocks.length).to.equal(10);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks').to.be.an('array');
+        testUtils.expect(res.body).to.have.property('blocks');
+        testUtils.expect(res.body.blocks.length).to.equal(10);
         checkBlocks(res.body.blocks);
         done();
       });
@@ -253,9 +253,9 @@ describe('Delegates API', function () {
 
     it('using limit 100 should be ok and return 20', function (done) {
       getLastBlocks(params.publicKey, '100', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks');
-        node.expect(res.body.blocks.length).to.equal(20);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks');
+        testUtils.expect(res.body.blocks.length).to.equal(20);
         checkBlocks(res.body.blocks);
         done();
       });
@@ -263,24 +263,24 @@ describe('Delegates API', function () {
 
     it('using publicKey with no blocks should be ok', function (done) {
       getLastBlocks(params.noBlocksKey, '', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('blocks');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('blocks');
         done();
       });
     });
 
     it.skip('using invalid publickey should fail', function (done) {
       getLastBlocks(params.invalidPublicKey, '', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('blocks');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('blocks');
         done();
       });
     });
 
     it('using no parameters should fail', function (done) {
       getLastBlocks('', '', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
@@ -289,24 +289,24 @@ describe('Delegates API', function () {
   describe('GET /api/getSearch', function () {
     it('should be ok', function (done) {
       getSearch(params.delegate, (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body.address).to.have.equal(params.address);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body.address).to.have.equal(params.address);
         done();
       });
     });
 
     it('using no parameters should fail', function (done) {
       getSearch('', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.not.ok;
-        node.expect(res.body).to.have.property('error');
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
 
     it('using partial name should autocomplete', function (done) {
       getSearch('adm_official', (err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body.address).to.have.equal(params.address);
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body.address).to.have.equal(params.address);
         done();
       });
     });
@@ -315,8 +315,8 @@ describe('Delegates API', function () {
   describe('GET /api/delegates/getNextForgers', function () {
     it('should be ok', function (done) {
       getNextForgers((err, res) => {
-        node.expect(res.body).to.have.property('success').to.be.ok;
-        node.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('delegates');
         checkPublicKeys(res.body.delegates);
         done();
       });
