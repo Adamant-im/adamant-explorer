@@ -26,7 +26,7 @@ async function getActive(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -57,7 +57,7 @@ async function getStandby(n, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -86,7 +86,7 @@ async function getLatestRegistrations (error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -115,7 +115,7 @@ async function getLatestVotes(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -141,7 +141,7 @@ async function getLastBlock(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -177,7 +177,7 @@ async function getLastBlocks(params, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -209,7 +209,7 @@ async function getSearch(params, error, success) {
     logger.log(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -233,7 +233,7 @@ async function getNextForgers(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }

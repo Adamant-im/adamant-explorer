@@ -35,7 +35,7 @@ async function getTransaction(transactionId, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -65,7 +65,7 @@ async function getUnconfirmedTransactions(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -101,7 +101,7 @@ async function getLastTransactions(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -137,7 +137,7 @@ async function getLastTransfers(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -193,7 +193,7 @@ async function getTransactionsByAddress(query, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -255,7 +255,7 @@ async function getTransfersByAddress(query, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -294,7 +294,7 @@ async function getTransactionsByBlock(query, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }

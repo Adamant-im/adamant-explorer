@@ -75,7 +75,7 @@ async function getAccount(params, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -108,7 +108,7 @@ async function getTopAccounts(query, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }

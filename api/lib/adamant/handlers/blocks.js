@@ -32,7 +32,7 @@ async function getLastBlocks(n, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -71,7 +71,7 @@ async function getBlock(params, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
@@ -93,7 +93,7 @@ async function getBlockStatus(error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }

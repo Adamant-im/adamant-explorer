@@ -74,7 +74,7 @@ async function search(id, error, success) {
     logger.error(err);
     return error({
       success: false,
-      error: err,
+      error: 'Request unsuccessful',
     });
   }
 }
