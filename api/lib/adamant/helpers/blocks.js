@@ -1,5 +1,3 @@
-const _ = require("underscore");
-
 /**
  * Get paginating for given n and height
  * @param {Number} n
@@ -50,7 +48,7 @@ function offset(n) {
  * @returns {Array}
  */
 function map(blocks) {
-  return _.map(blocks, (b) => {
+  return blocks.map((b) => {
     return {
       id: b.id,
       timestamp: b.timestamp,

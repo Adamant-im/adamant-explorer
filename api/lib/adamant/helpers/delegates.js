@@ -1,16 +1,13 @@
-const _ = require("underscore");
-
 /**
  * Formats delegate's productivity
  * @param {Array} delegates
  * @returns {Array}
  */
 function parseDelegates(delegates) {
-  _.each(delegates, (d) => {
+  return delegates.map((d) => {
     d.productivity = Math.abs(parseFloat(d.productivity)) || 0.0;
+    return d;
   });
-
-  return delegates;
 }
 
 /**

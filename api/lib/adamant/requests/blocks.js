@@ -1,5 +1,4 @@
 const api = require('./api');
-const _ = require('underscore');
 
 /**
  * Get the latest block height
@@ -71,8 +70,8 @@ function getBlockByHeight(height) {
 
 /**
  * Get latest blocks with given offset in descending order
- * @param {Number} limit default is 20
  * @param {Number} offset
+ * @param {Number} limit default is 20
  * @returns {Promise<Array>}
  */
 function getBlocks(offset, limit = 20) {
@@ -154,7 +153,7 @@ function getLastBlocksByGeneratorPublicKey(publicKey) {
           reject(response.errorMessage);
         }
 
-        response.data.blocks = _.isArray(response.data.blocks) ? response.data.blocks : [];
+        response.data.blocks = Array.isArray(response.data.blocks) ? response.data.blocks : [];
 
         resolve(response.data.blocks);
       })

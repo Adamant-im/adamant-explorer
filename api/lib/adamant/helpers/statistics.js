@@ -1,4 +1,3 @@
-const _ = require('underscore');
 const { promises: dnsPromises } = require('dns');
 const logger = require('../../../../utils/log');
 const statistics = require('../requests/statistics');
