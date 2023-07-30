@@ -1,20 +1,15 @@
 const Benchmark = require('benchmark');
-const suite = new Benchmark.Suite('api');
-
 const express = require('express');
-const _ = require('lodash');
-const logger = require('./utils/log');
-const config = require('./modules/configReader');
-config.enableExchange = false;
+const benchmarks = require('./api');
+const utils = require('../utils');
+const logger = require('../utils/log');
+const config = require('../modules/configReader');
 
-const benchmarks = require('./benchmarks');
-const utils = require('./utils');
-
+const suite = new Benchmark.Suite('api');
 const app = express();
-app.exchange = new utils.exchange(config);
-app.knownAddresses = utils.knownAddresses;
 
-app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
+config.enableExchange = false;
+app.exchange = new utils.exchange(config);
 
 const tests = new benchmarks(app);
 
@@ -57,9 +52,10 @@ suite
     logger.log(String(event.target));
   })
   .on('complete', function () {
-    logger.log('Slowest is ' + _.map(this.filter('slowest'), 'name'));
-    logger.log('Fastest is ' + _.map(this.filter('fastest'), 'name'));
+    logger.log(`Slowest is ${this.filter('slowest').map('name')}`);
+    logger.log(`Fastest is ${this.filter('fastest').map('name')}`);
     logger.log('Done :)');
+    process.exit(0);
   });
 
 logger.log('Running benchmarks...');

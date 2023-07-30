@@ -1,5 +1,5 @@
-const commonHandler = require('../api/lib/adamant/handlers/common');
-const logger = require('../utils/log');
+const commonHandler = require('../../api/lib/adamant/handlers/common');
+const logger = require('../../utils/log');
 
 module.exports = function (app) {
   this.getPriceTicker = function (deferred) {

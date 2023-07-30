@@ -1,5 +1,5 @@
-const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
-const logger = require('../utils/log');
+const delegatesHandler = require('../../api/lib/adamant/handlers/delegates');
+const logger = require('../../utils/log');
 
 module.exports = function () {
   this.getActive = (deferred) => {

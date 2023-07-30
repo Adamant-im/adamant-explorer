@@ -1,5 +1,5 @@
-const accountsHandler = require('../api/lib/adamant/handlers/accounts');
-const logger = require('../utils/log');
+const accountsHandler = require('../../api/lib/adamant/handlers/accounts');
+const logger = require('../../utils/log');
 
 module.exports = function () {
   this.getAccount = (deferred) => {

@@ -1,5 +1,5 @@
-const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
-const logger = require('../utils/log');
+const statisticsHandler = require('../../api/lib/adamant/handlers/statistics');
+const logger = require('../../utils/log');
 
 module.exports = function () {
   this.getBlocks = (deferred) => {
@@ -29,7 +29,6 @@ module.exports = function () {
   };
 
   this.getPeers = (deferred) => {
-    statisticsHandler.locator.disabled = true;
     statisticsHandler.getPeers(
       (data) => {
         deferred.resolve();

@@ -1,5 +1,5 @@
-const blocksHandler = require('../api/lib/adamant/handlers/blocks');
-const logger = require('../utils/log');
+const blocksHandler = require('../../api/lib/adamant/handlers/blocks');
+const logger = require('../../utils/log');
 
 module.exports = function () {
   this.getLastBlocks = (deferred) => {
