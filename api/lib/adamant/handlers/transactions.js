@@ -52,8 +52,6 @@ async function getUnconfirmedTransactions(error, success) {
 
     result.transactions = await transactions.getUnconfirmedTransactions();
 
-    console.log(result.transactions);
-
     result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
       return await helpers.processTransaction(transaction);
     }));
