@@ -1,8 +1,7 @@
 const async = require('async');
-const axios = require("axios");
 const moment = require('moment');
-const _ = require('underscore');
 const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
+const blocks = require('../api/lib/adamant/requests/blocks');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -83,9 +82,9 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const cutNextForgers = function (count) {
-    const data = tmpData.nextForgers.delegates.slice(0, 10);
+    const data = tmpData.nextForgers.delegates.slice(0, count);
 
-    _.each(data, (publicKey, index) => {
+    data.forEach((publicKey, index) => {
       const existing = findActiveByPublicKey(publicKey);
       data[index] = existing;
     });
@@ -111,19 +110,19 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const findActive = function (delegate) {
-    return _.find(data.active.delegates, (d) => {
+    return data.active.delegates.find((d) => {
       return d.publicKey === delegate.publicKey;
     });
   };
 
   const findActiveByPublicKey = function (publicKey) {
-    return _.find(data.active.delegates, (d) => {
+    return data.active.delegates.find((d) => {
       return d.publicKey === publicKey;
     });
   };
 
   const findActiveByBlock = function (block) {
-    return _.find(data.active.delegates, (d) => {
+    return data.active.delegates.find((d) => {
       return d.publicKey === block.generatorPublicKey;
     });
   };
@@ -146,7 +145,7 @@ module.exports = function (app, connectionHandler, socket) {
     if (!data.active || !data.active.delegates) {
       return results;
     } else {
-      _.each(results.delegates, (delegate) => {
+      results.delegates.forEach((delegate) => {
         const existing = findActive(delegate);
 
         if (existing) {
@@ -241,19 +240,9 @@ module.exports = function (app, connectionHandler, socket) {
 
     async.waterfall([
       (callback) => {
-        return axios({
-          url: app.get('adamant address') + '/api/blocks?orderBy=height:desc&limit=' + limit,
-          method: 'get',
-        })
+        return blocks.getBlocks(0, limit)
           .then((response) => {
-            if (response.status !== 200) {
-              return callback('Response was unsuccessful');
-            }
-            if (response.data.success) {
-              return callback(null, {blocks: response.data.blocks});
-            } else {
-              return callback(response.data.error);
-            }
+              return callback(null, {blocks: response});
           })
           .catch((err) => {
             return callback(err);
@@ -261,7 +250,7 @@ module.exports = function (app, connectionHandler, socket) {
       },
       (result, callback) => {
         // Set last block and his delegate (we will emit it later in emitData)
-        data.lastBlock.block = _.first(result.blocks);
+        data.lastBlock.block = result.blocks[0];
         const lb_delegate = findActiveByBlock(data.lastBlock.block);
         data.lastBlock.block.delegate = {
           username: lb_delegate.username,
