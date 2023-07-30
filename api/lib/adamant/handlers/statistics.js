@@ -9,7 +9,8 @@ const locator = new helpers.Locator();
  * Get last block
  * @param {Function} error
  * @param {Function} success
- * @returns {Promise<*>} */
+ * @returns {Promise<*>}
+ */
 async function getLastBlock(error, success) {
   try {
     const result = {};
@@ -45,7 +46,7 @@ async function getBlocks(error, success) {
       const data = await blocks.getBlocks(offset, limit);
       blocksStatistics.inspect(data, offset);
       offset += limit;
-    } while (offset <= blocksStatistics.maxOffset);
+    } while (offset <= helpers.BlocksStatistics.maxOffset);
 
     const result = {};
 
@@ -73,8 +74,8 @@ async function getBlocks(error, success) {
 async function getPeers(error, success) {
   try {
     const peersStatistics = new helpers.PeersStatistics(locator);
-    const limit = 100;
 
+    const limit = 100;
     let offset = 0;
     let found = false;
 
@@ -82,17 +83,19 @@ async function getPeers(error, success) {
       const data = await statistics.getPeers(offset, limit);
 
       if (data.length > 0) {
-        peersStatistics.collect(data);
+        await peersStatistics.collect(data);
       } else {
         found = true;
       }
 
       offset += limit;
-    } while (!(found || offset > peersStatistics.maxOffset));
+    } while (!(found || offset > helpers.PeersStatistics.maxOffset));
 
     const result = {};
 
-    result.list= peersStatistics.list;
+    peersStatistics.locator.updateCache(peersStatistics.ips);
+
+    result.list = peersStatistics.list;
 
     result.success = true;
 
@@ -110,5 +113,4 @@ module.exports = {
   getLastBlock,
   getBlocks,
   getPeers,
-  locator,
 };
