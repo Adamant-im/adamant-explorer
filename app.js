@@ -1,15 +1,16 @@
 'use strict';
 
 const express = require('express');
+const { program } = require('commander');
 const path = require('path');
-const program = require('commander');
 const async = require('async');
 const split = require('split');
 const morgan = require('morgan');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-const {Server} = require('socket.io');
+const { Server } = require('socket.io');
+
 const routes = require('./api/routes');
 const cache = require('./cache');
 const packageJson = require('./package.json');
@@ -35,12 +36,10 @@ const client = require('./redis')(config);
 
 app.candles = new utils.candles(config, client);
 app.exchange = new utils.exchange(config);
-app.knownAddresses = utils.knownAddresses;
 app.orders = new utils.orders(config, client);
 
-app.set('version', '0.3');
+app.set('version', packageJson.version);
 app.set('strict routing', true);
-app.set('adamant address', config.nodes_adm[0]);
 app.set(
   'freegeoip address',
   `http://${config.freegeoip.host}:${config.freegeoip.port}`,
