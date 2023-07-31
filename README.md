@@ -15,14 +15,14 @@ Read [more about ADAMANT](https://adamant.im).
 
 These programs and resources are required to install and run ADAMANT Explorer:
 
-- Node.js v10 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
+- Node.js v16 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
 
   ```bash
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
   source ~/.nvm/nvm.sh
   source ~/.profile
   source ~/.bashrc
-  nvm i --lts=dubnium
+  nvm i v16.5.0
   ```
 
 - Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
