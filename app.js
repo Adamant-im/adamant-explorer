@@ -8,7 +8,6 @@ const split = require('split');
 const morgan = require('morgan');
 const compression = require('compression');
 const methodOverride = require('method-override');
-const bodyParser = require('body-parser');
 const { Server } = require('socket.io');
 
 const routes = require('./api/routes');
@@ -55,7 +54,7 @@ app.use((req, res, next) => {
     'Content-Security-Policy',
     "frame-ancestors 'none'; default-src 'self'; connect-src 'self' " +
     ws_src +
-    "; img-src 'self' https://*.tile.openstreetmap.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
+    "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
   );
   return next();
 });
@@ -93,9 +92,9 @@ app.use(compression());
 
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true,
   }),
 );
