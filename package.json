@@ -33,7 +33,6 @@
     "async": "^3.2.4",
     "axios": "^1.4.0",
     "benchmark": "^2.1.4",
-    "body-parser": "^1.20.2",
     "bootstrap": "^3.4.1",
     "clipboard": "=1.7.1",
     "commander": "^11.0.0",
