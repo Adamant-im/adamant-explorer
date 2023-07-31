@@ -31,11 +31,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new CopyPlugin({
       patterns: [
-        {from: `${PATHS.assets}/icons/adm-qr-invert.png`, to: PATHS.public},
-        {from: `${PATHS.assets}/img/favicon.ico`, to: PATHS.public},
-        {from: `${PATHS.assets}/img/leaflet/`, to: PATHS.public},
-        {from: `${PATHS.assets}/icons/img/`, to: PATHS.public},
-        {from: `${PATHS.app}/index.html`, to: PATHS.public},
+        {from: 'icons/adm-qr-invert.png', to: PATHS.public, context: `${PATHS.assets}`},
+        {from: 'favicon.ico', to: PATHS.public, context: `${PATHS.assets}/img`},
+        {from: 'leaflet/*.png', to: PATHS.public, context: `${PATHS.assets}/img/`},
+        {from: '*', to: PATHS.public, context: `${PATHS.assets}/icons/img`},
+        {from: 'index.html', to: PATHS.public, context: `${PATHS.app}`},
       ],
     }),
     new BundleAnalyzerPlugin({
