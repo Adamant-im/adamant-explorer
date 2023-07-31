@@ -1,6 +1,6 @@
 import AppFilters from './filters.module';
 
-AppFilters.filter('lisk', () => amount => {
+AppFilters.filter('adamant', () => amount => {
     if (isNaN(amount)) {
         return (0).toFixed(8);
     } else {
