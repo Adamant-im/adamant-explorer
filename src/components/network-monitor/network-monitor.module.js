@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppNetworkMonitor = angular.module('lisk_explorer.networkMonitor', []);
+const AppNetworkMonitor = angular.module('adamant_explorer.networkMonitor', []);
 
 export default AppNetworkMonitor;

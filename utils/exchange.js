@@ -1,35 +1,36 @@
 'use strict';
 
-var async = require('async'),
-    _ = require('underscore');
+// This is an example for Exchange rates update function
+
+const _ = require('underscore');
 
 module.exports = function (config) {
-    this.tickers = {};
+  this.tickers = {};
 
-    this.loadRates = function () {
-        if (!config.exchangeRates.enabled) {
-            return false;
-        }
-        api.getPriceTicker(function (err, result) {
-            if (result) {
-                _.each(result.BTC, function (ticker, key) {
-                    if (!result.ADM[key]) {
-                        result.ADM[key] = result.ADM.BTC * ticker;
-                    }
-                });
-                exchange.tickers = result;
-            }
-        });
-    };
-
-    // Interval
-
-    if (config.exchangeRates.enabled) {
-        setInterval(this.loadRates, config.exchangeRates.updateInterval);
+  this.loadRates = function () {
+    if (!config.exchangeRates.enabled) {
+      return false;
     }
+    api.getPriceTicker((err, result) => {
+      if (result) {
+        _.each(result.BTC, (ticker, key) => {
+          if (!result.ADM[key]) {
+            result.ADM[key] = result.ADM.BTC * ticker;
+          }
+        });
+        exchange.tickers = result;
+      }
+    });
+  };
 
-    // Private
+  // Interval
 
-    var api = require('./exchange-api')(config),
-        exchange = this;
+  if (config.exchangeRates.enabled) {
+    setInterval(this.loadRates, config.exchangeRates.updateInterval);
+  }
+
+  // Private
+
+  const api = require('./exchange-api')(config);
+  const exchange = this;
 };

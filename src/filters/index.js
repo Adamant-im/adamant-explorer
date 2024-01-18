@@ -6,7 +6,7 @@ import './epoch-stamp';
 import './fiat';
 import './filters.module';
 import './forging-time';
-import './lisk';
+import './adamant';
 import './net-hash';
 import './proposal';
 import './round';

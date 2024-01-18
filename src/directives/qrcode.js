@@ -9,7 +9,7 @@ AppTools.directive ('qrcode', () => {
         window.can = myCanvas;
         QrCodeWithLogo.toCanvas({
             canvas: myCanvas,
-            content: $attrs.data.toUpperCase(),
+            content: $attrs.data,
             width: 220,
             logo: {
                 src: $attrs.imd_src || '/adm-qr-invert.png',

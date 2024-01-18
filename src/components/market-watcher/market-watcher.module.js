@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppMarketWatcher = angular.module('lisk_explorer.marketWatcher', []);
+const AppMarketWatcher = angular.module('adamant_explorer.marketWatcher', []);
 
 export default AppMarketWatcher;

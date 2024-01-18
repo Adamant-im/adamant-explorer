@@ -1,4 +1,4 @@
-angular.module('lisk_explorer').run(['gettextCatalog', function (gettextCatalog) {
+angular.module('adamant_explorer').run(['gettextCatalog', function (gettextCatalog) {
 /* jshint -W100 */
 /* jshint +W100 */
 }]);

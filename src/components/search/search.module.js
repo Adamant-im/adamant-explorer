@@ -1,6 +1,6 @@
 
 import 'angular';
 
-const AppSearch = angular.module('lisk_explorer.search', []);
+const AppSearch = angular.module('adamant_explorer.search', []);
 
 export default AppSearch;

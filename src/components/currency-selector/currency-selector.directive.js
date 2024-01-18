@@ -5,7 +5,7 @@ import template from './currency-selector.html';
 AppCurrency.directive ('currencySelector', ($rootScope, $timeout) => {
     const CurrencySelectorLink = () => {
         $timeout(() => {
-            $rootScope.currency.symbol = localStorage && localStorage.getItem ('lisk_explorer-currency') || 'ADM';
+            $rootScope.currency.symbol = localStorage && localStorage.getItem ('adamant_explorer-currency') || 'ADM';
         });
     };
 
@@ -13,7 +13,7 @@ AppCurrency.directive ('currencySelector', ($rootScope, $timeout) => {
         this.setCurrency = currency => {
             $rootScope.currency.symbol = currency;
             if (localStorage) {
-                localStorage.setItem ('lisk_explorer-currency', currency);
+                localStorage.setItem ('adamant_explorer-currency', currency);
             }
         };
     }

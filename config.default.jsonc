@@ -1,0 +1,63 @@
+{
+  /** Host to listen on **/
+  "host": "0.0.0.0",
+
+  /** Port to listen on **/
+  "port": 6040,
+
+  /** ADAMANT node list **/
+  "nodes_adm": [
+    "https://bid.adamant.im",
+    "http://localhost:36666",
+    "https://endless.adamant.im",
+    "https://clown.adamant.im",
+    "https://unusual.adamant.im",
+    "https://debate.adamant.im",
+    "http://23.226.231.225:36666",
+    "http://5.161.53.74:36666",
+    "https://lake.adamant.im"
+  ],
+
+  /** FreeGeoIP server parameters **/
+  "freegeoip": {
+    "host": "127.0.0.1",
+    "port": 8080
+  },
+
+  /** Redis server parameters **/
+  "redis": {
+    "username": "",
+    "password": "",
+    "host": "127.0.0.1",
+    "port": 6379,
+    "cacheTTL": 20 /* Time in seconds to store cache in Redis */
+  },
+
+  /** The software will use verbosity according to log_level.
+      It can be none < error < warn < info < log.
+    **/
+  "log_level": "log",
+
+  /** Exchange rates service parameters **/
+  "exchangeRates": {
+    "enabled": false,
+    "updateInterval": 30000
+  },
+
+  /** Market watcher service parameters **/
+  "marketWatcher": {
+    "enabled": false,
+    "candles": {
+      "updateInterval": 30000
+    },
+    "orders": {
+      "updateInterval": 15000
+    }
+  },
+
+  /** Proposals service parameters **/
+  "proposals": {
+    "enabled": false,
+    "updateInterval": 600000
+  }
+}
