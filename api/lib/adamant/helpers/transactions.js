@@ -27,14 +27,22 @@ async function processTransaction(transaction) {
 
   // Get delegates for votes
   if (transaction.votes) {
-    transaction.added = await Promise.all(transaction.votes.added.map(async (publicKey) => {
-      return await delegates.getDelegate(publicKey);
+    transaction.votes.added = await Promise.all(transaction.votes.added.map(async (publicKey) => {
+      const delegate = await delegates.getDelegate(publicKey);
+      return {
+        delegate,
+      };
     }));
 
-    transaction.deleted = await Promise.all(transaction.votes.deleted.map(async (publicKey) => {
-      return await delegates.getDelegate(publicKey);
+    transaction.votes.deleted = await Promise.all(transaction.votes.deleted.map(async (publicKey) => {
+      const delegate = await delegates.getDelegate(publicKey);
+      return {
+        delegate,
+      };
     }));
   }
+
+  console.log(transaction);
 
   return transaction;
 }
