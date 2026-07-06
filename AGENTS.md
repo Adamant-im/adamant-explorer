@@ -36,6 +36,16 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - Include a language tag for fenced code blocks whenever practical
 - Prefer stable relative links for files in this repository
 
+## JSDoc And Code Comments
+
+- Write JSDoc for public modules, exported functions, reusable helpers, and functions you materially change
+- Document purpose, parameters, return values, side effects, and error behavior when they are not obvious from the implementation
+- Describe value semantics and constraints, not only types
+- Keep JSDoc and comments synchronized with code changes in the same patch
+- Add short explanatory comments for non-obvious control flow, data normalization, security decisions, compatibility behavior, or workaround rationale
+- Avoid comments that merely restate what a single line of code already says
+- Prefer clear names and small functions first, then add comments where context still matters
+
 ## Sources Of Truth
 
 Use these sources when implementing or reviewing changes:
