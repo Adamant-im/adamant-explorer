@@ -16,3 +16,7 @@ package-lock.json
 tests.js
 config.test
 config.test.js
+
+# ai
+.ai-ignored/
+.claude/
