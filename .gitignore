@@ -19,4 +19,5 @@ config.test.js
 
 # ai
 .ai-ignored/
+.ai-tasks/
 .claude/
