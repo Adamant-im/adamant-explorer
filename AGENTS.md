@@ -36,14 +36,17 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - `sockets/`: Socket.IO namespaces for live pages (header, Delegate Monitor, Network Monitor, Activity Graph)
 - `modules/configReader.js`: config loading and validation for `config.jsonc` / `config.default.jsonc`
 - `utils/`: logger, exchange rates, known addresses
-- `src/`: AngularJS 1.8 frontend bundled with webpack into `public/`
-- `webpack/`: build configuration
-- `test/`: Mocha API test suite that runs against a live explorer instance
+- `src/`: Vue 3 frontend (Composition API, vue-router, Pinia) built with Vite into `public/`
+- `src/views/` and `src/components/`: page and shared single-file components; `src/lib/`: framework-free utilities; `src/static/`: files copied to `public/` verbatim
+- `vite.config.mjs`: frontend build configuration and dev-server proxy
+- `test/`: Mocha API test suite that runs against a live explorer instance; `test/unit/` holds Node-only unit tests for `src/lib/`
 - `benchmark/`: API handler benchmarks
 
 ## Technical Rules
 
-- Node.js 22.13 or newer; CommonJS on the backend, ES modules in `src/`
+- Node.js 22.13 or newer; CommonJS on the backend, ES modules and Vue single-file components in `src/`
+- Frontend routes must stay URL-compatible with previous explorer versions; existing deep links may not break
+- Keep `src/lib/` utilities framework-free so `test/unit/` can import them in plain Node; use explicit `.js` extensions in their imports
 - All node interaction must go through `adamant-api` (adamant-api-jsclient) in `api/lib/adamant/requests/`; do not call node endpoints with a raw HTTP client elsewhere
 - `adamant-api` responses are normalized: check `response.success`, read `response.errorMessage` on failure
 - Prettier formats the code (2-space indentation, single quotes); ESLint flat config in `eslint.config.mjs` must pass with no errors
@@ -52,8 +55,9 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 ## Validation Commands
 
 - `npm run lint` and `npm run format:check` for static checks
-- `npm run build` for the frontend bundle
+- `npm run build` for the frontend bundle (Vite); `npm run dev` serves the frontend with a proxy to a locally running backend
 - `npm start` to run the explorer; `node app.js dev` uses `config.test.jsonc`
+- `npm run test:unit` runs the frontend utility unit tests in plain Node
 - `npm test` runs the API suite against a live explorer connected to the ADAMANT Testnet
 
 ## Markdown Rules For AI-Generated Docs

@@ -39,7 +39,10 @@ Run the baseline checks before submitting:
 npm run lint
 npm run format:check
 npm run build
+npm run test:unit
 ```
+
+During frontend work, `npm run dev` starts the Vite dev server with hot reload; it proxies `/api` and Socket.IO traffic to a backend running on `localhost:6040`.
 
 The API test suite runs against a live explorer instance connected to the ADAMANT Testnet:
 
@@ -58,9 +61,9 @@ Report the exact commands run and any skipped or blocked validation in the pull 
 - `sockets/`: Socket.IO namespaces for live pages (header, monitors, activity graph)
 - `modules/`: config reader
 - `utils/`: logger, exchange rates, known addresses
-- `src/`: AngularJS frontend bundled with webpack
-- `webpack/`: build configuration
-- `test/`: API test suite (Mocha, Chai, and Supertest)
+- `src/`: Vue 3 frontend (vue-router, Pinia) built with Vite into `public/`
+- `vite.config.mjs`: frontend build configuration and dev-server proxy
+- `test/`: API test suite (Mocha, Chai, and Supertest) and Node-only unit tests in `test/unit/`
 - `benchmark/`: API handler benchmarks
 
 All interaction with ADAMANT nodes goes through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) in `api/lib/adamant/requests/`. Do not call node endpoints with a raw HTTP client elsewhere.

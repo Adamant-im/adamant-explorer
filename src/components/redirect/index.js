@@ -1,1 +1,0 @@
-import './redirect.module';
