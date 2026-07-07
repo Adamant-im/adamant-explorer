@@ -8,11 +8,18 @@ module.exports = function (app) {
       app.exchange,
       (data) => {
         deferred.resolve();
-        logger.warn('commonHandler.getPriceTicker ~> ' + ' Error retrieving price ticker: ' + data.error);
+        logger.warn(
+          'commonHandler.getPriceTicker ~> ' + ' Error retrieving price ticker: ' + data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('commonHandler.getPriceTicker ~> ' + 'price ticker retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'commonHandler.getPriceTicker ~> ' +
+            'price ticker retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -20,13 +27,18 @@ module.exports = function (app) {
   this.search = (deferred) => {
     commonHandler.search(
       '10491613424735062732',
-       (data) => {
+      (data) => {
         deferred.resolve();
         logger.warn('commonHandler.search ~> ' + ' Error retrieving search result: ' + data.error);
       },
       (data) => {
         deferred.resolve();
-        logger.log('commonHandler.search ~> ' + ' search result retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'commonHandler.search ~> ' +
+            ' search result retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };

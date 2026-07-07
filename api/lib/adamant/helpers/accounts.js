@@ -4,9 +4,7 @@
  * @returns {Boolean}
  */
 function validateAddress(address) {
-  return (
-    typeof address === 'string' && address.match(/^[U|u][0-9]{1,21}$/g)
-  );
+  return typeof address === 'string' && address.match(/^[U|u][0-9]{1,21}$/g);
 }
 
 /**
@@ -15,10 +13,7 @@ function validateAddress(address) {
  * @returns {Boolean}
  */
 function validatePublicKey(publicKey) {
-  return (
-    typeof publicKey === 'string' &&
-    publicKey.match(/^([A-Fa-f0-9]{2}){32}$/g)
-  );
+  return typeof publicKey === 'string' && publicKey.match(/^([A-Fa-f0-9]{2}){32}$/g);
 }
 
 /**

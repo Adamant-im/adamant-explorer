@@ -4,7 +4,7 @@ const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
 module.exports = function (app, connectionHandler, socket) {
   let interval = null;
   let data = {};
-  const connection = new connectionHandler('Activity Graph: ', socket, this);
+  new connectionHandler('Activity Graph:', socket, this);
   const running = { getlastBlock: false };
 
   this.onInit = function () {
@@ -77,7 +77,7 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const newLastBlock = function (res) {
-    return res.success && (data.block == null) || (res.block.height > data.block.height);
+    return (res.success && data.block == null) || res.block.height > data.block.height;
   };
 
   const emitLastBlock = function () {

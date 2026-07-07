@@ -1,219 +1,156 @@
+const { TransactionType } = require('adamant-api');
 const api = require('./api');
 
 /**
- * Get confirmed transaction by id
- * @param {String} id
- * @returns {Promise<Object>}
+ * Transaction types shown in transfer views: token transfers and
+ * chat messages that carry ADM. Combined with `minAmount`, this hides
+ * messaging and service transactions, matching the UI note on the
+ * home page. Service transactions remain visible in the full
+ * transaction views.
+ *
+ * Moving this list to the explorer config is planned as a follow-up
+ * of https://github.com/Adamant-im/adamant-explorer/issues/11.
  */
-function getConfirmedTransaction(id) {
-  return new Promise((resolve, reject) => {
-    api.get('transactions/get', {id})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+const TRANSFER_TYPES = [TransactionType.SEND, TransactionType.CHAT_MESSAGE];
 
-        response.data.success
-          ? resolve(response.data.transaction)
-          : reject(response.errorMessage);
-      });
-  });
+/**
+ * Extract the transaction list from a node response or throw its error.
+ * @param {Object} response Normalized SDK response
+ * @returns {Array} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+function unwrapTransactions(response) {
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transactions;
 }
 
 /**
- * Get unconfirmed transaction by id
- * @param {String} id
- * @returns {Promise<Object>}
+ * Get a confirmed transaction by its id.
+ * @param {string} id Transaction id
+ * @returns {Promise<Object>} Transaction body
+ * @throws {string} Node error message when the request fails or the transaction is not found
  */
-function getUnconfirmedTransaction(id) {
-  return new Promise((resolve, reject) => {
-    api.get('transactions/unconfirmed/get', {id})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getConfirmedTransaction(id) {
+  const response = await api.getTransaction(id);
 
-        response.data.success
-          ? resolve(response.data.transaction)
-          : reject(response.errorMessage);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transaction;
 }
 
 /**
- * Get unconfirmed transactions
- * @returns {Promise<Array>}
+ * Get an unconfirmed transaction by its id.
+ * @param {string} id Transaction id
+ * @returns {Promise<Object>} Transaction body
+ * @throws {string} Node error message when the request fails or the transaction is not found
  */
-function getUnconfirmedTransactions() {
-  return new Promise((resolve, reject) => {
-    api.get('transactions/unconfirmed')
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getUnconfirmedTransaction(id) {
+  const response = await api.getUnconfirmedTransaction(id);
 
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transaction;
 }
 
 /**
- * Get latest 20 transactions
- * @returns {Promise<Array>}
+ * Get all unconfirmed transactions.
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getLastTransactions() {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {orderBy: 'timestamp:desc', limit: 20})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getUnconfirmedTransactions() {
+  return unwrapTransactions(await api.getUnconfirmedTransactions());
 }
 
 /**
- * Get latest 20 transactions without clutter
- * @returns {Promise<Array>}
+ * Get the latest 20 transactions of any type.
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getLastTransfers() {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {orderBy: 'timestamp:desc', limit: 20, noClutter: 1})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getLastTransactions() {
+  return unwrapTransactions(await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20 }));
 }
 
 /**
- * Get transactions with given params
- * @param {Object} params
- * @returns {Promise<Array>}
+ * Get the latest 20 transfer transactions, including in-chat transfers.
+ * @returns {Promise<Array>} List of transactions, newest first
+ * @throws {string} Node error message when the request fails
  */
-function getTransactions(params) {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', params)
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getLastTransfers() {
+  return getTransfers({ orderBy: 'timestamp:desc', limit: 20 });
 }
 
 /**
- * Get transactions without clutter with given params
- * @param {Object} params
- * @returns {Promise<Array>}
+ * Get transactions matching an SDK-form query.
+ * @param {Object} query Query with filters grouped under `and`/`or`,
+ *   see `normalizeTransactionParams`
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getTransfers(params) {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {noClutter: 1, ...params})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getTransactions(query) {
+  return unwrapTransactions(await api.getTransactions(query));
 }
 
 /**
- * Get transactions by block id
- * @param {Object} query
- * @returns {Promise<Array>}
+ * Get transfer transactions matching an SDK-form query: token transfers
+ * and chat messages that carry ADM.
+ * @param {Object} query Query with filters grouped under `and`/`or`,
+ *   see `normalizeTransactionParams`
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getTransactionsByBlock(query) {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {blockId: query.blockId, orderBy: 'timestamp:desc', offset: query.offset, limit: query.limit})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getTransfers(query) {
+  return unwrapTransactions(
+    await api.getTransactions({
+      ...query,
+      and: { ...query.and, types: TRANSFER_TYPES, minAmount: 1 },
+    }),
+  );
 }
 
 /**
- * Get latest 5 transactions made for delegate registration
- * @returns {Promise<Array>}
+ * Get transactions included in a block.
+ * @param {{blockId: string, offset: number, limit: number}} query Block id and pagination
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getRegistrationTransactions() {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {orderBy: 'timestamp:desc', limit: 5, type: 2})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+async function getTransactionsByBlock(query) {
+  return unwrapTransactions(
+    await api.getTransactions({
+      blockId: query.blockId,
+      orderBy: 'timestamp:desc',
+      offset: query.offset,
+      limit: query.limit,
+    }),
+  );
 }
 
 /**
- * Get latest 5 transactions made for voting
- * @returns {Promise<Array>}
+ * Get the latest 5 delegate registration transactions (type 2).
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
  */
-function getVoteTransactions() {
-  return new Promise((resolve, reject) => {
-    api.get('transactions', {orderBy: 'timestamp:desc', limit: 5, type: 3})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getRegistrationTransactions() {
+  return unwrapTransactions(
+    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 2 }),
+  );
+}
 
-        response.data.success
-          ? resolve(response.data.transactions)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+/**
+ * Get the latest 5 voting transactions (type 3).
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getVoteTransactions() {
+  return unwrapTransactions(
+    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 3 }),
+  );
 }
 
 module.exports = {

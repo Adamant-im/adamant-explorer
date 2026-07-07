@@ -1,147 +1,113 @@
 const api = require('./api');
 
 /**
- * Get account by address
- * @param {String} address
- * @returns {Promise<Object>}
+ * Get an account by its address.
+ * @param {string} address ADAMANT address, e.g. `U777355171066438331`
+ * @returns {Promise<Object>} Account body
+ * @throws {string} Node error message when the request fails or the account is not found
  */
-function getAccountByAddress(address) {
-  return new Promise((resolve, reject) => {
-    api.get('accounts', {address})
-      .then((response) => {
-        if (!response.success) {
-          reject(response.errorMessage);
-        }
+async function getAccountByAddress(address) {
+  const response = await api.getAccountInfo({ address });
 
-        const account = response.data.account;
+  if (!response.success) {
+    throw response.errorMessage;
+  }
 
-        resolve(account);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.account;
 }
 
 /**
- * Get account by public key
- * @param {String} publicKey
- * @returns {Promise<Object>}
+ * Get an account by its public key.
+ * @param {string} publicKey Account public key, a 64-character hex string
+ * @returns {Promise<Object>} Account body
+ * @throws {string} Node error message when the request fails or the account is not found
  */
-function getAccountByPublicKey(publicKey) {
-  return new Promise((resolve, reject) => {
-    api.get('accounts', {publicKey})
-      .then((response) => {
-        if (!response.success) {
-          reject(response.errorMessage);
-        }
+async function getAccountByPublicKey(publicKey) {
+  const response = await api.getAccountInfo({ publicKey });
 
-        const account = response.data.account;
+  if (!response.success) {
+    throw response.errorMessage;
+  }
 
-        resolve(account);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.account;
 }
 
 /**
- * Get top accounts
- * @param {Object} query
- * @returns {Promise<Object>}
+ * Get accounts with the highest balances.
+ * @param {{offset: number, limit: number}} query Pagination parameters
+ * @returns {Promise<Array>} List of accounts
+ * @throws {string} Node error message when the request fails
  */
-function getTopAccounts(query) {
-  return new Promise((resolve, reject) => {
-    api.get('accounts/top', {offset: query.offset, limit: query.limit})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
-
-        resolve(response.data.accounts);
-      })
-      .catch((err) => {
-        reject(err);
-      });
+async function getTopAccounts(query) {
+  const response = await api.get('accounts/top', {
+    offset: query.offset,
+    limit: query.limit,
   });
+
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.accounts;
 }
 
 /**
- * Get incoming transactions count by address
- * @param {String} address
- * @returns {Promise<Number>} incoming_cnt or 0
+ * Get the number of incoming transactions for an address.
+ * @param {string} address ADAMANT address
+ * @returns {Promise<number|undefined>} Incoming transactions count, `undefined` when no address is given
+ * @throws {string} Node error message when the request fails
  */
-function getIncomingTxsCnt(address) {
-  return new Promise((resolve, reject) => {
-    if (!address) {
-      resolve(undefined);
-    }
+async function getIncomingTxsCnt(address) {
+  if (!address) {
+    return undefined;
+  }
 
-    api.get('api/transactions', {recipientId: address, limit: 1})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+  const response = await api.getTransactions({ recipientId: address, limit: 1 });
 
-        const incoming_cnt = response.data.success ? response.data.count : 0;
+  if (!response.success) {
+    throw response.errorMessage;
+  }
 
-        resolve(incoming_cnt);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.count;
 }
 
 /**
- * Get outgoing transactions count by address
- * @param {String} address
- * @returns {Promise<Number>} outgoing_cnt or 0
+ * Get the number of outgoing transactions for an address.
+ * @param {string} address ADAMANT address
+ * @returns {Promise<number|undefined>} Outgoing transactions count, `undefined` when no address is given
+ * @throws {string} Node error message when the request fails
  */
-function getOutgoingTxsCnt(address) {
-  return new Promise((resolve, reject) => {
-    if (!address) {
-      resolve(undefined);
-    }
+async function getOutgoingTxsCnt(address) {
+  if (!address) {
+    return undefined;
+  }
 
-    api.get('api/transactions', {senderId: address, limit: 1})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+  const response = await api.getTransactions({ senderId: address, limit: 1 });
 
-        const outgoing_cnt = response.data.success ? response.data.count : 0;
+  if (!response.success) {
+    throw response.errorMessage;
+  }
 
-        resolve(outgoing_cnt);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.count;
 }
 
 /**
- * Get public key by address
- * @param {String} address
- * @returns {Promise<String|null>}
+ * Get the public key of an address.
+ *
+ * Uses the SDK helper, which memoizes resolved keys. Never rejects: an
+ * uninitialized account has no public key, which is an expected state,
+ * so any failure resolves to `null`.
+ * @param {string} address ADAMANT address
+ * @returns {Promise<string|null>} Public key or `null` when unavailable
  */
-function getPublicKey(address) {
-  return new Promise((resolve) => {
-    api.get('accounts/getPublicKey', {address})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          resolve(null);
-        }
+async function getPublicKey(address) {
+  try {
+    const publicKey = await api.getPublicKey(address);
 
-        response.data.success
-          ? resolve(response.data.publicKey)
-          : resolve(null);
-      })
-      .catch((err) => {
-        resolve(err);
-      });
-  });
+    return publicKey || null;
+  } catch {
+    return null;
+  }
 }
 
 module.exports = {

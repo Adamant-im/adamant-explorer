@@ -13,4 +13,3 @@ module.exports = function (app) {
   this.statistics = new statistics();
   this.transactions = new transactions();
 };
-

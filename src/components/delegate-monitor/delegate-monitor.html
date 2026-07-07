@@ -316,9 +316,6 @@
                                 <tr data-ng-repeat="d in vm.activeDelegates | orderBy:$root.natural(vm.tables.active.predicate):vm.tables.active.reverse track by d.rate">
                                     <td>{{d.rate}}</td>
                                     <td>
-                                        <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon"
-                                            data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
-                                            title="{{d.proposal.description}}" target="_new"></a>&nbsp;
                                         <a href="delegate/{{d.address}}" data-type="delegate">{{d.username}}</a>
                                     </td>
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>
@@ -366,9 +363,6 @@
 
                                     <td>{{d.rate}}</td>
                                     <td>
-                                        <a data-ng-if="d.proposal" class="glyphicon glyphicon-user proposal-icon"
-                                            data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{d.proposal.topic}}"
-                                            title="{{d.proposal.description}}" target="_new"></a>&nbsp;
                                         <a href="/delegate/{{d.address}}" data-type="delegate">{{d.username}}</a>
                                     </td>
                                     <td class="hidden-xs"><span class="text-muted">{{d.address}}</span></td>

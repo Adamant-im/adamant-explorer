@@ -2,8 +2,8 @@ const testUtils = require('../testUtils');
 
 const params = {
   publicKey: '054ac27e10b11dc4b894837558bd964a2df6cb90fcebe0b0f6e15909a7128310',
-  noBlocksKey:
-    '1111111111111111111111111111111111111111111111111111111111111111',
+  // Must contain hex letters: the node rejects an all-digit key as a non-string
+  noBlocksKey: 'aa11111111111111111111111111111111111111111111111111111111111111',
   invalidPublicKey: 'abcdefghijklmnopqrstuvwyxz',
   delegate: 'adm_official_pool',
   address: 'U9466395914658764774',
@@ -18,7 +18,10 @@ describe('Delegates API', function () {
   }
 
   function getStandby(id, done) {
-    testUtils.httpRequest.get(id ? '/api/delegates/getStandby?n=' + id : '/api/delegates/getStandby', done);
+    testUtils.httpRequest.get(
+      id ? '/api/delegates/getStandby?n=' + id : '/api/delegates/getStandby',
+      done,
+    );
   }
 
   function getLatestRegistrations(done) {

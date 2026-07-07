@@ -6,24 +6,25 @@ const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
-  const connection = new connectionHandler('Delegate Monitor:', socket, this);
+  new connectionHandler('Delegate Monitor:', socket, this);
   const data = {};
-  // Only used in various calculations, will not be emited directly
+  // Only used in various calculations, will not be emitted directly
   const tmpData = {};
 
   const running = {
-    'getActive': false,
-    'getLastBlock': false,
-    'getRegistrations': false,
-    'getVotes': false,
-    'getLastBlocks': false,
-    'getNextForgers': false,
+    getActive: false,
+    getLastBlock: false,
+    getRegistrations: false,
+    getVotes: false,
+    getLastBlocks: false,
+    getNextForgers: false,
   };
 
   this.onInit = function () {
     this.onConnect();
 
-    async.parallel([
+    async.parallel(
+      [
         // We only call getLastBlock on init, later data.lastBlock will be updated from getLastBlocks
         getLastBlock,
         getActive,
@@ -33,7 +34,10 @@ module.exports = function (app, connectionHandler, socket) {
       ],
       function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          // A failed request must not leave the monitor empty forever:
+          // retry until the initial data set is collected
+          log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
+          setTimeout(() => this.onInit(), 10000);
         } else {
           tmpData.nextForgers = res[4];
 
@@ -51,7 +55,8 @@ module.exports = function (app, connectionHandler, socket) {
           newInterval(0, 5000, emitData);
           newInterval(1, 1000, getLastBlocks);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 
   this.onConnect = function () {
@@ -140,7 +145,10 @@ module.exports = function (app, connectionHandler, socket) {
 
   const updateActive = function (results) {
     // Calculate list of delegates that should forge in current round
-    tmpData.roundDelegates = getRoundDelegates(tmpData.nextForgers.delegates, data.lastBlock.block.height);
+    tmpData.roundDelegates = getRoundDelegates(
+      tmpData.nextForgers.delegates,
+      data.lastBlock.block.height,
+    );
 
     if (!data.active || !data.active.delegates) {
       return results;
@@ -238,72 +246,44 @@ module.exports = function (app, connectionHandler, socket) {
     }
     running.getLastBlocks = true;
 
-    async.waterfall([
-      (callback) => {
-        return blocks.getBlocks(0, limit)
-          .then((response) => {
-              return callback(null, {blocks: response});
-          })
-          .catch((err) => {
-            return callback(err);
-          });
-      },
-      (result, callback) => {
-        // Set last block and his delegate (we will emit it later in emitData)
-        data.lastBlock.block = result.blocks[0];
-        const lb_delegate = findActiveByBlock(data.lastBlock.block);
-        data.lastBlock.block.delegate = {
-          username: lb_delegate.username,
-          address: lb_delegate.address,
-        };
+    async.waterfall(
+      [
+        (callback) => {
+          return blocks
+            .getBlocks(0, limit)
+            .then((response) => {
+              return callback(null, { blocks: response });
+            })
+            .catch((err) => {
+              return callback(err);
+            });
+        },
+        (result, callback) => {
+          // Set last block and his delegate (we will emit it later in emitData)
+          data.lastBlock.block = result.blocks[0];
+          const lb_delegate = findActiveByBlock(data.lastBlock.block);
+          data.lastBlock.block.delegate = {
+            username: lb_delegate.username,
+            address: lb_delegate.address,
+          };
 
-        async.eachSeries(result.blocks, (b, cb) => {
-          let existing = findActiveByBlock(b);
-
-          if (existing) {
-            if (!existing.blocks || !existing.blocks[0] || existing.blocks[0].timestamp < b.timestamp) {
-              existing.blocks = [];
-              existing.blocks.push(b);
-              existing.blocksAt = moment();
-              existing = updateDelegate(existing, false);
-              emitDelegate(existing);
-            }
-          }
-
-          if (intervals[1]) {
-            cb(null);
-          } else {
-            callback('Monitor closed');
-          }
-        }, (err) => {
-          if (err) {
-            callback(err, result);
-          }
-          callback(null, result);
-        });
-      },
-      (result, callback) => {
-        async.eachSeries(data.active.delegates, (delegate, cb) => {
-          if (delegate.blocks) {
-            return cb(null);
-          }
-          delegatesHandler.getLastBlocks(
-            {
-              publicKey: delegate.publicKey,
-              limit: 1,
-            },
-            (res) => {
-              log('error', 'Error retrieving last blocks for: ' + delegateName(delegate));
-              callback(res.error);
-            },
-            (res) => {
-              let existing = findActive(delegate);
+          async.eachSeries(
+            result.blocks,
+            (b, cb) => {
+              let existing = findActiveByBlock(b);
 
               if (existing) {
-                existing.blocks = res.blocks;
-                existing.blocksAt = moment();
-                existing = updateDelegate(existing, false);
-                emitDelegate(existing);
+                if (
+                  !existing.blocks ||
+                  !existing.blocks[0] ||
+                  existing.blocks[0].timestamp < b.timestamp
+                ) {
+                  existing.blocks = [];
+                  existing.blocks.push(b);
+                  existing.blocksAt = moment();
+                  existing = updateDelegate(existing, false);
+                  emitDelegate(existing);
+                }
               }
 
               if (intervals[1]) {
@@ -312,20 +292,64 @@ module.exports = function (app, connectionHandler, socket) {
                 callback('Monitor closed');
               }
             },
+            (err) => {
+              if (err) {
+                callback(err, result);
+              }
+              callback(null, result);
+            },
           );
-        }, (err) => {
-          if (err) {
-            callback(err, result);
-          }
-          callback(null, result);
-        });
+        },
+        (result, callback) => {
+          async.eachSeries(
+            data.active.delegates,
+            (delegate, cb) => {
+              if (delegate.blocks) {
+                return cb(null);
+              }
+              delegatesHandler.getLastBlocks(
+                {
+                  publicKey: delegate.publicKey,
+                  limit: 1,
+                },
+                (res) => {
+                  log('error', 'Error retrieving last blocks for: ' + delegateName(delegate));
+                  callback(res.error);
+                },
+                (res) => {
+                  let existing = findActive(delegate);
+
+                  if (existing) {
+                    existing.blocks = res.blocks;
+                    existing.blocksAt = moment();
+                    existing = updateDelegate(existing, false);
+                    emitDelegate(existing);
+                  }
+
+                  if (intervals[1]) {
+                    cb(null);
+                  } else {
+                    callback('Monitor closed');
+                  }
+                },
+              );
+            },
+            (err) => {
+              if (err) {
+                callback(err, result);
+              }
+              callback(null, result);
+            },
+          );
+        },
+      ],
+      (err, callback) => {
+        if (err) {
+          log('error', 'Error retrieving LastBlocks: ' + err);
+        }
+        running.getLastBlocks = false;
       },
-    ], (err, callback) => {
-      if (err) {
-        log('error', 'Error retrieving LastBlocks: ' + err);
-      }
-      running.getLastBlocks = false;
-    });
+    );
   };
 
   const getRound = function (height) {
@@ -347,12 +371,8 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const emitData = function () {
-    async.parallel([
-        getActive,
-        getRegistrations,
-        getVotes,
-        getNextForgers,
-      ],
+    async.parallel(
+      [getActive, getRegistrations, getVotes, getNextForgers],
       function (err, res) {
         if (err) {
           log('error', 'Error retrieving: ' + err);
@@ -367,7 +387,8 @@ module.exports = function (app, connectionHandler, socket) {
           log('info', 'Emitting data');
           socket.emit('data', data);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 
   const emitDelegate = function (delegate) {

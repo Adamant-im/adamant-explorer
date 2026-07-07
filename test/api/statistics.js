@@ -20,16 +20,16 @@ describe('Statistics API', function () {
         testUtils
           .expect(id[i])
           .to.contain.all.keys(
-          'ip',
-          'port',
-          'state',
-          'os',
-          'version',
-          'broadhash',
-          'height',
-          'osBrand',
-          'humanState',
-        ); //'location' doesnt always get populated so we have removed it from the check
+            'ip',
+            'port',
+            'state',
+            'os',
+            'version',
+            'broadhash',
+            'height',
+            'osBrand',
+            'humanState',
+          ); //'location' doesnt always get populated so we have removed it from the check
       }
     }
   }
@@ -38,23 +38,23 @@ describe('Statistics API', function () {
     testUtils
       .expect(id)
       .to.contain.all.keys(
-      'totalForged',
-      'confirmations',
-      'blockSignature',
-      'generatorId',
-      'generatorPublicKey',
-      'payloadHash',
-      'payloadLength',
-      'reward',
-      'id',
-      'version',
-      'timestamp',
-      'height',
-      'previousBlock',
-      'numberOfTransactions',
-      'totalAmount',
-      'totalFee',
-    );
+        'totalForged',
+        'confirmations',
+        'blockSignature',
+        'generatorId',
+        'generatorPublicKey',
+        'payloadHash',
+        'payloadLength',
+        'reward',
+        'id',
+        'version',
+        'timestamp',
+        'height',
+        'previousBlock',
+        'numberOfTransactions',
+        'totalAmount',
+        'totalFee',
+      );
   }
 
   /*Define api endpoints to test */

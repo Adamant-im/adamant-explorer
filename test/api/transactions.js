@@ -24,24 +24,14 @@ describe('Transactions API', function () {
 
   function getTransactionsByAddress(id, id2, id3, done) {
     testUtils.httpRequest.get(
-      '/api/getTransactionsByAddress?address=' +
-        id +
-        '&offset=' +
-        id2 +
-        '&limit=' +
-        id3,
+      '/api/getTransactionsByAddress?address=' + id + '&offset=' + id2 + '&limit=' + id3,
       done,
     );
   }
 
   function getTransactionsByBlock(id, id2, id3, done) {
     testUtils.httpRequest.get(
-      '/api/getTransactionsByBlock?blockId=' +
-        id +
-        '&offset=' +
-        id2 +
-        '&limit=' +
-        id3,
+      '/api/getTransactionsByBlock?blockId=' + id + '&offset=' + id2 + '&limit=' + id3,
       done,
     );
   }
@@ -120,10 +110,7 @@ describe('Transactions API', function () {
     it('should be ok', function (done) {
       getUnconfirmedTransactions((err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils
-          .expect(res.body)
-          .to.have.property('transactions')
-          .that.is.an('array');
+        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
         done();
       });
     });
@@ -133,10 +120,7 @@ describe('Transactions API', function () {
     it('should be ok', function (done) {
       getLastTransactions((err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils
-          .expect(res.body)
-          .to.have.property('transactions')
-          .that.is.an('array');
+        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
         checkTransactionsBody(res.body.transactions);
         done();
       });
@@ -145,37 +129,21 @@ describe('Transactions API', function () {
 
   describe('GET /api/getTransactionsByAddress', function () {
     it('using known address should be ok', function (done) {
-      getTransactionsByAddress(
-        params.address,
-        '0',
-        params.limit,
-        (err, res) => {
-          testUtils.expect(res.body).to.have.property('success').to.be.ok;
-          testUtils
-            .expect(res.body)
-            .to.have.property('transactions')
-            .that.is.an('array');
-          checkTransactionsBody(res.body.transactions);
-          done();
-        },
-      );
+      getTransactionsByAddress(params.address, '0', params.limit, (err, res) => {
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
+        checkTransactionsBody(res.body.transactions);
+        done();
+      });
     }).timeout(5000);
 
     it('using known address and offset of 20 should be ok', function (done) {
-      getTransactionsByAddress(
-        params.address,
-        params.offset,
-        params.limit,
-        (err, res) => {
-          testUtils.expect(res.body).to.have.property('success').to.be.ok;
-          testUtils
-            .expect(res.body)
-            .to.have.property('transactions')
-            .that.is.an('array');
-          checkTransactionsBody(res.body.transactions);
-          done();
-        },
-      );
+      getTransactionsByAddress(params.address, params.offset, params.limit, (err, res) => {
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
+        checkTransactionsBody(res.body.transactions);
+        done();
+      });
     }).timeout(5000);
 
     it('using invalid address should fail', function (done) {
@@ -189,34 +157,21 @@ describe('Transactions API', function () {
 
   describe('GET /api/getTransactionsByBlock', function () {
     it('using known block should be ok', function (done) {
-      getTransactionsByBlock(
-        params.blockId,
-        '0',
-        params.limit,
-        (err, res) => {
-          testUtils.expect(res.body).to.have.property('success').to.be.ok;
-          testUtils
-            .expect(res.body)
-            .to.have.property('transactions')
-            .that.is.an('array');
-          checkTransactionsBody(res.body.transactions);
-          done();
-        },
-      );
+      getTransactionsByBlock(params.blockId, '0', params.limit, (err, res) => {
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
+        checkTransactionsBody(res.body.transactions);
+        done();
+      });
     }).timeout(5000);
 
     it('using known block and offset of 20 should be ok', function (done) {
-      getTransactionsByBlock(
-        params.blockId,
-        params.offset,
-        params.limit,
-        (err, res) => {
-          testUtils.expect(res.body).to.have.property('success').to.be.ok;
-          testUtils.expect(res.body).to.have.property('transactions');
-          checkTransactionsBody(res.body.transactions);
-          done();
-        },
-      );
+      getTransactionsByBlock(params.blockId, params.offset, params.limit, (err, res) => {
+        testUtils.expect(res.body).to.have.property('success').to.be.ok;
+        testUtils.expect(res.body).to.have.property('transactions');
+        checkTransactionsBody(res.body.transactions);
+        done();
+      });
     }).timeout(5000);
 
     it('using invalid block should fail', function (done) {

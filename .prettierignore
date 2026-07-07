@@ -1,0 +1,10 @@
+public/
+logs/
+pids/
+node_modules/
+package-lock.json
+*.md
+src/**/*.html
+src/assets/
+known.json
+*.jsonc

@@ -88,18 +88,20 @@ async function getTopAccounts(query, error, success) {
     query.limit = helpers.param(query.limit, 100);
 
     result.accounts = await accounts.getTopAccounts(query);
-    result.accounts = await Promise.all(result.accounts.map(async (account) => {
-      const accountKnowledge = knowledge.inAccount(account);
+    result.accounts = await Promise.all(
+      result.accounts.map(async (account) => {
+        const accountKnowledge = knowledge.inAccount(account);
 
-      if (!accountKnowledge && account.publicKey) {
-        account.knowledge = await delegates.getDelegate(account.publicKey);
-        account.knowledge = knowledge.inDelegate(account.knowledge);
-      } else {
-        account.knowledge = accountKnowledge;
-      }
+        if (!accountKnowledge && account.publicKey) {
+          account.knowledge = await delegates.getDelegate(account.publicKey);
+          account.knowledge = knowledge.inDelegate(account.knowledge);
+        } else {
+          account.knowledge = accountKnowledge;
+        }
 
-      return account;
-    }));
+        return account;
+      }),
+    );
 
     result.success = true;
 

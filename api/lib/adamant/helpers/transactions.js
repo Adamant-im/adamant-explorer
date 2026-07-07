@@ -3,9 +3,10 @@ const delegates = require('../requests/delegates');
 const knowledge = require('../../../../utils/knownAddresses');
 
 /**
- * Get knowledge, senderDelegate, recipientPublicKey, recipientDelegate information for transaction
- * @param {Object} transaction
- * @returns {Promise<Object>}
+ * Enrich a transaction with knowledge, sender and recipient delegate info,
+ * the recipient public key, and vote details.
+ * @param {Object} transaction Transaction body from the node
+ * @returns {Promise<Object>} The same transaction with extra fields
  */
 async function processTransaction(transaction) {
   transaction = knowledge.inTx(transaction);
@@ -15,34 +16,37 @@ async function processTransaction(transaction) {
     ? await delegates.getDelegate(transaction.senderPublicKey)
     : null;
 
-  // Get recipient public key
-  transaction.recipientPublicKey = (!transaction.recipientId || transaction.type !== 0)
-    ? null
-    : await accounts.getPublicKey(transaction.recipientId);
+  // Get recipient public key. Only token transfers (type 0) have a recipient account
+  transaction.recipientPublicKey =
+    !transaction.recipientId || transaction.type !== 0
+      ? null
+      : await accounts.getPublicKey(transaction.recipientId);
 
-  // // Get recipient delegate
+  // Get recipient delegate
   transaction.recipientDelegate = transaction.recipientPublicKey
     ? await delegates.getDelegate(transaction.recipientPublicKey)
     : null;
 
   // Get delegates for votes
   if (transaction.votes) {
-    transaction.votes.added = await Promise.all(transaction.votes.added.map(async (publicKey) => {
-      const delegate = await delegates.getDelegate(publicKey);
-      return {
-        delegate,
-      };
-    }));
+    transaction.votes.added = await Promise.all(
+      transaction.votes.added.map(async (publicKey) => {
+        const delegate = await delegates.getDelegate(publicKey);
+        return {
+          delegate,
+        };
+      }),
+    );
 
-    transaction.votes.deleted = await Promise.all(transaction.votes.deleted.map(async (publicKey) => {
-      const delegate = await delegates.getDelegate(publicKey);
-      return {
-        delegate,
-      };
-    }));
+    transaction.votes.deleted = await Promise.all(
+      transaction.votes.deleted.map(async (publicKey) => {
+        const delegate = await delegates.getDelegate(publicKey);
+        return {
+          delegate,
+        };
+      }),
+    );
   }
-
-  console.log(transaction);
 
   return transaction;
 }
@@ -70,111 +74,72 @@ function concatenateTransactions(transactions1, transactions2) {
 }
 
 /**
- * Parse transaction request query
- * @param {Object} params
- * @returns {Array}
+ * Transaction types shown by the `others` direction of the address page:
+ * every service type, that is everything except token transfers (0)
+ * and chat messages (8).
+ */
+const SERVICE_TYPES = [1, 2, 3, 4, 5, 6, 7];
+
+/**
+ * Build an SDK-form transaction query from an explorer request query.
+ *
+ * The query uses the adamant-api shape where filter conditions are
+ * grouped under `and`/`or`, e.g. `{and: {senderId}, or: {recipientId}}`.
+ * Type sets are expressed with the node's `types` filter, so every
+ * request maps to a single node call.
+ * @param {Object} params Explorer request query
+ * @returns {Object} Query for `getTransactions` or `getTransfers`
+ * @throws {string} `'Missing/Invalid address parameter'` when no filter is given
  */
 function normalizeTransactionParams(params) {
   if (!params || (!params.address && !params.senderId && !params.recipientId)) {
     throw 'Missing/Invalid address parameter';
   }
 
-  let directionQueries = [];
-  const baseQuery = {
+  const query = {
     orderBy: 'timestamp:desc',
     offset: param(params.offset, 0),
     limit: param(params.limit, 100),
   };
 
   if (params.direction === 'sent') {
-    directionQueries.push({
-      ...baseQuery,
-      'and:senderId': params.address,
-      'and:minAmount': 1,
-    });
+    query.and = { senderId: params.address, minAmount: 1 };
   } else if (params.direction === 'received') {
-    directionQueries.push({
-      ...baseQuery,
-      'and:recipientId': params.address,
-      'and:minAmount': 1,
-    });
+    query.and = { recipientId: params.address, minAmount: 1 };
   } else if (params.direction === 'others') {
-    for (let i = 1; i < 8; ++i) {
-      directionQueries.push({
-        ...baseQuery,
-        'and:senderId': params.address,
-        'and:type': i,
-      });
-    }
+    query.and = { senderId: params.address, types: SERVICE_TYPES };
   } else if (params.address) {
-    directionQueries.push({
-      ...baseQuery,
-      'and:recipientId': params.address,
-      'or:senderId': params.address,
-    });
+    query.and = { recipientId: params.address };
+    query.or = { senderId: params.address };
   } else {
-    let advanced = {};
+    // Advanced search: pass through any filter the node supports,
+    // except control and specially handled parameters
+    const advanced = {};
     Object.keys(params).forEach((key) => {
-      if (!(/key|url|parent|orderBy|offset|limit|type|recipientId|query/.test(key))) {
-        advanced[`and:${key}`] = params[key];
+      if (!/key|url|parent|orderBy|offset|limit|type|recipientId|query/.test(key)) {
+        advanced[key] = params[key];
       }
     });
 
-    if (params.type) {
-      params.type.split(',').forEach((type) => {
-        if (type) {
-          directionQueries.push({
-            ...baseQuery,
-            ...advanced,
-            'and:type': type,
-          });
-        }
-      });
-    } else {
-      directionQueries.push({
-        ...baseQuery,
-        ...advanced,
-      });
+    query.and = advanced;
+
+    const types = params.type ? params.type.split(',').filter(Boolean) : [];
+    if (types.length === 1) {
+      query.and.type = types[0];
+    } else if (types.length > 1) {
+      query.and.types = types;
     }
 
-    if (params.recipientId === params.senderId) {
-      const queriesAmount = directionQueries.length;
-      for (let i = 0; i < queriesAmount; ++i) {
-        const query = directionQueries[i];
-
-        query['and:recipientId'] = query['and:senderId'];
-        query['and:recipientId'] = undefined;
-
-        directionQueries.push(query);
-      }
-    } else if (params.recipientId && !params.senderId) {
-      directionQueries = directionQueries.map((query) => {
-        return {
-          ...query,
-          'and:recipientId': params.recipientId,
-        };
-      });
+    // When only recipientId is given, senderId is not in the advanced
+    // filters, so add the recipient condition.
+    // When recipientId equals senderId, the senderId condition already
+    // covers the query and the recipientId filter is ignored
+    if (params.recipientId && !params.senderId) {
+      query.and.recipientId = params.recipientId;
     }
   }
 
-  return directionQueries;
-}
-
-/**
- * Get index by id
- * @param {Array} list
- * @param {Object} item
- * @returns {Number}
- */
-function indexOfById(list, item) {
-  let index = -1;
-  list.forEach((mem, i) => {
-    if (mem.id === item.id) {
-      index = i;
-    }
-  });
-
-  return index;
+  return query;
 }
 
 /**
@@ -197,6 +162,5 @@ module.exports = {
   processTransaction,
   concatenateTransactions,
   normalizeTransactionParams,
-  indexOfById,
   param,
 };

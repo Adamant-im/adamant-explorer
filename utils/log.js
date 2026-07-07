@@ -1,73 +1,97 @@
+const fs = require('fs');
 const config = require('../modules/configReader');
 
-const fs = require('fs');
+// Verbosity thresholds, ordered from quietest to noisiest
+const LOG_LEVELS = ['none', 'error', 'warn', 'info', 'log', 'debug'];
+
+const COLORS = {
+  error: '\x1b[31m', // red
+  warn: '\x1b[33m', // yellow
+  info: '\x1b[32m', // green
+  log: '\x1b[34m', // blue
+  debug: '\x1b[36m', // cyan
+};
+
+const RESET_COLOR = '\x1b[0m';
+
+const configuredLevel = LOG_LEVELS.includes(config.log_level)
+  ? LOG_LEVELS.indexOf(config.log_level)
+  : LOG_LEVELS.indexOf('log');
+
 if (!fs.existsSync('./logs')) {
   fs.mkdirSync('./logs');
 }
 
-const infoStr = fs.createWriteStream('./logs/' + date() + '.log', {
+const logFile = fs.createWriteStream(`./logs/${date()}.log`, {
   flags: 'a',
 });
 
-infoStr.write(`\n\n[The explorer started] _________________${fullTime()}_________________\n`);
+logFile.write(`\n\n[The explorer started] _________________${fullTime()}_________________\n`);
 
-module.exports = {
-  error(str) {
-    if (['error', 'warn', 'info', 'log'].includes(config.log_level)) {
-      infoStr.write(`\n ` + 'error|' + fullTime() + '|' + str);
-      console.log('\x1b[31m', 'error|' + fullTime(), '\x1b[0m', str);
-    }
-  },
-  warn(str) {
-    if (['warn', 'info', 'log'].includes(config.log_level)) {
-      console.log('\x1b[33m', 'warn|' + fullTime(), '\x1b[0m', str);
-      infoStr.write(`\n ` + 'warn|' + fullTime() + '|' + str);
-    }
-  },
-  info(str) {
-    if (['info', 'log'].includes(config.log_level)) {
-      console.log('\x1b[32m', 'info|' + fullTime(), '\x1b[0m', str);
-      infoStr.write(`\n ` + 'info|' + fullTime() + '|' + str);
-    }
-  },
-  log(str) {
-    if (['log'].includes(config.log_level)) {
-      console.log('\x1b[34m', 'log|' + fullTime(), '\x1b[0m', str);
-      infoStr.write(`\n ` + 'log|[' + fullTime() + '|' + str);
-    }
-  },
-  debug(str) {
-    if (['debug'].includes(config.log_level)) {
-      console.log('\x1b[34m', 'debug|' + fullTime(), '\x1b[0m', str);
-      infoStr.write(`\n ` + 'log|[' + fullTime() + '|' + str);
-    }
-  },
-};
+/**
+ * Write a message to the console and the log file when the given
+ * severity passes the configured `log_level` threshold.
+ * @param {'error'|'warn'|'info'|'log'|'debug'} level Message severity
+ * @param {string} message Message to write; secrets must never be logged
+ */
+function write(level, message) {
+  if (LOG_LEVELS.indexOf(level) > configuredLevel) {
+    return;
+  }
 
-function time() {
-  return formatDate(Date.now()).hh_mm_ss;
+  console.log(COLORS[level], `${level}|${fullTime()}`, RESET_COLOR, message);
+  logFile.write(`\n ${level}|${fullTime()}|${message}`);
 }
 
+/**
+ * Explorer logger. Writes colored messages to the console and appends
+ * plain-text lines to a daily file in `./logs/`.
+ *
+ * Verbosity is controlled by the `log_level` config field:
+ * `none` < `error` < `warn` < `info` < `log` < `debug`.
+ */
+module.exports = {
+  error: (message) => write('error', message),
+  warn: (message) => write('warn', message),
+  info: (message) => write('info', message),
+  log: (message) => write('log', message),
+  debug: (message) => write('debug', message),
+};
+
+/**
+ * Format the current date as `YYYY-MM-DD`. Used for daily log file names.
+ * @returns {string} Formatted date
+ */
 function date() {
   return formatDate(Date.now()).YYYY_MM_DD;
 }
 
+/**
+ * Format the current date and time as `YYYY-MM-DD hh:mm:ss`.
+ * @returns {string} Formatted date and time
+ */
 function fullTime() {
-  return date() + ' ' + time();
+  const formatted = formatDate(Date.now());
+  return `${formatted.YYYY_MM_DD} ${formatted.hh_mm_ss}`;
 }
 
+/**
+ * Build zero-padded date and time strings from a timestamp.
+ * @param {number} timestamp Unix timestamp in milliseconds
+ * @returns {{YYYY_MM_DD: string, hh_mm_ss: string}} Formatted date parts
+ */
 function formatDate(timestamp) {
-  if (!timestamp) return false;
-  const formattedDate = {};
   const dateObject = new Date(timestamp);
-  formattedDate.year = dateObject.getFullYear();
-  formattedDate.month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
-  formattedDate.date = ('0' + dateObject.getDate()).slice(-2);
-  formattedDate.hours = ('0' + dateObject.getHours()).slice(-2);
-  formattedDate.minutes = ('0' + dateObject.getMinutes()).slice(-2);
-  formattedDate.seconds = ('0' + dateObject.getSeconds()).slice(-2);
-  formattedDate.YYYY_MM_DD = formattedDate.year + '-' + formattedDate.month + '-' + formattedDate.date;
-  formattedDate.YYYY_MM_DD_hh_mm = formattedDate.year + '-' + formattedDate.month + '-' + formattedDate.date + ' ' + formattedDate.hours + ':' + formattedDate.minutes;
-  formattedDate.hh_mm_ss = formattedDate.hours + ':' + formattedDate.minutes + ':' + formattedDate.seconds;
-  return formattedDate;
+
+  const year = dateObject.getFullYear();
+  const month = `0${dateObject.getMonth() + 1}`.slice(-2);
+  const day = `0${dateObject.getDate()}`.slice(-2);
+  const hours = `0${dateObject.getHours()}`.slice(-2);
+  const minutes = `0${dateObject.getMinutes()}`.slice(-2);
+  const seconds = `0${dateObject.getSeconds()}`.slice(-2);
+
+  return {
+    YYYY_MM_DD: `${year}-${month}-${day}`,
+    hh_mm_ss: `${hours}:${minutes}:${seconds}`,
+  };
 }

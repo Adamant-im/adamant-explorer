@@ -21,10 +21,9 @@ async function getTransaction(transactionId, error, success) {
 
     const result = {};
 
-    result.transaction = await transactions.getConfirmedTransaction(transactionId)
-      .catch(() => {
-        return transactions.getUnconfirmedTransaction(transactionId);
-      });
+    result.transaction = await transactions.getConfirmedTransaction(transactionId).catch(() => {
+      return transactions.getUnconfirmedTransaction(transactionId);
+    });
 
     result.transaction = await helpers.processTransaction(result.transaction);
 
@@ -52,9 +51,11 @@ async function getUnconfirmedTransactions(error, success) {
 
     result.transactions = await transactions.getUnconfirmedTransactions();
 
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 
@@ -86,11 +87,16 @@ async function getLastTransactions(error, success) {
 
     const unconfirmedTransactions = await transactions.getUnconfirmedTransactions();
 
-    result.transactions = helpers.concatenateTransactions(result.transactions, unconfirmedTransactions);
+    result.transactions = helpers.concatenateTransactions(
+      result.transactions,
+      unconfirmedTransactions,
+    );
 
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 
@@ -122,11 +128,16 @@ async function getLastTransfers(error, success) {
 
     const unconfirmedTransactions = await transactions.getUnconfirmedTransactions();
 
-    result.transactions = helpers.concatenateTransactions(result.transactions, unconfirmedTransactions);
+    result.transactions = helpers.concatenateTransactions(
+      result.transactions,
+      unconfirmedTransactions,
+    );
 
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 
@@ -141,48 +152,25 @@ async function getLastTransfers(error, success) {
 }
 
 /**
- * Get transactions with given params
- * @param {Object} query
- * @param {Function} error
- * @param {Function} success
- * @returns {Promise<*>}
+ * Get transactions of an address or an advanced search query.
+ * @param {Object} query Explorer request query
+ * @param {Function} error Callback for the error response
+ * @param {Function} success Callback for the success response
+ * @returns {Promise<*>} Result of the invoked callback
  */
 async function getTransactionsByAddress(query, error, success) {
   try {
     const result = {};
-    result.transactions = [];
 
-    const data = helpers.normalizeTransactionParams(query);
+    result.transactions = await transactions.getTransactions(
+      helpers.normalizeTransactionParams(query),
+    );
 
-    await Promise.all(data.map((async (query, i) => {
-      let errorMessage;
-      let txs;
-
-      try {
-        txs = await transactions.getTransactions(query);
-      } catch (err) {
-        errorMessage = err;
-      }
-
-      txs.forEach((transaction) => {
-        if (helpers.indexOfById(result.transactions, transaction) < 0) {
-          result.transactions.push(transaction);
-        }
-      });
-
-      if (i === data.length - 1) {
-        if (!(result.transactions > 0 || !errorMessage)) {
-          return error({
-            success: false,
-            error: 'Response was unsuccessful',
-          });
-        }
-      }
-    })));
-
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 
@@ -197,54 +185,33 @@ async function getTransactionsByAddress(query, error, success) {
 }
 
 /**
- * Get transactions without clutter with given params
- * @param {Object} query
- * @param {Function} error
- * @param {Function} success
- * @returns {Promise<*>}
+ * Get transfer transactions of an address, including in-chat transfers.
+ * @param {Object} query Explorer request query
+ * @param {Function} error Callback for the error response
+ * @param {Function} success Callback for the success response
+ * @returns {Promise<*>} Result of the invoked callback
  */
 async function getTransfersByAddress(query, error, success) {
   try {
     const result = {};
-    result.transactions = [];
 
-    const data = helpers.normalizeTransactionParams(query);
+    const normalized = helpers.normalizeTransactionParams(query);
 
-    await Promise.all(data.map((async (query, i) => {
-      if (query['or:senderId'] && query['and:recipientId']) {
-        query['and:inId'] = query['or:senderId'];
-        query['and:recipientId'] = undefined;
-        query['or:senderId'] = undefined;
-      }
+    // The sender-or-recipient pair collapses into the node's `inId`
+    // condition, which matches both directions in a single filter
+    if (normalized.or?.senderId && normalized.and?.recipientId) {
+      normalized.and.inId = normalized.or.senderId;
+      delete normalized.and.recipientId;
+      delete normalized.or.senderId;
+    }
 
-      let errorMessage;
-      let txs;
+    result.transactions = await transactions.getTransfers(normalized);
 
-      try {
-        txs = await transactions.getTransfers(query);
-      } catch (err) {
-        errorMessage = err;
-      }
-
-      txs.forEach((transaction) => {
-        if (helpers.indexOfById(result.transactions, transaction) < 0) {
-          result.transactions.push(transaction);
-        }
-      });
-
-      if (i === data.length - 1) {
-        if (!(result.transactions.length > 0 || !errorMessage)) {
-          return error({
-            success: false,
-            error: 'Response was unsuccessful',
-          });
-        }
-      }
-    })));
-
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 
@@ -280,10 +247,11 @@ async function getTransactionsByBlock(query, error, success) {
 
     result.transactions = await transactions.getTransactionsByBlock(query);
 
-
-    result.transactions = await Promise.all(result.transactions.map(async (transaction) => {
-      return await helpers.processTransaction(transaction);
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (transaction) => {
+        return await helpers.processTransaction(transaction);
+      }),
+    );
 
     result.success = true;
 

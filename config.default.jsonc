@@ -5,59 +5,40 @@
   /** Port to listen on **/
   "port": 6040,
 
-  /** ADAMANT node list **/
+  /** ADAMANT node list. Provide several independently operated nodes
+      running ADAMANT Node v0.10.0 or newer **/
   "nodes_adm": [
-    "https://bid.adamant.im",
     "http://localhost:36666",
+    "https://bid.adamant.im",
     "https://endless.adamant.im",
-    "https://clown.adamant.im",
-    "https://unusual.adamant.im",
-    "https://debate.adamant.im",
-    "http://23.226.231.225:36666",
-    "http://5.161.53.74:36666",
-    "https://lake.adamant.im"
+    "https://node2.blockchain2fa.io",
+    "https://sunshine.adamant.im",
+    "http://184.94.215.92:45555"
   ],
 
-  /** FreeGeoIP server parameters **/
+  /** FreeGeoIP service parameters. Used by the Network Monitor for
+      peer geo-location, see the README for setup instructions **/
   "freegeoip": {
     "host": "127.0.0.1",
     "port": 8080
   },
 
-  /** Redis server parameters **/
+  /** Redis server parameters. Redis caches API responses **/
   "redis": {
     "username": "",
     "password": "",
     "host": "127.0.0.1",
     "port": 6379,
-    "cacheTTL": 20 /* Time in seconds to store cache in Redis */
+    "cacheTTL": 20 /* Time in seconds to keep cached API responses in Redis */
   },
 
-  /** The software will use verbosity according to log_level.
-      It can be none < error < warn < info < log.
-    **/
+  /** Logging verbosity threshold: none < error < warn < info < log **/
   "log_level": "log",
 
-  /** Exchange rates service parameters **/
+  /** Exchange rates service parameters. ADM rates will be provided by
+      the currencyinfo service, see https://github.com/Adamant-im/currencyinfo **/
   "exchangeRates": {
     "enabled": false,
-    "updateInterval": 30000
-  },
-
-  /** Market watcher service parameters **/
-  "marketWatcher": {
-    "enabled": false,
-    "candles": {
-      "updateInterval": 30000
-    },
-    "orders": {
-      "updateInterval": 15000
-    }
-  },
-
-  /** Proposals service parameters **/
-  "proposals": {
-    "enabled": false,
-    "updateInterval": 600000
+    "updateInterval": 30000 /* Time in ms between rate updates */
   }
 }

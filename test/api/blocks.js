@@ -5,8 +5,7 @@ const params = {
   height: 1,
   id: '13096746075322409574',
   id2: '3848898435758454900',
-  generatorPublicKey:
-    '2efef768fc41949aaf5124d7a3663ae843fec87c930494ce37a54d83383b634d',
+  generatorPublicKey: '2efef768fc41949aaf5124d7a3663ae843fec87c930494ce37a54d83383b634d',
   totalAmount: 100000000,
   totalFee: 0,
 };

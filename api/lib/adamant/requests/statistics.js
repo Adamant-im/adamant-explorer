@@ -1,37 +1,39 @@
-const api = require('./api');
 const axios = require('axios');
+const api = require('./api');
 const config = require('../../../../modules/configReader');
 
-function getPeers(offset, limit) {
-  return new Promise((resolve, reject) => {
-    api.get('peers', {orderBy: 'ip:asc', offset, limit})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+/**
+ * Get a page of peers known to the node.
+ * @param {number} offset Number of peers to skip
+ * @param {number} limit Maximum number of peers to return
+ * @returns {Promise<Array>} List of peers
+ * @throws {string} Node error message when the request fails
+ */
+async function getPeers(offset, limit) {
+  const response = await api.getPeers({ orderBy: 'ip:asc', offset, limit });
 
-        resolve(response.data.peers);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.peers;
 }
 
-function getFreegeoip(ip) {
-  return new Promise((resolve, reject) => {
-    axios.get(`http://${config.freegeoip.host}:${config.freegeoip.port}/json/${ip}`)
-      .then((response) => {
-        if (response.status !== 200) {
-          reject(undefined);
-        }
+/**
+ * Get geo information for an IP address from the local freegeoip service.
+ *
+ * The service is self-hosted, see the README. Replacing freegeoip with
+ * a maintained geo-location source is tracked as a separate issue.
+ * @param {string} ip IPv4 address of a peer
+ * @returns {Promise<Object>} Geo data: country, city, coordinates, and more
+ * @throws {Error} Network error when the freegeoip service is unreachable
+ */
+async function getFreegeoip(ip) {
+  const response = await axios.get(
+    `http://${config.freegeoip.host}:${config.freegeoip.port}/json/${ip}`,
+  );
 
-        resolve(response.data);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.data;
 }
 
 module.exports = {

@@ -31,29 +31,19 @@ describe('Common API', function () {
     });
   });
 
-  // Exchange functions are disabled. Expect it to fail
-  describe.skip('GET /api/getPriceTicker', function () {
-    it('should be ok', function (done) {
+  describe('GET /api/getPriceTicker', function () {
+    it('should answer whether exchange rates are enabled', function (done) {
       getPriceTicker((err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.LSK.BTC').to.be.a.number;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.LSK.EUR').to.be.a.number;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.LSK.USD').to.be.a.number;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.LSK.CNY').to.be.a.number;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.BTC.USD').to.be.a.number;
-        testUtils
-          .expect(res.body)
-          .to.have.deep.property('tickers.BTC.EUR').to.be.a.number;
+        testUtils.expect(res.body).to.have.property('success');
+
+        if (res.body.success) {
+          // Exchange rates are enabled: tickers are grouped as tickers[base][quote]
+          testUtils.expect(res.body).to.have.property('tickers').to.be.an('object');
+        } else {
+          // Exchange rates are disabled in the config
+          testUtils.expect(res.body).to.have.property('error');
+        }
+
         done();
       });
     });

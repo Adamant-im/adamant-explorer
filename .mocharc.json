@@ -1,0 +1,5 @@
+{
+  "spec": "test/index.js",
+  "timeout": 30000,
+  "slow": 5000
+}

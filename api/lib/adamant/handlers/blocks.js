@@ -19,10 +19,12 @@ async function getLastBlocks(n, error, success) {
     result.pagination = helpers.pagination(n, height);
 
     result.blocks = await blocks.getBlocks(helpers.offset(n));
-    result.blocks = await Promise.all(result.blocks.map(async (b) => {
-      b.delegate = await delegates.getDelegate(b.generatorPublicKey);
-      return b;
-    }));
+    result.blocks = await Promise.all(
+      result.blocks.map(async (b) => {
+        b.delegate = await delegates.getDelegate(b.generatorPublicKey);
+        return b;
+      }),
+    );
     result.blocks = helpers.map(result.blocks);
 
     result.success = true;

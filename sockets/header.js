@@ -3,28 +3,35 @@ const commonHandler = require('../api/lib/adamant/handlers/common');
 const async = require('async');
 const logger = require('../utils/log');
 
+/**
+ * Header socket namespace. Periodically emits the network status
+ * and exchange rates shown in the page header.
+ * @param {Object} app Express application
+ * @param {Function} connectionHandler Shared socket connection life cycle handler
+ * @param {Object} socket Socket.IO namespace
+ */
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
   let data = {};
-  let tmpData = {};
-  const connection = new connectionHandler('Header: ', socket, this);
+
+  new connectionHandler('Header:', socket, this);
 
   const running = {
-    'getBlockStatus': false,
-    'getPriceTicker': false,
-    'getDelegateProposals': false,
+    getBlockStatus: false,
+    getPriceTicker: false,
   };
 
   this.onInit = function () {
     this.onConnect(); // Prevents data wipe
 
-    async.parallel([
-        getBlockStatus,
-        getPriceTicker,
-      ],
+    async.parallel(
+      [getBlockStatus, getPriceTicker],
       function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          // A failed request must not leave the header empty forever:
+          // retry until the initial data set is collected
+          log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
+          setTimeout(() => this.onInit(), 10000);
         } else {
           data.status = res[0];
           data.ticker = res[1];
@@ -34,14 +41,11 @@ module.exports = function (app, connectionHandler, socket) {
 
           newInterval(0, 10000, emitData);
         }
-      }.bind(this));
-
+      }.bind(this),
+    );
   };
 
   this.onConnect = function () {
-    log('info', 'Emitting existing delegate proposals');
-    socket.emit('delegateProposals', tmpData.proposals);
-
     log('info', 'Emitting existing data');
     socket.emit('data', data);
   };
@@ -107,10 +111,8 @@ module.exports = function (app, connectionHandler, socket) {
   const emitData = function () {
     const thisData = {};
 
-    async.parallel([
-        getBlockStatus,
-        getPriceTicker,
-      ],
+    async.parallel(
+      [getBlockStatus, getPriceTicker],
       function (err, res) {
         if (err) {
           log('error', 'Error retrieving: ' + err);
@@ -122,6 +124,7 @@ module.exports = function (app, connectionHandler, socket) {
           log('info', 'Emitting data');
           socket.emit('data', thisData);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 };

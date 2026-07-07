@@ -26,7 +26,35 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - If an item contains two or more sentences, end every sentence with a period
 - Keep documentation aligned with current code and passing validation commands
 - If documentation sources disagree, prefer current repository behavior and document the mismatch
-- Do not add project-specific technical guidance until the project documentation and current implementation have been refreshed
+
+## Project Layout
+
+- `app.js`: Express application, middleware, Redis response cache, and startup
+- `api/routes/`: HTTP API route definitions
+- `api/lib/adamant/requests/`: the only layer that talks to ADAMANT nodes, through `adamant-api`
+- `api/lib/adamant/handlers/` and `api/lib/adamant/helpers/`: response assembly and data shaping
+- `sockets/`: Socket.IO namespaces for live pages (header, Delegate Monitor, Network Monitor, Activity Graph)
+- `modules/configReader.js`: config loading and validation for `config.jsonc` / `config.default.jsonc`
+- `utils/`: logger, exchange rates, known addresses
+- `src/`: AngularJS 1.8 frontend bundled with webpack into `public/`
+- `webpack/`: build configuration
+- `test/`: Mocha API test suite that runs against a live explorer instance
+- `benchmark/`: API handler benchmarks
+
+## Technical Rules
+
+- Node.js 22.13 or newer; CommonJS on the backend, ES modules in `src/`
+- All node interaction must go through `adamant-api` (adamant-api-jsclient) in `api/lib/adamant/requests/`; do not call node endpoints with a raw HTTP client elsewhere
+- `adamant-api` responses are normalized: check `response.success`, read `response.errorMessage` on failure
+- Prettier formats the code (2-space indentation, single quotes); ESLint flat config in `eslint.config.mjs` must pass with no errors
+- Config files are JSONC parsed with `jsonminify` and `JSON.parse`: comments are allowed, trailing commas are not
+
+## Validation Commands
+
+- `npm run lint` and `npm run format:check` for static checks
+- `npm run build` for the frontend bundle
+- `npm start` to run the explorer; `node app.js dev` uses `config.test.jsonc`
+- `npm test` runs the API suite against a live explorer connected to the ADAMANT Testnet
 
 ## Markdown Rules For AI-Generated Docs
 

@@ -1,166 +1,113 @@
 const api = require('./api');
 
 /**
- * Get the latest block height
- * @returns {Promise<Number>}
+ * Get the current blockchain height.
+ * @returns {Promise<number>} Height of the last block
+ * @throws {string} Node error message when the request fails
  */
-function getBlockHeight() {
-  return new Promise((resolve, reject) => {
-    api.get('blocks/getHeight')
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getBlockHeight() {
+  const response = await api.getHeight();
 
-        response.data.success
-          ? resolve(response.data.height)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.height;
 }
 
 /**
- * Get block by block id
- * @param {Number} blockId
- * @returns {Promise<Object>} block and nodeTimestamp
+ * Get a block by its id.
+ * @param {string} blockId Block id
+ * @returns {Promise<{block: Object, nodeTimestamp: number}>} Block body and node timestamp
+ * @throws {string} Node error message when the request fails or the block is not found
  */
-function getBlockById(blockId) {
-  return new Promise((resolve, reject) => {
-    api.get('blocks/get', {id: blockId})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getBlockById(blockId) {
+  const response = await api.getBlock(blockId);
 
-        response.data.success
-          ? resolve({block: response.data.block, nodeTimestamp: response.data.nodeTimestamp})
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return { block: response.block, nodeTimestamp: response.nodeTimestamp };
 }
 
 /**
- * Get block by height
- * @param {Number} height
- * @returns {Promise<Object>} block and nodeTimestamp
+ * Get a block by its height.
+ * @param {number} height Block height
+ * @returns {Promise<{block: Object, nodeTimestamp: number}>} Block body and node timestamp
+ * @throws {string} Node error message when the request fails or no block exists at the height
  */
-function getBlockByHeight(height) {
-  return new Promise((resolve, reject) => {
-    api.get('blocks', {height})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getBlockByHeight(height) {
+  const response = await api.getBlocks({ height });
 
-        response.data.success && response.data.blocks.count !== 0
-          ? resolve({block: response.data.blocks[0], nodeTimestamp: response.data.nodeTimestamp})
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success || !response.blocks.length) {
+    throw response.errorMessage || `No block at height ${height}`;
+  }
+
+  return { block: response.blocks[0], nodeTimestamp: response.nodeTimestamp };
 }
 
 /**
- * Get latest blocks with given offset in descending order
- * @param {Number} offset
- * @param {Number} limit default is 20
- * @returns {Promise<Array>}
+ * Get the latest blocks in descending order by height.
+ * @param {number} offset Number of blocks to skip
+ * @param {number} [limit=20] Maximum number of blocks to return
+ * @returns {Promise<Array>} List of blocks
+ * @throws {string} Node error message when the request fails
  */
-function getBlocks(offset, limit = 20) {
-  return new Promise((resolve, reject) => {
-    api.get('blocks', {orderBy: 'height:desc', offset, limit})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getBlocks(offset, limit = 20) {
+  const response = await api.getBlocks({ orderBy: 'height:desc', offset, limit });
 
-        response.data.success
-          ? resolve(response.data.blocks)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.blocks;
 }
 
 /**
- * Get blocks status
- * @returns {Promise<Object>}
+ * Get blockchain network status: height, fee, milestone, reward, supply, and nethash.
+ * @returns {Promise<Object>} Network status payload
+ * @throws {string} Node error message when the request fails
  */
-function getBlockStatus() {
-  return new Promise((resolve, reject) => {
-    api.get('blocks/getStatus')
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getBlockStatus() {
+  const response = await api.getStatus();
 
-        response.data.success
-          ? resolve(response.data)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response;
 }
 
 /**
- * Get last block
- * @returns {Promise<Object>}
+ * Get the last forged block.
+ * @returns {Promise<Object>} Block body
+ * @throws {string} Node error message when the request fails or no blocks are returned
  */
-function getLastBlock() {
-  return new Promise((resolve, reject) => {
-    api.get('blocks', {orderBy: 'height:desc'})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getLastBlock() {
+  const response = await api.getBlocks({ orderBy: 'height:desc', limit: 1 });
 
-        if (response.data.blocks < 1) {
-          reject(response.errorMessage);
-        }
+  if (!response.success || !response.blocks.length) {
+    throw response.errorMessage || 'No blocks returned by the node';
+  }
 
-        response.data.success
-          ? resolve(response.data.blocks[0])
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.blocks[0];
 }
 
 /**
- * Get last blocks for given generator public key and limit
- * @param {String} publicKey
- * @returns {Promise<Array>}
+ * Get the latest blocks forged by the given delegate.
+ * @param {string} publicKey Delegate generator public key
+ * @returns {Promise<Array>} List of blocks, empty when the delegate has not forged yet
+ * @throws {string} Node error message when the request fails
  */
-function getLastBlocksByGeneratorPublicKey(publicKey) {
-  return new Promise((resolve, reject) => {
-    api.get('blocks', {orderBy: 'height:desc', generatorPublicKey: publicKey})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getLastBlocksByGeneratorPublicKey(publicKey) {
+  const response = await api.getBlocks({ orderBy: 'height:desc', generatorPublicKey: publicKey });
 
-        response.data.blocks = Array.isArray(response.data.blocks) ? response.data.blocks : [];
+  if (!response.success) {
+    throw response.errorMessage;
+  }
 
-        resolve(response.data.blocks);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return Array.isArray(response.blocks) ? response.blocks : [];
 }
 
 module.exports = {

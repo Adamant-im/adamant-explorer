@@ -10,7 +10,13 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('statisticsHandler.getBlocks ~> ' + String(data.volume.blocks) + ' blocks retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'statisticsHandler.getBlocks ~> ' +
+            String(data.volume.blocks) +
+            ' blocks retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -19,11 +25,18 @@ module.exports = function () {
     statisticsHandler.getLastBlock(
       (data) => {
         deferred.resolve();
-        logger.warn('statisticsHandler.getLastBlock ~> ' + ' Error retrieving block: ' + data.error);
+        logger.warn(
+          'statisticsHandler.getLastBlock ~> ' + ' Error retrieving block: ' + data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('statisticsHandler.getLastBlock ~> ' + ' block retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'statisticsHandler.getLastBlock ~> ' +
+            ' block retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -36,7 +49,13 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('statisticsHandler.getPeers ~> ' + (data.list.connected.length + data.list.disconnected.length) + ' peers retrieved in ' + String(deferred.elapsed), ' seconds');
+        logger.log(
+          'statisticsHandler.getPeers ~> ' +
+            (data.list.connected.length + data.list.disconnected.length) +
+            ' peers retrieved in ' +
+            String(deferred.elapsed),
+          ' seconds',
+        );
       },
     );
   };

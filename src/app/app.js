@@ -1,14 +1,11 @@
 import 'angular';
-import 'angular-ui-router';
+import '@uirouter/angularjs';
 import 'angular-resource';
 import 'angular-animate';
 import 'angular-ui-bootstrap';
 import 'angular-gettext';
-// import 'angular-advanced-searchbox'
-// import 'babel-polyfill';
 
 // styles
-import 'amstock3/amcharts/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'leaflet/dist/leaflet.css';
@@ -33,7 +30,6 @@ import '../components/activity-graph';
 import '../components/reserved-wallets';
 import '../components/home';
 import '../components/bread-crumb';
-import '../components/market-watcher';
 import '../components/network-monitor';
 
 import '../filters';
@@ -42,32 +38,30 @@ import '../directives';
 import './app-tools.module.js';
 import '../shared';
 
-const App = angular.module('adamant_explorer',[
-    'ngAnimate',
-    'ngResource',
-    'ui.router',
-    'ui.bootstrap',
-    'gettext',
-    // 'angular-advanced-searchbox',
-    'adamant_explorer.breadCrumb',
-    'adamant_explorer.filters',
-    'adamant_explorer.services',
-    'adamant_explorer.header',
-    'adamant_explorer.footer',
-    'adamant_explorer.blocks',
-    'adamant_explorer.transactions',
-    'adamant_explorer.address',
-    'adamant_explorer.delegate',
-    'adamant_explorer.topAccounts',
-    'adamant_explorer.search',
-    'adamant_explorer.tools',
-    'adamant_explorer.currency',
-    'adamant_explorer.activityGraph',
-    'adamant_explorer.delegateMonitor',
-    'adamant_explorer.home',
-    'adamant_explorer.reservedWallets',
-    'adamant_explorer.networkMonitor',
-    'adamant_explorer.marketWatcher'
+const App = angular.module('adamant_explorer', [
+  'ngAnimate',
+  'ngResource',
+  'ui.router',
+  'ui.bootstrap',
+  'gettext',
+  'adamant_explorer.breadCrumb',
+  'adamant_explorer.filters',
+  'adamant_explorer.services',
+  'adamant_explorer.header',
+  'adamant_explorer.footer',
+  'adamant_explorer.blocks',
+  'adamant_explorer.transactions',
+  'adamant_explorer.address',
+  'adamant_explorer.delegate',
+  'adamant_explorer.topAccounts',
+  'adamant_explorer.search',
+  'adamant_explorer.tools',
+  'adamant_explorer.currency',
+  'adamant_explorer.activityGraph',
+  'adamant_explorer.delegateMonitor',
+  'adamant_explorer.home',
+  'adamant_explorer.reservedWallets',
+  'adamant_explorer.networkMonitor',
 ]);
 
 export default App;

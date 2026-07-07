@@ -1,18 +1,8 @@
-const { ProvidePlugin } = require('webpack');
+const path = require('path');
 const { ContextReplacementPlugin } = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const path = require('path');
 
 const PATHS = require('./paths');
-
-/**
- * Utils
- */
-const removeEmpty = arr => arr.filter((p) => !!p);
-
-process.traceDeprecation = true;
 
 module.exports = {
   entry: {
@@ -21,47 +11,33 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: PATHS.public,
+    clean: true,
   },
   resolve: {
     alias: {
+      // The sigma package ships a prebuilt bundle only
       sigma: path.resolve(__dirname, '../node_modules/sigma/build/sigma.require.js'),
     },
   },
-  plugins: removeEmpty([
-    new CleanWebpackPlugin(),
+  plugins: [
     new CopyPlugin({
       patterns: [
-        {from: 'icons/adm-qr-invert.png', to: PATHS.public, context: `${PATHS.assets}`},
-        {from: 'favicon.ico', to: PATHS.public, context: `${PATHS.assets}/img`},
-        {from: 'leaflet/*.png', to: PATHS.public, context: `${PATHS.assets}/img/`},
-        {from: '*', to: PATHS.public, context: `${PATHS.assets}/icons/img`},
-        {from: 'index.html', to: PATHS.public, context: `${PATHS.app}`},
+        { from: 'icons/adm-qr-invert.png', to: PATHS.public, context: `${PATHS.assets}` },
+        { from: 'favicon.ico', to: PATHS.public, context: `${PATHS.assets}/img` },
+        { from: 'leaflet/*.png', to: PATHS.public, context: `${PATHS.assets}/img/` },
+        { from: '*', to: PATHS.public, context: `${PATHS.assets}/icons/img` },
+        { from: 'index.html', to: PATHS.public, context: `${PATHS.app}` },
       ],
     }),
-    new BundleAnalyzerPlugin({
-      openAnalyzer: false,
-      analyzerMode: 'static',
-    }),
-    new ProvidePlugin({
-      app: `exports?exports.default!${PATHS.app + 'app'}`,
-      $: path.resolve(__dirname, '../node_modules/jquery/dist/jquery.min.js'),
-    }),
+    // Bundle only the English moment locale
     new ContextReplacementPlugin(/moment[/\\]locale$/, /en/),
-  ]),
+  ],
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-          },
-        ],
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
@@ -84,18 +60,20 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(swf)$/,
+        test: /\.(png|jpg|gif)$/,
         type: 'asset/resource',
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
-        type: 'asset/resource',
-      },
-      {
-        test: /\/sigma.*\.js?$/,
+        // Sigma plugins expect the `sigma` variable in their scope.
+        // CommonJS injection keeps the prebuilt plugin files intact
+        test: /sigma[\\/]build[\\/]plugins[\\/].*\.js$/,
         use: [
           {
-            loader: 'imports-loader?sigma',
+            loader: 'imports-loader',
+            options: {
+              type: 'commonjs',
+              imports: ['single sigma sigma'],
+            },
           },
         ],
       },

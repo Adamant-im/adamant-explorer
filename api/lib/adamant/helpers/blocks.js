@@ -1,5 +1,5 @@
 /**
- * Get paginating for given n and height
+ * Build pagination info for the given offset and blockchain height
  * @param {Number} n
  * @param {Number} height
  * @returns {Object}

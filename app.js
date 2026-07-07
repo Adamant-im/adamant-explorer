@@ -1,13 +1,11 @@
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const { program } = require('commander');
-const path = require('path');
-const async = require('async');
-const split = require('split');
 const morgan = require('morgan');
 const compression = require('compression');
-const methodOverride = require('method-override');
+const split = require('split');
 const { Server } = require('socket.io');
 
 const routes = require('./api/routes');
@@ -22,56 +20,54 @@ const app = express();
 program
   .version(packageJson.version)
   .option('-p, --port <port>', 'listening port number')
-  .option('-h, --host <ip>', 'listening host name or ip')
+  .option('-h, --host <ip>', 'listening host name or IP address')
   .parse(process.argv);
 
-app.set('host', program?.host ?? config.host);
-app.set('port', program?.port ?? config.port);
+const cliOptions = program.opts();
 
-if (program?.redisPort) {
-  config.redis.port = program.redisPort;
-}
+app.set('host', cliOptions.host ?? config.host);
+app.set('port', cliOptions.port ?? config.port);
+
 const client = require('./redis')(config);
 
-app.candles = new utils.candles(config, client);
 app.exchange = new utils.exchange(config);
-app.orders = new utils.orders(config, client);
 
 app.set('version', packageJson.version);
 app.set('strict routing', true);
-app.set(
-  'freegeoip address',
-  `http://${config.freegeoip.host}:${config.freegeoip.port}`,
-);
 app.set('exchange enabled', config.exchangeRates.enabled);
 
+// Security headers. The CSP allows only self-hosted resources, the explorer's
+// own WebSocket endpoint, OpenStreetMap tiles for the network map, and Google Fonts.
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-XSS-Protection', '1; mode=block');
-  const ws_src = `ws://${req.get('host')} wss://${req.get('host')}`;
+
+  const wsSrc = `ws://${req.get('host')} wss://${req.get('host')}`;
+
   res.setHeader(
     'Content-Security-Policy',
     "frame-ancestors 'none'; default-src 'self'; connect-src 'self' " +
-    ws_src +
-    "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
+      wsSrc +
+      "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
   );
+
   return next();
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Share the Redis client with routes through the request object
 app.locals.redis = client;
 app.use((req, res, next) => {
   req.redis = client;
   return next();
 });
 
+// Route request logs by status: errors to the error log, the rest to the info log
 app.use(
   morgan('combined', {
-    skip: (req, res) => {
-      return parseInt(res.statusCode) < 400;
-    },
+    skip: (req, res) => res.statusCode < 400,
     stream: split().on('data', (data) => {
       logger.error(data);
     }),
@@ -79,9 +75,7 @@ app.use(
 );
 app.use(
   morgan('combined', {
-    skip: (req, res) => {
-      return parseInt(res.statusCode) >= 400;
-    },
+    skip: (req, res) => res.statusCode >= 400,
     stream: split().on('data', (data) => {
       logger.info(data);
     }),
@@ -90,53 +84,35 @@ app.use(
 
 app.use(compression());
 
-app.use(methodOverride('X-HTTP-Method-Override'));
-
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  }),
-);
-
+// The API is public and read-only, so allow cross-origin GET requests
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+  return next();
 });
 
-app.use((req, res, next) => {
-  if (req.originalUrl.split('/')[1] !== 'api') {
+// Cache lookup: serve a cached API response when one exists
+app.use(async (req, res, next) => {
+  if (!req.originalUrl.startsWith('/api')) {
     return next();
   }
 
-  logger.info(req.originalUrl);
-
-  if (req.originalUrl === undefined) {
+  if (cache.cacheIgnoreList.includes(req.originalUrl)) {
     return next();
   }
 
-  if (cache.cacheIgnoreList.indexOf(req.originalUrl) >= 0) {
-    return next();
-  } else {
-    req.redis.get(req.originalUrl, (err, json) => {
-      if (err) {
-        logger.info(err);
-        return next();
-      } else if (json) {
-        try {
-          json = JSON.parse(json);
-        } catch (e) {
-          return next();
-        }
+  try {
+    const json = await req.redis.get(req.originalUrl);
 
-        return res.json(json);
-      } else {
-        return next();
-      }
-    });
+    if (json) {
+      return res.json(JSON.parse(json));
+    }
+  } catch (error) {
+    logger.warn(`Cache: Failed to read ${req.originalUrl}: ${error}`);
   }
+
+  return next();
 });
 
 logger.info('Loading routes...');
@@ -145,63 +121,45 @@ routes(app);
 
 logger.info('Routes loaded');
 
+// Cache store: routes that support caching call next() with the response in req.json
 app.use((req, res, next) => {
-  logger.info(req.originalUrl.split('/')[1]);
-
-  if (req.originalUrl.split('/')[1] !== 'api') {
+  if (!req.originalUrl.startsWith('/api')) {
     return next();
   }
 
-  if (req.originalUrl === undefined) {
-    return next();
+  if (!cache.cacheIgnoreList.includes(req.originalUrl)) {
+    const ttl = cache.cacheTTLOverride[req.originalUrl] ?? config.redis.cacheTTL;
+
+    req.redis
+      .set(req.originalUrl, JSON.stringify(req.json), { expiration: { type: 'EX', value: ttl } })
+      .catch((error) => {
+        logger.warn(`Cache: Failed to store ${req.originalUrl}: ${error}`);
+      });
   }
 
-  if (cache.cacheIgnoreList.indexOf(req.originalUrl) >= 0) {
-    return res.json(req.json);
-  } else {
-    req.redis.set(req.originalUrl, JSON.stringify(req.json), (err) => {
-      if (err) {
-        logger.info(err);
-      } else {
-        const ttl = cache.cacheTTLOverride[req.originalUrl] || config.redis.cacheTTL;
-
-        req.redis.sendCommand(['EXPIRE', req.originalUrl, ttl]);
-      }
-    });
-
-    return res.json(req.json);
-  }
+  return res.json(req.json);
 });
 
-app.get('*', (req, res, next) => {
-  if (req.url.indexOf('api') !== 1) {
-    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  } else {
+// Serve the single-page application for any non-API path
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) {
     return next();
   }
+
+  return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-async.parallel(
-  [
-    (cb) => {
-      app.exchange.loadRates();
-      cb(null);
-    },
-  ],
-  () => {
-    const server = app.listen(app.get('port'), app.get('host'), (err) => {
-      if (err) {
-        logger.info(err);
-      } else {
-        logger.info(
-          'Adamant Explorer started at ' +
-          app.get('host') +
-          ':' +
-          app.get('port'),
-        );
-        const io = new Server(server);
-        require('./sockets')(app, io);
-      }
-    });
-  },
-);
+// Initial rates load runs in the background; the periodic update
+// is scheduled by the Exchange constructor
+app.exchange.loadRates();
+
+const server = app.listen(app.get('port'), app.get('host'), (err) => {
+  if (err) {
+    logger.error(`Failed to start ADAMANT Explorer: ${err}`);
+  } else {
+    logger.info(`ADAMANT Explorer started at ${app.get('host')}:${app.get('port')}`);
+
+    const io = new Server(server);
+    require('./sockets')(app, io);
+  }
+});

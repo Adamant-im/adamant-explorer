@@ -1,218 +1,141 @@
 const api = require('./api');
 
 /**
- * Get delegate info by public key
- * @param {String} publicKey
- * @param {Boolean?} rejectUnsuccessful
- * @returns {Promise<Object|null>}
+ * Get delegate info by public key.
+ * @param {string} publicKey Delegate public key
+ * @param {boolean} [rejectUnsuccessful] Throw instead of resolving with `null`
+ *   when the account is not a delegate
+ * @returns {Promise<Object|null|undefined>} Delegate body, `null` when the account
+ *   is not a delegate, or `undefined` when no public key is given
+ * @throws {string} Node error message when `rejectUnsuccessful` is set and no delegate is found
  */
-function getDelegate(publicKey, rejectUnsuccessful) {
-  return new Promise((resolve, reject) => {
-    if (!publicKey) {
-      resolve(undefined);
-    }
+async function getDelegate(publicKey, rejectUnsuccessful) {
+  if (!publicKey) {
+    return undefined;
+  }
 
-    api.get('delegates/get', {publicKey})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+  const response = await api.getDelegate({ publicKey });
 
-        const delegate = response.data.success ? response.data.delegate : null;
+  const delegate = response.success ? response.delegate : null;
 
-        if (rejectUnsuccessful && delegate === null) {
-          reject(response.errorMessage);
-        }
+  if (rejectUnsuccessful && delegate === null) {
+    throw response.errorMessage;
+  }
 
-        resolve(delegate);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return delegate;
 }
 
 /**
- * Get votes info by address
- * @param {String} address
- * @returns {Promise<Array|null>}
+ * Get delegates the account votes for.
+ * @param {string} address Voter's ADAMANT address
+ * @returns {Promise<Array|null|undefined>} List of delegates, `null` when there are
+ *   no votes, or `undefined` when no address is given
  */
-function getVotes(address) {
-  return new Promise((resolve, reject) => {
-    if (!address) {
-      resolve(undefined);
-    }
-    api.get('accounts/delegates', {address})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getVotes(address) {
+  if (!address) {
+    return undefined;
+  }
 
-        let votes;
-        if (response.data.success) {
-          votes =
-            response.data.delegates !== undefined &&
-            response.data.delegates !== null &&
-            response.data.delegates.length > 0
-              ? response.data.delegates
-              : null;
-        } else {
-          votes = null;
-        }
+  const response = await api.getVoteData(address);
 
-        resolve(votes);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    return null;
+  }
+
+  return response.delegates?.length ? response.delegates : null;
 }
 
 /**
- * Get voters info by public key
- * @param {String} publicKey
- * @returns {Promise<Array|null>}
+ * Get accounts that vote for a delegate.
+ * @param {string} publicKey Delegate public key
+ * @returns {Promise<Array|null>} List of voter accounts or `null` when there are none
  */
-function getVoters(publicKey) {
-  return new Promise((resolve, reject) => {
-    api.get('delegates/voters', {publicKey})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getVoters(publicKey) {
+  const response = await api.getVoters(publicKey);
 
-        let voters;
-        if (response.data.success) {
-          voters =
-            response.data.accounts !== undefined &&
-            response.data.accounts !== null &&
-            response.data.accounts.length > 0
-              ? response.data.accounts
-              : null;
-        } else {
-          voters = null;
-        }
+  if (!response.success) {
+    return null;
+  }
 
-        resolve(voters);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.accounts?.length ? response.accounts : null;
 }
 
 /**
- * Get forging activity of delegate by public key
- * @param {String} publicKey
- * @returns {Promise<Number>} forged or 0
+ * Get the total amount of ADM forged by a delegate.
+ * @param {string} publicKey Delegate generator public key
+ * @returns {Promise<string|number>} Forged amount in 1/10^8 ADM, `0` when unavailable
  */
-function getForged(publicKey) {
-  return new Promise((resolve, reject) => {
-    api.get('delegates/forging/getForgedByAccount', {generatorPublicKey: publicKey})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getForged(publicKey) {
+  const response = await api.getDelegateStats(publicKey);
 
-        const forged = response.data.success ? response.data.forged : 0;
-
-        resolve(forged);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  return response.success ? response.forged : 0;
 }
 
 /**
- * Get active delegates
- * @returns {Promise<Object>}
+ * Get the 101 active delegates ordered by rank.
+ * @returns {Promise<Object>} Payload with `delegates` and `totalCount`
+ * @throws {string} Node error message when the request fails
  */
-function getActive() {
-  return new Promise((resolve, reject) => {
-    api.get('delegates', {orderBy: 'rate:asc', limit: 101})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getActive() {
+  const response = await api.getDelegates({ orderBy: 'rate:asc', limit: 101 });
 
-        response.data.success
-          ? resolve(response.data)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response;
 }
 
 /**
- * Get 20 standby delegates with given offset
- * @param {Number} offset
- * @param {Number} limit
- * @returns {Promise<Array>}
+ * Get standby delegates, ordered by rank.
+ * @param {number} offset Number of delegates to skip, at least 101
+ * @param {number} limit Maximum number of delegates to return
+ * @returns {Promise<Object>} Payload with `delegates` and `totalCount`
+ * @throws {string} Node error message when the request fails
  */
-function getStandby(offset, limit) {
-  return new Promise((resolve, reject) => {
-    api.get('delegates', {orderBy: 'rate:asc', limit, offset})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getStandby(offset, limit) {
+  const response = await api.getDelegates({ orderBy: 'rate:asc', limit, offset });
 
-        response.data.success
-          ? resolve(response.data)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response;
 }
 
 /**
- * Get delegate address by username
- * @param {String} params e.g. 'adm_official_pool'
- * @returns {Promise<String>}
+ * Find a delegate address by username.
+ * @param {string} username Delegate username, e.g. `adm_official_pool`
+ * @returns {Promise<string>} Delegate ADAMANT address
+ * @throws {string} `'Delegate not found'` or a node error message
  */
-function getSearch(params) {
-  return new Promise((resolve, reject) => {
-    api.get('delegates/search', {q: params, limit: 1})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getSearch(username) {
+  const response = await api.searchDelegates(username);
 
-        !response.data.delegates || !response.data.delegates[0]
-          ? reject('Delegate not found')
-          : resolve(response.data.delegates[0].address);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  if (!response.delegates?.[0]) {
+    throw 'Delegate not found';
+  }
+
+  return response.delegates[0].address;
 }
 
 /**
- * Get next forgers
- * @returns {Promise<Array>}
+ * Get public keys of delegates that will forge next, in forging order.
+ * @returns {Promise<Array<string>>} List of delegate public keys
+ * @throws {string} Node error message when the request fails
  */
-function getNextForgers() {
-  return new Promise((resolve, reject) => {
-    api.get('delegates/getNextForgers', {limit: 101})
-      .then((response) => {
-        if (response.details.status !== 200) {
-          reject(response.errorMessage);
-        }
+async function getNextForgers() {
+  const response = await api.getNextForgers(101);
 
-        response.data.success
-          ? resolve(response.data.delegates)
-          : reject(response.errorMessage);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.delegates;
 }
 
 module.exports = {

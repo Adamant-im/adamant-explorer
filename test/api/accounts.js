@@ -53,9 +53,7 @@ describe('Accounts API', function () {
   }
 
   function checkTopAccount(id) {
-    testUtils
-      .expect(id)
-      .to.have.all.keys('address', 'balance', 'publicKey', 'knowledge');
+    testUtils.expect(id).to.have.all.keys('address', 'balance', 'publicKey', 'knowledge');
   }
 
   /*Define api endpoints to test */

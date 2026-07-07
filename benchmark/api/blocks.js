@@ -11,21 +11,32 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('blocksHandler.getLastBlocks ~> ' + data.blocks.length + ' blocks retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'blocksHandler.getLastBlocks ~> ' +
+            data.blocks.length +
+            ' blocks retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
 
   this.getBlock = (deferred) => {
     blocksHandler.getBlock(
-      {blockId: '10491613424735062732'},
+      { blockId: '10491613424735062732' },
       (data) => {
         deferred.resolve();
         logger.warn('blocksHandler.getBlock ~> ' + ' Error retrieving block: ' + data.error);
       },
       (data) => {
         deferred.resolve();
-        logger.log('blocksHandler.getBlock ~> ' + ' block retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'blocksHandler.getBlock ~> ' +
+            ' block retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -38,7 +49,12 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('blocksHandler.getBlockStatus ~> ' + 'status retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'blocksHandler.getBlockStatus ~> ' +
+            'status retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };

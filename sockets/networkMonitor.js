@@ -5,25 +5,25 @@ const logger = require('../utils/log');
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
   let intervals = [];
-  const connection = new connectionHandler('Network Monitor:', socket, this);
+  new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
-    'getlastBlock': false,
-    'getBlocks': false,
-    'getPeers': false,
+    getlastBlock: false,
+    getBlocks: false,
+    getPeers: false,
   };
 
   this.onInit = function () {
     this.onConnect();
 
-    async.parallel([
-        getLastBlock,
-        getBlocks,
-        getPeers,
-      ],
+    async.parallel(
+      [getLastBlock, getBlocks, getPeers],
       function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          // A failed request must not leave the monitor empty forever:
+          // retry until the initial data set is collected
+          log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
+          setTimeout(() => this.onInit(), 10000);
         } else {
           data.lastBlock = res[0];
           data.blocks = res[1];
@@ -37,7 +37,8 @@ module.exports = function (app, connectionHandler, socket) {
           newInterval(1, 300000, emitData2);
           newInterval(2, 5000, emitData3);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 
   this.onConnect = function () {
@@ -121,9 +122,8 @@ module.exports = function (app, connectionHandler, socket) {
   const emitData1 = function () {
     const thisData = {};
 
-    async.parallel([
-        getLastBlock,
-      ],
+    async.parallel(
+      [getLastBlock],
       function (err, res) {
         if (err) {
           log('error', 'Error retrieving: ' + err);
@@ -133,15 +133,15 @@ module.exports = function (app, connectionHandler, socket) {
           log('info', 'Emitting data-1');
           socket.emit('data1', thisData);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 
   const emitData2 = function () {
     const thisData = {};
 
-    async.parallel([
-        getBlocks,
-      ],
+    async.parallel(
+      [getBlocks],
       function (err, res) {
         if (err) {
           log('error', 'Error retrieving: ' + err);
@@ -151,15 +151,15 @@ module.exports = function (app, connectionHandler, socket) {
           log('info', 'Emitting data-2');
           socket.emit('data2', thisData);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 
   const emitData3 = function () {
     const thisData = {};
 
-    async.parallel([
-        getPeers,
-      ],
+    async.parallel(
+      [getPeers],
       function (err, res) {
         if (err) {
           log('error', 'Error retrieving: ' + err);
@@ -169,7 +169,7 @@ module.exports = function (app, connectionHandler, socket) {
           log('info', 'Emitting data-3');
           socket.emit('data3', thisData);
         }
-      }.bind(this));
+      }.bind(this),
+    );
   };
 };
-

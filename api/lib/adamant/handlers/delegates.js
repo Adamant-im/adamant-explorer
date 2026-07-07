@@ -14,10 +14,12 @@ async function getActive(error, success) {
   try {
     const result = await delegates.getActive();
     result.delegates = helpers.parseDelegates(result.delegates);
-    result.delegates = await Promise.all(result.delegates.map(async (delegate) => {
-      delegate.forged = await delegates.getForged(delegate.publicKey);
-      return delegate;
-    }));
+    result.delegates = await Promise.all(
+      result.delegates.map(async (delegate) => {
+        delegate.forged = await delegates.getForged(delegate.publicKey);
+        return delegate;
+      }),
+    );
 
     result.success = true;
 
@@ -42,12 +44,12 @@ async function getStandby(n, error, success) {
   try {
     const limit = 20;
     const offset = parseInt(n);
-    const actualOffset = (isNaN(offset)) ? 101 : offset + 101;
+    const actualOffset = isNaN(offset) ? 101 : offset + 101;
 
     const result = await delegates.getStandby(actualOffset, limit);
 
     result.delegates = helpers.parseDelegates(result.delegates);
-    result.totalCount = (result.totalCount - 101);
+    result.totalCount = result.totalCount - 101;
     result.pagination = helpers.pagination(result.totalCount, offset, limit);
 
     result.success = true;
@@ -68,16 +70,18 @@ async function getStandby(n, error, success) {
  * @param {Function} success
  * @returns {Promise<*>}
  */
-async function getLatestRegistrations (error, success) {
+async function getLatestRegistrations(error, success) {
   try {
     const result = {};
 
     result.transactions = await transactions.getRegistrationTransactions();
 
-    result.transactions = await Promise.all(result.transactions.map(async (tx) => {
-      tx.delegate = await delegates.getDelegate(tx.senderPublicKey, true);
-      return tx;
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (tx) => {
+        tx.delegate = await delegates.getDelegate(tx.senderPublicKey, true);
+        return tx;
+      }),
+    );
 
     result.success = true;
 
@@ -103,10 +107,12 @@ async function getLatestVotes(error, success) {
 
     result.transactions = await transactions.getVoteTransactions();
 
-    result.transactions = await Promise.all(result.transactions.map(async (tx) => {
-      tx.delegate = await delegates.getDelegate(tx.senderPublicKey);
-      return tx;
-    }));
+    result.transactions = await Promise.all(
+      result.transactions.map(async (tx) => {
+        tx.delegate = await delegates.getDelegate(tx.senderPublicKey);
+        return tx;
+      }),
+    );
 
     result.success = true;
 

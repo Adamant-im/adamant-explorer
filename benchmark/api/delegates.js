@@ -10,7 +10,13 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('delegatesHandler.getActive ~> ' + data.delegates.length + ' delegates retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'delegatesHandler.getActive ~> ' +
+            data.delegates.length +
+            ' delegates retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -20,11 +26,19 @@ module.exports = function () {
       0,
       (data) => {
         deferred.resolve();
-        logger.warn('delegatesHandler.getStandby ~> ' + ' Error retrieving delegates: ' + data.error);
+        logger.warn(
+          'delegatesHandler.getStandby ~> ' + ' Error retrieving delegates: ' + data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('delegatesHandler.getStandby ~> ' + data.delegates.length + ' delegates retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'delegatesHandler.getStandby ~> ' +
+            data.delegates.length +
+            ' delegates retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -33,11 +47,21 @@ module.exports = function () {
     delegatesHandler.getLatestRegistrations(
       (data) => {
         deferred.resolve();
-        logger.warn('delegatesHandler.getLatestRegistrations ~> ' + ' Error retrieving registrations: ' + data.error);
+        logger.warn(
+          'delegatesHandler.getLatestRegistrations ~> ' +
+            ' Error retrieving registrations: ' +
+            data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('delegatesHandler.getLatestRegistrations ~> ' + data.transactions.length + ' registrations retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'delegatesHandler.getLatestRegistrations ~> ' +
+            data.transactions.length +
+            ' registrations retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -46,11 +70,19 @@ module.exports = function () {
     delegatesHandler.getLatestVotes(
       (data) => {
         deferred.resolve();
-        logger.warn('delegatesHandler.getLatestVotes ~> ' + ' Error retrieving votes: ' + data.error);
+        logger.warn(
+          'delegatesHandler.getLatestVotes ~> ' + ' Error retrieving votes: ' + data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('delegatesHandler.getLatestVotes ~> ' + data.transactions.length + ' votes retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'delegatesHandler.getLatestVotes ~> ' +
+            data.transactions.length +
+            ' votes retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -63,7 +95,12 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.log('delegatesHandler.getLastBlock ~> ' + ' block retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'delegatesHandler.getLastBlock ~> ' +
+            ' block retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };

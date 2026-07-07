@@ -2,17 +2,23 @@ const transactionsHandler = require('../../api/lib/adamant/handlers/transactions
 const logger = require('../../utils/log');
 
 module.exports = function () {
-
   this.getTransaction = (deferred) => {
     transactionsHandler.getTransaction(
       '9372665649431258697',
       (data) => {
         deferred.resolve();
-        logger.warn('transactionsHandler.getTransaction ~> ' + ' Error retrieving transaction: ' + data.error);
+        logger.warn(
+          'transactionsHandler.getTransaction ~> ' + ' Error retrieving transaction: ' + data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('transactionsHandler.getTransaction ~> ' + ' transaction retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'transactionsHandler.getTransaction ~> ' +
+            ' transaction retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -21,11 +27,21 @@ module.exports = function () {
     transactionsHandler.getUnconfirmedTransactions(
       (data) => {
         deferred.resolve();
-        logger.warn('transactionsHandler.getUnconfirmedTransactions ~> ' + ' Error retrieving transactions: ' + data.error);
+        logger.warn(
+          'transactionsHandler.getUnconfirmedTransactions ~> ' +
+            ' Error retrieving transactions: ' +
+            data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('transactionsHandler.getUnconfirmedTransactions ~> ' + data.transactions.length + ' transactions retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'transactionsHandler.getUnconfirmedTransactions ~> ' +
+            data.transactions.length +
+            ' transactions retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -34,11 +50,21 @@ module.exports = function () {
     transactionsHandler.getLastTransactions(
       (data) => {
         deferred.resolve();
-        logger.warn('transactionsHandler.getLastTransactions ~> ' + ' Error retrieving transactions: ' + data.error);
+        logger.warn(
+          'transactionsHandler.getLastTransactions ~> ' +
+            ' Error retrieving transactions: ' +
+            data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('transactionsHandler.getLastTransactions ~> ' + data.transactions.length + ' transactions retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'transactionsHandler.getLastTransactions ~> ' +
+            data.transactions.length +
+            ' transactions retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -52,11 +78,21 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.warn('transactionsHandler.getTransactionsByAddress ~> ' + ' Error retrieving transactions: ' + data.error);
+        logger.warn(
+          'transactionsHandler.getTransactionsByAddress ~> ' +
+            ' Error retrieving transactions: ' +
+            data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('transactionsHandler.getTransactionsByAddress ~> ' + data.transactions.length + ' transactions retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'transactionsHandler.getTransactionsByAddress ~> ' +
+            data.transactions.length +
+            ' transactions retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
@@ -70,11 +106,21 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.warn('transactionsHandler.getTransactionsByBlock ~> ' + ' Error retrieving transactions: ' + data.error);
+        logger.warn(
+          'transactionsHandler.getTransactionsByBlock ~> ' +
+            ' Error retrieving transactions: ' +
+            data.error,
+        );
       },
       (data) => {
         deferred.resolve();
-        logger.log('transactionsHandler.getTransactionsByBlock ~> ' + data.transactions.length + ' transactions retrieved in ' + String(deferred.elapsed) + ' seconds');
+        logger.log(
+          'transactionsHandler.getTransactionsByBlock ~> ' +
+            data.transactions.length +
+            ' transactions retrieved in ' +
+            String(deferred.elapsed) +
+            ' seconds',
+        );
       },
     );
   };
