@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppRedirect = angular.module('lisk_explorer.redirect', []);
+const AppRedirect = angular.module('adamant_explorer.redirect', []);
 
 export default AppRedirect;

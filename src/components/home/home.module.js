@@ -1,5 +1,5 @@
 import 'angular';
 
-const AppHome = angular.module('lisk_explorer.home', []);
+const AppHome = angular.module('adamant_explorer.home', []);
 
 export default AppHome;

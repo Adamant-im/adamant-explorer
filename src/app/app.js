@@ -1,16 +1,13 @@
 import 'angular';
-import 'angular-ui-router';
+import '@uirouter/angularjs';
 import 'angular-resource';
 import 'angular-animate';
 import 'angular-ui-bootstrap';
 import 'angular-gettext';
-// import 'angular-advanced-searchbox'
-// import 'babel-polyfill';
 
 // styles
-import 'amstock3/amcharts/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'font-awesome/css/font-awesome.css';
+import 'font-awesome/css/font-awesome.min.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 // import 'angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css'
@@ -33,7 +30,6 @@ import '../components/activity-graph';
 import '../components/reserved-wallets';
 import '../components/home';
 import '../components/bread-crumb';
-import '../components/market-watcher';
 import '../components/network-monitor';
 
 import '../filters';
@@ -42,32 +38,30 @@ import '../directives';
 import './app-tools.module.js';
 import '../shared';
 
-const App = angular.module('lisk_explorer',[
-    'ngAnimate',
-    'ngResource',
-    'ui.router',
-    'ui.bootstrap',
-    'gettext',
-    // 'angular-advanced-searchbox',
-    'lisk_explorer.breadCrumb',
-    'lisk_explorer.filters',
-    'lisk_explorer.services',
-    'lisk_explorer.header',
-    'lisk_explorer.footer',
-    'lisk_explorer.blocks',
-    'lisk_explorer.transactions',
-    'lisk_explorer.address',
-    'lisk_explorer.delegate',
-    'lisk_explorer.topAccounts',
-    'lisk_explorer.search',
-    'lisk_explorer.tools',
-    'lisk_explorer.currency',
-    'lisk_explorer.activityGraph',
-    'lisk_explorer.delegateMonitor',
-    'lisk_explorer.home',
-    'lisk_explorer.reservedWallets',
-    'lisk_explorer.networkMonitor',
-    'lisk_explorer.marketWatcher'
+const App = angular.module('adamant_explorer', [
+  'ngAnimate',
+  'ngResource',
+  'ui.router',
+  'ui.bootstrap',
+  'gettext',
+  'adamant_explorer.breadCrumb',
+  'adamant_explorer.filters',
+  'adamant_explorer.services',
+  'adamant_explorer.header',
+  'adamant_explorer.footer',
+  'adamant_explorer.blocks',
+  'adamant_explorer.transactions',
+  'adamant_explorer.address',
+  'adamant_explorer.delegate',
+  'adamant_explorer.topAccounts',
+  'adamant_explorer.search',
+  'adamant_explorer.tools',
+  'adamant_explorer.currency',
+  'adamant_explorer.activityGraph',
+  'adamant_explorer.delegateMonitor',
+  'adamant_explorer.home',
+  'adamant_explorer.reservedWallets',
+  'adamant_explorer.networkMonitor',
 ]);
 
 export default App;

@@ -41,7 +41,7 @@
                                         <a data-ng-href="/block/{{vm.lastBlock.id}}">{{vm.lastBlock.id}}</a>
                                     </p>
                                     <p class="text-muted">
-                                        <span class="lisk">{{vm.lastBlock.totalAmount + vm.lastBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
+                                        <span class="adamant">{{vm.lastBlock.totalAmount + vm.lastBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
                                         <span class="num-trans">from {{vm.lastBlock.numberOfTransactions || 0}} transactions</span>
                                     </p>
                                     <p class="text-muted">{{vm.lastBlock.timestamp | timeAgo}}</p>
@@ -67,7 +67,7 @@
                                         <a data-ng-href="/block/{{vm.bestBlock.id}}">{{vm.bestBlock.id}}</a>
                                     </p>
                                     <p class="text-muted">
-                                        <span class="lisk">{{vm.bestBlock.totalAmount + vm.bestBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
+                                        <span class="adamant">{{vm.bestBlock.totalAmount + vm.bestBlock.totalFee || 0 | currency:$root.currency:$root.decimalPlaces}} {{$root.currency.symbol}}</span>
                                         <span class="num-trans">from {{vm.bestBlock.numberOfTransactions || 0}} transactions</span>
                                     </p>
                                     <p class="text-muted">{{vm.bestBlock.timestamp | timeAgo}}</p>

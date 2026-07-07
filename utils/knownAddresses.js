@@ -1,63 +1,87 @@
-'use strict';
-var logger = require('./logger');
+const logger = require('./log');
 
-module.exports = function () {
-    function KnownAddresses () {
-        this.addresses = {};
+// Address book of well-known ADAMANT accounts, loaded from known.json
+let addresses = {};
 
-        this.inTx = function (tx) {
-            if (tx.senderUsername) {
-                tx.knownSender = { owner : tx.senderUsername };
-            } else {
-                tx.knownSender = self.inAddress(tx.senderId);
-            }
-            if (tx.senderId === tx.recipientId) {
-                tx.recipientUsername = tx.senderUsername;
-            }
-            if (tx.recipientUsername) {
-                tx.knownRecipient = { owner : tx.recipientUsername };
-            } else {
-                tx.knownRecipient = self.inAddress(tx.recipientId);
-            }
-            return tx;
-        };
+/**
+ * Attach known-address info to a transaction.
+ *
+ * Sets `knownSender` and `knownRecipient` to `{owner}` objects when the
+ * counterparty is a delegate or a well-known address, or `null` otherwise.
+ * @param {Object} tx Transaction body
+ * @returns {Object} The same transaction with knowledge fields
+ */
+function inTx(tx) {
+  if (tx.senderUsername) {
+    tx.knownSender = { owner: tx.senderUsername };
+  } else {
+    tx.knownSender = inAddress(tx.senderId);
+  }
+  if (tx.senderId === tx.recipientId) {
+    tx.recipientUsername = tx.senderUsername;
+  }
+  if (tx.recipientUsername) {
+    tx.knownRecipient = { owner: tx.recipientUsername };
+  } else {
+    tx.knownRecipient = inAddress(tx.recipientId);
+  }
+  return tx;
+}
 
-        this.inAccount = function (account) {
-            if (account.username) {
-                return { owner : account.username };
-            } else {
-                return self.inAddress(account.address);
-            }
-        };
+/**
+ * Get known-address info for an account.
+ * @param {Object} account Account with `username` and `address` fields
+ * @returns {Object|null} `{owner}` when known, `null` otherwise
+ */
+function inAccount(account) {
+  if (account.username) {
+    return { owner: account.username };
+  }
 
-        this.inAddress = function (address) {
-            return self.addresses[address] || null;
-        };
+  return inAddress(account.address);
+}
 
-        this.inDelegate = function (delegate) {
-            return (delegate) ? { owner : delegate.username } : null;
-        };
+/**
+ * Look an address up in the known-address book.
+ * @param {string} address ADAMANT address
+ * @returns {Object|null} Knowledge entry when known, `null` otherwise
+ */
+function inAddress(address) {
+  return addresses[address] || null;
+}
 
-        this.load = function () {
-            try {
-                logger.info('KnownAddresses:', 'Loading known addresses...');
-                self.addresses = require('../known.json');
-            } catch (err) {
-                logger.error('KnownAddresses:', 'Error loading known.json:', err.message);
-                self.addresses = {};
-            }
+/**
+ * Get known-address info for a delegate.
+ * @param {Object|null} delegate Delegate body
+ * @returns {Object|null} `{owner}` when a delegate is given, `null` otherwise
+ */
+function inDelegate(delegate) {
+  return delegate ? { owner: delegate.username } : null;
+}
 
-            var length = Object.keys(self.addresses).length.toString();
-            logger.info('KnownAddresses:', length, 'known addresses loaded');
-            return self.addresses;
-        };
+/**
+ * Load the known-address book from known.json.
+ * Failures are not fatal: the explorer works without knowledge data.
+ * @returns {Object} Loaded address book
+ */
+function load() {
+  try {
+    logger.info('Known Addresses: Loading known addresses...');
+    addresses = require('../known.json');
+  } catch (err) {
+    logger.error(`Known Addresses: Failed to load known.json: ${err.message}`);
+    addresses = {};
+  }
 
-        // Private
+  logger.info(`Known Addresses: ${Object.keys(addresses).length} known addresses loaded`);
+  return addresses;
+}
 
-        var self = this;
+load();
 
-        this.load(); // Load on initialization
-    }
-
-    return new KnownAddresses();
+module.exports = {
+  inTx,
+  inAccount,
+  inAddress,
+  inDelegate,
 };

@@ -1,193 +1,159 @@
-# ADAMANT Blockchain Explorer
+# ADAMANT Explorer
 
-ADAMANT is a Decentralized Blockchain Messenger. This repository holds an Explorer for ADAMANT blockchain. Deployed at:
+ADAMANT Explorer is the blockchain explorer for [ADAMANT](https://adamant.im) — a decentralized blockchain messenger. It shows blocks, transactions, accounts, delegates, and the network state of the ADAMANT blockchain.
+
+Deployed at:
 
 - [Clear web](https://explorer.adamant.im)
 - [Tor](http://srovpmanmrbmbqe63vp5nycsa3j3g6be3bz46ksmo35u5pw7jjtjamid.onion)
 
-Read [more about ADAMANT](https://adamant.im).
-
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-## Prerequisites
+## Features
 
-These programs and resources are required to install and run ADAMANT Explorer:
+- Blocks, transactions, accounts, and delegate pages with search
+- Delegate Monitor: forging status of active and standby delegates
+- Network Monitor: peers with versions, height, and geo location on a map
+- Activity Graph: live visualization of the latest blocks and transactions
+- Top Accounts and reserved wallets
+- Live updates over WebSocket
+- Redis-backed API response cache
+- All node interaction through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) with node health checks and failover
 
-- Node.js v10 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
+## Requirements
 
+- Node.js 22.13 or newer
+- Redis — caches API responses
+
+  ```sh
+  sudo apt-get install -y redis-server
   ```
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-  source ~/.nvm/nvm.sh
-  source ~/.profile
-  source ~/.bashrc
-  nvm i --lts=dubnium
-  ```
 
-- Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
+- Freegeoip (optional) — used by the Network Monitor for peer geo-location. Replacing this dependency with a maintained source is planned.
 
-  `sudo apt-get install -y redis-server`
-
-- Freegeoip (<https://github.com/fiorix/freegeoip>) — Freegeoip is used by the Network Monitor for IP address geo-location.
-
-  ```
+  ```sh
   wget https://github.com/fiorix/freegeoip/releases/download/v3.4.1/freegeoip-3.4.1-linux-amd64.tar.gz
   tar -zxf freegeoip-3.4.1-linux-amd64.tar.gz
   ln -s freegeoip-3.4.1-linux-amd64 freegeoip
   nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
   ```
 
-- Grunt.js (<http://gruntjs.com/>) — Grunt is used to run eslint and unit tests.
+- PM2 (recommended) — keeps the explorer process running and rotates logs
 
-  `sudo npm install -g grunt`
-  
-- Bower (<https://bower.io/>) — used for building dependencies.
-
-  `sudo npm install -g bower`
-
-- PM2 (<https://github.com/Unitech/pm2>) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Recommended)
-
-  `sudo npm install -g pm2`
-  
-- PM2-logrotate (<https://github.com/pm2-hive/pm2-logrotate>) — Manages PM2 logs
-
-  ```
+  ```sh
+  sudo npm install -g pm2
   pm2 install pm2-logrotate
   pm2 set pm2-logrotate:max_size 100M
   ```
 
-- Git (<https://github.com/git/git>) — Used for cloning and updating ADAMANT Explorer
+## Installation
 
-  `sudo apt-get install -y git`
-
-- Tool chain components — Used for compiling dependencies
-
-  `sudo apt-get install -y python build-essential automake autoconf libtool libpng-dev pngquant pkg-config redis`
-
-## Installation Steps
-
-Clone the ADAMANT Explorer Repository:
-
-```
+```sh
 git clone https://github.com/Adamant-im/adamant-explorer.git
 cd adamant-explorer
 npm install
 ```
 
-## Build Steps
+### Configuration
 
-### Frontend
+The explorer uses `config.jsonc` when present, and `config.default.jsonc` otherwise:
 
-The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
-For having a watcher to generate bundles continuously for all the changes of the code, run:
+```sh
+cp config.default.jsonc config.jsonc
+nano config.jsonc
+```
 
-`npm run start`
+Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically.
 
-And for generating the minified bundles in production environment run:
+### Build the frontend
 
-`npm run build`
+Build the production bundle into `public/`:
 
-## Configuration
+```sh
+npm run build
+```
 
-The default `config.js` file contains all of the configuration settings for ADAMANT Explorer. These options can be modified according to comments included in configuration file.
+During development, rebuild on every change:
 
-## Managing ADAMANT Explorer
+```sh
+npm run watch
+```
 
-To test that ADAMANT Explorer is configured correctly, run the following command:
+## Usage
 
-`node app.js`
+Check that the explorer is configured correctly:
 
-Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
+```sh
+npm start
+```
 
-Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
+Open <http://localhost:6040>, or replace `localhost` with the external IP address of the machine.
 
-`pm2 start pm2-explorer.json`
+Once verified, stop the process with `CTRL+C` and start it with PM2:
 
-After the process is started its runtime status and log location can be found by issuing this statement:
+```sh
+pm2 start pm2-explorer.json
+```
 
-`pm2 list`
+Runtime status and log locations:
 
-To stop Explorer after it has been started with `PM2`, issue the following command:
+```sh
+pm2 list
+```
 
-`pm2 stop adamant-explorer`
+Stop the explorer:
+
+```sh
+pm2 stop adamant-explorer
+```
 
 ## Tests
 
-Before running any tests, please ensure ADAMANT Explorer and ADAMANT Node are configured to run on the ADAMANT Testnet.
+The API test suite runs against a live explorer connected to the ADAMANT Testnet. Configure the explorer and a local node for testnet, start the explorer, and run:
 
-Replace **config.js** with **config.test** file from the **test** directory:
-
-`cp test/config.test ./config.js`
-
-Replace the **config.json** for the ADAMANT Node the corresponding file under the **test** directory:
-
-`cp test/config_lisk.json  /PATH_TO_ADAMANT_DIR/config.json`
-
-Then restart the ADAMANT Node (example):
-
-`pm2 restart /PATH_TO_ADAMANT_DIR/app.js`
-
-Launch ADAMANT Explorer (runs on port 6040):
-
-`pm2 start pm2-explorer.json`
-
-Run the test suite:
-
-`npm test`
-
-Run individual tests:
-
-```
-npm test -- test/api/accounts.js
-npm test -- test/api/transactions.js
+```sh
+npm test
 ```
 
-## End-to-end Tests
+Run other checks:
 
-### Setup for end-to-end tests:
-
-Do all setup steps from "Test" section of this README
-
-Make sure you have `wget` installed (it's used in `./e2e-test-setup.sh`). On Linux by default. On MacOS:
-```
-brew install wget
+```sh
+npm run lint
+npm run format:check
+npm run benchmark
 ```
 
-Setup protractor
+## Contribution
 
-```
-./node_modules/protractor/bin/webdriver-manager update
-```
+Contributions are welcome. Read the [contribution guidelines](./CONTRIBUTING.md) for development setup, validation, and pull request conventions.
 
-### Run end-to-end test suite:
+## Links
 
-```
-./e2e-test-setup.sh /PATH_TO_LISK_DIR
-npm run e2e-test -s
-```
-
-### Run one end-to-end test feature file:
-
-```
-npm run e2e-test -s -- --specs=features/address.feature
-```
+- [ADAMANT website](https://adamant.im) — the ADAMANT project and Messenger apps
+- [ADAMANT documentation](https://docs.adamant.im) — protocol and API docs
+- [ADAMANT node](https://github.com/Adamant-im/adamant) — ADM blockchain node software
+- [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) — JavaScript SDK used for node interaction
+- [AIPs](https://aips.adamant.im) — ADAMANT Improvement Proposals
+- [ADAMANT API schema](https://schema.adamant.im) — node API specification
+- [currencyinfo](https://github.com/Adamant-im/currencyinfo) — self-hosted crypto rates service, planned as the ADM rates source
 
 ## License
 
-Copyright © 2016-2017 Lisk Foundation ©2017-2018 ADAMANT Tech Labs
+Copyright © 2017-2026 ADAMANT developer community, ADAMANT Foundation, and ADAMANT Tech Labs
+Copyright © 2016-2017 Lisk Foundation
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the [GNU General Public License](https://github.com/adamant/adamant-explorer/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License](./LICENSE) along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-***
+---
 
 This program also incorporates work previously released with lisk-explorer `1.1.0` (and earlier) versions under the [MIT License](https://opensource.org/licenses/MIT). To comply with the requirements of that license, the following permission notice, applicable to those parts of the code only, is included below:
 
-Copyright © 2018 ADAMANT TECH LABS LP
+Copyright © 2016-2017 Lisk Foundation
 
-Copyright © 2016-2017 Lisk Foundation  
 Copyright © 2015 Crypti
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

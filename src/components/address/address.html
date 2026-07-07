@@ -68,7 +68,7 @@
                         <tr ng-if="vm.address.delegate || proposal">
                             <td><strong>Delegate</strong></td>
                             <td class="text-right">
-                                <a class="glyphicon glyphicon-user" data-ng-if="vm.address.delegate.username | proposal:$root.delegateProposals" data-ng-href="https://forum.lisk.io/viewtopic.php?f=48&t={{vm.address.delegate.username | proposal:$root.delegateProposals: 'topic'}}" title="{{vm.address.delegate.username | proposal:$root.delegateProposals: 'description'}}" target="_blank"></a>
+
                                 <a data-account-href="vm.address.delegate" data-type="delegate">{{vm.address.delegate.username}}</a>
                             </td>
                         </tr>
@@ -80,7 +80,7 @@
             </div>
         </div>
         <div class="col-md-3 text-center">
-            <qrcode size="200" data="adm:{{vm.address.address}}"></qrcode>
+            <qrcode size="200" data="https://msg.adamant.im?address={{vm.address.address}}"></qrcode>
             <br> (Scan for Address)
         </div>
     </div>

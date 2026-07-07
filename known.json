@@ -1,14 +1,50 @@
 {
-    "address"               : { "owner" : "owner", "description" : "description" },
-    "U13113937065479682572"  : { "owner" : "Genesis Account", "description" : "" },
-    "U2065436277795836384"  : { "description" : "ADAMANT", "owner" : "Development and Support" },
-    "U8842529089226485961" : { "description" : "ADAMANT", "owner" : "Marketing" },
-    "U8842068055848619621"  : { "description" : "ADAMANT", "owner" : "Investors" },
-    "U15423595369615486571" : { "description" : "ADAMANT", "owner" : "Adoption and Bounty" },
-    "U1973842998847463129" : { "description" : "ADAMANT", "owner" : "Donates" },
-    "U1835325601873095435"  : { "description" : "ADAMANT Foundation", "owner" : "Adoption (Hot wallet)" },
-    "U5875207477212018391" : { "description" : "ADAMANT Foundation", "owner" : "Adoption" },
-    "U8181868247557556851"  : { "description" : "ADAMANT Foundation", "owner" : "Marketing" },
-    "U9701591031505109687" : { "description" : "ADAMANT Foundation", "owner" : "Development" },
-    "U380651761819723095" : { "description" : "ADAMANT Foundation", "owner" : "Donates" }
+    "address": {
+        "owner": "owner",
+        "description": "description"
+    },
+    "U13113937065479682572": {
+        "owner": "Genesis Account",
+        "description": ""
+    },
+    "U2065436277795836384": {
+        "description": "ADAMANT",
+        "owner": "Development and Support"
+    },
+    "U8842529089226485961": {
+        "description": "ADAMANT",
+        "owner": "Marketing"
+    },
+    "U8842068055848619621": {
+        "description": "ADAMANT",
+        "owner": "Investors"
+    },
+    "U15423595369615486571": {
+        "description": "ADAMANT",
+        "owner": "Adoption and Bounty"
+    },
+    "U1973842998847463129": {
+        "description": "ADAMANT",
+        "owner": "Donates"
+    },
+    "U1835325601873095435": {
+        "description": "ADAMANT Foundation",
+        "owner": "Adoption (Hot wallet)"
+    },
+    "U5875207477212018391": {
+        "description": "ADAMANT Foundation",
+        "owner": "Adoption"
+    },
+    "U8181868247557556851": {
+        "description": "ADAMANT Foundation",
+        "owner": "Marketing"
+    },
+    "U9701591031505109687": {
+        "description": "ADAMANT Foundation",
+        "owner": "Development"
+    },
+    "U380651761819723095": {
+        "description": "ADAMANT Foundation",
+        "owner": "Donates"
+    }
 }

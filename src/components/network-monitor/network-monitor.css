@@ -1,4 +1,6 @@
-.big-details span.connected-peers,.big-details span.volume-amount,.big-details span.total-peers {
+.big-details span.connected-peers,
+.big-details span.volume-amount,
+.big-details span.total-peers {
   color: #5f696e;
 }
 
@@ -63,7 +65,7 @@ div.platforms .os-icon {
   height: 48px;
   line-height: 48px;
   background-size: 48px 48px;
-  opacity:0.9;
+  opacity: 0.9;
 }
 
 div.platforms span.windows-counter {
@@ -75,11 +77,11 @@ div.platforms span.mac-counter {
 }
 
 div.platforms span.linux-counter {
-  color: #EC2100;
+  color: #ec2100;
 }
 
 div.platforms span.freebsd-counter {
-  color: #FF3300;
+  color: #ff3300;
 }
 
 div.versions,
@@ -128,7 +130,7 @@ div.heights span.height-num {
 }
 
 div.heights span.height-best {
-  background-color: #7CB342;
+  background-color: #7cb342;
 }
 
 @media (max-width: 1200px) {
@@ -173,20 +175,19 @@ div.heights span.height-best {
 
 .peers .peer-state:before {
   font-size: 22px;
-  font-family: "Glyphicons Halflings";
+  font-family: 'Glyphicons Halflings';
 }
 
 .peers .state-2:before {
-  content: "\E084";
-  color: #7CB342;
+  content: '\E084';
+  color: #7cb342;
 }
 
 .peers .state-1:before {
-  content: "\E083";
+  content: '\E083';
   color: #5f696e;
 }
 
 .peers td .broadhash {
   max-width: 355px;
 }
-

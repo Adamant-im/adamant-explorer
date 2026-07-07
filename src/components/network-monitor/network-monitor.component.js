@@ -4,11 +4,11 @@ import template from './network-monitor.html';
 import './network-monitor.css';
 
 const NetworkMonitorConstructor = function (networkMonitor) {
-    networkMonitor(this);
+  networkMonitor(this);
 };
 
 AppNetworkMonitor.component('networkMonitor', {
-    template: template,
-    controller: NetworkMonitorConstructor,
-    controllerAs: 'vm'
+  template: template,
+  controller: NetworkMonitorConstructor,
+  controllerAs: 'vm',
 });
