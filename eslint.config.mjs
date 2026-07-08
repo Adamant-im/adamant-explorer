@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import globals from 'globals';
 import mochaPlugin from 'eslint-plugin-mocha';
+import pluginVue from 'eslint-plugin-vue';
 import prettierConfig from 'eslint-config-prettier';
 
 export default [
@@ -17,7 +18,6 @@ export default [
       'modules/**/*.js',
       'sockets/**/*.js',
       'utils/**/*.js',
-      'webpack/**/*.js',
       'test/**/*.js',
     ],
     languageOptions: {
@@ -32,28 +32,33 @@ export default [
       'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
     },
   },
+  // Frontend: Vue 3 single-file components and ES modules built with Vite
+  ...pluginVue.configs['flat/recommended'].map((config) => ({
+    ...config,
+    files: ['src/**/*.js', 'src/**/*.vue'],
+  })),
   {
-    // Frontend: AngularJS application bundled with webpack
-    files: ['src/**/*.js'],
+    files: ['src/**/*.js', 'src/**/*.vue'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        angular: 'readonly',
-        // Socket.IO client is loaded from a script tag served by the backend
-        io: 'readonly',
       },
-    },
-    rules: {
-      // Unused callback arguments document the interface in this callback-heavy code base
-      'no-unused-vars': ['error', { args: 'none', caughtErrors: 'none' }],
     },
   },
   {
-    // Mocha test suite
-    files: ['test/**/*.js'],
+    // Mocha suites: the API tests (CommonJS) and the frontend unit tests
+    // (ES modules); both run in Node with Mocha's BDD globals
+    files: ['test/**/*.js', 'test/**/*.mjs'],
     ...mochaPlugin.configs.recommended,
+    languageOptions: {
+      ...mochaPlugin.configs.recommended.languageOptions,
+      globals: {
+        ...globals.node,
+        ...mochaPlugin.configs.recommended.languageOptions?.globals,
+      },
+    },
     rules: {
       ...mochaPlugin.configs.recommended.rules,
       // Deliberate skips document node behavior that the explorer does not rely on

@@ -19,6 +19,7 @@ Deployed at:
 - Live updates over WebSocket
 - Redis-backed API response cache
 - All node interaction through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) with node health checks and failover
+- Vue 3 frontend (vue-router, Pinia) built with Vite; each page loads as its own chunk
 
 ## Requirements
 
@@ -73,10 +74,16 @@ Build the production bundle into `public/`:
 npm run build
 ```
 
-During development, rebuild on every change:
+During development, either rebuild on every change:
 
 ```sh
 npm run watch
+```
+
+Or use the Vite dev server with hot reload, which proxies `/api` and Socket.IO traffic to a backend running on `localhost:6040`:
+
+```sh
+npm run dev
 ```
 
 ## Usage
@@ -108,6 +115,12 @@ pm2 stop adamant-explorer
 ```
 
 ## Tests
+
+Frontend utility unit tests run in plain Node and need no services:
+
+```sh
+npm run test:unit
+```
 
 The API test suite runs against a live explorer connected to the ADAMANT Testnet. Configure the explorer and a local node for testnet, start the explorer, and run:
 
