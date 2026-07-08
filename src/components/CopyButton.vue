@@ -1,7 +1,7 @@
 <script setup>
 // Copy-to-clipboard button with a transient "Copied!" tooltip,
 // replacing the legacy clipboard.js dependency with the native API.
-import { ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 
 const props = defineProps({
   /** Text placed on the clipboard when the button is clicked. */
@@ -29,6 +29,10 @@ async function copy() {
     failed.value = false;
   }, 1500);
 }
+
+onBeforeUnmount(() => {
+  clearTimeout(hideTimer);
+});
 </script>
 
 <template>

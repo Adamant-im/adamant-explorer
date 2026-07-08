@@ -32,7 +32,7 @@ async function getLastBlocks(page) {
 
 watch(
   () => route.params.page,
-  (page) => getLastBlocks(parseInt(page) || 1),
+  (page) => getLastBlocks(parseInt(page, 10) || 1),
   { immediate: true },
 );
 </script>

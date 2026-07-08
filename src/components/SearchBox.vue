@@ -1,7 +1,7 @@
 <script setup>
 // Universal search: resolves a block id, transaction id, address, or
 // delegate name through `/api/search` and navigates to the matching page.
-import { ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { apiGet } from '../lib/api';
 
@@ -48,6 +48,10 @@ function showBadQuery() {
     badQuery.value = false;
   }, 2000);
 }
+
+onBeforeUnmount(() => {
+  clearTimeout(badQueryTimer);
+});
 </script>
 
 <template>
