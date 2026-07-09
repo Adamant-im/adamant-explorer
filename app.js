@@ -10,6 +10,8 @@ const { Server } = require('socket.io');
 
 const routes = require('./api/routes');
 const cache = require('./cache');
+const adamantApi = require('./api/lib/adamant/requests/api');
+const createAdamantApiReadinessMiddleware = require('./api/lib/adamant/middleware/readiness');
 const packageJson = require('./package.json');
 const utils = require('./utils');
 const logger = require('./utils/log');
@@ -114,6 +116,8 @@ app.use(async (req, res, next) => {
 
   return next();
 });
+
+app.use(createAdamantApiReadinessMiddleware(adamantApi));
 
 logger.info('Loading routes...');
 

@@ -69,7 +69,9 @@ describe('Statistics API', function () {
     }).timeout(10000);
   });
 
-  describe('GET /api/statistics/getBlocks', function () {
+  // Temporarily skipped: this endpoint pulls thousands of blocks from the node.
+  // The Explorer replacement work is tracked in Adamant-im/adamant-explorer#27.
+  describe.skip('GET /api/statistics/getBlocks', function () {
     it('should be ok', function (done) {
       getBlocks((err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;

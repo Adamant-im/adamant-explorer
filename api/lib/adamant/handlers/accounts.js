@@ -86,6 +86,9 @@ async function getTopAccounts(query, error, success) {
 
     query.offset = helpers.param(query.offset, 0);
     query.limit = helpers.param(query.limit, 100);
+    if (query.limit === 0) {
+      query.limit = 100;
+    }
 
     result.accounts = await accounts.getTopAccounts(query);
     result.accounts = await Promise.all(

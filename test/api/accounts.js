@@ -146,10 +146,11 @@ describe('Accounts API', function () {
       });
     });
 
-    it('using offset 100 and limit 50 should return 50', function (done) {
+    it('using offset 100 and limit 50 should return 0', function (done) {
       getTopAccounts('100', '50', (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body.accounts.length).to.equal(50);
+        // Node currently exposes only the first 100 top accounts to public clients.
+        testUtils.expect(res.body.accounts.length).to.equal(0);
         checkTopAccounts(res.body.accounts);
         done();
       });

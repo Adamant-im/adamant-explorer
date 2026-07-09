@@ -1,3 +1,4 @@
+const adamantApi = require('../api/lib/adamant/requests/api');
 const logger = require('../utils/log');
 
 /**
@@ -28,17 +29,17 @@ module.exports = function (app, io) {
    * @param {Object} object Module with `onInit`, `onConnect`, and `onDisconnect` hooks
    */
   const connectionHandler = function (name, ns, object) {
+    let initialized = false;
+
     ns.on('connection', (socket) => {
-      if (clients() <= 1) {
-        object.onInit();
-        logger.info(`${name} First connection`);
-      } else {
-        object.onConnect();
-        logger.info(`${name} New connection`);
-      }
+      handleConnection(socket).catch((error) => {
+        logger.error(`${name} Failed to initialize socket connection: ${error}`);
+      });
+
       socket.on('disconnect', () => {
         if (clients() <= 0) {
           object.onDisconnect();
+          initialized = false;
           logger.info(`${name} Closed connection`);
         }
       });
@@ -48,6 +49,31 @@ module.exports = function (app, io) {
     });
 
     // Private
+
+    const handleConnection = async function (socket) {
+      if (!adamantApi.isReady()) {
+        socket.emit('status', {
+          status: 'waiting',
+          message: 'Waiting for ADAMANT node health check',
+        });
+        logger.info(`${name} Waiting for ADAMANT API readiness`);
+      }
+
+      await adamantApi.waitForReady();
+
+      if (!ns.sockets.has(socket.id)) {
+        return;
+      }
+
+      if (!initialized) {
+        initialized = true;
+        object.onInit();
+        logger.info(`${name} First connection`);
+      } else {
+        object.onConnect();
+        logger.info(`${name} New connection`);
+      }
+    };
 
     const clients = function () {
       return ns.sockets.size;

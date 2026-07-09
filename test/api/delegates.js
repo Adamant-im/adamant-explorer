@@ -264,7 +264,7 @@ describe('Delegates API', function () {
       });
     }).timeout(20000);
 
-    it('using publicKey with no blocks should be ok', function (done) {
+    it.skip('using publicKey with no blocks should be ok (blocked by Adamant-im/adamant#258)', function (done) {
       getLastBlocks(params.noBlocksKey, '', (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
         testUtils.expect(res.body).to.have.property('blocks');
