@@ -1,5 +1,5 @@
 /**
- * Create middleware that delays node-backed API requests until the shared
+ * Create middleware that delays `/api` requests until the shared
  * ADAMANT API client finishes its startup health check.
  * @param {{isReady: Function, waitForReady: Function}} adamantApi Shared API client
  * @returns {Function} Express middleware
