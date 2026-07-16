@@ -1,4 +1,4 @@
-const { ACTIVE_DELEGATES, INITIAL_SUPPLY_BASE_UNITS } = require('../constants');
+const { ACTIVE_DELEGATES, INITIAL_SUPPLY_BASE_UNITS } = require('../constants.mjs');
 
 /** Convert a Node integer field to an exact base-unit value. */
 function integer(value, label) {

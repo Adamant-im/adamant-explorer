@@ -8,7 +8,7 @@ const {
   ACTIVE_DELEGATES,
   BLOCK_INTERVAL_MILLISECONDS,
   BLOCK_INTERVAL_SECONDS,
-} = require('../api/lib/adamant/constants');
+} = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
 const {
   getForgingSchedule,

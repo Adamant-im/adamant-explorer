@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import blockStatisticsHelpers from '../../api/lib/adamant/helpers/blockStatistics.js';
-import constants from '../../api/lib/adamant/constants.js';
+import * as constants from '../../api/lib/adamant/constants.mjs';
 
 const { RollingBlocksWindow } = blockStatisticsHelpers;
 const { BLOCK_INTERVAL_SECONDS } = constants;

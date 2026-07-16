@@ -1,5 +1,5 @@
 const api = require('./api');
-const { BLOCKS_PAGE_SIZE } = require('../constants');
+const { BLOCKS_PAGE_SIZE } = require('../constants.mjs');
 const logger = require('../../../../utils/log');
 
 /**

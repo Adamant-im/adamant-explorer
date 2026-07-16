@@ -1,6 +1,6 @@
 const async = require('async');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
-const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants');
+const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
@@ -12,7 +12,7 @@ module.exports = function (app, connectionHandler, socket) {
   new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
-    getlastBlock: false,
+    getLastBlock: false,
     getBlocks: false,
     getPeers: false,
   };

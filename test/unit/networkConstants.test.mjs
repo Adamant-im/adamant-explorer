@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import constants from '../../api/lib/adamant/constants.js';
+import * as constants from '../../api/lib/adamant/constants.mjs';
 
 describe('ADAMANT network constants', function () {
   it('derives the daily block window from the five-second slot interval', function () {

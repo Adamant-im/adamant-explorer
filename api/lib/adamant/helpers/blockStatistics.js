@@ -3,7 +3,7 @@ const {
   BLOCKS_PAGE_SIZE,
   BLOCK_STATISTICS_WINDOW_BLOCKS,
   BLOCK_STATISTICS_WINDOW_SECONDS,
-} = require('../constants');
+} = require('../constants.mjs');
 
 /** Aggregates volume and best-block statistics over a bounded recent window. */
 class BlocksStatistics {

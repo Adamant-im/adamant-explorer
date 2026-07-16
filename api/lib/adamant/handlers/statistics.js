@@ -8,7 +8,7 @@ const {
   BLOCK_INTERVAL_MILLISECONDS,
   BLOCKS_PAGE_SIZE,
   BLOCK_STATISTICS_WINDOW_BLOCKS,
-} = require('../constants');
+} = require('../constants.mjs');
 const logger = require('../../../../utils/log');
 
 const locator = new helpers.Locator();
@@ -193,6 +193,7 @@ async function persistPeerStatistics() {
 /** Fetch, classify, and enrich every peer page from the active Node. */
 async function collectPeerStatistics() {
   const peersStatistics = new helpers.PeersStatistics(locator);
+  const peers = [];
   const limit = 100;
   let offset = 0;
   let found = false;
@@ -201,7 +202,7 @@ async function collectPeerStatistics() {
     const data = await statistics.getPeers(offset, limit);
 
     if (data.length > 0) {
-      await peersStatistics.collect(data);
+      peers.push(...data);
     } else {
       found = true;
     }
@@ -209,6 +210,9 @@ async function collectPeerStatistics() {
     offset += limit;
   } while (!(found || offset > helpers.PeersStatistics.maxOffset));
 
+  // Buffer and enrich the complete snapshot once. Processing the cumulative
+  // peer buffer per page would duplicate earlier pages in the public payload.
+  await peersStatistics.collect(peers);
   peersStatistics.locator.updateCache(peersStatistics.ips);
   return peersStatistics.list;
 }

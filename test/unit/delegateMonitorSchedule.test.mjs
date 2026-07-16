@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import schedule from '../../sockets/delegateMonitorSchedule.js';
-import constants from '../../api/lib/adamant/constants.js';
+import * as constants from '../../api/lib/adamant/constants.mjs';
 
 const {
   getForgingSchedule,

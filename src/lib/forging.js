@@ -1,4 +1,5 @@
 import { epochToDate, round } from './format.js';
+import { INITIAL_SUPPLY_BASE_UNITS } from '../../api/lib/adamant/constants.mjs';
 
 /**
  * Delegate forging status logic, ported from the legacy `forgingStatus`
@@ -16,7 +17,6 @@ import { epochToDate, round } from './format.js';
 
 const REQUIRED_HISTORY_ROUNDS = 5;
 const NOT_FORGING_AFTER_MISSED_ROUNDS = 4;
-const INITIAL_SUPPLY_BASE_UNITS = 9800000000000000n;
 
 /**
  * Derives the forging status of an active delegate.
