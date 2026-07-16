@@ -1,14 +1,38 @@
 const async = require('async');
-const moment = require('moment');
 const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
+const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const forgingStatistics = require('../api/lib/adamant/helpers/forgingStatistics');
 const blocks = require('../api/lib/adamant/requests/blocks');
+const delegates = require('../api/lib/adamant/requests/delegates');
+const {
+  ACTIVE_DELEGATES,
+  BLOCK_INTERVAL_MILLISECONDS,
+  BLOCK_INTERVAL_SECONDS,
+} = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
+const {
+  getForgingSchedule,
+  getNextSlotRefreshDelay,
+  getRound,
+  getRoundDelegates,
+  moveForgingScheduleToSlot,
+} = require('./delegateMonitorSchedule');
+const {
+  getDelegateObservationState,
+  parseActiveDelegateState,
+  serializeActiveDelegateState,
+} = require('./delegateMonitorState');
+
+const STATUS_REFRESH_GRACE_MILLISECONDS = 25;
+const ACTIVE_DELEGATE_STATE_KEY = 'adamant-explorer:delegate-monitor:active:v1';
 
 module.exports = function (app, connectionHandler, socket) {
-  let intervals = [];
+  let timers = [];
+  let monitoring = false;
+  let unsubscribeFromBlocks = null;
   new connectionHandler('Delegate Monitor:', socket, this);
   const data = {};
-  // Only used in various calculations, will not be emitted directly
+  // Internal scheduling data that is not emitted directly
   const tmpData = {};
 
   const running = {
@@ -16,44 +40,52 @@ module.exports = function (app, connectionHandler, socket) {
     getLastBlock: false,
     getRegistrations: false,
     getVotes: false,
-    getLastBlocks: false,
     getNextForgers: false,
+    getForgingBaseline: false,
   };
 
   this.onInit = function () {
+    monitoring = true;
     this.onConnect();
 
     async.parallel(
       [
-        // We only call getLastBlock on init, later data.lastBlock will be updated from getLastBlocks
         getLastBlock,
         getActive,
         getRegistrations,
         getVotes,
         getNextForgers,
+        refreshForgingBaseline,
+        restoreActiveDelegateState,
       ],
       function (err, res) {
         if (err) {
-          // A failed request must not leave the monitor empty forever:
-          // retry until the initial data set is collected
+          // A failed request must not leave the monitor empty forever
           log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
-          setTimeout(() => this.onInit(), 10000);
+          scheduleRetry();
         } else {
-          tmpData.nextForgers = res[4];
+          tmpData.nextForgers = getForgingSchedule(res[4]);
 
           data.lastBlock = res[0];
           data.active = updateActive(res[1]);
           data.registrations = res[2];
           data.votes = res[3];
           data.nextForgers = cutNextForgers(10);
+          tmpData.forgingBaseline = res[5].baseline;
+          data.forgingTotals = {
+            success: true,
+            transactionFees: res[5].transactionFees,
+          };
 
-          log('info', 'Emitting new data');
-          socket.emit('data', data);
+          // Status data is emitted by the first coherent schedule/block refresh.
+          socket.emit('data', {
+            forgingTotals: data.forgingTotals,
+            registrations: data.registrations,
+            votes: data.votes,
+          });
 
-          getLastBlocks(data.active, true);
-
-          newInterval(0, 5000, emitData);
-          newInterval(1, 1000, getLastBlocks);
+          newSerializedLoop(0, BLOCK_INTERVAL_MILLISECONDS, refreshMetadata, 'metadata');
+          startMonitorUpdates();
         }
       }.bind(this),
     );
@@ -65,19 +97,17 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onDisconnect = function () {
-    for (let i = 0; i < intervals.length; i++) {
-      clearInterval(intervals[i]);
-    }
-    intervals = [];
-  };
+    monitoring = false;
 
-  const newInterval = function (i, delay, cb) {
-    if (intervals[i] !== undefined) {
-      return null;
-    } else {
-      intervals[i] = setInterval(cb, delay);
-      return intervals[i];
+    for (const timer of timers) {
+      clearInterval(timer);
     }
+
+    timers = [];
+
+    unsubscribeFromBlocks?.();
+    unsubscribeFromBlocks = null;
+    tmpData.statusRefreshQueued = false;
   };
 
   // Private
@@ -86,24 +116,237 @@ module.exports = function (app, connectionHandler, socket) {
     logger[level]('Delegate Monitor:' + msg);
   };
 
-  const cutNextForgers = function (count) {
-    const data = tmpData.nextForgers.delegates.slice(0, count);
+  /** Starts a polling loop whose delay begins after the previous run finishes. */
+  const newSerializedLoop = function (index, delay, callback, label) {
+    if (timers[index] !== undefined) {
+      return null;
+    }
 
-    data.forEach((publicKey, index) => {
-      const existing = findActiveByPublicKey(publicKey);
-      data[index] = existing;
+    const run = async () => {
+      if (!monitoring) {
+        return;
+      }
+
+      try {
+        await callback();
+      } catch (error) {
+        log('error', `Error retrieving ${label}: ${error}`);
+      }
+
+      if (monitoring) {
+        timers[index] = setTimeout(run, delay);
+      }
+    };
+
+    timers[index] = setTimeout(run, delay);
+    return timers[index];
+  };
+
+  const scheduleRetry = function () {
+    if (timers[3] !== undefined) {
+      return;
+    }
+
+    timers[3] = setTimeout(() => {
+      timers[3] = undefined;
+
+      if (monitoring) {
+        this.onInit();
+      }
+    }, 10000);
+  }.bind(this);
+
+  /** Loads status first, then starts bounded serialized refresh loops. */
+  const startMonitorUpdates = async function () {
+    try {
+      await statisticsHandler.ensureBlockStatistics();
+      await refreshRecentBlocks();
+    } catch (error) {
+      log('error', 'Error retrieving recent blocks: ' + error);
+    }
+
+    if (!monitoring) {
+      return;
+    }
+
+    if (!unsubscribeFromBlocks) {
+      unsubscribeFromBlocks = statisticsHandler.subscribeBlockStatistics(
+        handleBlockStatisticsUpdate,
+      );
+    }
+
+    scheduleNextStatusRefresh();
+  };
+
+  /** Align the next status refresh just after the absolute five-second slot boundary. */
+  const getNextStatusRefreshDelay = function () {
+    return getNextSlotRefreshDelay(Date.now(), STATUS_REFRESH_GRACE_MILLISECONDS);
+  };
+
+  /** Schedule one slot-aligned refresh; block events may bring it forward. */
+  const scheduleNextStatusRefresh = function () {
+    if (!monitoring || timers[1] !== undefined) {
+      return;
+    }
+
+    timers[1] = setTimeout(() => {
+      timers[1] = undefined;
+      emitPredictedSlot((tmpData.nextForgers?.currentSlot ?? -1) + 1);
+      requestStatusRefresh('slot');
+    }, getNextStatusRefreshDelay());
+  };
+
+  /**
+   * Emit the deterministic slot transition immediately, then let REST confirm it.
+   * @param {number} currentSlot Slot derived from the local timer or socket block
+   */
+  const emitPredictedSlot = function (currentSlot) {
+    if (
+      !Number.isInteger(currentSlot) ||
+      !tmpData.nextForgers?.orderedDelegates?.length ||
+      currentSlot <= tmpData.nextForgers.currentSlot ||
+      !data.active?.delegates?.length
+    ) {
+      return;
+    }
+
+    tmpData.nextForgers = moveForgingScheduleToSlot(tmpData.nextForgers, currentSlot);
+    tmpData.roundDelegates = getRoundDelegates(
+      tmpData.nextForgers,
+      statisticsHandler.getCachedBlocks(),
+    );
+    data.active.delegates.forEach((delegate) => updateDelegate(delegate, false));
+    data.nextForgers = cutNextForgers(10);
+
+    socket.emit('data', {
+      active: data.active,
+      lastBlock: data.lastBlock,
+      nextForgers: data.nextForgers,
+    });
+  };
+
+  /**
+   * Coalesce slot and block triggers into one serialized status refresh.
+   * A trigger received during a request causes exactly one follow-up refresh.
+   */
+  const requestStatusRefresh = function (source) {
+    if (!monitoring) {
+      return Promise.resolve();
+    }
+
+    if (timers[1] !== undefined) {
+      clearTimeout(timers[1]);
+      timers[1] = undefined;
+    }
+
+    if (tmpData.statusRefreshPromise) {
+      tmpData.statusRefreshQueued = true;
+      return tmpData.statusRefreshPromise;
+    }
+
+    const run = async () => {
+      do {
+        tmpData.statusRefreshQueued = false;
+
+        try {
+          await refreshRecentBlocks();
+        } catch (error) {
+          log('error', `Error retrieving recent blocks after ${source}: ${error}`);
+        }
+      } while (monitoring && tmpData.statusRefreshQueued);
+    };
+
+    const promise = run().finally(() => {
+      if (tmpData.statusRefreshPromise === promise) {
+        tmpData.statusRefreshPromise = null;
+      }
+
+      scheduleNextStatusRefresh();
     });
 
-    return data;
+    tmpData.statusRefreshPromise = promise;
+    return promise;
+  };
+
+  /** Refresh immediately when the shared accumulator receives a socket block. */
+  const handleBlockStatisticsUpdate = function (update) {
+    if (!monitoring || update.source?.startsWith('delegate-rest')) {
+      return;
+    }
+
+    const blockSlot = Math.floor(Number(update.lastBlock?.timestamp ?? 0) / BLOCK_INTERVAL_SECONDS);
+    emitPredictedSlot(blockSlot);
+    requestStatusRefresh(update.source ?? 'block');
+  };
+
+  const getNextForgerPublicKeys = function () {
+    return tmpData.nextForgers?.delegates ?? [];
+  };
+
+  /** Restore delegate observation boundaries before comparing the active roster. */
+  const restoreActiveDelegateState = async function () {
+    if (tmpData.activeDelegateStateLoaded) {
+      return;
+    }
+
+    tmpData.activeDelegateStateLoaded = true;
+
+    try {
+      const json = await app.locals.redis?.get(ACTIVE_DELEGATE_STATE_KEY);
+      const restored = json ? parseActiveDelegateState(json) : null;
+
+      if (restored) {
+        tmpData.activeDelegateState = restored;
+        tmpData.activeRosterKnown = true;
+        tmpData.activeDelegateStateJson = json;
+      }
+    } catch (error) {
+      log('warn', ` Failed to restore active delegate state: ${error}`);
+    }
+  };
+
+  /** Persist only roster changes and schedule transitions, without an expiry. */
+  const persistActiveDelegateState = function (activeDelegates) {
+    const json = serializeActiveDelegateState(activeDelegates);
+
+    tmpData.activeDelegateState = new Map(
+      activeDelegates.map((delegate) => [
+        delegate.publicKey,
+        {
+          activeSinceRound: delegate.activeSinceRound ?? null,
+          scheduledSinceRound: delegate.scheduledSinceRound ?? null,
+          isScheduled: delegate.isScheduled === true,
+        },
+      ]),
+    );
+    tmpData.activeRosterKnown = true;
+
+    if (!app.locals.redis || json === tmpData.activeDelegateStateJson) {
+      return;
+    }
+
+    tmpData.activeDelegateStateJson = json;
+    app.locals.redis.set(ACTIVE_DELEGATE_STATE_KEY, json).catch((error) => {
+      if (tmpData.activeDelegateStateJson === json) {
+        tmpData.activeDelegateStateJson = null;
+      }
+
+      log('warn', ` Failed to persist active delegate state: ${error}`);
+    });
+  };
+
+  const cutNextForgers = function (count) {
+    return getNextForgerPublicKeys().slice(0, count).map(findActiveByPublicKey).filter(Boolean);
   };
 
   const getActive = function (cb) {
     if (running.getActive) {
       return cb('getActive (already running)');
     }
+
     running.getActive = true;
     delegatesHandler.getActive(
-      (res) => {
+      () => {
         running.getActive = false;
         cb('Active');
       },
@@ -114,69 +357,182 @@ module.exports = function (app, connectionHandler, socket) {
     );
   };
 
-  const findActive = function (delegate) {
-    return data.active.delegates.find((d) => {
-      return d.publicKey === delegate.publicKey;
+  /** Load parsed active delegates through the callback-based handler. */
+  const getActiveState = function () {
+    return new Promise((resolve, reject) => {
+      getActive((error, result) => {
+        if (error) {
+          reject(new Error(error));
+        } else {
+          resolve(result);
+        }
+      });
     });
+  };
+
+  /**
+   * Load all delegate account totals around one stable completed-round height.
+   * Four bounded delegate pages replace one request per delegate.
+   * @returns {Promise<{baseline: Object, transactionFees: string}>} Fee baseline and current total
+   */
+  const refreshForgingBaseline = async function () {
+    if (running.getForgingBaseline) {
+      throw new Error('getForgingBaseline (already running)');
+    }
+
+    running.getForgingBaseline = true;
+
+    try {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const before = await blocks.getBlockStatus();
+        const [allDelegates, status, recentBlocks] = await Promise.all([
+          delegates.getAll(),
+          blocks.getBlockStatus(),
+          blocks.getBlocksWindow(ACTIVE_DELEGATES),
+        ]);
+
+        if (
+          forgingStatistics.getCreditedHeight(before.height) !==
+            forgingStatistics.getCreditedHeight(status.height) ||
+          Number(recentBlocks[0]?.height) !== Number(status.height)
+        ) {
+          continue;
+        }
+
+        const baseline = forgingStatistics.createForgingBaseline(
+          allDelegates.delegates,
+          status,
+          recentBlocks,
+        );
+        const transactionFees = forgingStatistics.projectTransactionFees(
+          baseline,
+          recentBlocks,
+          status.height,
+        );
+
+        return { baseline, transactionFees };
+      }
+
+      throw new Error('Could not obtain a stable all-delegate forging baseline');
+    } finally {
+      running.getForgingBaseline = false;
+    }
+  };
+
+  /** Project lifetime fees through the latest cached block. */
+  const updateTransactionFees = function (recentBlocks, height) {
+    if (!tmpData.forgingBaseline) {
+      return;
+    }
+
+    data.forgingTotals = {
+      success: true,
+      transactionFees: forgingStatistics.projectTransactionFees(
+        tmpData.forgingBaseline,
+        recentBlocks,
+        height,
+      ),
+    };
+  };
+
+  /** Refresh account-level totals after Node credits a completed round. */
+  const refreshCompletedRoundBaseline = async function () {
+    try {
+      const result = await refreshForgingBaseline();
+
+      if (!monitoring) {
+        return;
+      }
+
+      tmpData.forgingBaseline = result.baseline;
+      data.forgingTotals = {
+        success: true,
+        transactionFees: result.transactionFees,
+      };
+      socket.emit('data', { forgingTotals: data.forgingTotals });
+    } catch (error) {
+      log('error', `Error refreshing all-delegate forging totals: ${error}`);
+    }
+  };
+
+  const findActive = function (delegate) {
+    return data.active?.delegates?.find((item) => item.publicKey === delegate.publicKey);
   };
 
   const findActiveByPublicKey = function (publicKey) {
-    return data.active.delegates.find((d) => {
-      return d.publicKey === publicKey;
-    });
+    return data.active?.delegates?.find((delegate) => delegate.publicKey === publicKey);
   };
 
   const findActiveByBlock = function (block) {
-    return data.active.delegates.find((d) => {
-      return d.publicKey === block.generatorPublicKey;
-    });
+    return data.active?.delegates?.find(
+      (delegate) => delegate.publicKey === block.generatorPublicKey,
+    );
   };
 
   const updateDelegate = function (delegate, updateForgingTime) {
-    // Update delegate with forging time
     if (updateForgingTime) {
-      delegate.forgingTime = tmpData.nextForgers.delegates.indexOf(delegate.publicKey) * 10;
+      delegate.forgingTime =
+        getNextForgerPublicKeys().indexOf(delegate.publicKey) * BLOCK_INTERVAL_SECONDS;
     }
 
-    // Update delegate with info if it should forge in current round
-    delegate.isRoundDelegate = tmpData.roundDelegates.indexOf(delegate.publicKey) !== -1;
+    const wasScheduled = delegate.isScheduled;
+    const isScheduled = getNextForgerPublicKeys().includes(delegate.publicKey);
+    const networkRound = getRound(data.lastBlock?.block?.height ?? 0);
+
+    delegate.isRoundDelegate = (tmpData.roundDelegates ?? []).includes(delegate.publicKey);
+    delegate.isScheduled = isScheduled;
+
+    if (!isScheduled) {
+      delegate.scheduledSinceRound = null;
+    } else if (wasScheduled === false) {
+      // A delegate that has just entered the forging schedule needs its own
+      // observation window instead of inheriting older cached rounds.
+      delegate.scheduledSinceRound = networkRound;
+    }
+
     return delegate;
   };
 
   const updateActive = function (results) {
-    // Calculate list of delegates that should forge in current round
+    const hadActiveSnapshot = Boolean(data.active?.delegates) || tmpData.activeRosterKnown;
+    const networkRound = getRound(data.lastBlock?.block?.height ?? 0);
+
     tmpData.roundDelegates = getRoundDelegates(
-      tmpData.nextForgers.delegates,
-      data.lastBlock.block.height,
+      tmpData.nextForgers,
+      statisticsHandler.getCachedBlocks(),
     );
 
-    if (!data.active || !data.active.delegates) {
-      return results;
-    } else {
-      results.delegates.forEach((delegate) => {
-        const existing = findActive(delegate);
+    results.delegates = results.delegates.map((delegate) => {
+      const existing = findActive(delegate);
+      const persisted = tmpData.activeDelegateState?.get(delegate.publicKey);
 
-        if (existing) {
-          delegate = updateDelegate(delegate, true);
-        }
+      delegate.forged = delegate.forged ?? existing?.forged ?? 0;
+      Object.assign(
+        delegate,
+        getDelegateObservationState(existing, persisted, hadActiveSnapshot, networkRound),
+      );
 
-        if (existing && existing.blocks && existing.blocksAt) {
-          delegate.blocks = existing.blocks;
-          delegate.blocksAt = existing.blocksAt;
-        }
-      });
+      if (existing?.blocksAt) {
+        delegate.blocks = existing.blocks;
+        delegate.blocksAt = existing.blocksAt;
+      }
 
-      return results;
-    }
+      return updateDelegate(delegate, true);
+    });
+
+    persistActiveDelegateState(results.delegates);
+
+    return results;
   };
 
   const getLastBlock = function (cb) {
     if (running.getLastBlock) {
       return cb('getLastBlock (already running)');
     }
+
     running.getLastBlock = true;
     delegatesHandler.getLastBlock(
-      (res) => {
+      () => {
         running.getLastBlock = false;
         cb('LastBlock');
       },
@@ -191,9 +547,10 @@ module.exports = function (app, connectionHandler, socket) {
     if (running.getRegistrations) {
       return cb('getRegistrations (already running)');
     }
+
     running.getRegistrations = true;
     delegatesHandler.getLatestRegistrations(
-      (res) => {
+      () => {
         running.getRegistrations = false;
         cb('Registrations');
       },
@@ -208,9 +565,10 @@ module.exports = function (app, connectionHandler, socket) {
     if (running.getVotes) {
       return cb('getVotes (already running)');
     }
+
     running.getVotes = true;
     delegatesHandler.getLatestVotes(
-      (res) => {
+      () => {
         running.getVotes = false;
         cb('Votes');
       },
@@ -225,9 +583,10 @@ module.exports = function (app, connectionHandler, socket) {
     if (running.getNextForgers) {
       return cb('getNextForgers (already running)');
     }
+
     running.getNextForgers = true;
     delegatesHandler.getNextForgers(
-      (res) => {
+      () => {
         running.getNextForgers = false;
         cb('NextForgers');
       },
@@ -238,161 +597,146 @@ module.exports = function (app, connectionHandler, socket) {
     );
   };
 
-  const getLastBlocks = function (init) {
-    const limit = init ? 100 : 2;
+  /**
+   * Read schedule timing and blocks until both responses describe one height.
+   * @returns {Promise<{nextForgers: Object, latestBlocks: Array<Object>}>} Coherent snapshot
+   */
+  const getForgingSnapshot = async function () {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const [nextForgers, latestBlocks] = await Promise.all([
+        delegates.getNextForgersState(),
+        blocks.getBlocks(0, 2),
+      ]);
 
-    if (running.getLastBlocks) {
-      return log('error', 'getLastBlocks (already running)');
+      if (!latestBlocks.length) {
+        throw new Error('No recent blocks returned by the node');
+      }
+
+      if (Number(nextForgers.currentBlock) === Number(latestBlocks[0].height)) {
+        return { nextForgers, latestBlocks };
+      }
     }
-    running.getLastBlocks = true;
 
-    async.waterfall(
-      [
-        (callback) => {
-          return blocks
-            .getBlocks(0, limit)
-            .then((response) => {
-              return callback(null, { blocks: response });
-            })
-            .catch((err) => {
-              return callback(err);
-            });
-        },
-        (result, callback) => {
-          // Set last block and his delegate (we will emit it later in emitData)
-          data.lastBlock.block = result.blocks[0];
-          const lb_delegate = findActiveByBlock(data.lastBlock.block);
-          data.lastBlock.block.delegate = {
-            username: lb_delegate.username,
-            address: lb_delegate.address,
-          };
+    throw new Error('Could not obtain matching schedule and block heights');
+  };
 
-          async.eachSeries(
-            result.blocks,
-            (b, cb) => {
-              let existing = findActiveByBlock(b);
+  /** Refresh forging state from one schedule, roster, and block snapshot. */
+  const refreshRecentBlocks = async function () {
+    const [{ nextForgers, latestBlocks }, activeResults] = await Promise.all([
+      getForgingSnapshot(),
+      getActiveState(),
+    ]);
 
-              if (existing) {
-                if (
-                  !existing.blocks ||
-                  !existing.blocks[0] ||
-                  existing.blocks[0].timestamp < b.timestamp
-                ) {
-                  existing.blocks = [];
-                  existing.blocks.push(b);
-                  existing.blocksAt = moment();
-                  existing = updateDelegate(existing, false);
-                  emitDelegate(existing);
-                }
-              }
+    await statisticsHandler.ingestBlocks(latestBlocks, 'delegate-rest');
 
-              if (intervals[1]) {
-                cb(null);
-              } else {
-                callback('Monitor closed');
-              }
+    // A socket block may arrive after the snapshot. Keep this emission on the
+    // matched height; the queued socket refresh will immediately advance it.
+    const recentBlocks = statisticsHandler
+      .getCachedBlocks()
+      .filter((block) => block.height <= latestBlocks[0].height);
+
+    if (!monitoring || !recentBlocks.length) {
+      return;
+    }
+
+    const fetchedAt = new Date().toISOString();
+    const latestBlock = recentBlocks[0];
+    const oldestBlock = recentBlocks[recentBlocks.length - 1];
+    const oldestRound = getRound(oldestBlock.height);
+
+    tmpData.nextForgers = {
+      ...getForgingSchedule(nextForgers),
+      success: true,
+    };
+
+    data.lastBlock = {
+      success: true,
+      block: latestBlock,
+    };
+    data.active = updateActive(activeResults);
+
+    tmpData.roundDelegates = getRoundDelegates(tmpData.nextForgers, recentBlocks);
+    data.active.delegates.forEach((delegate) => updateDelegate(delegate, false));
+
+    const lastBlockDelegate = findActiveByBlock(latestBlock);
+    data.lastBlock = {
+      success: true,
+      block: {
+        ...latestBlock,
+        delegate: lastBlockDelegate
+          ? {
+              username: lastBlockDelegate.username,
+              address: lastBlockDelegate.address,
+            }
+          : {
+              username: latestBlock.generatorId,
+              address: latestBlock.generatorId,
             },
-            (err) => {
-              if (err) {
-                callback(err, result);
-              }
-              callback(null, result);
-            },
-          );
-        },
-        (result, callback) => {
-          async.eachSeries(
-            data.active.delegates,
-            (delegate, cb) => {
-              if (delegate.blocks) {
-                return cb(null);
-              }
-              delegatesHandler.getLastBlocks(
-                {
-                  publicKey: delegate.publicKey,
-                  limit: 1,
-                },
-                (res) => {
-                  log('error', 'Error retrieving last blocks for: ' + delegateName(delegate));
-                  callback(res.error);
-                },
-                (res) => {
-                  let existing = findActive(delegate);
-
-                  if (existing) {
-                    existing.blocks = res.blocks;
-                    existing.blocksAt = moment();
-                    existing = updateDelegate(existing, false);
-                    emitDelegate(existing);
-                  }
-
-                  if (intervals[1]) {
-                    cb(null);
-                  } else {
-                    callback('Monitor closed');
-                  }
-                },
-              );
-            },
-            (err) => {
-              if (err) {
-                callback(err, result);
-              }
-              callback(null, result);
-            },
-          );
-        },
-      ],
-      (err, callback) => {
-        if (err) {
-          log('error', 'Error retrieving LastBlocks: ' + err);
-        }
-        running.getLastBlocks = false;
       },
-    );
+    };
+
+    const latestByGenerator = new Map();
+
+    for (const block of recentBlocks) {
+      if (!latestByGenerator.has(block.generatorPublicKey)) {
+        latestByGenerator.set(block.generatorPublicKey, block);
+      }
+    }
+
+    for (const delegate of data.active.delegates) {
+      const knownSinceRound = Math.max(
+        oldestRound,
+        delegate.activeSinceRound ?? oldestRound,
+        delegate.scheduledSinceRound ?? oldestRound,
+      );
+      const knownSinceHeight = Math.max(
+        oldestBlock.height,
+        (knownSinceRound - 1) * ACTIVE_DELEGATES + 1,
+      );
+      const observedBlockCount = latestBlock.height - knownSinceHeight + 1;
+      const historyRoundCount = delegate.isScheduled
+        ? Math.max(0, Math.ceil(observedBlockCount / ACTIVE_DELEGATES))
+        : 0;
+      const block = latestByGenerator.get(delegate.publicKey);
+      const isBlockInKnownHistory = block && getRound(block.height) >= knownSinceRound;
+
+      delegate.blocks = isBlockInKnownHistory ? [block] : [];
+      delegate.blocksAt = fetchedAt;
+      delegate.historyRoundCount = historyRoundCount;
+    }
+
+    data.nextForgers = cutNextForgers(10);
+    updateTransactionFees(recentBlocks, latestBlock.height);
+
+    if (
+      latestBlock.height % ACTIVE_DELEGATES === 0 &&
+      tmpData.forgingBaseline?.creditedHeight < latestBlock.height &&
+      !running.getForgingBaseline
+    ) {
+      refreshCompletedRoundBaseline();
+    }
+
+    log('info', 'Emitting coherent status data');
+    socket.emit('data', data);
   };
 
-  const getRound = function (height) {
-    return Math.floor(height / 101) + (height % 101 > 0 ? 1 : 0);
-  };
-
-  const getRoundDelegates = function (delegates, height) {
-    const currentRound = getRound(height);
-
-    const filtered = delegates.filter((delegate, index) => {
-      return currentRound === getRound(height + index + 1);
-    });
-
-    return filtered;
-  };
-
-  const delegateName = function (delegate) {
-    return delegate.username + '[' + delegate.rate + ']';
-  };
-
-  const emitData = function () {
-    async.parallel(
-      [getActive, getRegistrations, getVotes, getNextForgers],
-      function (err, res) {
+  /** Refresh page metadata without replacing the atomic forging state. */
+  const refreshMetadata = function () {
+    return new Promise((resolve, reject) => {
+      async.parallel([getRegistrations, getVotes], function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          reject(new Error(err));
         } else {
-          tmpData.nextForgers = res[3];
+          data.registrations = res[0];
+          data.votes = res[1];
 
-          data.active = updateActive(res[0]);
-          data.registrations = res[1];
-          data.votes = res[2];
-          data.nextForgers = cutNextForgers(10);
-
-          log('info', 'Emitting data');
-          socket.emit('data', data);
+          socket.emit('data', {
+            registrations: data.registrations,
+            votes: data.votes,
+          });
+          resolve();
         }
-      }.bind(this),
-    );
-  };
-
-  const emitDelegate = function (delegate) {
-    log('info', 'Emitting last blocks for: ' + delegateName(delegate));
-    socket.emit('delegate', delegate);
+      });
+    });
   };
 };

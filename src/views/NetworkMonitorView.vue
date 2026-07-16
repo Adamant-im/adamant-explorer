@@ -9,6 +9,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useNetworkStore } from '../stores/network';
 import { useSocket } from '../composables/useSocket';
 import { formatCurrency, timeAgo, timeSpan } from '../lib/format';
+import { compareVersionsDescending } from '../lib/peers.js';
 import TabsBar from '../components/TabsBar.vue';
 import PeersTable from '../components/PeersTable.vue';
 import OsIcon from '../components/OsIcon.vue';
@@ -146,7 +147,9 @@ const counter = computed(() => {
 
   const connected = peers.value.connected;
   const platformCounter = [0, 0, 0, 0];
-  const versions = [...new Set(connected.map((p) => p.version).sort())].reverse().slice(0, 3);
+  const versions = [...new Set(connected.map((p) => p.version))]
+    .sort(compareVersionsDescending)
+    .slice(0, 3);
   const versionCounter = [0, 0, 0, 0];
   const heights = [...new Set(connected.map((p) => p.height).sort((a, b) => a - b))]
     .reverse()
@@ -263,10 +266,10 @@ function amount(value) {
             </p>
             <p class="text-muted">
               <span class="accent">
-                {{ amount(lastBlock.totalAmount + lastBlock.totalFee) }}
+                {{ amount(lastBlock.totalAmount) }}
                 {{ network.currency.symbol }}
               </span>
-              from {{ lastBlock.numberOfTransactions || 0 }} transactions
+              transferred across {{ lastBlock.numberOfTransactions || 0 }} transactions
             </p>
             <p class="text-muted">{{ timeAgo(lastBlock.timestamp) }}</p>
           </template>
@@ -284,12 +287,16 @@ function amount(value) {
             </p>
             <p class="text-muted">
               <span class="accent">
-                {{ amount(bestBlock.totalAmount + bestBlock.totalFee) }}
+                {{ amount(bestBlock.totalAmount) }}
                 {{ network.currency.symbol }}
               </span>
-              from {{ bestBlock.numberOfTransactions || 0 }} transactions
+              transferred across {{ bestBlock.numberOfTransactions || 0 }} transactions
             </p>
             <p class="text-muted">{{ timeAgo(bestBlock.timestamp) }}</p>
+          </template>
+          <template v-else-if="volume">
+            <p class="big-details"><span class="text-muted">N/A</span></p>
+            <p class="text-muted">no transferred value in the collected block window</p>
           </template>
           <template v-else>
             <p class="big-details"><span class="text-muted">N/A</span></p>
@@ -307,11 +314,18 @@ function amount(value) {
               transferred within {{ timeSpan(volume.beginning, volume.end) }}
             </p>
             <p class="text-muted">
-              from {{ volume.txs || 0 }} transactions in {{ volume.withTxs || 0 }} /
-              {{ volume.blocks || 0 }} blocks
+              across {{ volume.txs || 0 }} total transactions; transferred value in
+              {{ volume.withTxs || 0 }} / {{ volume.blocks || 0 }} blocks
             </p>
           </template>
+          <p v-else-if="volume" class="text-muted">
+            no transferred value in the collected {{ volume.blocks || 0 }} blocks
+          </p>
           <p v-else class="text-muted">waiting for transactions <span class="spinner"></span></p>
+          <p v-if="volume && !volume.complete" class="text-muted">
+            accumulating up to {{ volume.targetBlocks || 0 }} blocks for a rolling 24-hour window
+          </p>
+          <p v-else-if="volume?.complete" class="text-muted">rolling 24-hour window</p>
         </div>
       </div>
 

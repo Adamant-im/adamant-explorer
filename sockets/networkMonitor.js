@@ -1,44 +1,41 @@
 const async = require('async');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
   let intervals = [];
+  let monitoring = false;
+  let unsubscribeFromBlocks = null;
+  let unsubscribeFromPeers = null;
   new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
-    getlastBlock: false,
+    getLastBlock: false,
     getBlocks: false,
     getPeers: false,
   };
 
   this.onInit = function () {
+    monitoring = true;
     this.onConnect();
 
-    async.parallel(
-      [getLastBlock, getBlocks, getPeers],
-      function (err, res) {
-        if (err) {
-          // A failed request must not leave the monitor empty forever:
-          // retry until the initial data set is collected
-          log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
-          setTimeout(() => this.onInit(), 10000);
-        } else {
-          data.lastBlock = res[0];
-          data.blocks = res[1];
-          data.peers = res[2];
+    if (!unsubscribeFromBlocks) {
+      unsubscribeFromBlocks = statisticsHandler.subscribeBlockStatistics(
+        handleBlockStatisticsUpdate,
+      );
+    }
 
-          log('info', 'Emitting new data');
-          socket.emit('data', data);
+    if (!unsubscribeFromPeers) {
+      unsubscribeFromPeers = statisticsHandler.subscribePeerStatistics(handlePeerStatisticsUpdate);
+    }
 
-          newInterval(0, 5000, emitData1);
-          // FIXME: Here we are pulling 8640 blocks - logic should be changed
-          newInterval(1, 300000, emitData2);
-          newInterval(2, 5000, emitData3);
-        }
-      }.bind(this),
-    );
+    // Load independent cards separately. Peers normally resolve immediately
+    // from the process-wide cache while a background refresh continues.
+    initializeSource(0, 'lastBlock', getLastBlock, BLOCK_INTERVAL_MILLISECONDS, emitData1);
+    initializeSource(1, 'blocks', getBlocks, 300000, emitData2);
+    initializeSource(2, 'peers', getPeers);
   };
 
   this.onConnect = function () {
@@ -47,10 +44,17 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onDisconnect = function () {
+    monitoring = false;
+
     for (let i = 0; i < intervals.length; i++) {
       clearInterval(intervals[i]);
     }
     intervals = [];
+
+    unsubscribeFromBlocks?.();
+    unsubscribeFromBlocks = null;
+    unsubscribeFromPeers?.();
+    unsubscribeFromPeers = null;
   };
 
   // Private
@@ -66,6 +70,46 @@ module.exports = function (app, connectionHandler, socket) {
       intervals[i] = setInterval(cb, delay);
       return intervals[i];
     }
+  };
+
+  /**
+   * Load one initial data source, emit it immediately, and start its refresh.
+   * Failed sources retry independently without delaying successful cards.
+   * @param {number} index Timer slot
+   * @param {string} key Data property emitted to clients
+   * @param {Function} loader Callback-style source loader
+   * @param {number} [delay] Refresh interval in milliseconds
+   * @param {Function} [refresh] Periodic refresh callback
+   */
+  const initializeSource = function (index, key, loader, delay, refresh) {
+    loader((err, result) => {
+      if (err) {
+        log('error', `Error retrieving ${key}: ${err}. Retrying in 10 seconds`);
+
+        if (monitoring && intervals[index] === undefined) {
+          intervals[index] = setTimeout(() => {
+            intervals[index] = undefined;
+
+            if (monitoring) {
+              initializeSource(index, key, loader, delay, refresh);
+            }
+          }, 10000);
+        }
+
+        return;
+      }
+
+      if (!monitoring) {
+        return;
+      }
+
+      data[key] = result;
+      log('info', `Emitting initial ${key}`);
+      socket.emit('data', { [key]: result });
+      if (delay && refresh) {
+        newInterval(index, delay, refresh);
+      }
+    });
   };
 
   const getLastBlock = function (cb) {
@@ -119,6 +163,31 @@ module.exports = function (app, connectionHandler, socket) {
     );
   };
 
+  /** Push shared WebSocket/REST accumulator updates without waiting for polling. */
+  const handleBlockStatisticsUpdate = function (update) {
+    if (!monitoring) {
+      return;
+    }
+
+    data.blocks = update.blocks;
+    socket.emit('data2', { blocks: update.blocks });
+
+    if (update.lastBlock) {
+      data.lastBlock = { success: true, block: update.lastBlock };
+      socket.emit('data1', { lastBlock: data.lastBlock });
+    }
+  };
+
+  /** Push process-wide peer snapshots without restarting collection per browser. */
+  const handlePeerStatisticsUpdate = function (update) {
+    if (!monitoring || !update.peers) {
+      return;
+    }
+
+    data.peers = update.peers;
+    socket.emit('data3', { peers: update.peers });
+  };
+
   const emitData1 = function () {
     const thisData = {};
 
@@ -150,24 +219,6 @@ module.exports = function (app, connectionHandler, socket) {
 
           log('info', 'Emitting data-2');
           socket.emit('data2', thisData);
-        }
-      }.bind(this),
-    );
-  };
-
-  const emitData3 = function () {
-    const thisData = {};
-
-    async.parallel(
-      [getPeers],
-      function (err, res) {
-        if (err) {
-          log('error', 'Error retrieving: ' + err);
-        } else {
-          thisData.peers = data.peers = res[0];
-
-          log('info', 'Emitting data-3');
-          socket.emit('data3', thisData);
         }
       }.bind(this),
     );

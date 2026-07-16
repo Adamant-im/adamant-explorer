@@ -2,9 +2,9 @@ const { AdamantApi } = require('adamant-api');
 const config = require('../../../../modules/configReader');
 const logger = require('../../../../utils/log');
 
-// The explorer targets the ADAMANT Node v0.10.0 API;
+// The explorer targets the ADAMANT Node v0.10.2 API;
 // older nodes are excluded from selection during health checks
-const MIN_NODE_VERSION = '0.10.0';
+const MIN_NODE_VERSION = '0.10.2';
 
 /**
  * Shared ADAMANT node API client.

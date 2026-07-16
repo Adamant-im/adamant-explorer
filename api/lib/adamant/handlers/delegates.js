@@ -6,20 +6,14 @@ const logger = require('../../../../utils/log');
 
 /**
  * Get active delegates info
- * @param error
- * @param success
+ * @param {Function} error Error callback
+ * @param {Function} success Success callback
  * @returns {Promise<*>}
  */
 async function getActive(error, success) {
   try {
     const result = await delegates.getActive();
     result.delegates = helpers.parseDelegates(result.delegates);
-    result.delegates = await Promise.all(
-      result.delegates.map(async (delegate) => {
-        delegate.forged = await delegates.getForged(delegate.publicKey);
-        return delegate;
-      }),
-    );
 
     result.success = true;
 
@@ -228,9 +222,7 @@ async function getSearch(params, error, success) {
  */
 async function getNextForgers(error, success) {
   try {
-    const result = {};
-
-    result.delegates = await delegates.getNextForgers();
+    const result = await delegates.getNextForgersState();
 
     result.success = true;
 

@@ -87,6 +87,54 @@ async function getActive() {
 }
 
 /**
+ * Get every registered delegate in bounded Node pages.
+ * @returns {Promise<Object>} Payload with the complete `delegates` list and `totalCount`
+ * @throws {string|Error} Node error or an incomplete pagination error
+ */
+async function getAll() {
+  const pageSize = 101;
+  const firstPage = await api.getDelegates({ orderBy: 'rate:asc', limit: pageSize, offset: 0 });
+
+  if (!firstPage.success) {
+    throw firstPage.errorMessage;
+  }
+
+  const totalCount = Number(firstPage.totalCount) || firstPage.delegates.length;
+  const offsets = [];
+
+  for (let offset = pageSize; offset < totalCount; offset += pageSize) {
+    offsets.push(offset);
+  }
+
+  const pages = await Promise.all(
+    offsets.map(async (offset) => {
+      const response = await api.getDelegates({
+        orderBy: 'rate:asc',
+        limit: pageSize,
+        offset,
+      });
+
+      if (!response.success) {
+        throw response.errorMessage;
+      }
+
+      return response.delegates;
+    }),
+  );
+  const allDelegates = [firstPage.delegates, ...pages].flat();
+
+  if (allDelegates.length !== totalCount) {
+    throw new Error(`Expected ${totalCount} delegates, received ${allDelegates.length}`);
+  }
+
+  return {
+    ...firstPage,
+    delegates: allDelegates,
+    totalCount,
+  };
+}
+
+/**
  * Get standby delegates, ordered by rank.
  * @param {number} offset Number of delegates to skip, at least 101
  * @param {number} limit Maximum number of delegates to return
@@ -124,18 +172,33 @@ async function getSearch(username) {
 }
 
 /**
- * Get public keys of delegates that will forge next, in forging order.
- * @returns {Promise<Array<string>>} List of delegate public keys
+ * Get the next-forger schedule and the block height it was calculated for.
+ * @returns {Promise<{delegates: Array<string>, currentBlock: number, currentBlockSlot: number, currentSlot: number, nodeTimestamp: number}>} Schedule snapshot
  * @throws {string} Node error message when the request fails
  */
-async function getNextForgers() {
+async function getNextForgersState() {
   const response = await api.getNextForgers(101);
 
   if (!response.success) {
     throw response.errorMessage;
   }
 
-  return response.delegates;
+  return {
+    delegates: response.delegates,
+    currentBlock: response.currentBlock,
+    currentBlockSlot: response.currentBlockSlot,
+    currentSlot: response.currentSlot,
+    nodeTimestamp: response.nodeTimestamp,
+  };
+}
+
+/**
+ * Get public keys of delegates that will forge next, in forging order.
+ * @returns {Promise<Array<string>>} List of delegate public keys
+ * @throws {string} Node error message when the request fails
+ */
+async function getNextForgers() {
+  return (await getNextForgersState()).delegates;
 }
 
 module.exports = {
@@ -144,7 +207,9 @@ module.exports = {
   getVoters,
   getForged,
   getActive,
+  getAll,
   getStandby,
   getSearch,
   getNextForgers,
+  getNextForgersState,
 };

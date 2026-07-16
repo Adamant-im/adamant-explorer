@@ -17,14 +17,14 @@ Deployed at:
 - Activity Graph: live visualization of the latest blocks and transactions
 - Top Accounts and reserved wallets
 - Live updates over WebSocket
-- Redis-backed API response cache
+- Redis-backed API response cache and persistent rolling block-statistics window
 - All node interaction through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) with node health checks and failover
 - Vue 3 frontend (vue-router, Pinia) built with Vite; each page loads as its own chunk
 
 ## Requirements
 
 - Node.js 22.13 or newer
-- Redis — caches API responses
+- Redis — caches API responses and retains the rolling block-statistics window between Explorer restarts. Enable Redis RDB or AOF persistence if the window must also survive Redis or host restarts
 
   ```sh
   sudo apt-get install -y redis-server

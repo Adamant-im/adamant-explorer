@@ -35,22 +35,20 @@ async function getAccountByPublicKey(publicKey) {
 /**
  * Get accounts with the highest balances.
  *
- * ADAMANT Node currently exposes only the first top-accounts page to public
- * callers because `/api/accounts/top` rejects numeric query strings. Explorer
- * applies pagination to that available page until the node API supports
- * offset/limit over HTTP query parameters.
+ * ADAMANT Node v0.10.2 supports public pagination and returns normalized page
+ * metadata through the typed SDK method.
  * @param {{offset: number, limit: number}} query Pagination parameters
  * @returns {Promise<Array>} List of accounts
  * @throws {string} Node error message when the request fails
  */
 async function getTopAccounts(query) {
-  const response = await api.get('accounts/top');
+  const response = await api.getTopAccounts(query);
 
   if (!response.success) {
     throw response.errorMessage;
   }
 
-  return response.accounts.slice(query.offset, query.offset + query.limit);
+  return response.accounts;
 }
 
 /**

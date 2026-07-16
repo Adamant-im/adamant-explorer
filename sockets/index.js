@@ -4,8 +4,8 @@ const logger = require('../utils/log');
 /**
  * Wire up Socket.IO namespaces for live explorer pages.
  *
- * Each namespace module starts polling the node while at least one
- * client is connected and stops when the last client disconnects.
+ * Page-local sources run while clients are connected. Process-wide block and
+ * peer caches continue updating independently and are only subscribed here.
  * @param {Object} app Express application
  * @param {Object} io Socket.IO server
  */

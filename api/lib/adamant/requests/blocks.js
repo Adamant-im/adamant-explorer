@@ -1,4 +1,6 @@
 const api = require('./api');
+const { BLOCKS_PAGE_SIZE } = require('../constants.mjs');
+const logger = require('../../../../utils/log');
 
 /**
  * Get the current blockchain height.
@@ -65,6 +67,37 @@ async function getBlocks(offset, limit = 20) {
 }
 
 /**
+ * Get a bounded window of latest blocks across node pages.
+ *
+ * ADAMANT Node accepts at most 100 blocks per request. This helper keeps the
+ * pagination rule inside the request layer while guaranteeing that callers
+ * cannot accidentally request an unbounded scan.
+ * @param {number} count Maximum number of blocks to return
+ * @param {number} [offset=0] Number of latest blocks to skip
+ * @returns {Promise<Array>} Blocks in descending height order
+ * @throws {string} Node error message when any page request fails
+ */
+async function getBlocksWindow(count, offset = 0) {
+  const blocks = [];
+  let currentOffset = offset;
+
+  while (blocks.length < count) {
+    const pageSize = Math.min(BLOCKS_PAGE_SIZE, count - blocks.length);
+    const page = await getBlocks(currentOffset, pageSize);
+
+    blocks.push(...page);
+
+    if (page.length < pageSize) {
+      break;
+    }
+
+    currentOffset += page.length;
+  }
+
+  return blocks;
+}
+
+/**
  * Get blockchain network status: height, fee, milestone, reward, supply, and nethash.
  * @returns {Promise<Object>} Network status payload
  * @throws {string} Node error message when the request fails
@@ -110,12 +143,42 @@ async function getLastBlocksByGeneratorPublicKey(publicKey) {
   return Array.isArray(response.blocks) ? response.blocks : [];
 }
 
+/**
+ * Subscribe to compact new-block notifications from a healthy Node.
+ * The SDK owns reconnection and moves the socket when its health check selects
+ * a different synchronized node.
+ * @param {(block: Object) => void|Promise<void>} handler New-block callback
+ * @returns {Function} Unsubscribe callback
+ */
+function onNewBlock(handler) {
+  let initialized = false;
+
+  if (!api.socket) {
+    // Initialize lazily so command-line consumers and unit tests that only use
+    // REST do not open an unnecessary long-lived socket.
+    api.initSocket({});
+    initialized = true;
+  }
+
+  api.socket.onNewBlock(handler);
+
+  if (initialized) {
+    Promise.resolve(api.updateNodes()).catch((error) => {
+      logger.error(`ADAMANT WebSocket health check: ${error}`);
+    });
+  }
+
+  return () => api.socket.off(handler);
+}
+
 module.exports = {
   getBlockHeight,
   getBlockById,
   getBlockByHeight,
   getBlocks,
+  getBlocksWindow,
   getBlockStatus,
   getLastBlock,
   getLastBlocksByGeneratorPublicKey,
+  onNewBlock,
 };

@@ -6,7 +6,7 @@
   "port": 6040,
 
   /** ADAMANT node list. Provide several independently operated nodes
-      running ADAMANT Node v0.10.0 or newer **/
+      running ADAMANT Node v0.10.2 or newer **/
   "nodes_adm": [
     "http://localhost:36666",
     "https://bid.adamant.im",
@@ -23,7 +23,8 @@
     "port": 8080
   },
 
-  /** Redis server parameters. Redis caches API responses **/
+  /** Redis server parameters. Redis caches API responses and the persistent
+      rolling block-statistics window **/
   "redis": {
     "username": "",
     "password": "",

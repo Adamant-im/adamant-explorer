@@ -6,7 +6,8 @@
  * use the `redis.cacheTTL` config value.
  */
 module.exports = {
-  cacheIgnoreList: [],
+  // Process-wide peer statistics already have their own live Redis-backed cache.
+  cacheIgnoreList: ['/api/statistics/getPeers'],
   cacheTTLOverride: {
     '/api/getUnconfirmedTransactions': 5,
   },

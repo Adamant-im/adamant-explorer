@@ -320,6 +320,9 @@ describe('Delegates API', function () {
       getNextForgers((err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
         testUtils.expect(res.body).to.have.property('delegates');
+        testUtils.expect(res.body).to.have.property('currentBlock').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('currentBlockSlot').to.be.a('number');
+        testUtils.expect(res.body).to.have.property('currentSlot').to.be.a('number');
         checkPublicKeys(res.body.delegates);
         done();
       });
