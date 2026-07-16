@@ -1,67 +1,6 @@
 const { promises: dnsPromises } = require('dns');
 const logger = require('../../../../utils/log');
-const statistics = require('../requests/statistics');
-
-/**
- * Aggregates volume and best-block statistics over a window
- * of recent blocks (about one day, 8640 blocks).
- */
-class BlocksStatistics {
-  static maxOffset = 8600;
-  static maxCount = 8640;
-
-  best = {
-    block: null,
-    amount: 0,
-  };
-
-  volume = {
-    amount: 0,
-    blocks: 0,
-    txs: 0,
-    withTxs: 0,
-    beginning: null,
-    end: null,
-  };
-
-  /**
-   * Add a page of blocks to the aggregated statistics.
-   * @param {Array} blocks Blocks in descending height order
-   * @param {number} offset Offset the page was fetched with
-   */
-  inspect(blocks, offset) {
-    if (blocks.length <= 0) {
-      return;
-    }
-
-    for (const block of blocks) {
-      if (this.volume.blocks >= BlocksStatistics.maxCount) {
-        break;
-      }
-
-      const newAmount = block.totalAmount + block.totalFee;
-
-      this.volume.blocks += 1;
-      this.volume.txs += block.numberOfTransactions;
-      this.volume.amount += newAmount;
-
-      if (newAmount > 0) {
-        this.volume.withTxs += 1;
-
-        if (newAmount > this.best.amount) {
-          this.best.block = block;
-          this.best.amount = newAmount;
-        }
-      }
-    }
-
-    if (offset === 0) {
-      this.volume.beginning = blocks[blocks.length - 1].timestamp;
-    } else if (offset === this.maxOffset) {
-      this.volume.end = blocks[0].timestamp;
-    }
-  }
-}
+const { BlocksStatistics, RollingBlocksWindow } = require('./blockStatistics');
 
 /**
  * Collects peers into connected and disconnected lists,
@@ -103,29 +42,25 @@ class PeersStatistics {
       peer.osBrand = this.#osBrand(peer.os);
       peer.location = await this.locator.locateIp(peer.ip);
 
+      // Node peer state is authoritative: 0 = banned, 1 = disconnected,
+      // 2 = connected. Height may be temporarily absent and must not move a
+      // connected peer into the disconnected bucket.
       switch (parseInt(peer.state)) {
+        case 2:
+          peer.humanState = 'Connected';
+          this.list.connected.push(peer);
+          break;
         case 1:
           peer.humanState = 'Disconnected';
           this.list.disconnected.push(peer);
           break;
-        case 2:
-          if (peer.height !== null) {
-            peer.humanState = 'Connected';
-            this.list.connected.push(peer);
-          } else {
-            peer.humanState = 'Connected';
-            this.list.disconnected.push(peer);
-          }
-          break;
         case 0:
-          if (peer.height !== null) {
-            peer.humanState = 'Unknown';
-            this.list.connected.push(peer);
-          } else {
-            peer.humanState = 'Unknown';
-            this.list.disconnected.push(peer);
-          }
+          peer.humanState = 'Banned';
+          this.list.disconnected.push(peer);
           break;
+        default:
+          peer.humanState = 'Unknown';
+          this.list.disconnected.push(peer);
       }
 
       result.push(peer);
@@ -173,6 +108,9 @@ class Locator {
     let data = {};
 
     try {
+      // Load node-backed requests only when geo lookup is actually used. This
+      // keeps pure peer-classification consumers free of network side effects.
+      const statistics = require('../requests/statistics');
       data = (await statistics.getFreegeoip(ip)) ?? {};
     } catch (error) {
       logger.debug(`Locator: Failed to get location for ${ip}: ${error}`);
@@ -250,6 +188,7 @@ function bufferPeers(peers) {
 
 module.exports = {
   BlocksStatistics,
+  RollingBlocksWindow,
   PeersStatistics,
   Locator,
 };

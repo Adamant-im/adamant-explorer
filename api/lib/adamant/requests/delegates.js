@@ -124,18 +124,33 @@ async function getSearch(username) {
 }
 
 /**
- * Get public keys of delegates that will forge next, in forging order.
- * @returns {Promise<Array<string>>} List of delegate public keys
+ * Get the next-forger schedule and the block height it was calculated for.
+ * @returns {Promise<{delegates: Array<string>, currentBlock: number, currentBlockSlot: number, currentSlot: number, nodeTimestamp: number}>} Schedule snapshot
  * @throws {string} Node error message when the request fails
  */
-async function getNextForgers() {
+async function getNextForgersState() {
   const response = await api.getNextForgers(101);
 
   if (!response.success) {
     throw response.errorMessage;
   }
 
-  return response.delegates;
+  return {
+    delegates: response.delegates,
+    currentBlock: response.currentBlock,
+    currentBlockSlot: response.currentBlockSlot,
+    currentSlot: response.currentSlot,
+    nodeTimestamp: response.nodeTimestamp,
+  };
+}
+
+/**
+ * Get public keys of delegates that will forge next, in forging order.
+ * @returns {Promise<Array<string>>} List of delegate public keys
+ * @throws {string} Node error message when the request fails
+ */
+async function getNextForgers() {
+  return (await getNextForgersState()).delegates;
 }
 
 module.exports = {
@@ -147,4 +162,5 @@ module.exports = {
   getStandby,
   getSearch,
   getNextForgers,
+  getNextForgersState,
 };

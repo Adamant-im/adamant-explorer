@@ -33,9 +33,7 @@ const sortActive = useSort('rate');
 const sortStandby = useSort('rate');
 
 /** Attaches computed forging status to every active delegate. */
-function withStatuses(delegates) {
-  const height = network.blockStatus?.height ?? 0;
-
+function withStatuses(delegates, height) {
   return delegates.map((delegate) => ({
     ...delegate,
     // Round the raw sats values the way the legacy monitor did
@@ -48,8 +46,12 @@ function withStatuses(delegates) {
 const socket = useSocket('/delegateMonitor');
 
 socket.on('data', (res) => {
+  if (res.lastBlock) {
+    lastBlock.value = res.lastBlock.block;
+  }
   if (res.active) {
-    activeDelegates.value = withStatuses(res.active.delegates);
+    const height = lastBlock.value?.height ?? network.blockStatus?.height ?? 0;
+    activeDelegates.value = withStatuses(res.active.delegates, height);
 
     const totalDelegates = res.active.totalCount || 0;
     totals.value = {
@@ -57,9 +59,6 @@ socket.on('data', (res) => {
       totalActive: 101,
       totalStandby: Math.max(totalDelegates - 101, 0),
     };
-  }
-  if (res.lastBlock) {
-    lastBlock.value = res.lastBlock.block;
   }
   if (res.registrations) {
     registrations.value = res.registrations.transactions;
@@ -70,25 +69,6 @@ socket.on('data', (res) => {
   if (res.votes) {
     votes.value = res.votes.transactions;
   }
-});
-
-// Per-delegate updates arrive when a delegate forges a new block
-socket.on('delegate', (res) => {
-  if (!res.publicKey || !activeDelegates.value) {
-    return;
-  }
-
-  const height = network.blockStatus?.height ?? 0;
-
-  activeDelegates.value = activeDelegates.value.map((delegate) => {
-    if (delegate.publicKey !== res.publicKey) {
-      return { ...delegate, forgingStatus: forgingStatus(delegate, height) };
-    }
-
-    const updated = { ...delegate, blocksAt: res.blocksAt, blocks: res.blocks };
-    updated.forgingStatus = forgingStatus(updated, height);
-    return updated;
-  });
 });
 
 /** Loads a page of standby delegates over the REST API. */
@@ -120,9 +100,7 @@ const statusTotals = computed(() =>
 const processed = computed(() => (statusTotals.value ? forgingProgress(statusTotals.value) : 0));
 
 const bestForger = computed(() => maxBy(activeDelegates.value, (d) => parseInt(d.forged)));
-const totalForged = computed(() =>
-  (activeDelegates.value ?? []).reduce((sum, d) => sum + parseInt(d.forged), 0),
-);
+const totalForged = computed(() => network.blockStatus?.supply ?? 0);
 const bestProductivity = computed(() => maxBy(activeDelegates.value, (d) => d.productivity));
 const worstProductivity = computed(() => maxBy(activeDelegates.value, (d) => -d.productivity));
 
@@ -221,7 +199,7 @@ const standbyColumns = [
           Total Forged <span class="text-muted">({{ network.currency.symbol }})</span>
         </p>
         <p class="big-details accent">{{ amount(totalForged) }}</p>
-        <p class="text-muted">between {{ totals.totalActive }} active delegates</p>
+        <p class="text-muted">network-wide current supply</p>
       </div>
 
       <div class="big-info">
@@ -349,7 +327,7 @@ const standbyColumns = [
         </div>
         <div class="forging-total orange">
           <p class="big-details">{{ statusTotals.missedBlock }}</p>
-          <span>Missed block recently</span>
+          <span>Missed a recent slot</span>
         </div>
         <div class="forging-total red">
           <p class="big-details">{{ statusTotals.notForging }}</p>
@@ -357,7 +335,7 @@ const standbyColumns = [
         </div>
         <div class="forging-total grey">
           <p class="big-details">{{ statusTotals.awaitingSlot }}</p>
-          <span>In queue for forging</span>
+          <span>Awaiting current-round slot</span>
         </div>
       </div>
 
@@ -405,7 +383,7 @@ const standbyColumns = [
                 {{ amount(delegate.forged) }}
                 <span class="text-muted">{{ network.currency.symbol }}</span>
               </td>
-              <td class="hide-md">{{ forgingTime(delegate.forgingTime / 2) }}</td>
+              <td class="hide-md">{{ forgingTime(delegate.forgingTime) }}</td>
               <td><ForgingStatusDot :status="delegate.forgingStatus" /></td>
               <td>{{ delegate.productivity || 0 }}%</td>
               <td class="hide-sm">

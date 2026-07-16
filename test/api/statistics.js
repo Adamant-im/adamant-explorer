@@ -69,9 +69,7 @@ describe('Statistics API', function () {
     }).timeout(10000);
   });
 
-  // Temporarily skipped: this endpoint pulls thousands of blocks from the node.
-  // The Explorer replacement work is tracked in Adamant-im/adamant-explorer#27.
-  describe.skip('GET /api/statistics/getBlocks', function () {
+  describe('GET /api/statistics/getBlocks', function () {
     it('should be ok', function (done) {
       getBlocks((err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
@@ -82,11 +80,17 @@ describe('Statistics API', function () {
         testUtils.expect(res.body.volume).to.have.property('txs');
         testUtils.expect(res.body.volume).to.have.property('blocks');
         testUtils.expect(res.body.volume).to.have.property('amount');
+        testUtils.expect(res.body.volume).to.have.property('complete');
+        testUtils.expect(res.body.volume).to.have.property('coverageSeconds');
+        testUtils.expect(res.body.volume).to.have.property('targetBlocks', 17280);
+        testUtils.expect(res.body.volume).to.have.property('windowSeconds', 86400);
         testUtils.expect(res.body).to.have.property('best');
-        checkBlock(res.body.best);
+        if (res.body.best) {
+          checkBlock(res.body.best);
+        }
         done();
       });
-    }).timeout(60000);
+    }).timeout(20000);
   });
 
   describe('GET /api/statistics/getPeers', function () {

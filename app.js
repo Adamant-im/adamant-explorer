@@ -11,6 +11,7 @@ const { Server } = require('socket.io');
 const routes = require('./api/routes');
 const cache = require('./cache');
 const adamantApi = require('./api/lib/adamant/requests/api');
+const statisticsHandler = require('./api/lib/adamant/handlers/statistics');
 const createAdamantApiReadinessMiddleware = require('./api/lib/adamant/middleware/readiness');
 const packageJson = require('./package.json');
 const utils = require('./utils');
@@ -165,5 +166,8 @@ const server = app.listen(app.get('port'), app.get('host'), (err) => {
 
     const io = new Server(server);
     require('./sockets')(app, io);
+    statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
+      logger.error(`Failed to start block statistics cache: ${error}`);
+    });
   }
 });

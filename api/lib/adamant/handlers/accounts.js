@@ -93,16 +93,21 @@ async function getTopAccounts(query, error, success) {
     result.accounts = await accounts.getTopAccounts(query);
     result.accounts = await Promise.all(
       result.accounts.map(async (account) => {
-        const accountKnowledge = knowledge.inAccount(account);
+        let accountKnowledge = knowledge.inAccount(account);
 
         if (!accountKnowledge && account.publicKey) {
-          account.knowledge = await delegates.getDelegate(account.publicKey);
-          account.knowledge = knowledge.inDelegate(account.knowledge);
-        } else {
-          account.knowledge = accountKnowledge;
+          const delegate = await delegates.getDelegate(account.publicKey);
+          accountKnowledge = knowledge.inDelegate(delegate);
         }
 
-        return account;
+        // Preserve the Explorer endpoint's stable public response while the
+        // node may add fields such as `username` and `isDelegate`
+        return {
+          address: account.address,
+          balance: account.balance,
+          publicKey: account.publicKey,
+          knowledge: accountKnowledge,
+        };
       }),
     );
 

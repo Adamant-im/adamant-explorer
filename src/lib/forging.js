@@ -7,17 +7,20 @@ import { epochToDate, round } from './format.js';
  * Status codes:
  *
  * - `0` forged a block in the current round
- * - `1` missed a block in the current round
- * - `2` not forging (missed the current and the previous round)
+ * - `1` missed one to three completed forging slots
+ * - `2` not forging (missed four or more completed slots)
  * - `3` awaiting slot, forged in the previous round
- * - `4` awaiting slot, missed a block in the previous round
+ * - `4` awaiting slot after one to three missed slots
  * - `5` status unknown (not enough data yet)
  */
+
+const REQUIRED_HISTORY_ROUNDS = 5;
+const NOT_FORGING_AFTER_MISSED_ROUNDS = 4;
 
 /**
  * Derives the forging status of an active delegate.
  *
- * @param {Object} delegate Delegate with `blocks`, `blocksAt`, and `isRoundDelegate` fields
+ * @param {Object} delegate Delegate with block, schedule, and history-coverage fields
  * @param {number} networkHeight Current network height used to determine the running round
  * @returns {{code: number, lastBlock: ?Object, blockAt: ?Date, awaitingSlot: ?number}}
  *   Status descriptor consumed by the status dot component
@@ -28,6 +31,7 @@ export function forgingStatus(delegate, networkHeight) {
     lastBlock: null,
     blockAt: null,
     awaitingSlot: null,
+    missedRounds: null,
   };
 
   if (delegate.blocksAt && delegate.blocks?.length > 0) {
@@ -38,29 +42,37 @@ export function forgingStatus(delegate, networkHeight) {
     status.awaitingSlot = status.networkRound - status.delegateRound;
   }
 
-  if (status.awaitingSlot === 0) {
-    // Forged block in current round
-    status.code = 0;
-  } else if (!delegate.isRoundDelegate && status.awaitingSlot === 1) {
-    // Missed block in current round
-    status.code = 1;
-  } else if (!delegate.isRoundDelegate && status.awaitingSlot > 1) {
-    // Missed block in current and last round = not forging
-    status.code = 2;
-  } else if (status.awaitingSlot === 1) {
-    // Awaiting slot, but forged in last round
-    status.code = 3;
-  } else if (status.awaitingSlot === 2) {
-    // Awaiting slot, but missed block in last round
-    status.code = 4;
-  } else if (!status.blockAt || !status.updatedAt) {
-    // Awaiting status or unprocessed.
-    // Note: misreported statuses right after opening the Delegate Monitor
-    // are a known problem, tracked in a separate issue
+  if (!status.updatedAt) {
     status.code = 5;
-  } else {
-    // Not forging
+    status.reason = 'awaiting-data';
+  } else if (status.awaitingSlot === 0) {
+    status.code = 0;
+  } else if (status.awaitingSlot === 1) {
+    if (delegate.isRoundDelegate) {
+      status.code = 3;
+    } else if ((delegate.historyRoundCount ?? 0) < REQUIRED_HISTORY_ROUNDS) {
+      status.code = 5;
+      status.reason = 'insufficient-history';
+    } else {
+      status.missedRounds = 1;
+      status.code = 1;
+    }
+  } else if ((delegate.historyRoundCount ?? 0) < REQUIRED_HISTORY_ROUNDS) {
+    // Do not turn missing startup/new-delegate history into a failure status
+    status.code = 5;
+    status.reason = 'insufficient-history';
+  } else if (!status.lastBlock) {
+    // Five observed rounds without a block prove at least four missed slots
+    status.missedRounds = NOT_FORGING_AFTER_MISSED_ROUNDS;
     status.code = 2;
+  } else {
+    status.missedRounds = Math.max(0, status.awaitingSlot - (delegate.isRoundDelegate ? 1 : 0));
+
+    if (status.missedRounds >= NOT_FORGING_AFTER_MISSED_ROUNDS) {
+      status.code = 2;
+    } else {
+      status.code = delegate.isRoundDelegate ? 4 : 1;
+    }
   }
 
   return status;
@@ -69,7 +81,7 @@ export function forgingStatus(delegate, networkHeight) {
 /**
  * Aggregates forging status counts across active delegates.
  *
- * @param {Array<{forgingStatus: {code: number}}>} delegates Active delegates with computed statuses
+ * @param {Array<{forgingStatus: {code: number}, isRoundDelegate: boolean}>} delegates Active delegates with computed statuses
  * @returns {{forging: number, missedBlock: number, notForging: number, awaitingSlot: number, unprocessed: number}}
  *   Totals per status bucket
  */
@@ -93,7 +105,7 @@ export function forgingTotals(delegates) {
         totals.unprocessed++;
     }
 
-    if (delegate.forgingStatus.code === 3 || delegate.forgingStatus.code === 4) {
+    if (delegate.isRoundDelegate) {
       totals.awaitingSlot++;
     }
   }

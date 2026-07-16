@@ -15,15 +15,22 @@ const view = computed(() => {
     case 0:
       return { label: 'Forging', tone: 'green', hollow: false };
     case 1:
-      return { label: 'Missed block', tone: 'orange', hollow: false };
+      return { label: 'Missed block recently', tone: 'orange', hollow: false };
     case 2:
       return { label: 'Not forging', tone: 'red', hollow: false };
     case 3:
-      return { label: 'Awaiting slot', tone: 'green', hollow: true };
+      return { label: 'Awaiting slot; forged previous round', tone: 'green', hollow: true };
     case 4:
-      return { label: 'Awaiting slot', tone: 'orange', hollow: true };
+      return { label: 'Awaiting slot; missed blocks recently', tone: 'orange', hollow: true };
     default:
-      return { label: 'Awaiting status', tone: 'grey', hollow: true };
+      return {
+        label:
+          props.status.reason === 'insufficient-history'
+            ? 'Insufficient forging history'
+            : 'Awaiting status',
+        tone: 'grey',
+        hollow: true,
+      };
   }
 });
 
@@ -33,7 +40,9 @@ const tooltip = computed(() => {
   if (props.status.code < 5) {
     text += props.status.blockAt
       ? ` — last block at ${props.status.lastBlock.height}, ${timeAgo(props.status.lastBlock.timestamp)}`
-      : ' — not forged a block yet';
+      : ' — no block in the observed forging history';
+  } else if (props.status.reason === 'insufficient-history') {
+    text += ' — fewer than five observed rounds';
   }
 
   return text;

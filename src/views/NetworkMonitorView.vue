@@ -9,6 +9,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useNetworkStore } from '../stores/network';
 import { useSocket } from '../composables/useSocket';
 import { formatCurrency, timeAgo, timeSpan } from '../lib/format';
+import { compareVersionsDescending } from '../lib/peers.js';
 import TabsBar from '../components/TabsBar.vue';
 import PeersTable from '../components/PeersTable.vue';
 import OsIcon from '../components/OsIcon.vue';
@@ -146,7 +147,9 @@ const counter = computed(() => {
 
   const connected = peers.value.connected;
   const platformCounter = [0, 0, 0, 0];
-  const versions = [...new Set(connected.map((p) => p.version).sort())].reverse().slice(0, 3);
+  const versions = [...new Set(connected.map((p) => p.version))]
+    .sort(compareVersionsDescending)
+    .slice(0, 3);
   const versionCounter = [0, 0, 0, 0];
   const heights = [...new Set(connected.map((p) => p.height).sort((a, b) => a - b))]
     .reverse()
@@ -291,6 +294,10 @@ function amount(value) {
             </p>
             <p class="text-muted">{{ timeAgo(bestBlock.timestamp) }}</p>
           </template>
+          <template v-else-if="volume">
+            <p class="big-details"><span class="text-muted">N/A</span></p>
+            <p class="text-muted">no transferred value in the collected block window</p>
+          </template>
           <template v-else>
             <p class="big-details"><span class="text-muted">N/A</span></p>
             <p class="text-muted">waiting for blocks <span class="spinner"></span></p>
@@ -311,7 +318,14 @@ function amount(value) {
               {{ volume.blocks || 0 }} blocks
             </p>
           </template>
+          <p v-else-if="volume" class="text-muted">
+            no transactions in the collected {{ volume.blocks || 0 }} blocks
+          </p>
           <p v-else class="text-muted">waiting for transactions <span class="spinner"></span></p>
+          <p v-if="volume && !volume.complete" class="text-muted">
+            accumulating up to {{ volume.targetBlocks || 0 }} blocks for a rolling 24-hour window
+          </p>
+          <p v-else-if="volume?.complete" class="text-muted">rolling 24-hour window</p>
         </div>
       </div>
 
