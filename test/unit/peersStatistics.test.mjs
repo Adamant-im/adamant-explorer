@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import statisticsHelpers from '../../api/lib/adamant/helpers/statistics.js';
 
-const { PeersStatistics } = statisticsHelpers;
+const { Locator, PeersStatistics } = statisticsHelpers;
 
 describe('PeersStatistics', function () {
   it('classifies peers by the Node state instead of their optional height', async function () {
@@ -22,5 +22,14 @@ describe('PeersStatistics', function () {
     expect(
       statistics.list.disconnected.find((peer) => peer.ip === '192.0.2.3').humanState,
     ).to.equal('Banned');
+  });
+
+  it('restores enriched locations for an immediate post-restart response', async function () {
+    const locator = new Locator();
+    const location = { hostname: 'node.example', country_code: 'NL' };
+
+    locator.restoreCache([{ ip: '192.0.2.10', location }]);
+
+    expect(await locator.locateIp('192.0.2.10')).to.equal(location);
   });
 });

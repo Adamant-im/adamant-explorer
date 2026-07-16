@@ -1,6 +1,7 @@
 const async = require('async');
 const delegatesHandler = require('../api/lib/adamant/handlers/delegates');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const forgingStatistics = require('../api/lib/adamant/helpers/forgingStatistics');
 const blocks = require('../api/lib/adamant/requests/blocks');
 const delegates = require('../api/lib/adamant/requests/delegates');
 const {
@@ -40,6 +41,7 @@ module.exports = function (app, connectionHandler, socket) {
     getRegistrations: false,
     getVotes: false,
     getNextForgers: false,
+    getForgingBaseline: false,
   };
 
   this.onInit = function () {
@@ -53,6 +55,7 @@ module.exports = function (app, connectionHandler, socket) {
         getRegistrations,
         getVotes,
         getNextForgers,
+        refreshForgingBaseline,
         restoreActiveDelegateState,
       ],
       function (err, res) {
@@ -68,9 +71,15 @@ module.exports = function (app, connectionHandler, socket) {
           data.registrations = res[2];
           data.votes = res[3];
           data.nextForgers = cutNextForgers(10);
+          tmpData.forgingBaseline = res[5].baseline;
+          data.forgingTotals = {
+            success: true,
+            transactionFees: res[5].transactionFees,
+          };
 
           // Status data is emitted by the first coherent schedule/block refresh.
           socket.emit('data', {
+            forgingTotals: data.forgingTotals,
             registrations: data.registrations,
             votes: data.votes,
           });
@@ -361,6 +370,91 @@ module.exports = function (app, connectionHandler, socket) {
     });
   };
 
+  /**
+   * Load all delegate account totals around one stable completed-round height.
+   * Four bounded delegate pages replace one request per delegate.
+   * @returns {Promise<{baseline: Object, transactionFees: string}>} Fee baseline and current total
+   */
+  const refreshForgingBaseline = async function () {
+    if (running.getForgingBaseline) {
+      throw new Error('getForgingBaseline (already running)');
+    }
+
+    running.getForgingBaseline = true;
+
+    try {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const before = await blocks.getBlockStatus();
+        const [allDelegates, status, recentBlocks] = await Promise.all([
+          delegates.getAll(),
+          blocks.getBlockStatus(),
+          blocks.getBlocksWindow(ACTIVE_DELEGATES),
+        ]);
+
+        if (
+          forgingStatistics.getCreditedHeight(before.height) !==
+            forgingStatistics.getCreditedHeight(status.height) ||
+          Number(recentBlocks[0]?.height) !== Number(status.height)
+        ) {
+          continue;
+        }
+
+        const baseline = forgingStatistics.createForgingBaseline(
+          allDelegates.delegates,
+          status,
+          recentBlocks,
+        );
+        const transactionFees = forgingStatistics.projectTransactionFees(
+          baseline,
+          recentBlocks,
+          status.height,
+        );
+
+        return { baseline, transactionFees };
+      }
+
+      throw new Error('Could not obtain a stable all-delegate forging baseline');
+    } finally {
+      running.getForgingBaseline = false;
+    }
+  };
+
+  /** Project lifetime fees through the latest cached block. */
+  const updateTransactionFees = function (recentBlocks, height) {
+    if (!tmpData.forgingBaseline) {
+      return;
+    }
+
+    data.forgingTotals = {
+      success: true,
+      transactionFees: forgingStatistics.projectTransactionFees(
+        tmpData.forgingBaseline,
+        recentBlocks,
+        height,
+      ),
+    };
+  };
+
+  /** Refresh account-level totals after Node credits a completed round. */
+  const refreshCompletedRoundBaseline = async function () {
+    try {
+      const result = await refreshForgingBaseline();
+
+      if (!monitoring) {
+        return;
+      }
+
+      tmpData.forgingBaseline = result.baseline;
+      data.forgingTotals = {
+        success: true,
+        transactionFees: result.transactionFees,
+      };
+      socket.emit('data', { forgingTotals: data.forgingTotals });
+    } catch (error) {
+      log('error', `Error refreshing all-delegate forging totals: ${error}`);
+    }
+  };
+
   const findActive = function (delegate) {
     return data.active?.delegates?.find((item) => item.publicKey === delegate.publicKey);
   };
@@ -612,6 +706,15 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     data.nextForgers = cutNextForgers(10);
+    updateTransactionFees(recentBlocks, latestBlock.height);
+
+    if (
+      latestBlock.height % ACTIVE_DELEGATES === 0 &&
+      tmpData.forgingBaseline?.creditedHeight < latestBlock.height &&
+      !running.getForgingBaseline
+    ) {
+      refreshCompletedRoundBaseline();
+    }
 
     log('info', 'Emitting coherent status data');
     socket.emit('data', data);

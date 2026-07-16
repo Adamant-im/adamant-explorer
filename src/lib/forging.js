@@ -16,6 +16,7 @@ import { epochToDate, round } from './format.js';
 
 const REQUIRED_HISTORY_ROUNDS = 5;
 const NOT_FORGING_AFTER_MISSED_ROUNDS = 4;
+const INITIAL_SUPPLY_BASE_UNITS = 9800000000000000n;
 
 /**
  * Derives the forging status of an active delegate.
@@ -114,20 +115,17 @@ export function forgingTotals(delegates) {
 }
 
 /**
- * Sum lifetime forged amounts without losing precision above Number.MAX_SAFE_INTEGER.
- * @param {Array<{forged?: string|number}>} delegates Delegates returned by the Node
- * @returns {string} Total fees and rewards in 1/10^8 ADM base units
+ * Calculate all block rewards minted after the initial 98 million ADM supply.
+ * @param {string|number} supply Current network supply in base units
+ * @returns {string} Lifetime block rewards in 1/10^8 ADM base units
  */
-export function sumForgedAmounts(delegates) {
-  return (delegates ?? [])
-    .reduce((total, delegate) => {
-      try {
-        return total + BigInt(delegate.forged ?? 0);
-      } catch {
-        return total;
-      }
-    }, 0n)
-    .toString();
+export function totalBlockRewards(supply) {
+  try {
+    const rewards = BigInt(supply ?? 0) - INITIAL_SUPPLY_BASE_UNITS;
+    return (rewards > 0n ? rewards : 0n).toString();
+  } catch {
+    return '0';
+  }
 }
 
 /**

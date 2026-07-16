@@ -169,5 +169,8 @@ const server = app.listen(app.get('port'), app.get('host'), (err) => {
     statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
       logger.error(`Failed to start block statistics cache: ${error}`);
     });
+    statisticsHandler.startPeerStatisticsCache(client).catch((error) => {
+      logger.error(`Failed to start peer statistics cache: ${error}`);
+    });
   }
 });

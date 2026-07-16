@@ -3,7 +3,7 @@ import {
   forgingStatus,
   forgingTotals,
   forgingProgress,
-  sumForgedAmounts,
+  totalBlockRewards,
 } from '../../src/lib/forging.js';
 
 // Unit tests for the Delegate Monitor forging status logic.
@@ -138,19 +138,15 @@ describe('forging.js', function () {
     });
   });
 
-  describe('sumForgedAmounts()', function () {
-    it('sums base-unit strings without floating-point precision loss', function () {
-      const total = sumForgedAmounts([
-        { forged: '9007199254740993' },
-        { forged: '7' },
-        { forged: null },
-      ]);
-
-      expect(total).to.equal('9007199254741000');
+  describe('totalBlockRewards()', function () {
+    it('subtracts the initial supply without floating-point precision loss', function () {
+      expect(totalBlockRewards('11451031950000000')).to.equal('1651031950000000');
     });
 
-    it('ignores malformed forged amounts', function () {
-      expect(sumForgedAmounts([{ forged: 'invalid' }, { forged: '10' }])).to.equal('10');
+    it('returns zero for missing, malformed, or pre-genesis supply', function () {
+      expect(totalBlockRewards()).to.equal('0');
+      expect(totalBlockRewards('invalid')).to.equal('0');
+      expect(totalBlockRewards('9700000000000000')).to.equal('0');
     });
   });
 });

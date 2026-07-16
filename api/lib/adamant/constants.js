@@ -7,6 +7,9 @@ const BLOCK_INTERVAL_MILLISECONDS = BLOCK_INTERVAL_SECONDS * 1000;
 /** Number of active delegates and forging slots in one ADAMANT round. */
 const ACTIVE_DELEGATES = 101;
 
+/** Initial ADM supply before block rewards, in 1/10^8 ADM base units. */
+const INITIAL_SUPPLY_BASE_UNITS = 9800000000000000n;
+
 /** Maximum number of blocks accepted by one Node `/api/blocks` request. */
 const BLOCKS_PAGE_SIZE = 100;
 
@@ -27,4 +30,5 @@ module.exports = {
   BLOCKS_PAGE_SIZE,
   BLOCK_STATISTICS_WINDOW_BLOCKS,
   BLOCK_STATISTICS_WINDOW_SECONDS,
+  INITIAL_SUPPLY_BASE_UNITS,
 };

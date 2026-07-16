@@ -7,7 +7,7 @@ import { useSocket } from '../composables/useSocket';
 import { apiGet } from '../lib/api';
 import { useSort } from '../lib/sort';
 import { formatCurrency, forgingTime, timeAgo, SAT } from '../lib/format';
-import { forgingStatus, forgingTotals, forgingProgress, sumForgedAmounts } from '../lib/forging';
+import { forgingStatus, forgingTotals, forgingProgress, totalBlockRewards } from '../lib/forging';
 import TabsBar from '../components/TabsBar.vue';
 import ForgingStatusDot from '../components/ForgingStatusDot.vue';
 
@@ -19,6 +19,7 @@ const lastBlock = ref(null);
 const registrations = ref(null);
 const votes = ref(null);
 const nextForgers = ref(null);
+const forgingStatistics = ref(null);
 
 const standbyDelegates = ref(null);
 const pagination = ref(null);
@@ -68,6 +69,9 @@ socket.on('data', (res) => {
   if (res.votes) {
     votes.value = res.votes.transactions;
   }
+  if (res.forgingTotals?.success) {
+    forgingStatistics.value = res.forgingTotals;
+  }
 });
 
 /** Loads a page of standby delegates over the REST API. */
@@ -99,7 +103,8 @@ const statusTotals = computed(() =>
 const processed = computed(() => (statusTotals.value ? forgingProgress(statusTotals.value) : 0));
 
 const bestForger = computed(() => maxBy(activeDelegates.value, (d) => parseInt(d.forged)));
-const totalForged = computed(() => sumForgedAmounts(activeDelegates.value));
+const totalForged = computed(() => totalBlockRewards(network.blockStatus?.supply));
+const transactionFees = computed(() => forgingStatistics.value?.transactionFees ?? 0);
 const bestProductivity = computed(() => maxBy(activeDelegates.value, (d) => d.productivity));
 const worstProductivity = computed(() => maxBy(activeDelegates.value, (d) => -d.productivity));
 
@@ -198,7 +203,15 @@ const standbyColumns = [
           Total Forged <span class="text-muted">({{ network.currency.symbol }})</span>
         </p>
         <p class="big-details accent">{{ amount(totalForged) }}</p>
-        <p class="text-muted">between {{ totals.totalActive }} active delegates</p>
+        <p class="text-muted">block rewards minted since genesis</p>
+      </div>
+
+      <div class="big-info">
+        <p class="small-title">
+          Transaction Fees <span class="text-muted">({{ network.currency.symbol }})</span>
+        </p>
+        <p class="big-details accent">{{ amount(transactionFees) }}</p>
+        <p class="text-muted">delegates earned additionally to block rewards</p>
       </div>
 
       <div class="big-info">

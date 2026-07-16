@@ -101,7 +101,7 @@ class Locator {
    */
   async locateIp(ip) {
     if (this.cache[ip]) {
-      logger.log(`Locator: Using cached location for ${ip}`);
+      logger.debug(`Locator: Using cached location for ${ip}`);
       return this.cache[ip];
     }
 
@@ -138,6 +138,18 @@ class Locator {
       if (!ips.includes(ip)) {
         logger.debug(`Locator: Removing stale location for ${ip}`);
         delete this.cache[ip];
+      }
+    }
+  }
+
+  /**
+   * Warm the location cache from a persisted peer snapshot.
+   * @param {Array<Object>} peers Previously enriched peers
+   */
+  restoreCache(peers) {
+    for (const peer of peers ?? []) {
+      if (peer?.ip && peer.location) {
+        this.cache[peer.ip] = peer.location;
       }
     }
   }

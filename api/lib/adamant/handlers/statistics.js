@@ -14,10 +14,15 @@ const logger = require('../../../../utils/log');
 const locator = new helpers.Locator();
 const blockWindow = new helpers.RollingBlocksWindow();
 const blockStatisticsEvents = new EventEmitter();
+const peerStatisticsEvents = new EventEmitter();
 const BLOCK_STATISTICS_REST_REFRESH_INTERVAL = BLOCK_INTERVAL_MILLISECONDS * 6;
 const BLOCK_STATISTICS_PERSIST_INTERVAL = 300000;
 const BLOCK_STATISTICS_CACHE_KEY = 'adamant-explorer:block-statistics:v1';
 const BLOCK_STATISTICS_CACHE_VERSION = 1;
+const PEER_STATISTICS_REFRESH_INTERVAL = BLOCK_INTERVAL_MILLISECONDS;
+const PEER_STATISTICS_PERSIST_INTERVAL = 60000;
+const PEER_STATISTICS_CACHE_KEY = 'adamant-explorer:peer-statistics:v1';
+const PEER_STATISTICS_CACHE_VERSION = 1;
 
 let blockStatistics = null;
 let blockStatisticsQueue = Promise.resolve();
@@ -26,6 +31,11 @@ let blockStatisticsTimer = null;
 let blockStatisticsPersistTimer = null;
 let redisClient = null;
 let unsubscribeFromNewBlocks = null;
+let peerStatistics = null;
+let peerStatisticsStart = null;
+let peerStatisticsRefresh = null;
+let peerStatisticsTimer = null;
+let peerStatisticsPersistTimer = null;
 
 /** Serialize mutations so WebSocket events cannot race REST recovery. */
 function queueBlockStatisticsUpdate(callback) {
@@ -111,6 +121,111 @@ async function persistBlockStatistics() {
   } catch (error) {
     logger.warn(`Block statistics cache: Failed to persist Redis window: ${error}`);
   }
+}
+
+/** Publish a process-wide peer snapshot to every Network Monitor client. */
+function publishPeerStatistics(list, source) {
+  peerStatistics = {
+    list,
+    success: true,
+  };
+
+  peerStatisticsEvents.emit('update', {
+    peers: peerStatistics,
+    source,
+  });
+
+  return peerStatistics;
+}
+
+/** Restore enriched peers so a restarted Explorer can answer immediately. */
+async function restorePeerStatistics() {
+  if (!redisClient) {
+    return false;
+  }
+
+  try {
+    const json = await redisClient.get(PEER_STATISTICS_CACHE_KEY);
+
+    if (!json) {
+      return false;
+    }
+
+    const cached = JSON.parse(json);
+
+    if (
+      cached.version !== PEER_STATISTICS_CACHE_VERSION ||
+      !Array.isArray(cached.list?.connected) ||
+      !Array.isArray(cached.list?.disconnected)
+    ) {
+      return false;
+    }
+
+    const peers = [...cached.list.connected, ...cached.list.disconnected];
+    locator.restoreCache(peers);
+    publishPeerStatistics(cached.list, 'redis');
+    return true;
+  } catch (error) {
+    logger.warn(`Peer statistics cache: Failed to restore Redis snapshot: ${error}`);
+    return false;
+  }
+}
+
+/** Persist the latest enriched peer snapshot without an expiry. */
+async function persistPeerStatistics() {
+  if (!redisClient || !peerStatistics) {
+    return;
+  }
+
+  try {
+    await redisClient.set(
+      PEER_STATISTICS_CACHE_KEY,
+      JSON.stringify({
+        version: PEER_STATISTICS_CACHE_VERSION,
+        list: peerStatistics.list,
+      }),
+    );
+  } catch (error) {
+    logger.warn(`Peer statistics cache: Failed to persist Redis snapshot: ${error}`);
+  }
+}
+
+/** Fetch, classify, and enrich every peer page from the active Node. */
+async function collectPeerStatistics() {
+  const peersStatistics = new helpers.PeersStatistics(locator);
+  const limit = 100;
+  let offset = 0;
+  let found = false;
+
+  do {
+    const data = await statistics.getPeers(offset, limit);
+
+    if (data.length > 0) {
+      await peersStatistics.collect(data);
+    } else {
+      found = true;
+    }
+
+    offset += limit;
+  } while (!(found || offset > helpers.PeersStatistics.maxOffset));
+
+  peersStatistics.locator.updateCache(peersStatistics.ips);
+  return peersStatistics.list;
+}
+
+/** Serialize peer refreshes so a slow DNS lookup cannot create overlap. */
+function refreshPeerStatistics() {
+  if (peerStatisticsRefresh) {
+    return peerStatisticsRefresh;
+  }
+
+  peerStatisticsRefresh = collectPeerStatistics()
+    .then((list) => publishPeerStatistics(list, 'node'))
+    .finally(() => {
+      peerStatisticsRefresh = null;
+    });
+
+  return peerStatisticsRefresh;
 }
 
 /**
@@ -261,6 +376,54 @@ async function startBlockStatisticsCache(client) {
   return blockStatisticsStart;
 }
 
+/**
+ * Start peer collection at Explorer startup, independently of browser clients.
+ * Redis supplies the first response while Node/DNS enrichment refreshes it.
+ * @param {Object} client Redis client
+ * @returns {Promise<Object|null>} Initial peer snapshot
+ */
+async function startPeerStatisticsCache(client) {
+  if (client) {
+    redisClient = client;
+  }
+
+  if (peerStatisticsStart) {
+    return peerStatisticsStart;
+  }
+
+  peerStatisticsStart = (async () => {
+    await api.waitForReady();
+    await restorePeerStatistics();
+
+    try {
+      await refreshPeerStatistics();
+      await persistPeerStatistics();
+    } catch (error) {
+      logger.error(`Peer statistics cache: ${error}`);
+    }
+
+    if (!peerStatisticsTimer) {
+      peerStatisticsTimer = setInterval(() => {
+        refreshPeerStatistics().catch((error) => {
+          logger.error(`Peer statistics refresh: ${error}`);
+        });
+      }, PEER_STATISTICS_REFRESH_INTERVAL);
+    }
+
+    if (!peerStatisticsPersistTimer) {
+      peerStatisticsPersistTimer = setInterval(() => {
+        persistPeerStatistics().catch((error) => {
+          logger.error(`Peer statistics persistence: ${error}`);
+        });
+      }, PEER_STATISTICS_PERSIST_INTERVAL);
+    }
+
+    return peerStatistics;
+  })();
+
+  return peerStatisticsStart;
+}
+
 /** Return a copy of the current contiguous block history. */
 function getCachedBlocks() {
   return blockWindow.blocks;
@@ -279,6 +442,12 @@ async function ensureBlockStatistics() {
 function subscribeBlockStatistics(listener) {
   blockStatisticsEvents.on('update', listener);
   return () => blockStatisticsEvents.off('update', listener);
+}
+
+/** Subscribe a process-local consumer to shared peer snapshot updates. */
+function subscribePeerStatistics(listener) {
+  peerStatisticsEvents.on('update', listener);
+  return () => peerStatisticsEvents.off('update', listener);
 }
 
 /**
@@ -333,32 +502,7 @@ async function getBlocks(error, success) {
  */
 async function getPeers(error, success) {
   try {
-    const peersStatistics = new helpers.PeersStatistics(locator);
-
-    const limit = 100;
-    let offset = 0;
-    let found = false;
-
-    do {
-      const data = await statistics.getPeers(offset, limit);
-
-      if (data.length > 0) {
-        await peersStatistics.collect(data);
-      } else {
-        found = true;
-      }
-
-      offset += limit;
-    } while (!(found || offset > helpers.PeersStatistics.maxOffset));
-
-    const result = {};
-
-    peersStatistics.locator.updateCache(peersStatistics.ips);
-
-    result.list = peersStatistics.list;
-
-    result.success = true;
-
+    const result = peerStatistics ?? (await refreshPeerStatistics());
     return success(result);
   } catch (err) {
     logger.error(err);
@@ -377,5 +521,7 @@ module.exports = {
   getPeers,
   ingestBlocks,
   startBlockStatisticsCache,
+  startPeerStatisticsCache,
   subscribeBlockStatistics,
+  subscribePeerStatistics,
 };

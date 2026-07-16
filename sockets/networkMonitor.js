@@ -8,6 +8,7 @@ module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
   let monitoring = false;
   let unsubscribeFromBlocks = null;
+  let unsubscribeFromPeers = null;
   new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
@@ -26,11 +27,15 @@ module.exports = function (app, connectionHandler, socket) {
       );
     }
 
-    // Peer geo/DNS enrichment may take several seconds on a cold cache. Load
-    // each source independently so block cards are not held behind peer data.
+    if (!unsubscribeFromPeers) {
+      unsubscribeFromPeers = statisticsHandler.subscribePeerStatistics(handlePeerStatisticsUpdate);
+    }
+
+    // Load independent cards separately. Peers normally resolve immediately
+    // from the process-wide cache while a background refresh continues.
     initializeSource(0, 'lastBlock', getLastBlock, BLOCK_INTERVAL_MILLISECONDS, emitData1);
     initializeSource(1, 'blocks', getBlocks, 300000, emitData2);
-    initializeSource(2, 'peers', getPeers, 5000, emitData3);
+    initializeSource(2, 'peers', getPeers);
   };
 
   this.onConnect = function () {
@@ -48,6 +53,8 @@ module.exports = function (app, connectionHandler, socket) {
 
     unsubscribeFromBlocks?.();
     unsubscribeFromBlocks = null;
+    unsubscribeFromPeers?.();
+    unsubscribeFromPeers = null;
   };
 
   // Private
@@ -71,8 +78,8 @@ module.exports = function (app, connectionHandler, socket) {
    * @param {number} index Timer slot
    * @param {string} key Data property emitted to clients
    * @param {Function} loader Callback-style source loader
-   * @param {number} delay Refresh interval in milliseconds
-   * @param {Function} refresh Periodic refresh callback
+   * @param {number} [delay] Refresh interval in milliseconds
+   * @param {Function} [refresh] Periodic refresh callback
    */
   const initializeSource = function (index, key, loader, delay, refresh) {
     loader((err, result) => {
@@ -99,7 +106,9 @@ module.exports = function (app, connectionHandler, socket) {
       data[key] = result;
       log('info', `Emitting initial ${key}`);
       socket.emit('data', { [key]: result });
-      newInterval(index, delay, refresh);
+      if (delay && refresh) {
+        newInterval(index, delay, refresh);
+      }
     });
   };
 
@@ -169,6 +178,16 @@ module.exports = function (app, connectionHandler, socket) {
     }
   };
 
+  /** Push process-wide peer snapshots without restarting collection per browser. */
+  const handlePeerStatisticsUpdate = function (update) {
+    if (!monitoring || !update.peers) {
+      return;
+    }
+
+    data.peers = update.peers;
+    socket.emit('data3', { peers: update.peers });
+  };
+
   const emitData1 = function () {
     const thisData = {};
 
@@ -200,24 +219,6 @@ module.exports = function (app, connectionHandler, socket) {
 
           log('info', 'Emitting data-2');
           socket.emit('data2', thisData);
-        }
-      }.bind(this),
-    );
-  };
-
-  const emitData3 = function () {
-    const thisData = {};
-
-    async.parallel(
-      [getPeers],
-      function (err, res) {
-        if (err) {
-          log('error', 'Error retrieving: ' + err);
-        } else {
-          thisData.peers = data.peers = res[0];
-
-          log('info', 'Emitting data-3');
-          socket.emit('data3', thisData);
         }
       }.bind(this),
     );
