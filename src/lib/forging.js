@@ -114,6 +114,23 @@ export function forgingTotals(delegates) {
 }
 
 /**
+ * Sum lifetime forged amounts without losing precision above Number.MAX_SAFE_INTEGER.
+ * @param {Array<{forged?: string|number}>} delegates Delegates returned by the Node
+ * @returns {string} Total fees and rewards in 1/10^8 ADM base units
+ */
+export function sumForgedAmounts(delegates) {
+  return (delegates ?? [])
+    .reduce((total, delegate) => {
+      try {
+        return total + BigInt(delegate.forged ?? 0);
+      } catch {
+        return total;
+      }
+    }, 0n)
+    .toString();
+}
+
+/**
  * Number of delegates with a resolved status this round, used by the
  * monitor's progress bar (out of the 101 active delegates).
  *

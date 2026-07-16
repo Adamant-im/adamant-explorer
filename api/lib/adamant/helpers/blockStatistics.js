@@ -40,18 +40,20 @@ class BlocksStatistics {
     const window = blocks.slice(0, this.windowSize);
 
     for (const block of window) {
-      const newAmount = block.totalAmount + block.totalFee;
+      // `totalAmount` is the sum of transaction values. Fees are paid to the
+      // forger, but they are not value transferred by these transactions.
+      const transferredAmount = Number(block.totalAmount) || 0;
 
       this.volume.blocks += 1;
       this.volume.txs += block.numberOfTransactions;
-      this.volume.amount += newAmount;
+      this.volume.amount += transferredAmount;
 
-      if (newAmount > 0) {
+      if (transferredAmount > 0) {
         this.volume.withTxs += 1;
 
-        if (newAmount > this.best.amount) {
+        if (transferredAmount > this.best.amount) {
           this.best.block = block;
-          this.best.amount = newAmount;
+          this.best.amount = transferredAmount;
         }
       }
     }

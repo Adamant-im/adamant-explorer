@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { forgingStatus, forgingTotals, forgingProgress } from '../../src/lib/forging.js';
+import {
+  forgingStatus,
+  forgingTotals,
+  forgingProgress,
+  sumForgedAmounts,
+} from '../../src/lib/forging.js';
 
 // Unit tests for the Delegate Monitor forging status logic.
 
@@ -130,6 +135,22 @@ describe('forging.js', function () {
 
     it('caps at the full round when everything is processed', function () {
       expect(forgingProgress({ unprocessed: 0 })).to.equal(101);
+    });
+  });
+
+  describe('sumForgedAmounts()', function () {
+    it('sums base-unit strings without floating-point precision loss', function () {
+      const total = sumForgedAmounts([
+        { forged: '9007199254740993' },
+        { forged: '7' },
+        { forged: null },
+      ]);
+
+      expect(total).to.equal('9007199254741000');
+    });
+
+    it('ignores malformed forged amounts', function () {
+      expect(sumForgedAmounts([{ forged: 'invalid' }, { forged: '10' }])).to.equal('10');
     });
   });
 });

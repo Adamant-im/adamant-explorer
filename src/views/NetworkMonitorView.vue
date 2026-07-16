@@ -266,10 +266,10 @@ function amount(value) {
             </p>
             <p class="text-muted">
               <span class="accent">
-                {{ amount(lastBlock.totalAmount + lastBlock.totalFee) }}
+                {{ amount(lastBlock.totalAmount) }}
                 {{ network.currency.symbol }}
               </span>
-              from {{ lastBlock.numberOfTransactions || 0 }} transactions
+              transferred across {{ lastBlock.numberOfTransactions || 0 }} transactions
             </p>
             <p class="text-muted">{{ timeAgo(lastBlock.timestamp) }}</p>
           </template>
@@ -287,10 +287,10 @@ function amount(value) {
             </p>
             <p class="text-muted">
               <span class="accent">
-                {{ amount(bestBlock.totalAmount + bestBlock.totalFee) }}
+                {{ amount(bestBlock.totalAmount) }}
                 {{ network.currency.symbol }}
               </span>
-              from {{ bestBlock.numberOfTransactions || 0 }} transactions
+              transferred across {{ bestBlock.numberOfTransactions || 0 }} transactions
             </p>
             <p class="text-muted">{{ timeAgo(bestBlock.timestamp) }}</p>
           </template>
@@ -314,12 +314,12 @@ function amount(value) {
               transferred within {{ timeSpan(volume.beginning, volume.end) }}
             </p>
             <p class="text-muted">
-              from {{ volume.txs || 0 }} transactions in {{ volume.withTxs || 0 }} /
-              {{ volume.blocks || 0 }} blocks
+              across {{ volume.txs || 0 }} total transactions; transferred value in
+              {{ volume.withTxs || 0 }} / {{ volume.blocks || 0 }} blocks
             </p>
           </template>
           <p v-else-if="volume" class="text-muted">
-            no transactions in the collected {{ volume.blocks || 0 }} blocks
+            no transferred value in the collected {{ volume.blocks || 0 }} blocks
           </p>
           <p v-else class="text-muted">waiting for transactions <span class="spinner"></span></p>
           <p v-if="volume && !volume.complete" class="text-muted">

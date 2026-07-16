@@ -11,6 +11,7 @@ const {
 const logger = require('../utils/log');
 const {
   getForgingSchedule,
+  getNextSlotRefreshDelay,
   getRound,
   getRoundDelegates,
   moveForgingScheduleToSlot,
@@ -21,10 +22,7 @@ const {
   serializeActiveDelegateState,
 } = require('./delegateMonitorState');
 
-const STATUS_REFRESH_INTERVAL = BLOCK_INTERVAL_MILLISECONDS;
 const STATUS_REFRESH_GRACE_MILLISECONDS = 25;
-const FORGED_REFRESH_INTERVAL = 300000;
-const FORGED_REQUEST_CONCURRENCY = 10;
 const ACTIVE_DELEGATE_STATE_KEY = 'adamant-explorer:delegate-monitor:active:v1';
 
 module.exports = function (app, connectionHandler, socket) {
@@ -63,10 +61,7 @@ module.exports = function (app, connectionHandler, socket) {
           log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
           scheduleRetry();
         } else {
-          tmpData.nextForgers = getForgingSchedule(
-            res[1].delegates.map((delegate) => delegate.publicKey),
-            res[4],
-          );
+          tmpData.nextForgers = getForgingSchedule(res[4]);
 
           data.lastBlock = res[0];
           data.active = updateActive(res[1]);
@@ -172,32 +167,11 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     scheduleNextStatusRefresh();
-
-    try {
-      await refreshForgedAmounts();
-    } catch (error) {
-      log('error', 'Error retrieving forged amounts: ' + error);
-    }
-
-    if (monitoring) {
-      newSerializedLoop(2, FORGED_REFRESH_INTERVAL, refreshForgedAmounts, 'forged amounts');
-    }
   };
 
-  /** Align the next status refresh just after the next five-second slot boundary. */
+  /** Align the next status refresh just after the absolute five-second slot boundary. */
   const getNextStatusRefreshDelay = function () {
-    const nodeTimestamp = tmpData.nextForgers?.nodeTimestamp;
-
-    if (!Number.isInteger(nodeTimestamp)) {
-      return STATUS_REFRESH_INTERVAL;
-    }
-
-    const elapsedInSlot = (nodeTimestamp % BLOCK_INTERVAL_SECONDS) * 1000 + (Date.now() % 1000);
-
-    return Math.max(
-      STATUS_REFRESH_GRACE_MILLISECONDS,
-      STATUS_REFRESH_INTERVAL - elapsedInSlot + STATUS_REFRESH_GRACE_MILLISECONDS,
-    );
+    return getNextSlotRefreshDelay(Date.now(), STATUS_REFRESH_GRACE_MILLISECONDS);
   };
 
   /** Schedule one slot-aligned refresh; block events may bring it forward. */
@@ -371,7 +345,6 @@ module.exports = function (app, connectionHandler, socket) {
         running.getActive = false;
         cb(null, res);
       },
-      { includeForged: false },
     );
   };
 
@@ -439,7 +412,7 @@ module.exports = function (app, connectionHandler, socket) {
       const existing = findActive(delegate);
       const persisted = tmpData.activeDelegateState?.get(delegate.publicKey);
 
-      delegate.forged = existing?.forged ?? delegate.forged ?? 0;
+      delegate.forged = delegate.forged ?? existing?.forged ?? 0;
       Object.assign(
         delegate,
         getDelegateObservationState(existing, persisted, hadActiveSnapshot, networkRound),
@@ -578,10 +551,7 @@ module.exports = function (app, connectionHandler, socket) {
     const oldestRound = getRound(oldestBlock.height);
 
     tmpData.nextForgers = {
-      ...getForgingSchedule(
-        activeResults.delegates.map((delegate) => delegate.publicKey),
-        nextForgers,
-      ),
+      ...getForgingSchedule(nextForgers),
       success: true,
     };
 
@@ -645,39 +615,6 @@ module.exports = function (app, connectionHandler, socket) {
 
     log('info', 'Emitting coherent status data');
     socket.emit('data', data);
-  };
-
-  /** Refreshes forged totals separately so status updates are never blocked by 101 requests. */
-  const refreshForgedAmounts = async function () {
-    const activeDelegates = data.active?.delegates ?? [];
-
-    if (!activeDelegates.length) {
-      return;
-    }
-
-    const forgedAmounts = await async.mapLimit(
-      activeDelegates,
-      FORGED_REQUEST_CONCURRENCY,
-      async (delegate) => ({
-        publicKey: delegate.publicKey,
-        forged: await delegates.getForged(delegate.publicKey),
-      }),
-    );
-
-    if (!monitoring || !data.active?.delegates) {
-      return;
-    }
-
-    const forgedByPublicKey = new Map(
-      forgedAmounts.map((delegate) => [delegate.publicKey, delegate.forged]),
-    );
-
-    data.active.delegates = data.active.delegates.map((delegate) => ({
-      ...delegate,
-      forged: forgedByPublicKey.get(delegate.publicKey) ?? delegate.forged,
-    }));
-
-    socket.emit('data', { active: data.active });
   };
 
   /** Refresh page metadata without replacing the atomic forging state. */

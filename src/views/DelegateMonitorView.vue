@@ -7,7 +7,7 @@ import { useSocket } from '../composables/useSocket';
 import { apiGet } from '../lib/api';
 import { useSort } from '../lib/sort';
 import { formatCurrency, forgingTime, timeAgo, SAT } from '../lib/format';
-import { forgingStatus, forgingTotals, forgingProgress } from '../lib/forging';
+import { forgingStatus, forgingTotals, forgingProgress, sumForgedAmounts } from '../lib/forging';
 import TabsBar from '../components/TabsBar.vue';
 import ForgingStatusDot from '../components/ForgingStatusDot.vue';
 
@@ -38,7 +38,6 @@ function withStatuses(delegates, height) {
     ...delegate,
     // Round the raw sats values the way the legacy monitor did
     votesWeight: Number((delegate.votesWeight / SAT).toFixed(0)) * SAT,
-    forged: Number((delegate.forged / SAT).toFixed(4)) * SAT,
     forgingStatus: forgingStatus(delegate, height),
   }));
 }
@@ -100,7 +99,7 @@ const statusTotals = computed(() =>
 const processed = computed(() => (statusTotals.value ? forgingProgress(statusTotals.value) : 0));
 
 const bestForger = computed(() => maxBy(activeDelegates.value, (d) => parseInt(d.forged)));
-const totalForged = computed(() => network.blockStatus?.supply ?? 0);
+const totalForged = computed(() => sumForgedAmounts(activeDelegates.value));
 const bestProductivity = computed(() => maxBy(activeDelegates.value, (d) => d.productivity));
 const worstProductivity = computed(() => maxBy(activeDelegates.value, (d) => -d.productivity));
 
@@ -199,7 +198,7 @@ const standbyColumns = [
           Total Forged <span class="text-muted">({{ network.currency.symbol }})</span>
         </p>
         <p class="big-details accent">{{ amount(totalForged) }}</p>
-        <p class="text-muted">network-wide current supply</p>
+        <p class="text-muted">between {{ totals.totalActive }} active delegates</p>
       </div>
 
       <div class="big-info">

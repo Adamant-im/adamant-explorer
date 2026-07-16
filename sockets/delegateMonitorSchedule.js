@@ -1,5 +1,23 @@
-const crypto = require('crypto');
-const { ACTIVE_DELEGATES, BLOCK_INTERVAL_SECONDS } = require('../api/lib/adamant/constants');
+const {
+  ACTIVE_DELEGATES,
+  BLOCK_INTERVAL_MILLISECONDS,
+  BLOCK_INTERVAL_SECONDS,
+} = require('../api/lib/adamant/constants');
+
+/**
+ * Calculate the delay to the next absolute network slot boundary.
+ * @param {number} nowMilliseconds Current Unix timestamp in milliseconds
+ * @param {number} graceMilliseconds Delay after the boundary before firing
+ * @returns {number} Milliseconds until the refresh should run
+ */
+function getNextSlotRefreshDelay(nowMilliseconds, graceMilliseconds) {
+  const elapsedInSlot = nowMilliseconds % BLOCK_INTERVAL_MILLISECONDS;
+
+  return Math.max(
+    graceMilliseconds,
+    BLOCK_INTERVAL_MILLISECONDS - elapsedInSlot + graceMilliseconds,
+  );
+}
 
 /**
  * Get the forging round containing a block height.
@@ -11,43 +29,16 @@ function getRound(height) {
 }
 
 /**
- * Reproduce the ADAMANT Node v0.10.2 delegate shuffle for one block round.
- *
- * The Explorer needs this narrow client-side projection because the Node
- * `getNextForgers` endpoint shuffles by the last block height. At a round
- * boundary, the next block already uses the following round's shuffle.
- * @param {Array<string>} delegatePublicKeys Active public keys ordered by rank
- * @param {number} height Height of the block that will use the generated list
- * @returns {Array<string>} Shuffled delegate public keys
- */
-function generateDelegateList(delegatePublicKeys, height) {
-  const delegates = delegatePublicKeys.slice();
-  let seed = crypto
-    .createHash('sha256')
-    .update(String(getRound(height)), 'utf8')
-    .digest();
-
-  // Keep the Node's outer-loop increment: it is part of the consensus shuffle.
-  for (let index = 0; index < delegates.length; index++) {
-    for (let seedIndex = 0; seedIndex < 4 && index < delegates.length; index++, seedIndex++) {
-      const newIndex = seed[seedIndex] % delegates.length;
-      [delegates[newIndex], delegates[index]] = [delegates[index], delegates[newIndex]];
-    }
-
-    seed = crypto.createHash('sha256').update(seed).digest();
-  }
-
-  return delegates;
-}
-
-/**
- * Build the schedule for the next block from an atomic Node timing snapshot.
- * @param {Array<string>} activePublicKeys Active public keys ordered by rank
- * @param {Object} state Node `getNextForgers` timing fields
+ * Build an absolute-slot schedule from the Node's next-block snapshot.
+ * @param {Object} state Node `getNextForgers` response with all 101 delegates
  * @returns {Object} Timing fields plus projected next and current forgers
  */
-function getForgingSchedule(activePublicKeys, state) {
-  const orderedDelegates = generateDelegateList(activePublicKeys, state.currentBlock + 1);
+function getForgingSchedule(state) {
+  const orderedDelegates = Array(ACTIVE_DELEGATES);
+
+  state.delegates.forEach((publicKey, index) => {
+    orderedDelegates[(state.currentSlot + index + 1) % ACTIVE_DELEGATES] = publicKey;
+  });
 
   return moveForgingScheduleToSlot(
     {
@@ -102,8 +93,11 @@ function getRoundDelegates(schedule, recentBlocks = []) {
       return [];
     }
 
+    const missedSlots = Math.max(0, schedule.currentSlot - schedule.currentBlockSlot - 1);
+    const remainingSlots = Math.max(0, ACTIVE_DELEGATES - missedSlots);
+
     return Array.from(
-      { length: ACTIVE_DELEGATES },
+      { length: remainingSlots },
       (_, index) => schedule.orderedDelegates[(schedule.currentSlot + index) % ACTIVE_DELEGATES],
     );
   }
@@ -133,8 +127,8 @@ function getRoundDelegates(schedule, recentBlocks = []) {
 }
 
 module.exports = {
-  generateDelegateList,
   getForgingSchedule,
+  getNextSlotRefreshDelay,
   getRound,
   getRoundDelegates,
   moveForgingScheduleToSlot,

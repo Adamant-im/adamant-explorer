@@ -8,22 +8,12 @@ const logger = require('../../../../utils/log');
  * Get active delegates info
  * @param {Function} error Error callback
  * @param {Function} success Success callback
- * @param {{includeForged?: boolean}} [options] Optional response enrichment
  * @returns {Promise<*>}
  */
-async function getActive(error, success, options = {}) {
+async function getActive(error, success) {
   try {
     const result = await delegates.getActive();
     result.delegates = helpers.parseDelegates(result.delegates);
-
-    if (options.includeForged !== false) {
-      result.delegates = await Promise.all(
-        result.delegates.map(async (delegate) => {
-          delegate.forged = await delegates.getForged(delegate.publicKey);
-          return delegate;
-        }),
-      );
-    }
 
     result.success = true;
 
