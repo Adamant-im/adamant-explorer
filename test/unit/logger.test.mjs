@@ -68,6 +68,10 @@ describe('Explorer logger', function () {
 
     await logger.close();
     expect(calls.map((args) => args[1].split('|')[0])).to.deep.equal(METHODS.slice(0, 4));
+
+    const contents = await readFile(join(logDirectory, '2026-01-02.log'), 'utf8');
+    expect(contents).to.include('logLevel=log');
+    expect(contents).not.to.include('logLevel=verbose');
   });
 
   it('writes debug output to an isolated log file', async function () {

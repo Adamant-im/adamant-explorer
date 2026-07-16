@@ -35,9 +35,8 @@ function createLogger({
   consoleOutput = console,
   now = Date.now,
 } = {}) {
-  const configuredLevel = LOG_LEVELS.includes(level)
-    ? LOG_LEVELS.indexOf(level)
-    : LOG_LEVELS.indexOf(DEFAULT_LOG_LEVEL);
+  const effectiveLevel = LOG_LEVELS.includes(level) ? level : DEFAULT_LOG_LEVEL;
+  const configuredLevel = LOG_LEVELS.indexOf(effectiveLevel);
 
   fs.mkdirSync(logDirectory, { recursive: true });
 
@@ -48,7 +47,7 @@ function createLogger({
   );
 
   logFile.write(
-    `\n\n[Explorer process started] time=${fullTime(startedAt)}; pid=${process.pid}; logLevel=${level}\n`,
+    `\n\n[Explorer process started] time=${fullTime(startedAt)}; pid=${process.pid}; logLevel=${effectiveLevel}\n`,
   );
 
   /** Write one message when its severity passes the configured threshold. */
