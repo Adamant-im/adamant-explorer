@@ -31,7 +31,9 @@ async function getLastBlocks(n, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Blocks handler: Failed to load the latest blocks; page=${Number.parseInt(n, 10) || 0}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -70,7 +72,9 @@ async function getBlock(params, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Blocks handler: Failed to load block details; lookup=${params.blockId ? 'id' : 'height'}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -92,7 +96,7 @@ async function getBlockStatus(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Blocks handler: Failed to load network status: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',

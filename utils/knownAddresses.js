@@ -66,14 +66,16 @@ function inDelegate(delegate) {
  */
 function load() {
   try {
-    logger.info('Known Addresses: Loading known addresses...');
+    logger.debug('Known addresses: Loading known.json');
     addresses = require('../known.json');
   } catch (err) {
-    logger.error(`Known Addresses: Failed to load known.json: ${err.message}`);
+    logger.warn(
+      `Known addresses: Failed to load known.json; continuing without address labels: ${err.message}`,
+    );
     addresses = {};
   }
 
-  logger.info(`Known Addresses: ${Object.keys(addresses).length} known addresses loaded`);
+  logger.info(`Known addresses: Loaded ${Object.keys(addresses).length} address labels`);
   return addresses;
 }
 

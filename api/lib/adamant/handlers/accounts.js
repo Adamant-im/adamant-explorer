@@ -72,7 +72,7 @@ async function getAccount(params, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Accounts handler: Failed to assemble account details: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -115,7 +115,9 @@ async function getTopAccounts(query, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Accounts handler: Failed to load top accounts; offset=${query.offset}; limit=${query.limit}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',

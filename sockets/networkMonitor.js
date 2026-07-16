@@ -39,7 +39,7 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onConnect = function () {
-    log('info', 'Emitting existing data');
+    log('debug', `Emitted cached data; sources=${Object.keys(data).join(',') || 'none'}`);
     socket.emit('data', data);
   };
 
@@ -60,7 +60,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Network Monitor:' + msg);
+    logger[level](`Network Monitor: ${msg}`);
   };
 
   const newInterval = function (i, delay, cb) {
@@ -84,7 +84,7 @@ module.exports = function (app, connectionHandler, socket) {
   const initializeSource = function (index, key, loader, delay, refresh) {
     loader((err, result) => {
       if (err) {
-        log('error', `Error retrieving ${key}: ${err}. Retrying in 10 seconds`);
+        log('warn', `Initial ${key} load failed (${err}); retrying in 10000ms`);
 
         if (monitoring && intervals[index] === undefined) {
           intervals[index] = setTimeout(() => {
@@ -104,7 +104,7 @@ module.exports = function (app, connectionHandler, socket) {
       }
 
       data[key] = result;
-      log('info', `Emitting initial ${key}`);
+      log('debug', `Emitted initial ${key} snapshot`);
       socket.emit('data', { [key]: result });
       if (delay && refresh) {
         newInterval(index, delay, refresh);
@@ -171,6 +171,10 @@ module.exports = function (app, connectionHandler, socket) {
 
     data.blocks = update.blocks;
     socket.emit('data2', { blocks: update.blocks });
+    log(
+      'debug',
+      `Forwarded block statistics; source=${update.source ?? 'unknown'}; height=${update.lastBlock?.height ?? 'unknown'}`,
+    );
 
     if (update.lastBlock) {
       data.lastBlock = { success: true, block: update.lastBlock };
@@ -186,6 +190,11 @@ module.exports = function (app, connectionHandler, socket) {
 
     data.peers = update.peers;
     socket.emit('data3', { peers: update.peers });
+    log(
+      'debug',
+      `Forwarded peer statistics; source=${update.source ?? 'unknown'}; ` +
+        `connected=${update.peers.list?.connected?.length ?? 0}; disconnected=${update.peers.list?.disconnected?.length ?? 0}`,
+    );
   };
 
   const emitData1 = function () {
@@ -195,11 +204,17 @@ module.exports = function (app, connectionHandler, socket) {
       [getLastBlock],
       function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          log(
+            'warn',
+            `Latest-block refresh failed (${err}); next attempt in ${BLOCK_INTERVAL_MILLISECONDS}ms`,
+          );
         } else {
           thisData.lastBlock = data.lastBlock = res[0];
 
-          log('info', 'Emitting data-1');
+          log(
+            'debug',
+            `Emitted latest-block refresh; height=${thisData.lastBlock?.block?.height ?? 'unknown'}`,
+          );
           socket.emit('data1', thisData);
         }
       }.bind(this),
@@ -213,11 +228,14 @@ module.exports = function (app, connectionHandler, socket) {
       [getBlocks],
       function (err, res) {
         if (err) {
-          log('error', 'Error retrieving: ' + err);
+          log('warn', `Block-statistics refresh failed (${err}); next attempt in 300000ms`);
         } else {
           thisData.blocks = data.blocks = res[0];
 
-          log('info', 'Emitting data-2');
+          log(
+            'debug',
+            `Emitted block-statistics refresh; blocks=${thisData.blocks?.volume?.blocks ?? 0}`,
+          );
           socket.emit('data2', thisData);
         }
       }.bind(this),

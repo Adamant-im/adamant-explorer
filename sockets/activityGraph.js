@@ -1,22 +1,24 @@
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
+const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
+const logger = require('../utils/log');
 
 module.exports = function (app, connectionHandler, socket) {
   let interval = null;
   let data = {};
   new connectionHandler('Activity Graph:', socket, this);
-  const running = { getlastBlock: false };
+  const running = { getLastBlock: false };
 
   this.onInit = function () {
     emitLastBlock();
 
     if (interval == null) {
-      interval = setInterval(emitLastBlock, 10000);
+      interval = setInterval(emitLastBlock, BLOCK_INTERVAL_MILLISECONDS);
     }
   };
 
   this.onConnect = function () {
-    log('Emitting existing data');
+    log('debug', `Emitted cached data; height=${data.block?.height ?? 'unknown'}`);
     socket.emit('data', data);
   };
 
@@ -29,7 +31,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    // logger[level]('Activity Graph: ', msg);
+    logger[level](`Activity Graph: ${msg}`);
   };
 
   const getLastBlock = function (cb) {
@@ -83,11 +85,18 @@ module.exports = function (app, connectionHandler, socket) {
   const emitLastBlock = function () {
     getLastBlock((err, res) => {
       if (err) {
-        log('error', 'Error retrieving: ' + err);
+        log(
+          'warn',
+          `Block refresh failed (${err}); next attempt in ${BLOCK_INTERVAL_MILLISECONDS}ms`,
+        );
       } else if (newLastBlock(res)) {
         data = res;
       }
-      log('info', 'Emitting new data');
+
+      log(
+        'debug',
+        `Emitted data; height=${data.block?.height ?? 'unknown'}; transactions=${data.block?.transactions?.length ?? data.block?.numberOfTransactions ?? 0}`,
+      );
       socket.emit('data', data);
     });
   };

@@ -66,6 +66,8 @@ nano config.jsonc
 
 Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically.
 
+Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` is the most verbose troubleshooting level.
+
 ### Build the frontend
 
 Build the production bundle into `public/`:

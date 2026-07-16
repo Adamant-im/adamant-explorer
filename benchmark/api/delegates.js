@@ -6,16 +6,12 @@ module.exports = function () {
     delegatesHandler.getActive(
       (data) => {
         deferred.resolve();
-        logger.warn('delegatesHandler.getActive ~> ' + 'Error retrieving delegates: ' + data.error);
+        logger.warn(`Benchmark delegates.getActive: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'delegatesHandler.getActive ~> ' +
-            data.delegates.length +
-            ' delegates retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark delegates.getActive: Completed; delegates=${data.delegates.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -26,18 +22,12 @@ module.exports = function () {
       0,
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'delegatesHandler.getStandby ~> ' + ' Error retrieving delegates: ' + data.error,
-        );
+        logger.warn(`Benchmark delegates.getStandby: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'delegatesHandler.getStandby ~> ' +
-            data.delegates.length +
-            ' delegates retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark delegates.getStandby: Completed; delegates=${data.delegates.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -47,20 +37,12 @@ module.exports = function () {
     delegatesHandler.getLatestRegistrations(
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'delegatesHandler.getLatestRegistrations ~> ' +
-            ' Error retrieving registrations: ' +
-            data.error,
-        );
+        logger.warn(`Benchmark delegates.getLatestRegistrations: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'delegatesHandler.getLatestRegistrations ~> ' +
-            data.transactions.length +
-            ' registrations retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark delegates.getLatestRegistrations: Completed; registrations=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -70,18 +52,12 @@ module.exports = function () {
     delegatesHandler.getLatestVotes(
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'delegatesHandler.getLatestVotes ~> ' + ' Error retrieving votes: ' + data.error,
-        );
+        logger.warn(`Benchmark delegates.getLatestVotes: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'delegatesHandler.getLatestVotes ~> ' +
-            data.transactions.length +
-            ' votes retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark delegates.getLatestVotes: Completed; votes=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -91,16 +67,11 @@ module.exports = function () {
     delegatesHandler.getLastBlock(
       (data) => {
         deferred.resolve();
-        logger.warn('delegatesHandler.getLastBlock ~> ' + ' Error retrieving block: ' + data.error);
+        logger.warn(`Benchmark delegates.getLastBlock: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
-        logger.log(
-          'delegatesHandler.getLastBlock ~> ' +
-            ' block retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
-        );
+        logger.log(`Benchmark delegates.getLastBlock: Completed; elapsed=${deferred.elapsed}s`);
       },
     );
   };

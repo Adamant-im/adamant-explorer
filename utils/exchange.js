@@ -49,6 +49,11 @@ class Exchange {
 
     if (config.exchangeRates.enabled) {
       setInterval(() => this.loadRates(), config.exchangeRates.updateInterval);
+      logger.debug(
+        `Exchange rates: Enabled; sources=${SOURCES.length}; refreshInterval=${config.exchangeRates.updateInterval}ms`,
+      );
+    } else {
+      logger.debug('Exchange rates: Disabled by configuration');
     }
   }
 
@@ -76,12 +81,12 @@ class Exchange {
             tickers[base] = { ...tickers[base], [quote]: rate };
           } else {
             logger.warn(
-              `Exchange rates: Unexpected ${base}/${quote} response from ${name}, ignored`,
+              `Exchange rates: ${name} returned an invalid ${base}/${quote} rate; source skipped`,
             );
           }
         } catch (error) {
           logger.warn(
-            `Exchange rates: Failed to get ${base}/${quote} from ${name}: ${error.message}`,
+            `Exchange rates: Failed to fetch ${base}/${quote} from ${name} within ${REQUEST_TIMEOUT}ms; source skipped: ${error.message}`,
           );
         }
       }),
@@ -89,6 +94,13 @@ class Exchange {
 
     if (Object.keys(tickers).length > 0) {
       this.tickers = tickers;
+      const pairCount = Object.values(tickers).reduce(
+        (count, quotes) => count + Object.keys(quotes).length,
+        0,
+      );
+      logger.debug(`Exchange rates: Refreshed ${pairCount} ticker pairs`);
+    } else {
+      logger.warn('Exchange rates: No source returned a usable ticker; keeping previous rates');
     }
   }
 }

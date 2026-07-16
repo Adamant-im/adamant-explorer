@@ -19,7 +19,7 @@ async function getActive(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Delegates handler: Failed to load active delegates: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -50,7 +50,9 @@ async function getStandby(n, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Delegates handler: Failed to load standby delegates; offset=${Number.parseInt(n, 10) || 0}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -81,7 +83,7 @@ async function getLatestRegistrations(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Delegates handler: Failed to load recent registrations: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -112,7 +114,7 @@ async function getLatestVotes(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Delegates handler: Failed to load recent votes: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -138,7 +140,7 @@ async function getLastBlock(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Delegates handler: Failed to load the latest forged block: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -174,7 +176,9 @@ async function getLastBlocks(params, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Delegates handler: Failed to load delegate blocks; limit=${Number.parseInt(params.limit, 10) || 20}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -206,7 +210,7 @@ async function getSearch(params, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.log(err);
+    logger.debug(`Delegates handler: Username search did not resolve: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -228,7 +232,7 @@ async function getNextForgers(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Delegates handler: Failed to load the next-forger schedule: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',

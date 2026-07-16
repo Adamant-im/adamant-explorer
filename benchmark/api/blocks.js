@@ -7,16 +7,12 @@ module.exports = function () {
       1,
       (data) => {
         deferred.resolve();
-        logger.warn('blocksHandler.getLastBlocks ~> ' + ' Error retrieving blocks: ' + data.error);
+        logger.warn(`Benchmark blocks.getLastBlocks: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'blocksHandler.getLastBlocks ~> ' +
-            data.blocks.length +
-            ' blocks retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark blocks.getLastBlocks: Completed; blocks=${data.blocks.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -27,16 +23,11 @@ module.exports = function () {
       { blockId: '10491613424735062732' },
       (data) => {
         deferred.resolve();
-        logger.warn('blocksHandler.getBlock ~> ' + ' Error retrieving block: ' + data.error);
+        logger.warn(`Benchmark blocks.getBlock: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
-        logger.log(
-          'blocksHandler.getBlock ~> ' +
-            ' block retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
-        );
+        logger.log(`Benchmark blocks.getBlock: Completed; elapsed=${deferred.elapsed}s`);
       },
     );
   };
@@ -45,16 +36,11 @@ module.exports = function () {
     blocksHandler.getBlockStatus(
       (data) => {
         deferred.resolve();
-        logger.warn('blocksHandler.getBlockStatus ~> ' + ' Error retrieving status: ' + data.error);
+        logger.warn(`Benchmark blocks.getBlockStatus: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
-        logger.log(
-          'blocksHandler.getBlockStatus ~> ' +
-            'status retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
-        );
+        logger.log(`Benchmark blocks.getBlockStatus: Completed; elapsed=${deferred.elapsed}s`);
       },
     );
   };

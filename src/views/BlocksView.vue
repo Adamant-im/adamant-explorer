@@ -4,6 +4,7 @@ import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
+import { createBlockRefreshTrigger } from '../lib/blockRefresh';
 import { formatCurrency, formatTimestamp } from '../lib/format';
 
 const route = useRoute();
@@ -14,7 +15,8 @@ const pagination = ref(null);
 
 /**
  * Loads one page of blocks. The API takes a row offset (`n`); pages are
- * 20 blocks each, matching the legacy explorer.
+ * 20 blocks each, matching the legacy explorer. The server versions this
+ * endpoint's Redis cache by its trusted latest block identity.
  * @param {number} page 1-based page number
  */
 async function getLastBlocks(page) {
@@ -34,6 +36,16 @@ watch(
   () => route.params.page,
   (page) => getLastBlocks(parseInt(page, 10) || 1),
   { immediate: true },
+);
+
+const refreshOnBlock = createBlockRefreshTrigger(
+  () => getLastBlocks(parseInt(route.params.page, 10) || 1),
+  network.latestBlock,
+);
+
+watch(
+  () => network.latestBlock,
+  (block) => void refreshOnBlock(block),
 );
 </script>
 

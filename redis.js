@@ -20,11 +20,23 @@ module.exports = function (config) {
   });
 
   client.on('error', (error) => {
-    logger.error(`Redis: ${error}`);
+    logger.warn(
+      `Redis cache: Connection error at ${host}:${port}; requests will continue without cache: ${error}`,
+    );
+  });
+
+  client.on('ready', () => {
+    logger.info(`Redis cache: Ready at ${host}:${port}`);
+  });
+
+  client.on('reconnecting', () => {
+    logger.debug(`Redis cache: Reconnecting to ${host}:${port}`);
   });
 
   client.connect().catch((error) => {
-    logger.error(`Redis: Failed to connect: ${error}`);
+    logger.warn(
+      `Redis cache: Initial connection to ${host}:${port} failed; automatic reconnect remains enabled: ${error}`,
+    );
   });
 
   return client;

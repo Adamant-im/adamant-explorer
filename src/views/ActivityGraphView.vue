@@ -6,6 +6,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue';
 import Graph from 'graphology';
 import Sigma from 'sigma';
+import { BLOCK_INTERVAL_SECONDS } from '../../api/lib/adamant/constants.mjs';
 import { useNetworkStore } from '../stores/network';
 import { useSocket } from '../composables/useSocket';
 import { formatCurrency, timeSpan, toAdm } from '../lib/format';
@@ -274,7 +275,7 @@ onBeforeUnmount(() => {
           <button type="button" class="btn" title="Reset camera position/zoom" @click="resetCamera">
             Reset Camera
           </button>
-          <p class="text-muted">Updated every 10 seconds.</p>
+          <p class="text-muted">Updated every {{ BLOCK_INTERVAL_SECONDS }} seconds.</p>
         </div>
       </div>
 

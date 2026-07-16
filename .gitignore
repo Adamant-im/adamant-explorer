@@ -12,6 +12,8 @@ logs
 config.jsonc
 config.test.jsonc
 
+.playwright-cli/
+
 # ai
 .ai-ignored/
 .ai-tasks/

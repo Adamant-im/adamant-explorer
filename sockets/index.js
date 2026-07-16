@@ -33,17 +33,22 @@ module.exports = function (app, io) {
 
     ns.on('connection', (socket) => {
       handleConnection(socket).catch((error) => {
-        logger.error(`${name} Failed to initialize socket connection: ${error}`);
+        logger.warn(
+          `${name} Client initialization failed; connection remains available for retry: ${error}`,
+        );
       });
 
       socket.on('disconnect', () => {
         if (clients() <= 0) {
           object.onDisconnect();
           initialized = false;
-          logger.info(`${name} Closed connection`);
+          logger.debug(`${name} Last client disconnected; page monitor stopped`);
+        } else {
+          logger.debug(`${name} Client disconnected; clients=${clients()}`);
         }
       });
       socket.on('forceDisconnect', () => {
+        logger.debug(`${name} Client requested forced disconnect`);
         socket.disconnect();
       });
     });
@@ -56,22 +61,23 @@ module.exports = function (app, io) {
           status: 'waiting',
           message: 'Waiting for ADAMANT node health check',
         });
-        logger.info(`${name} Waiting for ADAMANT API readiness`);
+        logger.debug(`${name} Client waiting for ADAMANT API readiness`);
       }
 
       await adamantApi.waitForReady();
 
       if (!ns.sockets.has(socket.id)) {
+        logger.debug(`${name} Client disconnected before ADAMANT API became ready`);
         return;
       }
 
       if (!initialized) {
         initialized = true;
         object.onInit();
-        logger.info(`${name} First connection`);
+        logger.debug(`${name} First client connected; page monitor started; clients=${clients()}`);
       } else {
         object.onConnect();
-        logger.info(`${name} New connection`);
+        logger.debug(`${name} Client connected; clients=${clients()}`);
       }
     };
 

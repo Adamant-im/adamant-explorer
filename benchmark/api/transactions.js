@@ -7,17 +7,12 @@ module.exports = function () {
       '9372665649431258697',
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'transactionsHandler.getTransaction ~> ' + ' Error retrieving transaction: ' + data.error,
-        );
+        logger.warn(`Benchmark transactions.getTransaction: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'transactionsHandler.getTransaction ~> ' +
-            ' transaction retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark transactions.getTransaction: Completed; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -27,20 +22,12 @@ module.exports = function () {
     transactionsHandler.getUnconfirmedTransactions(
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'transactionsHandler.getUnconfirmedTransactions ~> ' +
-            ' Error retrieving transactions: ' +
-            data.error,
-        );
+        logger.warn(`Benchmark transactions.getUnconfirmedTransactions: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'transactionsHandler.getUnconfirmedTransactions ~> ' +
-            data.transactions.length +
-            ' transactions retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark transactions.getUnconfirmedTransactions: Completed; transactions=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -50,20 +37,12 @@ module.exports = function () {
     transactionsHandler.getLastTransactions(
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'transactionsHandler.getLastTransactions ~> ' +
-            ' Error retrieving transactions: ' +
-            data.error,
-        );
+        logger.warn(`Benchmark transactions.getLastTransactions: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'transactionsHandler.getLastTransactions ~> ' +
-            data.transactions.length +
-            ' transactions retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark transactions.getLastTransactions: Completed; transactions=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -78,20 +57,12 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'transactionsHandler.getTransactionsByAddress ~> ' +
-            ' Error retrieving transactions: ' +
-            data.error,
-        );
+        logger.warn(`Benchmark transactions.getTransactionsByAddress: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'transactionsHandler.getTransactionsByAddress ~> ' +
-            data.transactions.length +
-            ' transactions retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark transactions.getTransactionsByAddress: Completed; transactions=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -106,20 +77,12 @@ module.exports = function () {
       },
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'transactionsHandler.getTransactionsByBlock ~> ' +
-            ' Error retrieving transactions: ' +
-            data.error,
-        );
+        logger.warn(`Benchmark transactions.getTransactionsByBlock: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'transactionsHandler.getTransactionsByBlock ~> ' +
-            data.transactions.length +
-            ' transactions retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark transactions.getTransactionsByBlock: Completed; transactions=${data.transactions.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );

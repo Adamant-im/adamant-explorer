@@ -101,7 +101,6 @@ class Locator {
    */
   async locateIp(ip) {
     if (this.cache[ip]) {
-      logger.debug(`Locator: Using cached location for ${ip}`);
       return this.cache[ip];
     }
 
@@ -113,14 +112,18 @@ class Locator {
       const statistics = require('../requests/statistics');
       data = (await statistics.getFreegeoip(ip)) ?? {};
     } catch (error) {
-      logger.debug(`Locator: Failed to get location for ${ip}: ${error}`);
+      logger.debug(
+        `Peer locator: Geo lookup failed for ${ip}; peer will remain without location data: ${error}`,
+      );
     }
 
     data.hostname = await dnsPromises
       .reverse(ip)
       .then((hostnames) => hostnames[0])
-      .catch(() => {
-        logger.debug(`Locator: Failed to get host name for ${ip}`);
+      .catch((error) => {
+        logger.debug(
+          `Peer locator: Reverse DNS failed for ${ip}; using fallback hostname: ${error}`,
+        );
         return `${ip}.unknown`;
       });
 
@@ -136,7 +139,7 @@ class Locator {
   updateCache(ips) {
     for (const ip in this.cache) {
       if (!ips.includes(ip)) {
-        logger.debug(`Locator: Removing stale location for ${ip}`);
+        logger.debug(`Peer locator: Removed stale cache entry for ${ip}`);
         delete this.cache[ip];
       }
     }
@@ -147,11 +150,16 @@ class Locator {
    * @param {Array<Object>} peers Previously enriched peers
    */
   restoreCache(peers) {
+    let restored = 0;
+
     for (const peer of peers ?? []) {
       if (peer?.ip && peer.location) {
         this.cache[peer.ip] = peer.location;
+        restored++;
       }
     }
+
+    logger.debug(`Peer locator: Restored ${restored} cached locations`);
   }
 }
 
@@ -192,7 +200,9 @@ function bufferPeers(peers) {
     knownPeers = knownPeers.filter((p) => p);
   } catch (e) {
     knownPeers = [];
-    logger.error(`Failed to buffer peers: ${e}`);
+    logger.error(
+      `Peer statistics: Failed to update the in-memory peer buffer; buffer was reset: ${e}`,
+    );
   }
 
   return knownPeers;

@@ -93,7 +93,7 @@ async function search(id, error, success) {
       );
     }
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Search handler: Unexpected lookup failure; criteria omitted from logs: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',

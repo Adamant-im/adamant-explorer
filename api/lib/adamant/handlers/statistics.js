@@ -64,6 +64,12 @@ function publishBlockStatistics(source) {
     source,
   });
 
+  const latestHeight = blockWindow.blocks[0]?.height ?? 'unknown';
+  logger.debug(
+    `Block statistics: Published ${source} snapshot; height=${latestHeight}; ` +
+      `blocks=${blockStatistics.volume.blocks}; coverage=${blockStatistics.volume.coverageSeconds}s`,
+  );
+
   return blockStatistics;
 }
 
@@ -77,6 +83,7 @@ async function restoreBlockStatistics() {
     const json = await redisClient.get(BLOCK_STATISTICS_CACHE_KEY);
 
     if (!json) {
+      logger.debug('Block statistics cache: No Redis window available for restore');
       return false;
     }
 
@@ -87,19 +94,24 @@ async function restoreBlockStatistics() {
       !Array.isArray(cached.blocks) ||
       !cached.blocks.length
     ) {
+      logger.warn('Block statistics cache: Ignored incompatible or empty Redis window');
       return false;
     }
 
     const result = blockWindow.replace(cached.blocks);
 
     if (result.rejected || !blockWindow.blocks.length) {
+      logger.warn('Block statistics cache: Ignored non-contiguous Redis window');
       return false;
     }
 
     publishBlockStatistics('redis');
+    logger.info(`Block statistics cache: Restored ${blockWindow.blocks.length} blocks from Redis`);
     return true;
   } catch (error) {
-    logger.warn(`Block statistics cache: Failed to restore Redis window: ${error}`);
+    logger.warn(
+      `Block statistics cache: Failed to restore Redis window; REST recovery will be used: ${error}`,
+    );
     return false;
   }
 }
@@ -118,8 +130,11 @@ async function persistBlockStatistics() {
         blocks: blockWindow.blocks,
       }),
     );
+    logger.debug(`Block statistics cache: Persisted ${blockWindow.blocks.length} blocks to Redis`);
   } catch (error) {
-    logger.warn(`Block statistics cache: Failed to persist Redis window: ${error}`);
+    logger.warn(
+      `Block statistics cache: Failed to persist ${blockWindow.blocks.length} blocks to Redis; in-memory data remains active: ${error}`,
+    );
   }
 }
 
@@ -135,6 +150,10 @@ function publishPeerStatistics(list, source) {
     source,
   });
 
+  logger.debug(
+    `Peer statistics: Published ${source} snapshot; connected=${list.connected.length}; disconnected=${list.disconnected.length}`,
+  );
+
   return peerStatistics;
 }
 
@@ -148,6 +167,7 @@ async function restorePeerStatistics() {
     const json = await redisClient.get(PEER_STATISTICS_CACHE_KEY);
 
     if (!json) {
+      logger.debug('Peer statistics cache: No Redis snapshot available for restore');
       return false;
     }
 
@@ -158,15 +178,19 @@ async function restorePeerStatistics() {
       !Array.isArray(cached.list?.connected) ||
       !Array.isArray(cached.list?.disconnected)
     ) {
+      logger.warn('Peer statistics cache: Ignored incompatible Redis snapshot');
       return false;
     }
 
     const peers = [...cached.list.connected, ...cached.list.disconnected];
     locator.restoreCache(peers);
     publishPeerStatistics(cached.list, 'redis');
+    logger.info(`Peer statistics cache: Restored ${peers.length} enriched peers from Redis`);
     return true;
   } catch (error) {
-    logger.warn(`Peer statistics cache: Failed to restore Redis snapshot: ${error}`);
+    logger.warn(
+      `Peer statistics cache: Failed to restore Redis snapshot; Node refresh will be used: ${error}`,
+    );
     return false;
   }
 }
@@ -185,8 +209,13 @@ async function persistPeerStatistics() {
         list: peerStatistics.list,
       }),
     );
+    const peerCount =
+      peerStatistics.list.connected.length + peerStatistics.list.disconnected.length;
+    logger.debug(`Peer statistics cache: Persisted ${peerCount} enriched peers to Redis`);
   } catch (error) {
-    logger.warn(`Peer statistics cache: Failed to persist Redis snapshot: ${error}`);
+    logger.warn(
+      `Peer statistics cache: Failed to persist the current snapshot; in-memory data remains active: ${error}`,
+    );
   }
 }
 
@@ -335,7 +364,9 @@ async function startBlockStatisticsCache(client) {
       await refreshBlockStatistics(!blockWindow.blocks.length, BLOCK_CACHE_RECOVERY_BLOCKS);
       await persistBlockStatistics();
     } catch (error) {
-      logger.error(`Block statistics cache: ${error}`);
+      logger.warn(
+        `Block statistics cache: Initial REST refresh failed; WebSocket and periodic fallback remain active: ${error}`,
+      );
     }
 
     if (!unsubscribeFromNewBlocks) {
@@ -347,13 +378,17 @@ async function startBlockStatisticsCache(client) {
           // over REST so public statistics keep returning the full block shape.
           block = (await blocks.getBlockById(notification.id)).block;
         } catch (error) {
-          logger.warn(`Block statistics REST confirmation: ${error}`);
+          logger.warn(
+            `Block statistics: REST confirmation failed for WebSocket block at height=${notification.height ?? 'unknown'}; compact payload will be used: ${error}`,
+          );
         }
 
         try {
           await ingestBlocks([block], 'websocket');
         } catch (error) {
-          logger.error(`Block statistics WebSocket: ${error}`);
+          logger.warn(
+            `Block statistics: Failed to ingest WebSocket block at height=${block?.height ?? 'unknown'}; periodic REST recovery remains active: ${error}`,
+          );
         }
       });
     }
@@ -361,7 +396,9 @@ async function startBlockStatisticsCache(client) {
     if (!blockStatisticsTimer) {
       blockStatisticsTimer = setInterval(() => {
         refreshBlockStatistics().catch((error) => {
-          logger.error(`Block statistics REST fallback: ${error}`);
+          logger.warn(
+            `Block statistics: Periodic REST reconciliation failed; next attempt in ${BLOCK_STATISTICS_REST_REFRESH_INTERVAL}ms: ${error}`,
+          );
         });
       }, BLOCK_STATISTICS_REST_REFRESH_INTERVAL);
     }
@@ -369,11 +406,17 @@ async function startBlockStatisticsCache(client) {
     if (!blockStatisticsPersistTimer) {
       blockStatisticsPersistTimer = setInterval(() => {
         persistBlockStatistics().catch((error) => {
-          logger.error(`Block statistics persistence: ${error}`);
+          logger.warn(
+            `Block statistics cache: Scheduled Redis persistence failed; next attempt in ${BLOCK_STATISTICS_PERSIST_INTERVAL}ms: ${error}`,
+          );
         });
       }, BLOCK_STATISTICS_PERSIST_INTERVAL);
     }
 
+    logger.info(
+      `Block statistics cache: Ready; blocks=${blockWindow.blocks.length}; ` +
+        `restFallbackInterval=${BLOCK_STATISTICS_REST_REFRESH_INTERVAL}ms`,
+    );
     return blockStatistics;
   })();
 
@@ -403,13 +446,17 @@ async function startPeerStatisticsCache(client) {
       await refreshPeerStatistics();
       await persistPeerStatistics();
     } catch (error) {
-      logger.error(`Peer statistics cache: ${error}`);
+      logger.warn(
+        `Peer statistics cache: Initial Node refresh failed; periodic retry remains active: ${error}`,
+      );
     }
 
     if (!peerStatisticsTimer) {
       peerStatisticsTimer = setInterval(() => {
         refreshPeerStatistics().catch((error) => {
-          logger.error(`Peer statistics refresh: ${error}`);
+          logger.warn(
+            `Peer statistics: Periodic Node refresh failed; next attempt in ${PEER_STATISTICS_REFRESH_INTERVAL}ms: ${error}`,
+          );
         });
       }, PEER_STATISTICS_REFRESH_INTERVAL);
     }
@@ -417,11 +464,19 @@ async function startPeerStatisticsCache(client) {
     if (!peerStatisticsPersistTimer) {
       peerStatisticsPersistTimer = setInterval(() => {
         persistPeerStatistics().catch((error) => {
-          logger.error(`Peer statistics persistence: ${error}`);
+          logger.warn(
+            `Peer statistics cache: Scheduled Redis persistence failed; next attempt in ${PEER_STATISTICS_PERSIST_INTERVAL}ms: ${error}`,
+          );
         });
       }, PEER_STATISTICS_PERSIST_INTERVAL);
     }
 
+    const peerCount = peerStatistics
+      ? peerStatistics.list.connected.length + peerStatistics.list.disconnected.length
+      : 0;
+    logger.info(
+      `Peer statistics cache: Ready; peers=${peerCount}; refreshInterval=${PEER_STATISTICS_REFRESH_INTERVAL}ms`,
+    );
     return peerStatistics;
   })();
 
@@ -470,7 +525,7 @@ async function getLastBlock(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Statistics handler: Failed to load the latest block: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -490,7 +545,7 @@ async function getBlocks(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Statistics handler: Failed to load block statistics: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -509,7 +564,7 @@ async function getPeers(error, success) {
     const result = peerStatistics ?? (await refreshPeerStatistics());
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Statistics handler: Failed to load peer statistics: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
