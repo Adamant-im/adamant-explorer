@@ -1,15 +1,16 @@
 <script setup>
-// Home page: latest transfer operations, refreshed every 30 seconds.
-import { onBeforeUnmount, ref } from 'vue';
+// Home page: latest transfer operations, refreshed after every new block.
+import { ref, watch } from 'vue';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
+import { createBlockRefreshTrigger } from '../lib/blockRefresh';
 import { formatCurrency, formatTimestamp, txSenderLabel, txRecipientLabel } from '../lib/format';
 import { txSenderPath, txRecipientPath } from '../lib/accounts';
 
 const network = useNetworkStore();
 const txs = ref([]);
 
-/** Fetches the latest transfers; keeps the current list on failure. */
+/** Fetch the latest transfers; the server versions their cache by latest block. */
 async function getLastTransfers() {
   try {
     const data = await apiGet('/api/getLastTransfers');
@@ -18,13 +19,18 @@ async function getLastTransfers() {
       txs.value = data.transactions;
     }
   } catch {
-    // Transient network failures are fine here: the timer retries
+    // Keep the current list; the next block or status fallback retries
   }
 }
 
 getLastTransfers();
-const timer = setInterval(getLastTransfers, 30000);
-onBeforeUnmount(() => clearInterval(timer));
+
+const refreshOnBlock = createBlockRefreshTrigger(getLastTransfers, network.latestBlock);
+
+watch(
+  () => network.latestBlock,
+  (block) => void refreshOnBlock(block),
+);
 </script>
 
 <template>

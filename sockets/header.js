@@ -1,5 +1,6 @@
 const blocksHandler = require('../api/lib/adamant/handlers/blocks');
 const commonHandler = require('../api/lib/adamant/handlers/common');
+const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const async = require('async');
 const logger = require('../utils/log');
 
@@ -13,6 +14,7 @@ const logger = require('../utils/log');
 module.exports = function (app, connectionHandler, socket) {
   let intervals = [];
   let data = {};
+  let unsubscribeFromBlocks = null;
 
   new connectionHandler('Header:', socket, this);
 
@@ -22,6 +24,10 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onInit = function () {
+    if (!unsubscribeFromBlocks) {
+      unsubscribeFromBlocks = statisticsHandler.subscribeBlockStatistics(handleBlockUpdate);
+    }
+
     this.onConnect(); // Prevents data wipe
 
     async.parallel(
@@ -55,12 +61,40 @@ module.exports = function (app, connectionHandler, socket) {
       clearInterval(intervals[i]);
     }
     intervals = [];
+
+    unsubscribeFromBlocks?.();
+    unsubscribeFromBlocks = null;
   };
 
   // Private
 
   const log = function (level, msg) {
     logger[level]('Header: ' + msg);
+  };
+
+  /**
+   * Forward the shared block accumulator event to every browser. The compact
+   * payload lets pages refresh on the block that invalidates their data while
+   * the regular status poll remains a fallback for Node WebSocket outages.
+   * @param {{lastBlock?: Object}} update Shared block-statistics update
+   */
+  const handleBlockUpdate = function (update) {
+    const block = update.lastBlock;
+    const height = Number(block?.height);
+
+    if (!Number.isSafeInteger(height) || height < 1) {
+      return;
+    }
+
+    if (data.status?.success) {
+      data.status = { ...data.status, height };
+    }
+
+    socket.emit('block', {
+      id: block.id,
+      height,
+      timestamp: block.timestamp,
+    });
   };
 
   const newInterval = function (i, delay, cb) {

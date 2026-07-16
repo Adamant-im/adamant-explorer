@@ -101,12 +101,15 @@ app.use(async (req, res, next) => {
     return next();
   }
 
-  if (cache.cacheIgnoreList.includes(req.originalUrl)) {
+  const latestBlock = statisticsHandler.getCachedBlocks()[0];
+  req.cacheKey = cache.getCacheKey(req.originalUrl, req.path, latestBlock);
+
+  if (!req.cacheKey) {
     return next();
   }
 
   try {
-    const json = await req.redis.get(req.originalUrl);
+    const json = await req.redis.get(req.cacheKey);
 
     if (json) {
       return res.json(JSON.parse(json));
@@ -132,11 +135,11 @@ app.use((req, res, next) => {
     return next();
   }
 
-  if (!cache.cacheIgnoreList.includes(req.originalUrl)) {
-    const ttl = cache.cacheTTLOverride[req.originalUrl] ?? config.redis.cacheTTL;
+  if (req.cacheKey) {
+    const ttl = cache.cacheTTLOverride[req.path] ?? config.redis.cacheTTL;
 
     req.redis
-      .set(req.originalUrl, JSON.stringify(req.json), { expiration: { type: 'EX', value: ttl } })
+      .set(req.cacheKey, JSON.stringify(req.json), { expiration: { type: 'EX', value: ttl } })
       .catch((error) => {
         logger.warn(`Cache: Failed to store ${req.originalUrl}: ${error}`);
       });

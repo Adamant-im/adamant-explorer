@@ -12,6 +12,8 @@ export const useNetworkStore = defineStore('network', {
   state: () => ({
     /** Latest block status from the node, `null` until the first socket event */
     blockStatus: null,
+    /** Block identity used by open pages to refresh after sockets or REST fallback */
+    latestBlock: null,
     /** Display currency; the explorer currently shows amounts in ADM only */
     currency: {
       symbol: 'ADM',
@@ -40,8 +42,14 @@ export const useNetworkStore = defineStore('network', {
 
       this._socket.on('data', (res) => {
         if (res.status?.success) {
+          const height = Number(res.status.height);
+
+          if (Number.isSafeInteger(height) && height > 0 && height !== this.latestBlock?.height) {
+            this.latestBlock = { height };
+          }
+
           this.blockStatus = {
-            height: res.status.height,
+            height,
             fee: res.status.fee,
             milestone: res.status.milestone,
             reward: res.status.reward,
@@ -57,6 +65,24 @@ export const useNetworkStore = defineStore('network', {
         // When no rate is known for the selected currency, fall back to ADM
         if (this.currency.symbol !== 'ADM' && !this.currency.tickers?.ADM?.[this.currency.symbol]) {
           this.currency.symbol = 'ADM';
+        }
+      });
+
+      this._socket.on('block', (block) => {
+        const height = Number(block?.height);
+
+        if (!Number.isSafeInteger(height) || height < 1) {
+          return;
+        }
+
+        this.latestBlock = {
+          id: block.id,
+          height,
+          timestamp: block.timestamp,
+        };
+
+        if (this.blockStatus) {
+          this.blockStatus = { ...this.blockStatus, height };
         }
       });
     },

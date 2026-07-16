@@ -1,17 +1,18 @@
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
+const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 
 module.exports = function (app, connectionHandler, socket) {
   let interval = null;
   let data = {};
   new connectionHandler('Activity Graph:', socket, this);
-  const running = { getlastBlock: false };
+  const running = { getLastBlock: false };
 
   this.onInit = function () {
     emitLastBlock();
 
     if (interval == null) {
-      interval = setInterval(emitLastBlock, 10000);
+      interval = setInterval(emitLastBlock, BLOCK_INTERVAL_MILLISECONDS);
     }
   };
 

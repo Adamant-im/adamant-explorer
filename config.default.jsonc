@@ -33,7 +33,7 @@
     "cacheTTL": 20 /* Time in seconds to keep cached API responses in Redis */
   },
 
-  /** Logging verbosity threshold: none < error < warn < info < log **/
+  /** Logging verbosity threshold: none < error < warn < info < log < debug **/
   "log_level": "log",
 
   /** Exchange rates service parameters. ADM rates will be provided by
