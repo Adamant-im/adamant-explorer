@@ -54,14 +54,14 @@ suite
 
 suite
   .on('cycle', (event) => {
-    logger.log(String(event.target));
+    logger.log(`Benchmark: ${String(event.target)}`);
   })
   .on('complete', function () {
-    logger.log(`Slowest is ${this.filter('slowest').map('name')}`);
-    logger.log(`Fastest is ${this.filter('fastest').map('name')}`);
-    logger.log('Done :)');
+    logger.log(`Benchmark summary: slowest=${this.filter('slowest').map('name')}`);
+    logger.log(`Benchmark summary: fastest=${this.filter('fastest').map('name')}`);
+    logger.log(`Benchmark summary: completed ${this.length} cases`);
     process.exit(0);
   });
 
-logger.log('Running benchmarks...');
+logger.log(`Benchmark: Starting API suite; cases=${suite.length}`);
 suite.run({ async: false });

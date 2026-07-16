@@ -72,9 +72,7 @@ try {
 
     if (config[field] === undefined || config[field] === null) {
       if (isRequired && defaultValue === undefined) {
-        exit(
-          `Explorer config is wrong: required field _${field}_ is missing. Cannot start the explorer.`,
-        );
+        exit(`Explorer config: Required field "${field}" is missing; startup aborted`);
       }
 
       config[field] = defaultValue;
@@ -82,16 +80,18 @@ try {
 
     if (config[field].constructor !== type) {
       exit(
-        `Explorer config is wrong: field _${field}_ must be of type _${type.name}_. Cannot start the explorer.`,
+        `Explorer config: Field "${field}" must be ${type.name}; received ${config[field].constructor.name}; startup aborted`,
       );
     }
   });
 
   console.info(
-    `The explorer successfully read the ${configFile} config file${isDev ? ' (dev)' : ''}.`,
+    `Explorer config: Loaded ${configFile}; mode=${isDev ? 'development' : 'production'}; ` +
+      `nodes=${config.nodes_adm.length}; port=${config.port}; logLevel=${config.log_level}; ` +
+      `exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}`,
   );
 } catch (e) {
-  exit(`Error reading config: ${e}`);
+  exit(`Explorer config: Failed to read or validate configuration; startup aborted: ${e}`);
 }
 
 config.isDev = isDev;

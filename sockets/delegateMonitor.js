@@ -61,7 +61,7 @@ module.exports = function (app, connectionHandler, socket) {
       function (err, res) {
         if (err) {
           // A failed request must not leave the monitor empty forever
-          log('error', 'Error retrieving: ' + err + '. Retrying in 10 seconds');
+          log('warn', `Initial data load failed (${err}); retrying in 10000ms`);
           scheduleRetry();
         } else {
           tmpData.nextForgers = getForgingSchedule(res[4]);
@@ -84,6 +84,13 @@ module.exports = function (app, connectionHandler, socket) {
             votes: data.votes,
           });
 
+          log(
+            'info',
+            `Initialized; activeDelegates=${data.active?.delegates?.length ?? 0}; ` +
+              `scheduledDelegates=${tmpData.nextForgers?.delegates?.length ?? 0}; ` +
+              `height=${data.lastBlock?.block?.height ?? 'unknown'}`,
+          );
+
           newSerializedLoop(0, BLOCK_INTERVAL_MILLISECONDS, refreshMetadata, 'metadata');
           startMonitorUpdates();
         }
@@ -92,7 +99,7 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onConnect = function () {
-    log('info', 'Emitting existing data');
+    log('debug', `Emitted cached data; height=${data.lastBlock?.block?.height ?? 'unknown'}`);
     socket.emit('data', data);
   };
 
@@ -113,7 +120,7 @@ module.exports = function (app, connectionHandler, socket) {
   // Private
 
   const log = function (level, msg) {
-    logger[level]('Delegate Monitor:' + msg);
+    logger[level](`Delegate Monitor: ${msg}`);
   };
 
   /** Starts a polling loop whose delay begins after the previous run finishes. */
@@ -130,7 +137,7 @@ module.exports = function (app, connectionHandler, socket) {
       try {
         await callback();
       } catch (error) {
-        log('error', `Error retrieving ${label}: ${error}`);
+        log('warn', `${label} refresh failed; next attempt in ${delay}ms: ${error}`);
       }
 
       if (monitoring) {
@@ -162,7 +169,10 @@ module.exports = function (app, connectionHandler, socket) {
       await statisticsHandler.ensureBlockStatistics();
       await refreshRecentBlocks();
     } catch (error) {
-      log('error', 'Error retrieving recent blocks: ' + error);
+      log(
+        'warn',
+        `Initial recent-block refresh failed; slot-aligned retry remains active: ${error}`,
+      );
     }
 
     if (!monitoring) {
@@ -223,6 +233,10 @@ module.exports = function (app, connectionHandler, socket) {
       lastBlock: data.lastBlock,
       nextForgers: data.nextForgers,
     });
+    log(
+      'debug',
+      `Emitted predicted slot; slot=${currentSlot}; height=${data.lastBlock?.block?.height ?? 'unknown'}`,
+    );
   };
 
   /**
@@ -251,7 +265,10 @@ module.exports = function (app, connectionHandler, socket) {
         try {
           await refreshRecentBlocks();
         } catch (error) {
-          log('error', `Error retrieving recent blocks after ${source}: ${error}`);
+          log(
+            'warn',
+            `Recent-block refresh triggered by ${source} failed; next slot refresh remains scheduled: ${error}`,
+          );
         }
       } while (monitoring && tmpData.statusRefreshQueued);
     };
@@ -301,7 +318,10 @@ module.exports = function (app, connectionHandler, socket) {
         tmpData.activeDelegateStateJson = json;
       }
     } catch (error) {
-      log('warn', ` Failed to restore active delegate state: ${error}`);
+      log(
+        'warn',
+        `Failed to restore active delegate state from Redis; observation starts will reset: ${error}`,
+      );
     }
   };
 
@@ -331,7 +351,10 @@ module.exports = function (app, connectionHandler, socket) {
         tmpData.activeDelegateStateJson = null;
       }
 
-      log('warn', ` Failed to persist active delegate state: ${error}`);
+      log(
+        'warn',
+        `Failed to persist active delegate state to Redis; in-memory state remains active: ${error}`,
+      );
     });
   };
 
@@ -451,7 +474,10 @@ module.exports = function (app, connectionHandler, socket) {
       };
       socket.emit('data', { forgingTotals: data.forgingTotals });
     } catch (error) {
-      log('error', `Error refreshing all-delegate forging totals: ${error}`);
+      log(
+        'warn',
+        `All-delegate forging totals refresh failed; previous totals remain active: ${error}`,
+      );
     }
   };
 
@@ -716,7 +742,11 @@ module.exports = function (app, connectionHandler, socket) {
       refreshCompletedRoundBaseline();
     }
 
-    log('info', 'Emitting coherent status data');
+    log(
+      'debug',
+      `Emitted coherent status; height=${latestBlock.height}; activeDelegates=${data.active.delegates.length}; ` +
+        `nextForgers=${data.nextForgers.length}; historyBlocks=${recentBlocks.length}`,
+    );
     socket.emit('data', data);
   };
 
@@ -734,6 +764,11 @@ module.exports = function (app, connectionHandler, socket) {
             registrations: data.registrations,
             votes: data.votes,
           });
+          log(
+            'debug',
+            `Emitted metadata; registrations=${data.registrations?.transactions?.length ?? 0}; ` +
+              `votes=${data.votes?.transactions?.length ?? 0}`,
+          );
           resolve();
         }
       });

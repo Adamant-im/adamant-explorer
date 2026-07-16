@@ -31,7 +31,7 @@ async function getTransaction(transactionId, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Transactions handler: Failed to load transaction details: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -61,7 +61,7 @@ async function getUnconfirmedTransactions(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Transactions handler: Failed to load unconfirmed transactions: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -102,7 +102,7 @@ async function getLastTransactions(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Transactions handler: Failed to load recent transactions: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -143,7 +143,7 @@ async function getLastTransfers(error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(`Transactions handler: Failed to load recent transfers: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -176,7 +176,9 @@ async function getTransactionsByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Transactions handler: Failed to load address transactions; query values omitted from logs: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -217,7 +219,9 @@ async function getTransfersByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Transactions handler: Failed to load address transfers; query values omitted from logs: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -257,7 +261,9 @@ async function getTransactionsByBlock(query, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.error(err);
+    logger.warn(
+      `Transactions handler: Failed to load block transactions; offset=${query.offset}; limit=${query.limit}: ${err}`,
+    );
     return error({
       success: false,
       error: 'Request unsuccessful',

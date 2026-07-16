@@ -84,7 +84,8 @@ describe('Explorer logger', function () {
     await logger.close();
 
     const contents = await readFile(join(logDirectory, '2026-01-02.log'), 'utf8');
-    expect(contents).to.include('[The explorer started]');
+    expect(contents).to.include('[Explorer process started] time=2026-01-02 03:04:05;');
+    expect(contents).to.include('logLevel=debug');
     expect(contents).to.include('debug|2026-01-02 03:04:05|socket diagnostics');
   });
 });

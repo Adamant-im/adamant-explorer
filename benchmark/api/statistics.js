@@ -6,16 +6,12 @@ module.exports = function () {
     statisticsHandler.getBlocks(
       (data) => {
         deferred.resolve();
-        logger.warn('statisticsHandler.getBlocks ~> ' + 'Error retrieving blocks: ' + data.error);
+        logger.warn(`Benchmark statistics.getBlocks: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'statisticsHandler.getBlocks ~> ' +
-            String(data.volume.blocks) +
-            ' blocks retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark statistics.getBlocks: Completed; blocks=${data.volume.blocks}; elapsed=${deferred.elapsed}s`,
         );
       },
     );
@@ -25,18 +21,11 @@ module.exports = function () {
     statisticsHandler.getLastBlock(
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'statisticsHandler.getLastBlock ~> ' + ' Error retrieving block: ' + data.error,
-        );
+        logger.warn(`Benchmark statistics.getLastBlock: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
-        logger.log(
-          'statisticsHandler.getLastBlock ~> ' +
-            ' block retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
-        );
+        logger.log(`Benchmark statistics.getLastBlock: Completed; elapsed=${deferred.elapsed}s`);
       },
     );
   };
@@ -45,16 +34,12 @@ module.exports = function () {
     statisticsHandler.getPeers(
       (data) => {
         deferred.resolve();
-        logger.warn('statisticsHandler.getPeers ~> ' + ' Error retrieving peers: ' + data.error);
+        logger.warn(`Benchmark statistics.getPeers: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'statisticsHandler.getPeers ~> ' +
-            (data.list.connected.length + data.list.disconnected.length) +
-            ' peers retrieved in ' +
-            String(deferred.elapsed),
-          ' seconds',
+          `Benchmark statistics.getPeers: Completed; peers=${data.list.connected.length + data.list.disconnected.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );

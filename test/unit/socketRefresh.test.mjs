@@ -35,8 +35,10 @@ describe('socket-driven refresh scheduling', function () {
     const activityGraphPath = require.resolve('../../sockets/activityGraph.js');
     const statisticsPath = require.resolve('../../api/lib/adamant/handlers/statistics.js');
     const transactionsPath = require.resolve('../../api/lib/adamant/handlers/transactions.js');
+    const loggerPath = require.resolve('../../utils/log.js');
     let intervalDelay;
     let clearedTimer;
+    const logCalls = [];
 
     stubModule(statisticsPath, {
       getLastBlock(error, success) {
@@ -47,6 +49,15 @@ describe('socket-driven refresh scheduling', function () {
       },
     });
     stubModule(transactionsPath, {});
+    stubModule(
+      loggerPath,
+      Object.fromEntries(
+        ['error', 'warn', 'info', 'log', 'debug'].map((level) => [
+          level,
+          (message) => logCalls.push({ level, message }),
+        ]),
+      ),
+    );
     originalModules.set(activityGraphPath, require.cache[activityGraphPath]);
     delete require.cache[activityGraphPath];
 
@@ -77,6 +88,10 @@ describe('socket-driven refresh scheduling', function () {
         block: { id: 'block-100', height: 100, numberOfTransactions: 0 },
       },
     });
+    expect(logCalls).to.deep.include({
+      level: 'debug',
+      message: 'Activity Graph: Emitted data; height=100; transactions=0',
+    });
 
     graph.onDisconnect();
     expect(clearedTimer).to.be.a('function');
@@ -90,6 +105,7 @@ describe('socket-driven refresh scheduling', function () {
     const loggerPath = require.resolve('../../utils/log.js');
     let blockListener;
     let unsubscribeCount = 0;
+    const logCalls = [];
 
     stubModule(blocksPath, {
       getBlockStatus(error, success) {
@@ -112,7 +128,10 @@ describe('socket-driven refresh scheduling', function () {
     stubModule(
       loggerPath,
       Object.fromEntries(
-        ['error', 'warn', 'info', 'log', 'debug'].map((level) => [level, () => {}]),
+        ['error', 'warn', 'info', 'log', 'debug'].map((level) => [
+          level,
+          (message) => logCalls.push({ level, message }),
+        ]),
       ),
     );
     originalModules.set(headerPath, require.cache[headerPath]);
@@ -143,6 +162,10 @@ describe('socket-driven refresh scheduling', function () {
     expect(socket.emitted).to.deep.include({
       event: 'block',
       payload: { id: 'block-101', height: 101, timestamp: 505 },
+    });
+    expect(logCalls).to.deep.include({
+      level: 'debug',
+      message: 'Header: Forwarded block event; height=101; source=websocket',
     });
 
     header.onConnect();

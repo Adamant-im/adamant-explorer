@@ -48,7 +48,7 @@ function createLogger({
   );
 
   logFile.write(
-    `\n\n[The explorer started] _________________${fullTime(startedAt)}_________________\n`,
+    `\n\n[Explorer process started] time=${fullTime(startedAt)}; pid=${process.pid}; logLevel=${level}\n`,
   );
 
   /** Write one message when its severity passes the configured threshold. */

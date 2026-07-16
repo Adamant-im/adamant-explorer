@@ -164,7 +164,9 @@ function onNewBlock(handler) {
 
   if (initialized) {
     Promise.resolve(api.updateNodes()).catch((error) => {
-      logger.error(`ADAMANT WebSocket health check: ${error}`);
+      logger.warn(
+        `ADAMANT WebSocket: Initial node health update failed; SDK reconnection remains active: ${error}`,
+      );
     });
   }
 

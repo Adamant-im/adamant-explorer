@@ -7,16 +7,11 @@ module.exports = function () {
       { address: 'U9466395914658764774' },
       (data) => {
         deferred.resolve();
-        logger.warn('accountsHandler.getAccount ~> ' + 'Error retrieving account: ' + data.error);
+        logger.warn(`Benchmark accounts.getAccount: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
-        logger.log(
-          'accountsHandler.getAccount ~> ' +
-            'account retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
-        );
+        logger.log(`Benchmark accounts.getAccount: Completed; elapsed=${deferred.elapsed}s`);
       },
     );
   };
@@ -26,18 +21,12 @@ module.exports = function () {
       { offset: 0, limit: 50 },
       (data) => {
         deferred.resolve();
-        logger.warn(
-          'accountsHandler.getTopAccounts ~> ' + 'Error retrieving accountsHandler: ' + data.error,
-        );
+        logger.warn(`Benchmark accounts.getTopAccounts: Failed: ${data.error}`);
       },
       (data) => {
         deferred.resolve();
         logger.log(
-          'accounts.getTopAccounts ~> ' +
-            data.accounts.length +
-            ' accounts retrieved in ' +
-            String(deferred.elapsed) +
-            ' seconds',
+          `Benchmark accounts.getTopAccounts: Completed; accounts=${data.accounts.length}; elapsed=${deferred.elapsed}s`,
         );
       },
     );

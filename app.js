@@ -5,7 +5,6 @@ const express = require('express');
 const { program } = require('commander');
 const morgan = require('morgan');
 const compression = require('compression');
-const split = require('split');
 const { Server } = require('socket.io');
 
 const routes = require('./api/routes');
@@ -16,6 +15,7 @@ const createAdamantApiReadinessMiddleware = require('./api/lib/adamant/middlewar
 const packageJson = require('./package.json');
 const utils = require('./utils');
 const logger = require('./utils/log');
+const { createHttpLogFormatter } = require('./utils/httpLogging');
 const config = require('./modules/configReader');
 
 const app = express();
@@ -67,23 +67,9 @@ app.use((req, res, next) => {
   return next();
 });
 
-// Route request logs by status: errors to the error log, the rest to the info log
-app.use(
-  morgan('combined', {
-    skip: (req, res) => res.statusCode < 400,
-    stream: split().on('data', (data) => {
-      logger.error(data);
-    }),
-  }),
-);
-app.use(
-  morgan('combined', {
-    skip: (req, res) => res.statusCode >= 400,
-    stream: split().on('data', (data) => {
-      logger.info(data);
-    }),
-  }),
-);
+// Keep routine access logs at debug while surfacing client and server failures.
+// Query strings are omitted because they may contain user-supplied identifiers.
+app.use(morgan(createHttpLogFormatter(logger)));
 
 app.use(compression());
 
@@ -112,10 +98,15 @@ app.use(async (req, res, next) => {
     const json = await req.redis.get(req.cacheKey);
 
     if (json) {
+      logger.debug(`API cache: Hit for ${req.method} ${req.path}`);
       return res.json(JSON.parse(json));
     }
+
+    logger.debug(`API cache: Miss for ${req.method} ${req.path}`);
   } catch (error) {
-    logger.warn(`Cache: Failed to read ${req.originalUrl}: ${error}`);
+    logger.warn(
+      `API cache: Redis read failed for ${req.method} ${req.path}; continuing without cache: ${error}`,
+    );
   }
 
   return next();
@@ -123,11 +114,11 @@ app.use(async (req, res, next) => {
 
 app.use(createAdamantApiReadinessMiddleware(adamantApi));
 
-logger.info('Loading routes...');
+logger.debug('Explorer startup: Registering API routes');
 
 routes(app);
 
-logger.info('Routes loaded');
+logger.debug('Explorer startup: API routes registered');
 
 // Cache store: routes that support caching call next() with the response in req.json
 app.use((req, res, next) => {
@@ -140,8 +131,13 @@ app.use((req, res, next) => {
 
     req.redis
       .set(req.cacheKey, JSON.stringify(req.json), { expiration: { type: 'EX', value: ttl } })
+      .then(() => {
+        logger.debug(`API cache: Stored ${req.method} ${req.path}; ttl=${ttl}s`);
+      })
       .catch((error) => {
-        logger.warn(`Cache: Failed to store ${req.originalUrl}: ${error}`);
+        logger.warn(
+          `API cache: Redis write failed for ${req.method} ${req.path}; ttl=${ttl}s: ${error}`,
+        );
       });
   }
 
@@ -163,17 +159,27 @@ app.exchange.loadRates();
 
 const server = app.listen(app.get('port'), app.get('host'), (err) => {
   if (err) {
-    logger.error(`Failed to start ADAMANT Explorer: ${err}`);
+    logger.error(
+      `Explorer startup: Failed to listen on ${app.get('host')}:${app.get('port')}: ${err}`,
+    );
   } else {
-    logger.info(`ADAMANT Explorer started at ${app.get('host')}:${app.get('port')}`);
+    logger.info(
+      `Explorer startup: v${app.get('version')} listening on ${app.get('host')}:${app.get('port')}; ` +
+        `nodes=${config.nodes_adm.length}; exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
+        `logLevel=${config.log_level}`,
+    );
 
     const io = new Server(server);
     require('./sockets')(app, io);
     statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
-      logger.error(`Failed to start block statistics cache: ${error}`);
+      logger.warn(
+        `Explorer startup: Block statistics cache initialization failed; background recovery remains active: ${error}`,
+      );
     });
     statisticsHandler.startPeerStatisticsCache(client).catch((error) => {
-      logger.error(`Failed to start peer statistics cache: ${error}`);
+      logger.warn(
+        `Explorer startup: Peer statistics cache initialization failed; background retry remains active: ${error}`,
+      );
     });
   }
 });
