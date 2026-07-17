@@ -53,7 +53,7 @@
     "benchmark": "node benchmark"
   },
   "dependencies": {
-    "adamant-api": "^3.0.0",
+    "adamant-api": "^3.1.0",
     "async": "^3.2.6",
     "axios": "^1.18.1",
     "commander": "^15.0.0",
