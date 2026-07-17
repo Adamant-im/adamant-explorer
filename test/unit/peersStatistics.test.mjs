@@ -128,4 +128,24 @@ describe('PeersStatistics', function () {
     });
     expect(lookups).to.equal(1);
   });
+
+  it('removes stale peer data from every locator cache', function () {
+    const locator = new Locator();
+    const activeIp = '192.0.2.30';
+    const staleIp = '192.0.2.31';
+
+    locator.cache[activeIp] = { country_code: 'NL' };
+    locator.cache[staleIp] = { country_code: 'DE' };
+    locator.geoLocationExpiresAt[activeIp] = 100;
+    locator.geoLocationExpiresAt[staleIp] = 200;
+    locator.geoLocationRetryAt[staleIp] = 300;
+
+    locator.updateCache([activeIp]);
+
+    expect(locator.cache).to.have.property(activeIp);
+    expect(locator.geoLocationExpiresAt).to.have.property(activeIp, 100);
+    expect(locator.cache).not.to.have.property(staleIp);
+    expect(locator.geoLocationExpiresAt).not.to.have.property(staleIp);
+    expect(locator.geoLocationRetryAt).not.to.have.property(staleIp);
+  });
 });

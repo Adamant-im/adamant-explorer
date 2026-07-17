@@ -235,8 +235,10 @@ class Locator {
    * @param {Array<string>} ips IP addresses seen in the latest peers snapshot
    */
   updateCache(ips) {
+    const activeIps = new Set(ips);
+
     for (const ip in this.cache) {
-      if (!ips.includes(ip)) {
+      if (!activeIps.has(ip)) {
         logger.debug(`Peer locator: Removed stale cache entry for ${ip}`);
         delete this.cache[ip];
         delete this.geoLocationExpiresAt[ip];
