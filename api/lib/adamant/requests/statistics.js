@@ -1,6 +1,11 @@
 const axios = require('axios');
 const api = require('./api');
 const config = require('../../../../modules/configReader');
+const {
+  GEOLOCATION_BATCH_SIZE,
+  buildGeoJsRequest,
+  normalizeGeoJsLocation,
+} = require('../helpers/geolocation');
 
 /**
  * Get a page of peers known to the node.
@@ -20,23 +25,39 @@ async function getPeers(offset, limit) {
 }
 
 /**
- * Get geo information for an IP address from the local freegeoip service.
+ * Get normalized geo information for peer IP addresses.
  *
- * The service is self-hosted, see the README. Replacing freegeoip with
- * a maintained geo-location source is tracked as a separate issue.
- * @param {string} ip IPv4 address of a peer
- * @returns {Promise<Object>} Geo data: country, city, coordinates, and more
- * @throws {Error} Network error when the freegeoip service is unreachable
+ * GeoJS accepts multiple IPs in one request. Callers must keep batches bounded
+ * by `GEOLOCATION_BATCH_SIZE` and cache results to avoid excessive API usage.
+ * When geo-location is disabled, no request is made to GeoJS.
+ * @param {Array<string>} ips IPv4 or IPv6 peer addresses
+ * @returns {Promise<Array<Object>>} Normalized locations keyed by their `ip` fields
+ * @throws {Error} Invalid input, provider configuration, or network failure
  */
-async function getFreegeoip(ip) {
-  const response = await axios.get(
-    `http://${config.freegeoip.host}:${config.freegeoip.port}/json/${ip}`,
-  );
+async function getGeoLocations(ips) {
+  if (!config.geoLocation.enabled || !ips.length) {
+    return [];
+  }
 
-  return response.data;
+  if (config.geoLocation.provider !== 'geojs') {
+    throw new Error(`Unsupported geo-location provider: ${config.geoLocation.provider}`);
+  }
+
+  if (ips.length > GEOLOCATION_BATCH_SIZE) {
+    throw new RangeError(
+      `Geo-location batches cannot contain more than ${GEOLOCATION_BATCH_SIZE} IP addresses`,
+    );
+  }
+
+  const request = buildGeoJsRequest(ips, config.geoLocation.timeout);
+  const response = await axios.get(request.url, request.options);
+  const items = Array.isArray(response.data) ? response.data : [response.data];
+
+  return items.map(normalizeGeoJsLocation).filter((location) => location.ip);
 }
 
 module.exports = {
+  GEOLOCATION_BATCH_SIZE,
+  getGeoLocations,
   getPeers,
-  getFreegeoip,
 };

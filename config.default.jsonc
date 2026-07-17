@@ -16,11 +16,12 @@
     "http://184.94.215.92:45555"
   ],
 
-  /** FreeGeoIP service parameters. Used by the Network Monitor for
-      peer geo-location, see the README for setup instructions **/
-  "freegeoip": {
-    "host": "127.0.0.1",
-    "port": 8080
+  /** Network Monitor peer geo-location through GeoJS. This sends peer IP
+      addresses to GeoJS and its infrastructure providers; disable if needed **/
+  "geoLocation": {
+    "enabled": true,
+    "provider": "geojs",
+    "timeout": 5000 /* Request timeout in milliseconds */
   },
 
   /** Redis server parameters. Redis caches API responses and the persistent
