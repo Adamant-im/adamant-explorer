@@ -21,8 +21,8 @@ const BLOCK_STATISTICS_CACHE_KEY = 'adamant-explorer:block-statistics:v1';
 const BLOCK_STATISTICS_CACHE_VERSION = 1;
 const PEER_STATISTICS_REFRESH_INTERVAL = BLOCK_INTERVAL_MILLISECONDS;
 const PEER_STATISTICS_PERSIST_INTERVAL = 60000;
-const PEER_STATISTICS_CACHE_KEY = 'adamant-explorer:peer-statistics:v1';
-const PEER_STATISTICS_CACHE_VERSION = 1;
+const PEER_STATISTICS_CACHE_KEY = 'adamant-explorer:peer-statistics:v2';
+const PEER_STATISTICS_CACHE_VERSION = 2;
 
 let blockStatistics = null;
 let blockStatisticsQueue = Promise.resolve();

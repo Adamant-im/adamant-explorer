@@ -1,5 +1,6 @@
 const fs = require('fs');
 const jsonminify = require('jsonminify');
+const { validateGeoLocationConfig } = require('./configValidation');
 
 // `node app.js dev` runs the explorer with the testnet config
 const isDev = process.argv.includes('dev');
@@ -24,10 +25,9 @@ const fields = {
     type: Array,
     isRequired: true,
   },
-  freegeoip: {
+  geoLocation: {
     type: Object,
-    default: { host: '127.0.0.1', port: 8080 },
-    isRequired: true,
+    default: { enabled: true, provider: 'geojs', timeout: 5000 },
   },
   redis: {
     type: Object,
@@ -85,10 +85,17 @@ try {
     }
   });
 
+  const geoLocationError = validateGeoLocationConfig(config.geoLocation);
+
+  if (geoLocationError) {
+    exit(`Explorer config: ${geoLocationError}; startup aborted`);
+  }
+
   console.info(
     `Explorer config: Loaded ${configFile}; mode=${isDev ? 'development' : 'production'}; ` +
       `nodes=${config.nodes_adm.length}; port=${config.port}; logLevel=${config.log_level}; ` +
-      `exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}`,
+      `exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
+      `geoLocation=${config.geoLocation.enabled ? config.geoLocation.provider : 'disabled'}`,
   );
 } catch (e) {
   exit(`Explorer config: Failed to read or validate configuration; startup aborted: ${e}`);

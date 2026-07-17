@@ -1,6 +1,30 @@
 const { promises: dnsPromises } = require('dns');
+const { isIP } = require('node:net');
 const logger = require('../../../../utils/log');
 const { BlocksStatistics, RollingBlocksWindow } = require('./blockStatistics');
+const { GEOLOCATION_BATCH_SIZE } = require('./geolocation');
+
+const GEOLOCATION_CACHE_TTL = 86400000;
+const GEOLOCATION_RETRY_INTERVAL = 300000;
+const GEOLOCATION_FIELDS = [
+  'country_code',
+  'country_name',
+  'region_name',
+  'city',
+  'time_zone',
+  'latitude',
+  'longitude',
+];
+const NORMALIZED_LOCATION_FIELDS = ['ip', ...GEOLOCATION_FIELDS];
+
+/**
+ * Check whether a cached location contains provider geo data, not only DNS data.
+ * @param {Object} location Cached peer location
+ * @returns {boolean} Whether another provider lookup is unnecessary
+ */
+function hasGeoLocation(location) {
+  return GEOLOCATION_FIELDS.some((field) => location?.[field] !== undefined);
+}
 
 /**
  * Collects peers into connected and disconnected lists,
@@ -35,12 +59,13 @@ class PeersStatistics {
 
     peers = bufferPeers(peers);
     peers = peers.filter((p) => p.ip !== '0.0.0.0');
+    const locations = await this.locator.locateIps(peers.map((peer) => peer.ip));
 
     for (const peer of peers) {
       this.ips.push(peer.ip);
 
       peer.osBrand = this.#osBrand(peer.os);
-      peer.location = await this.locator.locateIp(peer.ip);
+      peer.location = locations.get(peer.ip) ?? {};
 
       // Node peer state is authoritative: 0 = banned, 1 = disconnected,
       // 2 = connected. Height may be temporarily absent and must not move a
@@ -89,47 +114,120 @@ class PeersStatistics {
  * with an in-memory cache keyed by IP.
  */
 class Locator {
-  cache = {};
+  cache = Object.create(null);
+
+  geoLocationExpiresAt = Object.create(null);
+
+  geoLocationRetryAt = Object.create(null);
 
   /**
-   * Get geo data and host name for an IP address.
+   * @param {Object} [dependencies] Testable network dependencies
+   * @param {Function} [dependencies.lookupGeoLocations] Batched geo lookup
+   * @param {Function} [dependencies.reverseDns] Reverse-DNS lookup
+   * @param {Function} [dependencies.now] Current Unix time in milliseconds
+   */
+  constructor({
+    lookupGeoLocations = async (ips) => {
+      // Load requests only when geo lookup is used so peer classification
+      // remains free of ADAMANT API client initialization side effects.
+      const statistics = require('../requests/statistics');
+      return statistics.getGeoLocations(ips);
+    },
+    reverseDns = (ip) => dnsPromises.reverse(ip),
+    now = Date.now,
+  } = {}) {
+    this.lookupGeoLocations = lookupGeoLocations;
+    this.reverseDns = reverseDns;
+    this.now = now;
+  }
+
+  /**
+   * Get geo data and a host name for one IP address.
    *
    * Geo lookup failures degrade gracefully: the peer is still listed,
    * only without location details. Never rejects.
-   * @param {string} ip IPv4 address of a peer
+   * @param {string} ip IPv4 or IPv6 address of a peer
    * @returns {Promise<Object>} Geo data with a `hostname` field
    */
   async locateIp(ip) {
-    if (this.cache[ip]) {
-      return this.cache[ip];
-    }
+    const locations = await this.locateIps([ip]);
+    return locations.get(ip);
+  }
 
-    let data = {};
+  /**
+   * Get geo data and host names for multiple IP addresses.
+   *
+   * Only uncached valid addresses are sent to the configured provider, in
+   * bounded batches. Provider and reverse-DNS failures never reject.
+   * @param {Array<string>} ips IPv4 or IPv6 peer addresses
+   * @returns {Promise<Map<string, Object>>} Locations keyed by peer IP
+   */
+  async locateIps(ips) {
+    const uniqueIps = [...new Set(ips)];
+    const now = this.now();
+    const ipsToLocate = uniqueIps.filter(
+      (ip) =>
+        isIP(ip) &&
+        (!hasGeoLocation(this.cache[ip]) || (this.geoLocationExpiresAt[ip] ?? 0) <= now) &&
+        (this.geoLocationRetryAt[ip] ?? 0) <= now,
+    );
 
-    try {
-      // Load node-backed requests only when geo lookup is actually used. This
-      // keeps pure peer-classification consumers free of network side effects.
-      const statistics = require('../requests/statistics');
-      data = (await statistics.getFreegeoip(ip)) ?? {};
-    } catch (error) {
-      logger.debug(
-        `Peer locator: Geo lookup failed for ${ip}; peer will remain without location data: ${error}`,
-      );
-    }
+    for (let index = 0; index < ipsToLocate.length; index += GEOLOCATION_BATCH_SIZE) {
+      const batch = ipsToLocate.slice(index, index + GEOLOCATION_BATCH_SIZE);
+      let locations = [];
 
-    data.hostname = await dnsPromises
-      .reverse(ip)
-      .then((hostnames) => hostnames[0])
-      .catch((error) => {
+      try {
+        locations = (await this.lookupGeoLocations(batch)) ?? [];
+      } catch (error) {
         logger.debug(
-          `Peer locator: Reverse DNS failed for ${ip}; using fallback hostname: ${error}`,
+          `Peer locator: Geo lookup failed for a batch of ${batch.length} peers; ` +
+            `peers will remain without location data: ${error}`,
         );
-        return `${ip}.unknown`;
-      });
+      }
 
-    this.cache[ip] = data;
+      const locationsByIp = new Map(
+        locations
+          .filter((location) => location?.ip && batch.includes(location.ip))
+          .map((location) => [location.ip, location]),
+      );
 
-    return data;
+      for (const ip of batch) {
+        const location = locationsByIp.get(ip);
+        this.cache[ip] ??= {};
+
+        if (location && hasGeoLocation(location)) {
+          for (const field of NORMALIZED_LOCATION_FIELDS) {
+            delete this.cache[ip][field];
+          }
+
+          Object.assign(this.cache[ip], location);
+          this.geoLocationExpiresAt[ip] = now + GEOLOCATION_CACHE_TTL;
+          delete this.geoLocationRetryAt[ip];
+        } else {
+          this.geoLocationRetryAt[ip] = now + GEOLOCATION_RETRY_INTERVAL;
+        }
+      }
+    }
+
+    const ipsToResolve = uniqueIps.filter((ip) => !this.cache[ip]?.hostname);
+
+    for (const ip of ipsToResolve) {
+      const data = this.cache[ip] ?? {};
+
+      data.hostname = await Promise.resolve()
+        .then(() => this.reverseDns(ip))
+        .then((hostnames) => hostnames[0] || `${ip}.unknown`)
+        .catch((error) => {
+          logger.debug(
+            `Peer locator: Reverse DNS failed for ${ip}; using fallback hostname: ${error}`,
+          );
+          return `${ip}.unknown`;
+        });
+
+      this.cache[ip] = data;
+    }
+
+    return new Map(uniqueIps.map((ip) => [ip, this.cache[ip]]));
   }
 
   /**
@@ -137,10 +235,14 @@ class Locator {
    * @param {Array<string>} ips IP addresses seen in the latest peers snapshot
    */
   updateCache(ips) {
+    const activeIps = new Set(ips);
+
     for (const ip in this.cache) {
-      if (!ips.includes(ip)) {
+      if (!activeIps.has(ip)) {
         logger.debug(`Peer locator: Removed stale cache entry for ${ip}`);
         delete this.cache[ip];
+        delete this.geoLocationExpiresAt[ip];
+        delete this.geoLocationRetryAt[ip];
       }
     }
   }
@@ -155,6 +257,11 @@ class Locator {
     for (const peer of peers ?? []) {
       if (peer?.ip && peer.location) {
         this.cache[peer.ip] = peer.location;
+
+        if (hasGeoLocation(peer.location)) {
+          this.geoLocationExpiresAt[peer.ip] = this.now() + GEOLOCATION_CACHE_TTL;
+        }
+
         restored++;
       }
     }

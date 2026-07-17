@@ -30,15 +30,6 @@ Deployed at:
   sudo apt-get install -y redis-server
   ```
 
-- Freegeoip (optional) — used by the Network Monitor for peer geo-location. Replacing this dependency with a maintained source is planned.
-
-  ```sh
-  wget https://github.com/fiorix/freegeoip/releases/download/v3.4.1/freegeoip-3.4.1-linux-amd64.tar.gz
-  tar -zxf freegeoip-3.4.1-linux-amd64.tar.gz
-  ln -s freegeoip-3.4.1-linux-amd64 freegeoip
-  nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
-  ```
-
 - PM2 (recommended) — keeps the explorer process running and rotates logs
 
   ```sh
@@ -67,6 +58,8 @@ nano config.jsonc
 Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically.
 
 Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` is the most verbose troubleshooting level.
+
+Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Results are requested in batches, normalized for the frontend, cached by IP, and refreshed daily. Failed lookups are retried after five minutes; peers still render when GeoJS is disabled or unavailable.
 
 ### Build the frontend
 
