@@ -1,4 +1,4 @@
-import definitions from '../../transactionTypes.cjs';
+import definitions from '../../transactionTypes.mjs';
 
 /**
  * Protocol and UX transaction semantics used by operation lists.

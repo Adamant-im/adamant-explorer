@@ -4,7 +4,7 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
-import { formatCurrency } from '../lib/format';
+import { formatCurrency, formatInteger } from '../lib/format';
 import VotesList from '../components/VotesList.vue';
 
 const route = useRoute();
@@ -69,7 +69,9 @@ function amount(value) {
               <td><strong>Rank / Status</strong></td>
               <td class="text-right">
                 {{ account.delegate.rate }} /
-                <span class="text-muted">
+                <span
+                  :class="account.delegate.rate <= 101 ? 'delegate-active' : 'delegate-standby'"
+                >
                   {{ account.delegate.rate <= 101 ? 'Active' : 'Standby' }}
                 </span>
               </td>
@@ -102,8 +104,10 @@ function amount(value) {
             <tr>
               <td><strong>Blocks</strong></td>
               <td class="text-right">
-                {{ account.delegate.producedblocks }}
-                <span class="text-muted">({{ account.delegate.missedblocks }} missed)</span>
+                {{ formatInteger(account.delegate.producedblocks) }}
+                <span class="text-muted"
+                  >({{ formatInteger(account.delegate.missedblocks) }} missed)</span
+                >
               </td>
             </tr>
           </tbody>

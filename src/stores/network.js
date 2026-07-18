@@ -16,6 +16,8 @@ export const useNetworkStore = defineStore('network', {
     latestBlock: null,
     /** Browser timestamp of the latest live network update */
     lastUpdate: null,
+    /** Active delegates with a healthy or recently missed Delegate Monitor status */
+    forgingDelegates: null,
     /** Display currency; the explorer currently shows amounts in ADM only */
     currency: {
       symbol: 'ADM',
@@ -59,6 +61,9 @@ export const useNetworkStore = defineStore('network', {
             supply: res.status.supply,
             nethash: res.status.nethash,
           };
+          this.forgingDelegates = Number.isSafeInteger(res.status.forgingDelegates)
+            ? res.status.forgingDelegates
+            : null;
         }
 
         if (res.ticker?.success) {
@@ -84,6 +89,9 @@ export const useNetworkStore = defineStore('network', {
           timestamp: block.timestamp,
         };
         this.lastUpdate = Date.now();
+        this.forgingDelegates = Number.isSafeInteger(block.forgingDelegates)
+          ? block.forgingDelegates
+          : this.forgingDelegates;
 
         if (this.blockStatus) {
           this.blockStatus = { ...this.blockStatus, height };

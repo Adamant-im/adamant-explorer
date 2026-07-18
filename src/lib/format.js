@@ -93,6 +93,20 @@ export function formatFullCurrency(amount, currency) {
 }
 
 /**
+ * Formats every meaningful on-chain decimal without insignificant trailing
+ * zeros. Unlike the compact list formatter, this never rounds away a non-zero
+ * base-unit digit.
+ * @param {number|string} amount Amount in sats
+ * @param {{symbol: string, tickers?: Object}} currency Selected currency
+ * @returns {string} Exact amount with grouped integer digits
+ */
+export function formatExactCurrency(amount, currency) {
+  return formatFullCurrency(amount, currency)
+    .replace(/(\.\d*?)0+$/, '$1')
+    .replace(/\.$/, '');
+}
+
+/**
  * Formats an integer with thousands separators.
  * @param {number|string} value Integer-like value
  * @returns {string} Grouped value, or `'0'` for invalid input

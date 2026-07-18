@@ -1,4 +1,4 @@
-const TRANSACTION_TYPES = require('../../../transactionTypes.cjs');
+const { TRANSACTION_TYPES } = require('../../../transactionTypes.mjs');
 
 /**
  * Select transaction ids by a boolean semantic flag from the shared

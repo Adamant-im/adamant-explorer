@@ -108,8 +108,18 @@ const collectingHistory = computed(() => statusTotals.value?.unprocessed ?? 101)
 const bestForger = computed(() => maxBy(activeDelegates.value, (d) => parseInt(d.forged)));
 const totalForged = computed(() => totalBlockRewards(network.blockStatus?.supply));
 const transactionFees = computed(() => forgingStatistics.value?.transactionFees ?? 0);
-const bestProductivity = computed(() => maxBy(activeDelegates.value, (d) => d.productivity));
-const worstProductivity = computed(() => maxBy(activeDelegates.value, (d) => -d.productivity));
+const averageProductivity = computed(() => {
+  if (!activeDelegates.value?.length) {
+    return 0;
+  }
+
+  const total = activeDelegates.value.reduce(
+    (sum, delegate) => sum + Number(delegate.productivity || 0),
+    0,
+  );
+
+  return (total / activeDelegates.value.length).toFixed(2);
+});
 
 /** Returns the element with the highest score, or `null` for empty input. */
 function maxBy(list, score) {
@@ -219,9 +229,9 @@ const standbyColumns = [
         <small>Since genesis</small>
       </article>
       <article>
-        <span>Transaction fees</span>
-        <strong>{{ amount(transactionFees) }} {{ network.currency.symbol }}</strong>
-        <small>Earned by delegates</small>
+        <span>Average productivity</span>
+        <strong>{{ averageProductivity }}%</strong>
+        <small>Across the active delegate set</small>
       </article>
       <article>
         <span>Best forger</span>
@@ -232,11 +242,9 @@ const standbyColumns = [
         <small>{{ amount(bestForger?.forged) }} {{ network.currency.symbol }} forged</small>
       </article>
       <article>
-        <span>Productivity range</span>
-        <strong>
-          {{ worstProductivity?.productivity || 0 }}–{{ bestProductivity?.productivity || 0 }}%
-        </strong>
-        <small>Lowest to highest active delegate</small>
+        <span>Transaction fees</span>
+        <strong>{{ amount(transactionFees) }} {{ network.currency.symbol }}</strong>
+        <small>Earned by delegates in addition to minted rewards</small>
       </article>
     </div>
 

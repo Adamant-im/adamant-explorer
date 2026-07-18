@@ -93,6 +93,7 @@
 
 html {
   min-width: 320px;
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
@@ -204,9 +205,8 @@ main.container {
   z-index: 1000;
   top: 0;
   color: var(--text);
-  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(18px);
 }
 
 .site-header-main {
@@ -415,11 +415,48 @@ main.container {
   color: var(--green);
 }
 
+.network-health.degraded,
 .network-health.delayed {
   color: var(--orange);
 }
 
-.network-health svg,
+.network-health.critical {
+  color: var(--red);
+}
+
+.network-status-dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  flex: 0 0 9px;
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 13%, transparent);
+  margin-right: 4px;
+}
+
+.network-status-dot.pulse::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  content: '';
+  animation: network-block-pulse 1s ease-out;
+}
+
+@keyframes network-block-pulse {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(3.6);
+  }
+}
+
 .rail-stat svg {
   width: 16px;
   height: 16px;
@@ -441,7 +478,6 @@ main.container {
   border-right: 0;
 }
 
-.rail-update i,
 .operations-summary i {
   width: 8px;
   height: 8px;
@@ -532,6 +568,7 @@ main.container {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  margin-top: 18px;
 }
 
 .operations-heading {
@@ -612,7 +649,7 @@ main.container {
 }
 
 .latest-transactions th:nth-child(6) {
-  width: 4%;
+  width: 6%;
 }
 
 .latest-transactions thead th {
@@ -710,6 +747,20 @@ main.container {
   gap: 18px;
 }
 
+.operation-sender {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+}
+
+.operation-route-arrow {
+  width: 17px;
+  color: var(--muted);
+  margin-left: 20px;
+}
+
 .route-arrow {
   width: 18px;
   color: var(--muted);
@@ -777,9 +828,16 @@ main.container {
   font-size: 11px;
 }
 
+.operation-open {
+  padding-right: 26px !important;
+  padding-left: 20px !important;
+  text-align: right;
+}
+
 .operation-open a {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .operation-open svg {
@@ -1178,10 +1236,8 @@ main.container {
 }
 
 .copy-tooltip {
-  position: absolute;
-  z-index: 50;
-  right: 0;
-  bottom: calc(100% + 5px);
+  position: fixed;
+  z-index: 3000;
   padding: 4px 7px;
   color: var(--text-strong);
   background: var(--surface-raised);
@@ -1189,7 +1245,24 @@ main.container {
   border-radius: 4px;
   box-shadow: var(--shadow);
   font-size: 11px;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
   white-space: nowrap;
+}
+
+.copy-tooltip.error {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.delegate-active {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.delegate-standby {
+  color: var(--orange);
+  font-weight: 700;
 }
 
 .spinner {
@@ -1619,16 +1692,20 @@ main.container {
 .delegate-events {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
   margin-bottom: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 .delegate-events > article {
   min-width: 0;
   padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+}
+
+.delegate-events > article:first-child {
+  border-right: 1px solid var(--border);
 }
 
 .delegate-events > article > .small-title {
@@ -1657,7 +1734,7 @@ main.container {
   border-right: 0;
 }
 
-.account-insights span,
+.account-insights article > span,
 .account-insights small {
   overflow: hidden;
   color: var(--muted);
@@ -1673,6 +1750,12 @@ main.container {
   font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.account-insight-balance {
+  min-height: 27px;
+  display: flex;
+  align-items: center;
 }
 
 .table.summary .text-success + .text-danger {
@@ -1877,6 +1960,10 @@ main.container {
 
 .os-darwin {
   background-image: url('../img/os/darwin.png');
+}
+
+:root[data-theme='dark'] .network-distribution .os-darwin {
+  filter: brightness(0) invert(1);
 }
 
 .os-linux {
@@ -2264,10 +2351,6 @@ main.container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .delegate-events {
-    grid-template-columns: 1fr;
-  }
-
   .network-distribution > article:last-child {
     grid-column: 1 / -1;
   }
@@ -2427,6 +2510,14 @@ main.container {
     width: auto;
   }
 
+  .latest-transactions .operation-sender {
+    grid-template-columns: minmax(0, 1fr) 20px;
+  }
+
+  .latest-transactions .operation-route-arrow {
+    transform: rotate(90deg);
+  }
+
   .operation-type {
     font-size: 14px;
   }
@@ -2513,6 +2604,15 @@ main.container {
 
   .delegate-command {
     grid-template-columns: 1fr;
+  }
+
+  .delegate-events {
+    grid-template-columns: 1fr;
+  }
+
+  .delegate-events > article:first-child {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
   }
 
   .delegate-command > div,

@@ -168,7 +168,7 @@ watch(
         </button>
       </div>
 
-      <TransactionsList v-if="txs" :txs="txs" :address="account.address" />
+      <TransactionsList v-if="txs" :txs="txs" :address="account.address" full-amounts />
     </template>
   </section>
 </template>

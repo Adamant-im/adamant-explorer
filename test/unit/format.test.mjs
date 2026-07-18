@@ -4,6 +4,7 @@ import {
   epochToDate,
   toAdm,
   formatCurrency,
+  formatExactCurrency,
   formatFullCurrency,
   formatInteger,
   compactAmountParts,
@@ -78,6 +79,12 @@ describe('format.js', function () {
     it('preserves all eight ADAMANT decimal places for ledger values', function () {
       expect(formatFullCurrency(23, adm)).to.equal('0.00000023');
       expect(formatFullCurrency(100000000, adm)).to.equal('1.00000000');
+    });
+
+    it('keeps exact base units while trimming insignificant trailing zeros', function () {
+      expect(formatExactCurrency(23, adm)).to.equal('0.00000023');
+      expect(formatExactCurrency(50000000, adm)).to.equal('0.5');
+      expect(formatExactCurrency(123450000, adm)).to.equal('1.2345');
     });
   });
 

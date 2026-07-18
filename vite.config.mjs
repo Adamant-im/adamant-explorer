@@ -9,8 +9,8 @@ import vue from '@vitejs/plugin-vue';
  * `src/static/` (favicons, manifest, map marker icons) are copied
  * to `public/` verbatim.
  *
- * The dev server proxies API and Socket.IO traffic to a locally
- * running explorer backend, so `npm run dev` works against real data.
+ * The dev server proxies API and Socket.IO traffic to the explorer
+ * backend that `npm run dev` starts on localhost:6040.
  */
 export default defineConfig({
   root: 'src',

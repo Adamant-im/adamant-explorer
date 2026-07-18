@@ -5,7 +5,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
 import { useLessMore } from '../lib/lessMore';
-import { formatFullCurrency, formatInteger } from '../lib/format';
+import { formatExactCurrency, formatInteger } from '../lib/format';
+import { liveConfirmations } from '../lib/confirmations';
 import CopyButton from '../components/CopyButton.vue';
 import TransactionsList from '../components/TransactionsList.vue';
 import TimestampValue from '../components/TimestampValue.vue';
@@ -42,7 +43,11 @@ watch(() => route.params.blockId, getBlock, { immediate: true });
 /** Rows of the summary table: label plus rendered value. */
 const summary = [
   { label: 'Transactions', value: (b) => formatInteger(b.numberOfTransactions) },
-  { label: 'Confirmations', value: (b) => formatInteger(b.confirmations) },
+  {
+    label: 'Confirmations',
+    value: (b) =>
+      formatInteger(liveConfirmations(b.height, network.blockStatus?.height, b.confirmations)),
+  },
   { label: 'Height', value: (b) => formatInteger(b.height) },
   { label: 'Reward', value: (b) => amount(b.reward), currency: true },
   { label: 'Total Fee', value: (b) => amount(b.totalFee), currency: true },
@@ -60,7 +65,7 @@ const summary = [
 
 /** Shorthand for currency formatting in the summary rows. */
 function amount(value) {
-  return formatFullCurrency(value, network.currency);
+  return formatExactCurrency(value, network.currency);
 }
 </script>
 

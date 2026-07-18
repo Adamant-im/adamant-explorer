@@ -1,8 +1,9 @@
 <script setup>
 // Always-visible list of accounts, used for delegate votes and voters.
-import { useNetworkStore } from '../stores/network.js';
-import { accountLabel, formatFullCurrency } from '../lib/format';
+import { accountLabel } from '../lib/format';
 import { accountPath } from '../lib/accounts';
+import HomeAmount from './HomeAmount.vue';
+import IdentityCell from './IdentityCell.vue';
 
 defineProps({
   /** Accounts to list; nothing is rendered for an empty list. */
@@ -12,8 +13,6 @@ defineProps({
   /** Show voter address and balance in an information table. */
   detailed: { type: Boolean, default: false },
 });
-
-const network = useNetworkStore();
 </script>
 
 <template>
@@ -26,20 +25,19 @@ const network = useNetworkStore();
         <thead>
           <tr>
             <th>Voter</th>
-            <th>Address</th>
             <th class="text-right">Balance</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="account in accounts" :key="account.address">
             <td>
-              <router-link :to="accountPath(account)">{{ accountLabel(account) }}</router-link>
+              <IdentityCell
+                :address="account.address"
+                :label="accountLabel(account)"
+                :path="accountPath(account)"
+              />
             </td>
-            <td class="text-muted">{{ account.address }}</td>
-            <td class="text-right">
-              {{ formatFullCurrency(account.balance || 0, network.currency) }}
-              <span class="text-muted">{{ network.currency.symbol }}</span>
-            </td>
+            <td class="text-right"><HomeAmount :amount="account.balance || 0" /></td>
           </tr>
         </tbody>
       </table>

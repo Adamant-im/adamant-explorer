@@ -6,11 +6,12 @@ import { computed } from 'vue';
 import { useNetworkStore } from '../stores/network';
 import {
   formatCurrency,
-  formatFullCurrency,
+  formatExactCurrency,
   formatInteger,
   txSenderLabel,
   txRecipientLabel,
 } from '../lib/format';
+import { liveConfirmations } from '../lib/confirmations';
 import { txSenderPath } from '../lib/accounts';
 import { operationRecipient } from '../lib/transactionTypes.js';
 import CopyButton from './CopyButton.vue';
@@ -50,7 +51,9 @@ const amountTone = computed(() => {
   return 'txvalues-default';
 });
 
-const confirmations = computed(() => props.tx.confirmations || 0);
+const confirmations = computed(() =>
+  liveConfirmations(props.tx.height, network.blockStatus?.height, props.tx.confirmations),
+);
 
 const sender = computed(() => ({
   address: props.tx.senderId,
@@ -91,14 +94,19 @@ const recipient = computed(() => {
       <span class="txvalues" :class="amountTone">
         {{
           fullAmounts
-            ? formatFullCurrency(tx.amount, network.currency)
+            ? formatExactCurrency(tx.amount, network.currency)
             : formatCurrency(tx.amount, network.currency, network.decimalPlaces)
         }}
         {{ network.currency.symbol }}
       </span>
     </td>
     <td data-title="Fee" class="text-nowrap">
-      {{ formatCurrency(tx.fee, network.currency) }} {{ network.currency.symbol }}
+      {{
+        fullAmounts
+          ? formatExactCurrency(tx.fee, network.currency)
+          : formatCurrency(tx.fee, network.currency)
+      }}
+      {{ network.currency.symbol }}
     </td>
     <td data-title="Confirmations">
       <span v-if="!confirmations" class="text-danger">Unconfirmed Transaction!</span>

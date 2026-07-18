@@ -4,7 +4,9 @@ import { computed, nextTick, ref } from 'vue';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
 import { useLessMore } from '../lib/lessMore';
-import { formatCurrency, formatFullCurrency, supplyPercent, SAT } from '../lib/format';
+import { formatCurrency, supplyPercent, SAT } from '../lib/format';
+import { accountPath } from '../lib/accounts';
+import HomeAmount from '../components/HomeAmount.vue';
 
 const network = useNetworkStore();
 
@@ -56,12 +58,10 @@ async function loadMore() {
       </article>
       <article>
         <span>Largest account</span>
-        <strong
-          >{{
-            largestAccount ? formatFullCurrency(largestAccount.balance, network.currency) : '—'
-          }}
-          ADM</strong
-        >
+        <div v-if="largestAccount" class="account-insight-balance">
+          <HomeAmount :amount="largestAccount.balance" />
+        </div>
+        <strong v-else>—</strong>
         <small v-if="largestAccount">{{
           largestAccount.knowledge?.owner || largestAccount.address
         }}</small>
@@ -83,21 +83,25 @@ async function loadMore() {
           <tr v-for="(account, index) in topAccounts.results" :key="account.address">
             <td>{{ index + 1 }}</td>
             <td class="text-right">
-              <router-link :to="`/address/${account.address}`">{{ account.address }}</router-link>
+              <router-link :to="accountPath(account)">{{ account.address }}</router-link>
             </td>
-            <td class="text-right">
-              {{ formatFullCurrency(account.balance, network.currency) }}
-              <span class="text-muted">{{ network.currency.symbol }}</span>
-            </td>
+            <td class="text-right"><HomeAmount :amount="account.balance" /></td>
             <td class="text-right hide-sm">
               {{ supplyPercent(account.balance, network.blockStatus?.supply) }}%
             </td>
             <td class="text-right hide-md">
               <template v-if="account.knowledge">
-                <span class="owner-name">{{ account.knowledge.owner }}</span>
+                <router-link
+                  v-if="account.knowledge.kind === 'delegate'"
+                  class="owner-name"
+                  :to="accountPath(account)"
+                >
+                  {{ account.knowledge.owner }}
+                </router-link>
+                <span v-else class="owner-name">{{ account.knowledge.owner }}</span>
                 <span class="owner-desc text-muted">{{ account.knowledge.description }}</span>
               </template>
-              <span v-else class="owner-unknown text-muted">Unlabelled account</span>
+              <span v-else class="owner-unknown text-muted">Unknown</span>
             </td>
           </tr>
         </tbody>

@@ -21,16 +21,16 @@ describe('peers.js', function () {
       ]);
     });
 
-    it('collapses every lagging band when more than 95% are synchronized', function () {
+    it('collapses every lagging band when at least 90% are synchronized', function () {
       const result = groupPeerHeights([
-        ...Array(97).fill(53733846),
+        ...Array(88).fill(53733846),
         ...Array(2).fill(53733845),
-        53733840,
+        ...Array(10).fill(53733840),
       ]);
 
-      expect(result.groups).to.deep.equal([{ height: 53733846, count: 99, percent: 99 }]);
-      expect(result.otherCount).to.equal(1);
-      expect(result.otherPercent).to.equal(1);
+      expect(result.groups).to.deep.equal([{ height: 53733846, count: 90, percent: 90 }]);
+      expect(result.otherCount).to.equal(10);
+      expect(result.otherPercent).to.equal(10);
     });
   });
 });

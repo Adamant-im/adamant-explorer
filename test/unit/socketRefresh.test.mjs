@@ -101,7 +101,10 @@ describe('socket-driven refresh scheduling', function () {
     const headerPath = require.resolve('../../sockets/header.js');
     const blocksPath = require.resolve('../../api/lib/adamant/handlers/blocks.js');
     const commonPath = require.resolve('../../api/lib/adamant/handlers/common.js');
+    const delegatesPath = require.resolve('../../api/lib/adamant/requests/delegates.js');
+    const networkHealthPath = require.resolve('../../api/lib/adamant/helpers/networkHealth.js');
     const statisticsPath = require.resolve('../../api/lib/adamant/handlers/statistics.js');
+    const schedulePath = require.resolve('../../sockets/delegateMonitorSchedule.js');
     const loggerPath = require.resolve('../../utils/log.js');
     let blockListener;
     let unsubscribeCount = 0;
@@ -117,12 +120,36 @@ describe('socket-driven refresh scheduling', function () {
         success({ success: true, tickers: {} });
       },
     });
+    stubModule(delegatesPath, {
+      async getNextForgersState() {
+        return {
+          currentBlock: 100,
+          delegates: Array.from({ length: 101 }, (_, index) => `delegate-${index}`),
+        };
+      },
+    });
+    stubModule(networkHealthPath, {
+      countActiveForgingDelegates() {
+        return 101;
+      },
+    });
     stubModule(statisticsPath, {
+      getCachedBlocks() {
+        return [{ height: 100, generatorPublicKey: 'delegate-0' }];
+      },
       subscribeBlockStatistics(listener) {
         blockListener = listener;
         return () => {
           unsubscribeCount++;
         };
+      },
+    });
+    stubModule(schedulePath, {
+      getForgingSchedule(state) {
+        return { orderedDelegates: state.delegates };
+      },
+      getRoundDelegates() {
+        return [];
       },
     });
     stubModule(
@@ -161,7 +188,12 @@ describe('socket-driven refresh scheduling', function () {
 
     expect(socket.emitted).to.deep.include({
       event: 'block',
-      payload: { id: 'block-101', height: 101, timestamp: 505 },
+      payload: {
+        id: 'block-101',
+        height: 101,
+        timestamp: 505,
+        forgingDelegates: 101,
+      },
     });
     expect(logCalls).to.deep.include({
       level: 'debug',

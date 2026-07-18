@@ -41,7 +41,8 @@
   "scripts": {
     "start": "node app.js",
     "start:testnet": "node app.js dev",
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:frontend": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
     "test": "mocha",

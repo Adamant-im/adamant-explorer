@@ -3,7 +3,7 @@
  * frontend. Semantic flags define which protocol types appear in each
  * explorer operation group.
  */
-module.exports = Object.freeze([
+export const TRANSACTION_TYPES = Object.freeze([
   {
     type: 0,
     id: 'transfer',
@@ -85,3 +85,5 @@ module.exports = Object.freeze([
     service: true,
   },
 ]);
+
+export default TRANSACTION_TYPES;

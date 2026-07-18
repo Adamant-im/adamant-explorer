@@ -42,7 +42,7 @@ npm run build
 npm run test:unit
 ```
 
-During frontend work, `npm run dev` starts the Vite dev server with hot reload; it proxies `/api` and Socket.IO traffic to a backend running on `localhost:6040`.
+During frontend work, `npm run dev` starts the backend and Vite dev server together. Vite provides hot reload and proxies `/api` and Socket.IO traffic to the backend on `localhost:6040`. Use `npm run dev:frontend` only when the backend is already running separately.
 
 The API test suite runs against a live explorer instance connected to the ADAMANT Testnet:
 

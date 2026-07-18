@@ -1,10 +1,11 @@
 <script setup>
 // Transaction details page: summary, vote changes, and a details row.
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
-import { formatFullCurrency, formatInteger, txSenderLabel, txRecipientLabel } from '../lib/format';
+import { formatExactCurrency, formatInteger, txSenderLabel, txRecipientLabel } from '../lib/format';
+import { liveConfirmations } from '../lib/confirmations';
 import { txSenderPath, txRecipientPath } from '../lib/accounts';
 import CopyButton from '../components/CopyButton.vue';
 import IdentityCell from '../components/IdentityCell.vue';
@@ -17,21 +18,43 @@ const router = useRouter();
 const network = useNetworkStore();
 
 const tx = ref(null);
+let refreshPromise = null;
 
 /** Loads the transaction or falls back to the home page when unknown. */
-async function getTransaction(txId) {
-  tx.value = null;
+async function getTransaction(txId, reset = true) {
+  if (reset) {
+    tx.value = null;
+  }
 
   try {
     const data = await apiGetOrThrow('/api/getTransaction', { transactionId: txId });
 
     tx.value = data.transaction;
   } catch {
-    router.replace('/');
+    if (reset) {
+      router.replace('/');
+    }
   }
 }
 
 watch(() => route.params.txId, getTransaction, { immediate: true });
+
+watch(
+  () => network.latestBlock,
+  () => {
+    if (!tx.value || tx.value.height || refreshPromise) {
+      return;
+    }
+
+    refreshPromise = getTransaction(route.params.txId, false).finally(() => {
+      refreshPromise = null;
+    });
+  },
+);
+
+const confirmations = computed(() =>
+  liveConfirmations(tx.value?.height, network.blockStatus?.height, tx.value?.confirmations),
+);
 </script>
 
 <template>
@@ -82,19 +105,19 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
             </tr>
             <tr>
               <td><strong>Confirmations</strong></td>
-              <td class="text-right">{{ formatInteger(tx.confirmations || 0) }}</td>
+              <td class="text-right">{{ formatInteger(confirmations) }}</td>
             </tr>
             <tr>
               <td><strong>Amount</strong></td>
               <td class="text-right">
-                {{ formatFullCurrency(tx.amount, network.currency) }}
+                {{ formatExactCurrency(tx.amount, network.currency) }}
                 <span class="text-muted">{{ network.currency.symbol }}</span>
               </td>
             </tr>
             <tr>
               <td><strong>Fee</strong></td>
               <td class="text-right">
-                {{ formatFullCurrency(tx.fee, network.currency) }}
+                {{ formatExactCurrency(tx.fee, network.currency) }}
                 <span class="text-muted">{{ network.currency.symbol }}</span>
               </td>
             </tr>

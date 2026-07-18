@@ -254,11 +254,11 @@ function amount(value) {
           <strong>{{ formatInteger(counter?.connected || 0) }}</strong>
           <span>/ {{ formatInteger(counter?.total || 0) }}</span>
         </div>
-        <div class="sync-meter" aria-label="Peers at the best three-block height band">
+        <div class="sync-meter" aria-label="Peers at the best height">
           <i :style="{ width: `${synchronizedPercent}%` }"></i>
         </div>
         <p>
-          <strong>{{ synchronizedPercent }}%</strong> at the best height band
+          <strong>{{ synchronizedPercent }}%</strong> at the best height
           <span>· {{ formatInteger(counter?.disconnected || 0) }} disconnected</span>
         </p>
       </article>
@@ -321,8 +321,8 @@ function amount(value) {
         <span class="small-title">Platforms</span>
         <div class="platforms">
           <div class="platform">
-            <OsIcon os="Darwin" :brand="{ name: 'darwin' }" class="platform-icon" />
-            <span>Darwin</span>
+            <OsIcon os="macOS" :brand="{ name: 'darwin' }" class="platform-icon" />
+            <span>macOS</span>
             <strong>{{ counter.platforms[1] || 0 }}</strong>
           </div>
           <div class="platform">
@@ -351,7 +351,7 @@ function amount(value) {
       </article>
 
       <article>
-        <span class="small-title">Best heights · grouped by 3</span>
+        <span class="small-title">Best heights</span>
         <div class="distribution-list">
           <div
             v-for="(group, index) in counter.heightGroups.groups"

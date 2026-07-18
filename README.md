@@ -75,10 +75,16 @@ During development, either rebuild on every change:
 npm run watch
 ```
 
-Or use the Vite dev server with hot reload, which proxies `/api` and Socket.IO traffic to a backend running on `localhost:6040`:
+Or start the backend and Vite dev server together. Vite provides hot reload and proxies `/api` and Socket.IO traffic to the backend on `localhost:6040`:
 
 ```sh
 npm run dev
+```
+
+Open <http://localhost:5173>. To run only Vite against an already running backend on `localhost:6040`, use:
+
+```sh
+npm run dev:frontend
 ```
 
 ## Usage

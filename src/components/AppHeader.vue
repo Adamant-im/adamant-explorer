@@ -1,15 +1,10 @@
 <script setup>
 // Site header: compact navigation plus a separate live network rail.
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import {
-  IconActivityHeartbeat,
-  IconChevronDown,
-  IconMenu2,
-  IconNetwork,
-  IconX,
-} from '@tabler/icons-vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { IconChevronDown, IconMenu2, IconNetwork, IconX } from '@tabler/icons-vue';
 import { useNetworkStore } from '../stores/network';
 import { toAdm, nethashLabel } from '../lib/format';
+import { networkHealthStatus } from '../lib/networkHealth';
 import SearchBox from './SearchBox.vue';
 import ThemeToggle from './ThemeToggle.vue';
 import logoUrl from '../assets/img/adm-exp-logo-light-256x256.png';
@@ -18,7 +13,9 @@ const network = useNetworkStore();
 const menuOpen = ref(false);
 const toolsOpen = ref(false);
 const clock = ref(Date.now());
+const blockPulse = ref(false);
 let clockTimer;
+let pulseTimer;
 
 onMounted(() => {
   clockTimer = window.setInterval(() => {
@@ -28,6 +25,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.clearInterval(clockTimer);
+  window.clearTimeout(pulseTimer);
 });
 
 /** Closes the mobile menu after a navigation so it does not cover content. */
@@ -50,16 +48,33 @@ const secondsSinceUpdate = computed(() => {
 });
 
 const networkHealth = computed(() => {
-  if (!network.blockStatus || secondsSinceUpdate.value === null) {
-    return { tone: 'connecting', label: 'Connecting to network' };
-  }
-
-  if (secondsSinceUpdate.value <= 15) {
-    return { tone: 'online', label: 'Network live' };
-  }
-
-  return { tone: 'delayed', label: 'Updates delayed' };
+  return networkHealthStatus({
+    hasStatus: Boolean(network.blockStatus),
+    secondsSinceUpdate: secondsSinceUpdate.value,
+    forgingDelegates: network.forgingDelegates,
+  });
 });
+
+const networkHealthTitle = computed(() =>
+  network.forgingDelegates === null
+    ? networkHealth.value.label
+    : `${networkHealth.value.label}: ${network.forgingDelegates} of 101 active delegates are forging or have only recent misses`,
+);
+
+watch(
+  () => network.latestBlock,
+  (block, previousBlock) => {
+    if (!block || block.height === previousBlock?.height) {
+      return;
+    }
+
+    blockPulse.value = true;
+    window.clearTimeout(pulseTimer);
+    pulseTimer = window.setTimeout(() => {
+      blockPulse.value = false;
+    }, 1000);
+  },
+);
 </script>
 
 <template>
@@ -114,8 +129,8 @@ const networkHealth = computed(() => {
 
     <div class="network-rail">
       <div class="container network-rail-inner">
-        <div class="network-health" :class="networkHealth.tone">
-          <IconActivityHeartbeat aria-hidden="true" />
+        <div class="network-health" :class="networkHealth.tone" :title="networkHealthTitle">
+          <i class="network-status-dot" :class="{ pulse: blockPulse }" aria-hidden="true"></i>
           <span>{{ networkHealth.label }}</span>
         </div>
 
@@ -135,11 +150,6 @@ const networkHealth = computed(() => {
                 network.blockStatus.nethash ? nethashLabel(network.blockStatus.nethash) : 'Unknown'
               }}
             </strong>
-          </div>
-          <div class="rail-stat rail-update">
-            <span>Last update</span>
-            <strong>{{ secondsSinceUpdate ?? 0 }}s ago</strong>
-            <i aria-hidden="true"></i>
           </div>
         </template>
       </div>

@@ -18,7 +18,7 @@ export function compareVersionsDescending(left, right) {
  * Groups peer heights into three-block bands anchored at the maximum.
  *
  * A peer at max, max - 1, or max - 2 is considered synchronized with the
- * best height. When that band contains more than 95% of peers, every
+ * best height. When that band contains at least 90% of peers, every
  * remaining height is summarized as "other".
  * @param {Array<number|string>} heights Connected peer heights
  * @returns {{groups: Array<{height: number, count: number, percent: number}>, otherCount: number, otherPercent: number}}
@@ -46,7 +46,7 @@ export function groupPeerHeights(heights) {
       count,
       percent: Math.round((count / valid.length) * 100),
     }));
-  const visibleCount = allGroups[0].percent > 95 ? 1 : 4;
+  const visibleCount = allGroups[0].percent >= 90 ? 1 : 4;
   const groups = allGroups.slice(0, visibleCount);
   const otherCount = allGroups.slice(visibleCount).reduce((sum, group) => sum + group.count, 0);
 
