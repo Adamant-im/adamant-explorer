@@ -265,15 +265,29 @@ onBeforeUnmount(() => {
           <span class="text-muted">Loading graph <span class="spinner"></span></span>
         </div>
         <div v-if="selected.id" class="hud hud-node">
-          <button type="button" class="btn" title="Cancel node selection" @click="deselectNode">
+          <button
+            v-tooltip="'Cancel node selection'"
+            type="button"
+            class="btn"
+            @click="deselectNode"
+          >
             <IconX class="inline-icon" aria-hidden="true" />
           </button>
-          <router-link class="btn" :to="selectedHref" title="Open selected node in the explorer">
+          <router-link
+            v-tooltip="'Open selected node in the explorer'"
+            class="btn"
+            :to="selectedHref"
+          >
             Open
           </router-link>
         </div>
         <div class="graph-controls">
-          <button type="button" class="btn" title="Reset camera position/zoom" @click="resetCamera">
+          <button
+            v-tooltip="'Reset camera position/zoom'"
+            type="button"
+            class="btn"
+            @click="resetCamera"
+          >
             Reset Camera
           </button>
           <p class="text-muted">Updated every {{ BLOCK_INTERVAL_SECONDS }} seconds.</p>

@@ -74,7 +74,9 @@ async function getUnconfirmedTransactions() {
  * @throws {string} Node error message when the request fails
  */
 async function getLastTransactions() {
-  return unwrapTransactions(await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20 }));
+  return unwrapTransactions(
+    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20, returnAsset: 1 }),
+  );
 }
 
 /**
@@ -95,6 +97,7 @@ async function getLastTransfers() {
       orderBy: 'timestamp:desc',
       limit: PUBLIC_OPERATION_FETCH_LIMIT,
       and: { types: PUBLIC_OPERATION_TYPES },
+      returnAsset: 1,
     }),
   );
 }
@@ -107,7 +110,7 @@ async function getLastTransfers() {
  * @throws {string} Node error message when the request fails
  */
 async function getTransactions(query) {
-  return unwrapTransactions(await api.getTransactions(query));
+  return unwrapTransactions(await api.getTransactions({ ...query, returnAsset: 1 }));
 }
 
 /**
@@ -123,6 +126,7 @@ async function getTransfers(query) {
     await api.getTransactions({
       ...query,
       and: { ...query.and, types: TRANSFER_TYPES, minAmount: 1 },
+      returnAsset: 1,
     }),
   );
 }
@@ -140,6 +144,7 @@ async function getTransactionsByBlock(query) {
       orderBy: 'timestamp:desc',
       offset: query.offset,
       limit: query.limit,
+      returnAsset: 1,
     }),
   );
 }
@@ -151,7 +156,12 @@ async function getTransactionsByBlock(query) {
  */
 async function getRegistrationTransactions() {
   return unwrapTransactions(
-    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 2 }),
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 2,
+      returnAsset: 1,
+    }),
   );
 }
 
@@ -162,7 +172,12 @@ async function getRegistrationTransactions() {
  */
 async function getVoteTransactions() {
   return unwrapTransactions(
-    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 3 }),
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 3,
+      returnAsset: 1,
+    }),
   );
 }
 

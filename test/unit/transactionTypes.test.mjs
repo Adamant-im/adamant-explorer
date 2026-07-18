@@ -15,6 +15,7 @@ describe('transactionTypes.js', function () {
       'deposit',
       'withdraw',
       'unvote',
+      'vote-unvote',
       'message',
       'state',
     ]);
@@ -42,6 +43,21 @@ describe('transactionTypes.js', function () {
     expect(operationTypeId({ type: 3, votes: { deleted: [{}] } })).to.equal('unvote');
     expect(operationTypeId({ type: 3, asset: { votes: ['-public-key'] } })).to.equal('unvote');
     expect(operationMeta({ type: 3, votes: { added: [{}] } }).label).to.equal('Vote');
+  });
+
+  it('derives mixed vote and unvote operations', function () {
+    expect(
+      operationMeta({
+        type: 3,
+        votes: { added: [{}, {}, {}], deleted: [{}, {}, {}, {}] },
+      }).label,
+    ).to.equal('Vote & Unvote');
+    expect(
+      operationTypeId({
+        type: 3,
+        asset: { votes: ['+added-key', '-deleted-key'] },
+      }),
+    ).to.equal('vote-unvote');
   });
 
   it('resolves delegate registration and vote recipients', function () {

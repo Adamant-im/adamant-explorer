@@ -66,7 +66,7 @@ watch(
     <template v-else>
       <h2>
         Address Summary
-        <small v-if="account.secondSignature" title="Second signature">
+        <small v-if="account.secondSignature" v-tooltip="'Second signature'">
           <IconLock class="inline-icon" aria-label="Second signature" />
         </small>
       </h2>
@@ -106,11 +106,11 @@ watch(
               <tr>
                 <td><strong>Transactions</strong></td>
                 <td class="text-right">
-                  <span title="Incoming" class="text-success">
+                  <span v-tooltip="'Incoming'" class="text-success">
                     <IconArrowDown class="inline-icon" aria-hidden="true" />
                     {{ formatInteger(account.incoming_cnt) }}
                   </span>
-                  <span title="Outgoing" class="text-danger">
+                  <span v-tooltip="'Outgoing'" class="text-danger">
                     <IconArrowUp class="inline-icon" aria-hidden="true" />
                     {{ formatInteger(account.outgoing_cnt) }}
                   </span>

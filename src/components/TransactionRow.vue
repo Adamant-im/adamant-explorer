@@ -113,7 +113,7 @@ const recipient = computed(() => {
       <span v-else-if="confirmations < 101" class="text-warning">{{
         formatInteger(confirmations)
       }}</span>
-      <span v-else class="text-success" :title="`${formatInteger(confirmations)} confirmations`">
+      <span v-else v-tooltip="`${formatInteger(confirmations)} confirmations`" class="text-success">
         Confirmed
       </span>
     </td>

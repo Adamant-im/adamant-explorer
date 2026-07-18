@@ -123,7 +123,8 @@ a {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+.tooltip-trigger:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -1237,7 +1238,7 @@ main.container {
 
 .copy-tooltip {
   position: fixed;
-  z-index: 3000;
+  z-index: 6000;
   padding: 4px 7px;
   color: var(--text-strong);
   background: var(--surface-raised);
@@ -1253,6 +1254,110 @@ main.container {
 .copy-tooltip.error {
   color: var(--red);
   border-color: var(--red);
+}
+
+.app-tooltip {
+  --tooltip-background: #173244;
+  --tooltip-arrow-offset: 50%;
+  position: fixed;
+  z-index: 5000;
+  max-width: min(320px, calc(100vw - 20px));
+  padding: 8px 11px;
+  color: #f7fbfd;
+  background: var(--tooltip-background);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px;
+  box-shadow: 0 14px 36px rgba(4, 15, 22, 0.24);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  transform: translateY(2px);
+  transition:
+    opacity 90ms ease,
+    transform 90ms ease;
+  white-space: pre-line;
+}
+
+.app-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-tooltip[data-tone='blue'] {
+  --tooltip-background: #126b9c;
+}
+
+.app-tooltip[data-tone='green'],
+.app-tooltip[data-tone='online'] {
+  --tooltip-background: #4f8d36;
+}
+
+.app-tooltip[data-tone='orange'],
+.app-tooltip[data-tone='degraded'],
+.app-tooltip[data-tone='delayed'] {
+  --tooltip-background: #a96425;
+}
+
+.app-tooltip[data-tone='red'],
+.app-tooltip[data-tone='critical'] {
+  --tooltip-background: #a94340;
+}
+
+.app-tooltip[data-tone='violet'] {
+  --tooltip-background: #75458f;
+}
+
+.app-tooltip[data-tone='grey'],
+.app-tooltip[data-tone='connecting'] {
+  --tooltip-background: #52616a;
+}
+
+.app-tooltip::after {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--tooltip-background);
+  content: '';
+  transform: rotate(45deg);
+}
+
+.app-tooltip[data-placement='top']::after,
+.app-tooltip[data-placement='bottom']::after {
+  left: clamp(9px, var(--tooltip-arrow-offset), calc(100% - 9px));
+  margin-left: -4px;
+}
+
+.app-tooltip[data-placement='top']::after {
+  bottom: -5px;
+  border-right: 1px solid rgba(255, 255, 255, 0.13);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.app-tooltip[data-placement='bottom']::after {
+  top: -5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  border-left: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.app-tooltip[data-placement='left']::after,
+.app-tooltip[data-placement='right']::after {
+  top: clamp(9px, var(--tooltip-arrow-offset), calc(100% - 9px));
+  margin-top: -4px;
+}
+
+.app-tooltip[data-placement='left']::after {
+  right: -5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  border-right: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.app-tooltip[data-placement='right']::after {
+  left: -5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  border-left: 1px solid rgba(255, 255, 255, 0.13);
 }
 
 .delegate-active {

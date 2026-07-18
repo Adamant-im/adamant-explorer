@@ -12,7 +12,7 @@ const parts = computed(() => formatHomeAmountParts(props.amount, network.currenc
 </script>
 
 <template>
-  <span class="home-amount" :title="`${parts.text} ${network.currency.symbol}`">
+  <span v-tooltip="`${parts.text} ${network.currency.symbol}`" class="home-amount">
     <strong>{{ parts.integer }}</strong
     ><span v-if="parts.fraction">.{{ parts.fraction }}</span>
     <small>{{ network.currency.symbol }}</small>

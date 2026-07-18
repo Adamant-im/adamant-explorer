@@ -7,10 +7,10 @@ const { isDark, toggleTheme } = useTheme();
 
 <template>
   <button
+    v-tooltip="isDark ? 'Use light theme' : 'Use dark theme'"
     type="button"
     class="theme-toggle"
     :aria-label="isDark ? 'Use light theme' : 'Use dark theme'"
-    :title="isDark ? 'Use light theme' : 'Use dark theme'"
     @click="toggleTheme"
   >
     <IconSun v-if="isDark" aria-hidden="true" />

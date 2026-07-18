@@ -15,5 +15,11 @@ const label = computed(() =>
 </script>
 
 <template>
-  <time :datetime="String(timestamp)" :title="timestampTitle(Number(timestamp))">{{ label }}</time>
+  <time
+    v-tooltip="timestampTitle(Number(timestamp))"
+    :datetime="String(timestamp)"
+    :aria-label="timestampTitle(Number(timestamp))"
+  >
+    {{ label }}
+  </time>
 </template>

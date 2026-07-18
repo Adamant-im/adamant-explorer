@@ -81,7 +81,12 @@ watch(
   <header class="site-header">
     <div class="site-header-main">
       <div class="container site-header-inner">
-        <router-link to="/" class="brand" title="ADAMANT Blockchain Explorer" @click="closeMenus">
+        <router-link
+          v-tooltip="'ADAMANT Blockchain Explorer'"
+          to="/"
+          class="brand"
+          @click="closeMenus"
+        >
           <img :src="logoUrl" alt="ADAMANT Blockchain Explorer" class="brand-logo" />
           <span>Explorer</span>
         </router-link>
@@ -120,7 +125,7 @@ watch(
             </div>
             <router-link to="/networkMonitor" @click="closeMenus">Network</router-link>
             <span class="nav-divider" aria-hidden="true"></span>
-            <span class="currency-badge" title="Display currency">ADM</span>
+            <span v-tooltip="'Display currency'" class="currency-badge">ADM</span>
             <ThemeToggle />
           </nav>
         </div>
@@ -129,7 +134,11 @@ watch(
 
     <div class="network-rail">
       <div class="container network-rail-inner">
-        <div class="network-health" :class="networkHealth.tone" :title="networkHealthTitle">
+        <div
+          v-tooltip="{ content: networkHealthTitle, tone: networkHealth.tone }"
+          class="network-health"
+          :class="networkHealth.tone"
+        >
           <i class="network-status-dot" :class="{ pulse: blockPulse }" aria-hidden="true"></i>
           <span>{{ networkHealth.label }}</span>
         </div>

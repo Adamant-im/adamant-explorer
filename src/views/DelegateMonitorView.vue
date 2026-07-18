@@ -365,7 +365,12 @@ const standbyColumns = [
               <td><ForgingStatusDot :status="delegate.forgingStatus" /></td>
               <td>{{ delegate.productivity || 0 }}%</td>
               <td class="hide-sm">
-                <span :title="`${amount(delegate.votesWeight)} ${network.currency.symbol}`">
+                <span
+                  v-tooltip="{
+                    content: `${amount(delegate.votesWeight)} ${network.currency.symbol}`,
+                    tone: 'blue',
+                  }"
+                >
                   {{ delegate.approval }}%
                 </span>
               </td>
@@ -411,7 +416,12 @@ const standbyColumns = [
               </td>
               <td class="hide-sm">{{ delegate.productivity || 0 }}%</td>
               <td class="hide-sm">
-                <span :title="`${amount(delegate.votesWeight)} ${network.currency.symbol}`">
+                <span
+                  v-tooltip="{
+                    content: `${amount(delegate.votesWeight)} ${network.currency.symbol}`,
+                    tone: 'blue',
+                  }"
+                >
                   {{ delegate.approval }}%
                 </span>
               </td>

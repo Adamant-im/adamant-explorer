@@ -40,6 +40,7 @@ function stopTrackingFeedback() {
 async function copy() {
   copied.value = false;
   failed.value = false;
+  button.value?.dispatchEvent(new Event('tooltip:hide'));
 
   try {
     await navigator.clipboard.writeText(props.text);
@@ -69,9 +70,9 @@ onBeforeUnmount(() => {
 <template>
   <button
     ref="button"
+    v-tooltip="'Copy to clipboard'"
     type="button"
     class="copy-button"
-    :title="copied ? 'Copied' : 'Copy to clipboard'"
     :aria-label="copied ? 'Copied' : 'Copy to clipboard'"
     @click="copy"
   >

@@ -29,6 +29,7 @@ export const OPERATION_TYPE_OPTIONS = Object.freeze([
   { id: 'create-delegate', label: 'Create delegate' },
   { id: 'vote', label: 'Vote' },
   { id: 'unvote', label: 'Unvote' },
+  { id: 'vote-unvote', label: 'Vote & Unvote' },
   { id: 'multisignature', label: 'Multisignature' },
   { id: 'dapp-registration', label: 'DApp registration' },
   { id: 'dapp-deposit', label: 'DApp deposit' },
@@ -46,6 +47,7 @@ const TYPE_META = {
   'create-delegate': { label: 'Create delegate', tone: 'blue', icon: 'delegate' },
   vote: { label: 'Vote', tone: 'violet', icon: 'vote' },
   unvote: { label: 'Unvote', tone: 'orange', icon: 'vote' },
+  'vote-unvote': { label: 'Vote & Unvote', tone: 'violet', icon: 'vote' },
   multisignature: { label: 'Multisignature', tone: 'blue', icon: 'multisignature' },
   'dapp-registration': { label: 'DApp registration', tone: 'blue', icon: 'dapp' },
   'dapp-deposit': { label: 'DApp deposit', tone: 'green', icon: 'deposit' },
@@ -65,14 +67,25 @@ function isWelcomeBonus(tx) {
   );
 }
 
-/** Returns whether a vote transaction removes at least one vote. */
-function isUnvote(tx) {
-  if (tx.votes?.deleted?.length) {
-    return true;
+/**
+ * Resolves added and removed vote directions from enriched or raw assets.
+ * @param {Object} tx Vote transaction
+ * @returns {'vote'|'unvote'|'vote-unvote'} Semantic vote operation id
+ */
+function voteOperationId(tx) {
+  const votes = tx.asset?.votes;
+  const hasAdded =
+    Boolean(tx.votes?.added?.length) ||
+    (Array.isArray(votes) && votes.some((vote) => String(vote).startsWith('+')));
+  const hasDeleted =
+    Boolean(tx.votes?.deleted?.length) ||
+    (Array.isArray(votes) && votes.some((vote) => String(vote).startsWith('-')));
+
+  if (hasAdded && hasDeleted) {
+    return 'vote-unvote';
   }
 
-  const votes = tx.asset?.votes;
-  return Array.isArray(votes) && votes.some((vote) => String(vote).startsWith('-'));
+  return hasDeleted ? 'unvote' : 'vote';
 }
 
 /**
@@ -97,7 +110,7 @@ export function operationTypeId(tx) {
     case 2:
       return 'create-delegate';
     case 3:
-      return isUnvote(tx) ? 'unvote' : 'vote';
+      return voteOperationId(tx);
     case 4:
       return 'multisignature';
     case 5:

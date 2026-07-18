@@ -56,19 +56,23 @@ const rows = computed(() => sort.sorted(props.peers));
             <span class="text-muted">{{ peer.port }}</span>
           </td>
           <td>
-            <span class="text-muted ellipsis hostname" :title="peer.location?.hostname">
+            <span v-tooltip="peer.location?.hostname" class="text-muted ellipsis hostname">
               {{ peer.location?.hostname || 'N/A' }}
             </span>
           </td>
           <td>
             <span
+              v-tooltip="peer.location?.country_name"
               class="flag"
               :class="`flag-${(peer.location?.country_code || '').toLowerCase()}`"
-              :title="peer.location?.country_name"
             ></span>
           </td>
           <td>
-            <span class="peer-state" :class="`state-${peer.state}`" :title="peer.humanState"></span>
+            <span
+              v-tooltip="peer.humanState"
+              class="peer-state"
+              :class="`state-${peer.state}`"
+            ></span>
           </td>
           <td>
             <span class="text-muted">{{ peer.version }}</span>

@@ -107,7 +107,7 @@ watch(
               <HomeAmount :amount="tx.amount" />
             </td>
             <td class="operation-open">
-              <router-link :to="`/tx/${tx.id}`" :title="`Open transaction ${tx.id}`">
+              <router-link v-tooltip="`Open transaction ${tx.id}`" :to="`/tx/${tx.id}`">
                 <IconChevronRight aria-hidden="true" />
                 <span class="sr-only">View transaction {{ tx.id }}</span>
               </router-link>
