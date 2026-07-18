@@ -4,12 +4,13 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
-import { formatCurrency, formatTimestamp, txSenderLabel, txRecipientLabel } from '../lib/format';
+import { formatFullCurrency, formatInteger, txSenderLabel, txRecipientLabel } from '../lib/format';
 import { txSenderPath, txRecipientPath } from '../lib/accounts';
 import CopyButton from '../components/CopyButton.vue';
 import IdentityCell from '../components/IdentityCell.vue';
 import OperationType from '../components/OperationType.vue';
 import TransactionRow from '../components/TransactionRow.vue';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -35,23 +36,23 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
 
 <template>
   <section>
-    <h1>
-      Transaction <small class="ellipsis">{{ route.params.txId }}</small>
-    </h1>
+    <h1>Transaction</h1>
 
     <div v-if="!tx" class="text-muted">Loading transaction <span class="spinner"></span></div>
 
     <template v-else>
-      <div class="well ellipsis">
-        <strong>Transaction ID</strong>
-        <span class="txid text-muted">{{ tx.id }}</span>
-        <CopyButton :text="tx.id" />
-      </div>
-
-      <h2>Summary</h2>
       <div class="table-responsive">
         <table class="table summary">
           <tbody>
+            <tr>
+              <td><strong>Transaction ID</strong></td>
+              <td class="text-right">
+                <span class="copy-value"
+                  ><span class="txid">{{ tx.id }}</span
+                  ><CopyButton :text="tx.id"
+                /></span>
+              </td>
+            </tr>
             <tr>
               <td><strong>Type</strong></td>
               <td class="text-right"><OperationType :tx="tx" /></td>
@@ -81,25 +82,25 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
             </tr>
             <tr>
               <td><strong>Confirmations</strong></td>
-              <td class="text-right">{{ tx.confirmations || 0 }}</td>
+              <td class="text-right">{{ formatInteger(tx.confirmations || 0) }}</td>
             </tr>
             <tr>
               <td><strong>Amount</strong></td>
               <td class="text-right">
-                {{ formatCurrency(tx.amount, network.currency, network.decimalPlaces) }}
+                {{ formatFullCurrency(tx.amount, network.currency) }}
                 <span class="text-muted">{{ network.currency.symbol }}</span>
               </td>
             </tr>
             <tr>
               <td><strong>Fee</strong></td>
               <td class="text-right">
-                {{ formatCurrency(tx.fee, network.currency) }}
+                {{ formatFullCurrency(tx.fee, network.currency) }}
                 <span class="text-muted">{{ network.currency.symbol }}</span>
               </td>
             </tr>
             <tr>
               <td><strong>Timestamp</strong></td>
-              <td class="text-right">{{ formatTimestamp(tx.timestamp) }}</td>
+              <td class="text-right"><TimestampValue :timestamp="tx.timestamp" /></td>
             </tr>
             <tr>
               <td><strong>Block</strong></td>
@@ -142,11 +143,12 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
         </p>
       </section>
 
-      <h2>Details</h2>
+      <h2>Ledger entry</h2>
       <div class="table-responsive table-mobile">
         <table class="table details">
           <thead>
             <tr>
+              <th>Type</th>
               <th>Transaction ID</th>
               <th>Date</th>
               <th>Sender</th>
@@ -157,7 +159,7 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
             </tr>
           </thead>
           <tbody>
-            <TransactionRow :tx="tx" :address="tx.senderId" />
+            <TransactionRow :tx="tx" neutral-amounts full-amounts />
           </tbody>
         </table>
       </div>

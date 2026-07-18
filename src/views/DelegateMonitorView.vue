@@ -6,11 +6,12 @@ import { useNetworkStore } from '../stores/network';
 import { useSocket } from '../composables/useSocket';
 import { apiGet } from '../lib/api';
 import { useSort } from '../lib/sort';
-import { formatCurrency, forgingTime, timeAgo, SAT } from '../lib/format';
+import { formatCurrency, formatInteger, forgingTime, SAT } from '../lib/format';
 import { forgingStatus, forgingTotals, forgingProgress, totalBlockRewards } from '../lib/forging';
 import TabsBar from '../components/TabsBar.vue';
 import ForgingStatusDot from '../components/ForgingStatusDot.vue';
 import SortIndicator from '../components/SortIndicator.vue';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const network = useNetworkStore();
 
@@ -102,6 +103,7 @@ const statusTotals = computed(() =>
   activeDelegates.value ? forgingTotals(activeDelegates.value) : null,
 );
 const processed = computed(() => (statusTotals.value ? forgingProgress(statusTotals.value) : 0));
+const collectingHistory = computed(() => statusTotals.value?.unprocessed ?? 101);
 
 const bestForger = computed(() => maxBy(activeDelegates.value, (d) => parseInt(d.forged)));
 const totalForged = computed(() => totalBlockRewards(network.blockStatus?.supply));
@@ -147,118 +149,100 @@ const standbyColumns = [
 </script>
 
 <template>
-  <section>
-    <h1>Delegate Monitor</h1>
-    <hr />
-
-    <div class="cards-grid">
-      <div class="big-info">
-        <p class="small-title">Delegates</p>
-        <p class="big-details">{{ totals.totalDelegates || 0 }}</p>
-        <p class="text-muted">{{ totals.totalActive }} active delegates</p>
-        <p class="text-muted">{{ totals.totalStandby }} delegates on standby</p>
+  <section class="delegate-monitor">
+    <header class="monitor-title">
+      <div>
+        <span class="monitor-kicker">DPoS control room</span>
+        <h1>Delegate Monitor</h1>
       </div>
+      <p>Live forging coverage across the active set and the delegates waiting to enter it</p>
+    </header>
 
-      <div class="big-info">
-        <p class="small-title">Last Block By</p>
-        <p class="big-details">
-          <router-link v-if="lastBlock" :to="`/delegate/${lastBlock.delegate.address}`">
-            {{ lastBlock.delegate.username }}
-          </router-link>
-          <span v-else class="text-muted">N/A</span>
-        </p>
-        <p class="text-muted">
-          <router-link v-if="lastBlock" :to="`/block/${lastBlock.id}`">
-            {{ lastBlock.id }}
-          </router-link>
-          <span v-else>N/A</span>
-        </p>
-        <p class="text-muted">
-          <span class="accent">
-            {{ amount(lastBlock?.totalForged) }} {{ network.currency.symbol }} forged
-          </span>
-          from {{ lastBlock?.numberOfTransactions || 0 }} transactions
-        </p>
-      </div>
-
-      <div class="big-info">
-        <p class="small-title">Next Forgers</p>
-        <div v-if="!nextForgers">Waiting for next forgers <span class="spinner"></span></div>
-        <template v-else>
-          <p class="big-details">
-            <router-link :to="`/delegate/${nextForgers[0].address}`">
-              {{ nextForgers[0].username }}
-            </router-link>
-          </p>
-          <p>
-            <template v-for="(forger, index) in nextForgers.slice(1)" :key="forger.address">
-              <router-link :to="`/delegate/${forger.address}`">{{ forger.username }}</router-link>
-              <span v-if="index < nextForgers.length - 2" class="text-muted"> • </span>
-            </template>
-          </p>
-        </template>
-      </div>
-
-      <div class="big-info">
-        <p class="small-title">
-          Total Forged <span class="text-muted">({{ network.currency.symbol }})</span>
-        </p>
-        <p class="big-details accent">{{ amount(totalForged) }}</p>
-        <p class="text-muted">block rewards minted since genesis</p>
-      </div>
-
-      <div class="big-info">
-        <p class="small-title">
-          Transaction Fees <span class="text-muted">({{ network.currency.symbol }})</span>
-        </p>
-        <p class="big-details accent">{{ amount(transactionFees) }}</p>
-        <p class="text-muted">delegates earned additionally to block rewards</p>
-      </div>
-
-      <div class="big-info">
-        <p class="small-title">Best Forger</p>
-        <p class="big-details">
-          <router-link v-if="bestForger" :to="`/delegate/${bestForger.address}`">
-            {{ bestForger.username }}
-          </router-link>
-          <span v-else class="text-muted">N/A</span>
-        </p>
-        <p class="text-muted accent">
-          {{ amount(bestForger?.forged) }} {{ network.currency.symbol }} forged
-        </p>
-        <p class="text-muted">since registration</p>
-      </div>
-
-      <div class="big-info">
-        <p class="small-title">Productivity</p>
-        <div class="productivity-pair">
-          <div>
-            <p class="big-details">{{ bestProductivity?.productivity || 0 }}%</p>
-            <p>
-              <span class="text-muted">best by</span>
-              <router-link v-if="bestProductivity" :to="`/delegate/${bestProductivity.address}`">
-                {{ bestProductivity.username }}
-              </router-link>
-              <span v-else class="text-muted">N/A</span>
-            </p>
-          </div>
-          <div>
-            <p class="big-details">{{ worstProductivity?.productivity || 0 }}%</p>
-            <p>
-              <span class="text-muted">worst by</span>
-              <router-link v-if="worstProductivity" :to="`/delegate/${worstProductivity.address}`">
-                {{ worstProductivity.username }}
-              </router-link>
-              <span v-else class="text-muted">N/A</span>
-            </p>
-          </div>
+    <div class="delegate-command">
+      <div class="round-readout">
+        <span class="small-title">Status coverage</span>
+        <strong>{{ processed }}<small>/ 101 classified</small></strong>
+        <div class="classification-track">
+          <i :style="{ width: `${(processed / 101) * 100}%` }"></i>
         </div>
+        <p>{{ collectingHistory }} collecting at least five rounds of history</p>
+      </div>
+      <div v-if="statusTotals" class="status-band">
+        <div class="green">
+          <strong>{{ statusTotals.forging }}</strong
+          ><span>Forging</span>
+        </div>
+        <div class="orange">
+          <strong>{{ statusTotals.missedBlock }}</strong
+          ><span>Recent misses</span>
+        </div>
+        <div class="red">
+          <strong>{{ statusTotals.notForging }}</strong
+          ><span>Not forging</span>
+        </div>
+        <div class="grey">
+          <strong>{{ statusTotals.awaitingSlot }}</strong
+          ><span>Awaiting slot</span>
+        </div>
+      </div>
+      <div class="forger-queue">
+        <span class="small-title">Next forging queue</span>
+        <ol v-if="nextForgers">
+          <li v-for="forger in nextForgers.slice(0, 5)" :key="forger.address">
+            <router-link :to="`/delegate/${forger.address}`">{{ forger.username }}</router-link>
+          </li>
+        </ol>
+        <p v-else>Waiting for schedule <span class="spinner"></span></p>
       </div>
     </div>
 
-    <div class="cards-grid two-columns">
-      <div class="big-info">
-        <p class="small-title">Latest Votes</p>
+    <div class="delegate-metrics">
+      <article>
+        <span>Delegate registry</span>
+        <strong>{{ formatInteger(totals.totalDelegates || 0) }}</strong>
+        <small>{{ totals.totalActive }} active · {{ totals.totalStandby }} standby</small>
+      </article>
+      <article>
+        <span>Last block by</span>
+        <router-link v-if="lastBlock" :to="`/delegate/${lastBlock.delegate.address}`">
+          {{ lastBlock.delegate.username }}
+        </router-link>
+        <strong v-else>—</strong>
+        <small v-if="lastBlock">
+          <router-link :to="`/block/${lastBlock.id}`">{{ lastBlock.id }}</router-link>
+          · {{ formatInteger(lastBlock.numberOfTransactions || 0) }} txs
+        </small>
+      </article>
+      <article>
+        <span>Minted rewards</span>
+        <strong>{{ amount(totalForged) }} {{ network.currency.symbol }}</strong>
+        <small>Since genesis</small>
+      </article>
+      <article>
+        <span>Transaction fees</span>
+        <strong>{{ amount(transactionFees) }} {{ network.currency.symbol }}</strong>
+        <small>Earned by delegates</small>
+      </article>
+      <article>
+        <span>Best forger</span>
+        <router-link v-if="bestForger" :to="`/delegate/${bestForger.address}`">
+          {{ bestForger.username }}
+        </router-link>
+        <strong v-else>—</strong>
+        <small>{{ amount(bestForger?.forged) }} {{ network.currency.symbol }} forged</small>
+      </article>
+      <article>
+        <span>Productivity range</span>
+        <strong>
+          {{ worstProductivity?.productivity || 0 }}–{{ bestProductivity?.productivity || 0 }}%
+        </strong>
+        <small>Lowest to highest active delegate</small>
+      </article>
+    </div>
+
+    <div class="delegate-events">
+      <article>
+        <p class="small-title">Latest votes</p>
         <div class="table-responsive">
           <table class="table condensed">
             <thead>
@@ -288,16 +272,16 @@ const standbyColumns = [
                   <router-link class="ellipsis" :to="`/tx/${vote.id}`">{{ vote.id }}</router-link>
                 </td>
                 <td>
-                  <span class="text-muted">{{ timeAgo(vote.timestamp) }}</span>
+                  <TimestampValue class="text-muted" :timestamp="vote.timestamp" relative />
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </article>
 
-      <div class="big-info">
-        <p class="small-title">Newest Delegates</p>
+      <article>
+        <p class="small-title">Newest delegates</p>
         <div class="table-responsive">
           <table class="table condensed">
             <thead>
@@ -321,45 +305,18 @@ const standbyColumns = [
                   <router-link class="ellipsis" :to="`/tx/${reg.id}`">{{ reg.id }}</router-link>
                 </td>
                 <td>
-                  <span class="text-muted">{{ timeAgo(reg.timestamp) }}</span>
+                  <TimestampValue class="text-muted" :timestamp="reg.timestamp" relative />
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </article>
     </div>
 
     <TabsBar v-model="tab" :tabs="tabs" />
 
     <div v-if="tab === 'active'" class="tab-content">
-      <div v-if="statusTotals" class="forging-totals">
-        <div class="forging-total green">
-          <p class="big-details">{{ statusTotals.forging }}</p>
-          <span>Forged block recently</span>
-        </div>
-        <div class="forging-total orange">
-          <p class="big-details">{{ statusTotals.missedBlock }}</p>
-          <span>Missed a recent slot</span>
-        </div>
-        <div class="forging-total red">
-          <p class="big-details">{{ statusTotals.notForging }}</p>
-          <span>Not forging</span>
-        </div>
-        <div class="forging-total grey">
-          <p class="big-details">{{ statusTotals.awaitingSlot }}</p>
-          <span>Awaiting current-round slot</span>
-        </div>
-      </div>
-
-      <div v-if="processed > 0" class="forging-progress">
-        <div class="progress-track">
-          <div class="progress-fill" :style="{ width: `${(processed / 101) * 100}%` }">
-            <span>{{ processed }} / 101 {{ processed < 101 ? 'updating…' : 'up-to-date' }}</span>
-          </div>
-        </div>
-      </div>
-
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>

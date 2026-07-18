@@ -26,13 +26,14 @@ function getByPath(obj, path) {
  * service.
  *
  * @param {string} initialKey Dot-path of the column to sort by initially
+ * @param {boolean} [initialReverse] Start with descending order
  * @returns {{key: string, reverse: boolean, order: Function, sorted: Function}}
  *   Reactive sort state: `order(key)` toggles, `sorted(rows)` returns a sorted copy
  */
-export function useSort(initialKey) {
+export function useSort(initialKey, initialReverse = false) {
   const state = reactive({
     key: initialKey,
-    reverse: false,
+    reverse: initialReverse,
 
     /**
      * Selects the sort column or flips the direction for the active one.

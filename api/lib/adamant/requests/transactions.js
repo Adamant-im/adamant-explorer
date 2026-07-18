@@ -1,5 +1,5 @@
-const { TransactionType } = require('adamant-api');
 const api = require('./api');
+const { PUBLIC_OPERATION_TYPES, TRANSFER_TYPES } = require('../transactionTypes');
 
 /**
  * Transaction types shown in transfer views: token transfers and
@@ -11,17 +11,6 @@ const api = require('./api');
  * Moving this list to the explorer config is planned as a follow-up
  * of https://github.com/Adamant-im/adamant-explorer/issues/11.
  */
-const TRANSFER_TYPES = [TransactionType.SEND, TransactionType.CHAT_MESSAGE];
-const PUBLIC_OPERATION_TYPES = [
-  TransactionType.SEND,
-  TransactionType.SIGNATURE,
-  TransactionType.DELEGATE,
-  TransactionType.VOTE,
-  TransactionType.MULTI,
-  TransactionType.DAPP,
-  TransactionType.IN_TRANSFER,
-  TransactionType.OUT_TRANSFER,
-];
 const PUBLIC_OPERATION_FETCH_LIMIT = 100;
 
 /**

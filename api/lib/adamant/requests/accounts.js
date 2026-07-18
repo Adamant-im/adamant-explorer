@@ -1,5 +1,10 @@
 const api = require('./api');
 
+/** Public keys are immutable, so successful address lookups can be reused. */
+const publicKeyCache = new Map();
+const MISSING_PUBLIC_KEY_TTL_MS = 5 * 60 * 1000;
+const MAX_PUBLIC_KEY_CACHE_SIZE = 5000;
+
 /**
  * Get an account by its address.
  * @param {string} address ADAMANT address, e.g. `U777355171066438331`
@@ -94,20 +99,43 @@ async function getOutgoingTxsCnt(address) {
 /**
  * Get the public key of an address.
  *
- * Uses the SDK helper, which memoizes resolved keys. Never rejects: an
- * uninitialized account has no public key, which is an expected state,
- * so any failure resolves to `null`.
+ * Uses the normalized account endpoint instead of the SDK convenience
+ * helper. The helper logs expected "account not found" responses as
+ * warnings, which would otherwise flood explorer logs for an
+ * uninitialized recipient. Concurrent lookups share one promise.
  * @param {string} address ADAMANT address
  * @returns {Promise<string|null>} Public key or `null` when unavailable
  */
 async function getPublicKey(address) {
-  try {
-    const publicKey = await api.getPublicKey(address);
-
-    return publicKey || null;
-  } catch {
+  if (!address) {
     return null;
   }
+
+  const cached = publicKeyCache.get(address);
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.promise;
+  }
+
+  const entry = { expiresAt: Infinity, promise: null };
+
+  entry.promise = api
+    .getAccountInfo({ address })
+    .then((response) => (response.success ? response.account?.publicKey || null : null))
+    .catch(() => null)
+    .then((publicKey) => {
+      entry.expiresAt = publicKey ? Infinity : Date.now() + MISSING_PUBLIC_KEY_TTL_MS;
+      return publicKey;
+    });
+
+  publicKeyCache.delete(address);
+  publicKeyCache.set(address, entry);
+
+  if (publicKeyCache.size > MAX_PUBLIC_KEY_CACHE_SIZE) {
+    publicKeyCache.delete(publicKeyCache.keys().next().value);
+  }
+
+  return entry.promise;
 }
 
 module.exports = {

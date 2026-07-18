@@ -1,6 +1,7 @@
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const knowledge = require('../../../../utils/knownAddresses');
+const { SERVICE_TYPES } = require('../transactionTypes');
 const { concatenateTransactions, sortTransactions } = require('./transactionList');
 
 /**
@@ -12,16 +13,27 @@ const { concatenateTransactions, sortTransactions } = require('./transactionList
 async function processTransaction(transaction) {
   transaction = knowledge.inTx(transaction);
 
-  // Get sender delegate
-  transaction.senderDelegate = transaction.senderPublicKey
-    ? await delegates.getDelegate(transaction.senderPublicKey)
-    : null;
+  const senderDelegateRequest =
+    transaction.senderPublicKey && !transaction.senderUsername && !transaction.knownSender
+      ? delegates.getDelegate(transaction.senderPublicKey)
+      : Promise.resolve(null);
 
-  // Get recipient public key. Only token transfers (type 0) have a recipient account
-  transaction.recipientPublicKey =
-    !transaction.recipientId || transaction.type !== 0
-      ? null
-      : await accounts.getPublicKey(transaction.recipientId);
+  // Only plain transfer recipients need an extra account lookup. Known
+  // identities and usernames already provide the label and destination.
+  const recipientPublicKeyRequest =
+    transaction.recipientId &&
+    transaction.type === 0 &&
+    !transaction.recipientUsername &&
+    !transaction.knownRecipient
+      ? transaction.recipientId === transaction.senderId
+        ? Promise.resolve(transaction.senderPublicKey || null)
+        : accounts.getPublicKey(transaction.recipientId)
+      : Promise.resolve(null);
+
+  [transaction.senderDelegate, transaction.recipientPublicKey] = await Promise.all([
+    senderDelegateRequest,
+    recipientPublicKeyRequest,
+  ]);
 
   // Get recipient delegate
   transaction.recipientDelegate = transaction.recipientPublicKey
@@ -51,13 +63,6 @@ async function processTransaction(transaction) {
 
   return transaction;
 }
-
-/**
- * Transaction types shown by the `others` direction of the address page:
- * every service type, that is everything except token transfers (0)
- * and chat messages (8).
- */
-const SERVICE_TYPES = [1, 2, 3, 4, 5, 6, 7, 9];
 
 /**
  * Build an SDK-form transaction query from an explorer request query.

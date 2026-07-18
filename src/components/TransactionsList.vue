@@ -1,7 +1,7 @@
 <script setup>
 // Sortable transaction table over a Less/More loader
 // (see `lib/lessMore.js`), used by the block and address pages.
-import { computed } from 'vue';
+import { computed, nextTick } from 'vue';
 import { useSort } from '../lib/sort';
 import SortIndicator from './SortIndicator.vue';
 import TransactionRow from './TransactionRow.vue';
@@ -11,9 +11,13 @@ const props = defineProps({
   txs: { type: Object, required: true },
   /** Page context address for amount coloring. */
   address: { type: String, default: undefined },
+  /** Do not apply incoming/outgoing amount colors. */
+  neutralAmounts: { type: Boolean, default: false },
+  /** Preserve all amount decimals. */
+  fullAmounts: { type: Boolean, default: false },
 });
 
-const sort = useSort('timestamp');
+const sort = useSort('timestamp', true);
 
 const columns = [
   { key: 'type', label: 'Type' },
@@ -27,6 +31,15 @@ const columns = [
 ];
 
 const rows = computed(() => sort.sorted(props.txs.results));
+
+/** Loads another page without moving the reader away from the button. */
+async function loadMore() {
+  const scrollTop = window.scrollY;
+
+  await props.txs.loadMore();
+  await nextTick();
+  window.scrollTo({ top: scrollTop, behavior: 'instant' });
+}
 </script>
 
 <template>
@@ -52,20 +65,22 @@ const rows = computed(() => sort.sorted(props.txs.results));
           </tr>
         </thead>
         <tbody>
-          <TransactionRow v-for="tx in rows" :key="tx.id" :tx="tx" :address="address" />
+          <TransactionRow
+            v-for="tx in rows"
+            :key="tx.id"
+            :tx="tx"
+            :address="address"
+            :neutral-amounts="neutralAmounts"
+            :full-amounts="fullAmounts"
+          />
         </tbody>
       </table>
     </div>
 
     <div v-if="txs.loading" class="progress-loading">Loading transactions…</div>
 
-    <div v-if="!txs.disabled()" class="btn-pair">
-      <button type="button" class="btn" :disabled="!txs.lessData" @click="txs.loadLess()">
-        Less
-      </button>
-      <button type="button" class="btn" :disabled="!txs.moreData" @click="txs.loadMore()">
-        More
-      </button>
+    <div v-if="txs.moreData" class="btn-pair">
+      <button type="button" class="btn btn-primary" @click="loadMore">More</button>
     </div>
   </div>
 </template>

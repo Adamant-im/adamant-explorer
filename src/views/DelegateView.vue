@@ -111,7 +111,7 @@ function amount(value) {
       </div>
 
       <VotesList :accounts="account.votes" title="Votes" />
-      <VotesList :accounts="account.voters" title="Voters" />
+      <VotesList :accounts="account.voters" title="Voters" detailed />
     </template>
   </section>
 </template>

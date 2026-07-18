@@ -8,11 +8,12 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import { useNetworkStore } from '../stores/network';
 import { useSocket } from '../composables/useSocket';
-import { formatCurrency, timeAgo, timeSpan } from '../lib/format';
-import { compareVersionsDescending } from '../lib/peers.js';
+import { formatCurrency, formatInteger, timeSpan } from '../lib/format';
+import { compareVersionsDescending, groupPeerHeights } from '../lib/peers.js';
 import TabsBar from '../components/TabsBar.vue';
 import PeersTable from '../components/PeersTable.vue';
 import OsIcon from '../components/OsIcon.vue';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const network = useNetworkStore();
 
@@ -151,10 +152,7 @@ const counter = computed(() => {
     .sort(compareVersionsDescending)
     .slice(0, 3);
   const versionCounter = [0, 0, 0, 0];
-  const heights = [...new Set(connected.map((p) => p.height).sort((a, b) => a - b))]
-    .reverse()
-    .slice(0, 4);
-  const heightCounter = [0, 0, 0, 0, 0];
+  const heightGroups = groupPeerHeights(connected.map((peer) => peer.height));
 
   for (const peer of connected) {
     // Platform groups: 0 other, 1 darwin, 2 linux, 3 freebsd
@@ -164,9 +162,6 @@ const counter = computed(() => {
 
     const versionIndex = versions.indexOf(peer.version);
     versionCounter[versionIndex === -1 ? 3 : versionIndex]++;
-
-    const heightIndex = heights.indexOf(peer.height);
-    heightCounter[heightIndex === -1 ? 4 : heightIndex]++;
   }
 
   return {
@@ -176,13 +171,11 @@ const counter = computed(() => {
     platforms: platformCounter,
     versions,
     versionCounter,
-    heights,
-    heightCounter,
-    heightPercent: heightCounter.map((count) =>
-      connected.length ? Math.round((count / connected.length) * 100) : 0,
-    ),
+    heightGroups,
   };
 });
+
+const synchronizedPercent = computed(() => counter.value?.heightGroups.groups[0]?.percent ?? 0);
 
 // --- Socket wiring ----------------------------------------------------
 
@@ -242,146 +235,138 @@ function amount(value) {
 </script>
 
 <template>
-  <section>
-    <h1>Network Monitor</h1>
-    <hr />
-
-    <div class="network-layout">
-      <div class="cards-grid two-columns">
-        <div class="big-info">
-          <p class="small-title">Connected Peers</p>
-          <p class="big-details">
-            <span class="accent">{{ counter?.connected || 0 }}</span>
-            <span class="text-muted"> / </span>
-            <span class="accent">{{ counter?.total || 0 }}</span>
-          </p>
-          <p class="text-muted">{{ counter?.disconnected || 0 }} disconnected peers</p>
-        </div>
-
-        <div class="big-info">
-          <p class="small-title">Last Block</p>
-          <template v-if="lastBlock">
-            <p class="big-details">
-              <router-link :to="`/block/${lastBlock.id}`">{{ lastBlock.id }}</router-link>
-            </p>
-            <p class="text-muted">
-              <span class="accent">
-                {{ amount(lastBlock.totalAmount) }}
-                {{ network.currency.symbol }}
-              </span>
-              transferred across {{ lastBlock.numberOfTransactions || 0 }} transactions
-            </p>
-            <p class="text-muted">{{ timeAgo(lastBlock.timestamp) }}</p>
-          </template>
-          <template v-else>
-            <p class="big-details"><span class="text-muted">N/A</span></p>
-            <p class="text-muted">waiting for block <span class="spinner"></span></p>
-          </template>
-        </div>
-
-        <div class="big-info">
-          <p class="small-title">Best Block</p>
-          <template v-if="bestBlock">
-            <p class="big-details">
-              <router-link :to="`/block/${bestBlock.id}`">{{ bestBlock.id }}</router-link>
-            </p>
-            <p class="text-muted">
-              <span class="accent">
-                {{ amount(bestBlock.totalAmount) }}
-                {{ network.currency.symbol }}
-              </span>
-              transferred across {{ bestBlock.numberOfTransactions || 0 }} transactions
-            </p>
-            <p class="text-muted">{{ timeAgo(bestBlock.timestamp) }}</p>
-          </template>
-          <template v-else-if="volume">
-            <p class="big-details"><span class="text-muted">N/A</span></p>
-            <p class="text-muted">no transferred value in the collected block window</p>
-          </template>
-          <template v-else>
-            <p class="big-details"><span class="text-muted">N/A</span></p>
-            <p class="text-muted">waiting for blocks <span class="spinner"></span></p>
-          </template>
-        </div>
-
-        <div class="big-info">
-          <p class="small-title">
-            Volume <span class="text-muted">({{ network.currency.symbol }})</span>
-          </p>
-          <p class="big-details accent">{{ amount(volume?.amount) }}</p>
-          <template v-if="volume?.amount">
-            <p class="text-muted">
-              transferred within {{ timeSpan(volume.beginning, volume.end) }}
-            </p>
-            <p class="text-muted">
-              across {{ volume.txs || 0 }} total transactions; transferred value in
-              {{ volume.withTxs || 0 }} / {{ volume.blocks || 0 }} blocks
-            </p>
-          </template>
-          <p v-else-if="volume" class="text-muted">
-            no transferred value in the collected {{ volume.blocks || 0 }} blocks
-          </p>
-          <p v-else class="text-muted">waiting for transactions <span class="spinner"></span></p>
-          <p v-if="volume && !volume.complete" class="text-muted">
-            accumulating up to {{ volume.targetBlocks || 0 }} blocks for a rolling 24-hour window
-          </p>
-          <p v-else-if="volume?.complete" class="text-muted">rolling 24-hour window</p>
-        </div>
+  <section class="network-monitor">
+    <header class="monitor-title">
+      <div>
+        <span class="monitor-kicker">Live topology</span>
+        <h1>Network Monitor</h1>
       </div>
+      <p>
+        Connection coverage, chain alignment and node distribution from the explorer's current peer
+        set
+      </p>
+    </header>
 
-      <div id="map"></div>
+    <div class="network-overview">
+      <article class="network-pulse">
+        <span class="small-title">Peer coverage</span>
+        <div class="network-pulse-value">
+          <strong>{{ formatInteger(counter?.connected || 0) }}</strong>
+          <span>/ {{ formatInteger(counter?.total || 0) }}</span>
+        </div>
+        <div class="sync-meter" aria-label="Peers at the best three-block height band">
+          <i :style="{ width: `${synchronizedPercent}%` }"></i>
+        </div>
+        <p>
+          <strong>{{ synchronizedPercent }}%</strong> at the best height band
+          <span>· {{ formatInteger(counter?.disconnected || 0) }} disconnected</span>
+        </p>
+      </article>
+      <div class="network-map-shell">
+        <div class="map-caption">
+          <span>Connected node locations</span>
+          <small>Markers stay visually distinct in both themes</small>
+        </div>
+        <div id="map"></div>
+      </div>
     </div>
 
-    <div v-if="counter" class="cards-grid two-columns">
-      <div class="big-info platforms-block">
-        <p class="small-title">Platforms</p>
+    <div class="network-metrics">
+      <article>
+        <span class="small-title">Last block</span>
+        <template v-if="lastBlock">
+          <router-link class="metric-id" :to="`/block/${lastBlock.id}`">{{
+            lastBlock.id
+          }}</router-link>
+          <strong>{{ amount(lastBlock.totalAmount) }} {{ network.currency.symbol }}</strong>
+          <p>
+            {{ formatInteger(lastBlock.numberOfTransactions || 0) }} transactions ·
+            <TimestampValue :timestamp="lastBlock.timestamp" relative />
+          </p>
+        </template>
+        <p v-else>Waiting for block <span class="spinner"></span></p>
+      </article>
+      <article>
+        <span class="small-title">Best value block</span>
+        <template v-if="bestBlock">
+          <router-link class="metric-id" :to="`/block/${bestBlock.id}`">{{
+            bestBlock.id
+          }}</router-link>
+          <strong>{{ amount(bestBlock.totalAmount) }} {{ network.currency.symbol }}</strong>
+          <p>
+            {{ formatInteger(bestBlock.numberOfTransactions || 0) }} transactions ·
+            <TimestampValue :timestamp="bestBlock.timestamp" relative />
+          </p>
+        </template>
+        <p v-else>Waiting for the collected block window <span class="spinner"></span></p>
+      </article>
+      <article>
+        <span class="small-title">Rolling volume</span>
+        <strong>{{ amount(volume?.amount) }} {{ network.currency.symbol }}</strong>
+        <p v-if="volume?.amount">
+          {{ formatInteger(volume.txs || 0) }} transactions in
+          {{ timeSpan(volume.beginning, volume.end) }}
+        </p>
+        <p v-else>Waiting for transferred value <span class="spinner"></span></p>
+        <small v-if="volume && !volume.complete">
+          Collecting {{ formatInteger(volume.blocks || 0) }} /
+          {{ formatInteger(volume.targetBlocks || 0) }} blocks
+        </small>
+        <small v-else-if="volume?.complete">Complete 24-hour window</small>
+      </article>
+    </div>
+
+    <div v-if="counter" class="network-distribution">
+      <article>
+        <span class="small-title">Platforms</span>
         <div class="platforms">
           <div class="platform">
             <OsIcon os="Darwin" :brand="{ name: 'darwin' }" class="platform-icon" />
-            <span class="counter">{{ counter.platforms[1] || 0 }}</span>
+            <span>Darwin</span>
+            <strong>{{ counter.platforms[1] || 0 }}</strong>
           </div>
           <div class="platform">
             <OsIcon os="Linux" :brand="{ name: 'linux' }" class="platform-icon" />
-            <span class="counter">{{ counter.platforms[2] || 0 }}</span>
+            <span>Linux</span>
+            <strong>{{ counter.platforms[2] || 0 }}</strong>
           </div>
           <div class="platform">
             <OsIcon os="FreeBSD" :brand="{ name: 'freebsd' }" class="platform-icon" />
-            <span class="counter">{{ counter.platforms[3] || 0 }}</span>
+            <span>FreeBSD</span>
+            <strong>{{ counter.platforms[3] || 0 }}</strong>
           </div>
         </div>
-        <p class="text-muted text-center">
-          {{ counter.platforms[0] || 0 }} peers on other platforms
-        </p>
-      </div>
+        <small>{{ counter.platforms[0] || 0 }} on other platforms</small>
+      </article>
 
-      <div class="big-info versions-block">
-        <p class="small-title">Versions</p>
-        <div class="pill-row">
-          <div v-for="(version, index) in counter.versions" :key="version" class="pill-stat">
-            <span class="pill">{{ version }}</span>
-            <span class="counter">{{ counter.versionCounter[index] || 0 }}</span>
+      <article>
+        <span class="small-title">Node versions</span>
+        <div class="distribution-list">
+          <div v-for="(version, index) in counter.versions" :key="version">
+            <span>{{ version }}</span
+            ><strong>{{ counter.versionCounter[index] || 0 }}</strong>
           </div>
         </div>
-        <p class="text-muted text-center">
-          {{ counter.versionCounter[3] || 0 }} peers on other versions
-        </p>
-      </div>
-    </div>
+        <small>{{ counter.versionCounter[3] || 0 }} on other versions</small>
+      </article>
 
-    <div v-if="counter" class="big-info">
-      <p class="small-title">Best heights</p>
-      <div class="pill-row">
-        <div v-for="(height, index) in counter.heights" :key="height" class="pill-stat">
-          <span class="pill" :class="{ 'pill-best': index === 0 }">{{ height }}</span>
-          <span class="counter">
-            {{ counter.heightCounter[index] || 0 }} • {{ counter.heightPercent[index] || 0 }}%
-          </span>
+      <article>
+        <span class="small-title">Best heights · grouped by 3</span>
+        <div class="distribution-list">
+          <div
+            v-for="(group, index) in counter.heightGroups.groups"
+            :key="group.height"
+            :class="{ best: index === 0 }"
+          >
+            <span>{{ formatInteger(group.height) }}</span>
+            <strong>{{ group.count }} · {{ group.percent }}%</strong>
+          </div>
         </div>
-      </div>
-      <p class="text-muted text-center">
-        {{ counter.heightCounter[4] || 0 }} • {{ counter.heightPercent[4] || 0 }}% peers at other
-        heights
-      </p>
+        <small>
+          {{ counter.heightGroups.otherCount }} · {{ counter.heightGroups.otherPercent }}% peers at
+          other heights
+        </small>
+      </article>
     </div>
 
     <TabsBar v-model="tab" :tabs="tabs" />

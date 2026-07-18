@@ -1,3 +1,5 @@
+import definitions from '../../transactionTypes.cjs';
+
 /**
  * Protocol and UX transaction semantics used by operation lists.
  *
@@ -7,18 +9,12 @@
  */
 
 /** Every transaction type currently defined by adamant-api. */
-export const TRANSACTION_TYPES = Object.freeze([
-  { type: 0, id: 'transfer', label: 'Transfer' },
-  { type: 1, id: 'second-signature', label: 'Second signature' },
-  { type: 2, id: 'create-delegate', label: 'Create delegate' },
-  { type: 3, id: 'vote', label: 'Vote / Unvote' },
-  { type: 4, id: 'multisignature', label: 'Multisignature' },
-  { type: 5, id: 'dapp-registration', label: 'DApp registration' },
-  { type: 6, id: 'dapp-deposit', label: 'DApp deposit' },
-  { type: 7, id: 'dapp-withdrawal', label: 'DApp withdrawal' },
-  { type: 8, id: 'message', label: 'Message' },
-  { type: 9, id: 'state', label: 'State' },
-]);
+export const TRANSACTION_TYPES = Object.freeze(
+  definitions.map((definition) => ({ ...definition })),
+);
+export const TX_TYPE_LABELS = Object.freeze(
+  Object.fromEntries(TRANSACTION_TYPES.map(({ type, label }) => [type, label])),
+);
 
 /**
  * Complete user-facing operation filter list, including labels derived

@@ -1,16 +1,17 @@
 <script setup>
 // Home page: latest public operations, refreshed after every new block.
 import { ref, watch } from 'vue';
-import { IconArrowRight, IconExternalLink, IconTopologyStar3 } from '@tabler/icons-vue';
+import { IconChevronRight, IconTopologyStar3 } from '@tabler/icons-vue';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
 import { createBlockRefreshTrigger } from '../lib/blockRefresh';
-import { formatTimestamp, txSenderLabel } from '../lib/format';
+import { txSenderLabel } from '../lib/format';
 import { txSenderPath } from '../lib/accounts';
 import { operationRecipient } from '../lib/transactionTypes.js';
 import HomeAmount from '../components/HomeAmount.vue';
 import IdentityCell from '../components/IdentityCell.vue';
 import OperationType from '../components/OperationType.vue';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const network = useNetworkStore();
 const txs = ref([]);
@@ -21,7 +22,7 @@ async function getLastTransfers() {
     const data = await apiGet('/api/getLastTransfers');
 
     if (data.success) {
-      txs.value = data.transactions.slice(0, 10);
+      txs.value = data.transactions.slice(0, 20);
     }
   } catch {
     // Keep the current list; the next block or status fallback retries
@@ -68,10 +69,6 @@ watch(
         <span class="section-mark"><IconTopologyStar3 aria-hidden="true" /></span>
         <h1>Latest operations</h1>
       </div>
-      <a href="/api/getLastTransfers" target="_blank" rel="noopener">
-        <span class="heading-link-label">Open operations API</span>
-        <IconArrowRight aria-hidden="true" />
-      </a>
     </div>
 
     <div class="table-responsive operations-table-wrap">
@@ -80,36 +77,36 @@ watch(
           <tr>
             <th>Type</th>
             <th>Timestamp</th>
-            <th>Sender <IconArrowRight class="heading-arrow" aria-hidden="true" /> Recipient</th>
-            <th class="text-right">Amount ({{ network.currency.symbol }})</th>
-            <th><span class="sr-only">Open</span></th>
+            <th>Sender</th>
+            <th>Recipient</th>
+            <th class="text-right">Amount</th>
+            <th><span class="sr-only">View</span></th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="!txs.length">
-            <td colspan="5">Waiting for operations <span class="spinner"></span></td>
+            <td colspan="6">Waiting for operations <span class="spinner"></span></td>
           </tr>
           <tr v-for="tx in txs" :key="tx.id">
             <td data-title="Type">
               <OperationType :tx="tx" />
             </td>
             <td data-title="Timestamp" class="operation-time">
-              {{ formatTimestamp(tx.timestamp) }}
+              <TimestampValue :timestamp="tx.timestamp" />
             </td>
-            <td data-title="Route">
-              <div class="operation-route">
-                <IdentityCell v-bind="senderIdentity(tx)" />
-                <IconArrowRight class="route-arrow" aria-hidden="true" />
-                <IdentityCell v-bind="recipientIdentity(tx)" />
-              </div>
+            <td data-title="Sender">
+              <IdentityCell v-bind="senderIdentity(tx)" />
+            </td>
+            <td data-title="Recipient">
+              <IdentityCell v-bind="recipientIdentity(tx)" />
             </td>
             <td data-title="Amount" class="text-right operation-amount">
               <HomeAmount :amount="tx.amount" />
             </td>
             <td class="operation-open">
               <router-link :to="`/tx/${tx.id}`" :title="`Open transaction ${tx.id}`">
-                <IconExternalLink aria-hidden="true" />
-                <span class="sr-only">Open transaction {{ tx.id }}</span>
+                <IconChevronRight aria-hidden="true" />
+                <span class="sr-only">View transaction {{ tx.id }}</span>
               </router-link>
             </td>
           </tr>
@@ -119,7 +116,6 @@ watch(
 
     <div class="operations-summary">
       <span>Showing {{ txs.length }} latest operations</span>
-      <span><i aria-hidden="true"></i> Auto-updates with every block</span>
     </div>
   </section>
 </template>

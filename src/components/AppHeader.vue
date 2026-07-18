@@ -48,6 +48,18 @@ const secondsSinceUpdate = computed(() => {
 
   return Math.max(0, Math.floor((clock.value - network.lastUpdate) / 1000));
 });
+
+const networkHealth = computed(() => {
+  if (!network.blockStatus || secondsSinceUpdate.value === null) {
+    return { tone: 'connecting', label: 'Connecting to network' };
+  }
+
+  if (secondsSinceUpdate.value <= 15) {
+    return { tone: 'online', label: 'Network live' };
+  }
+
+  return { tone: 'delayed', label: 'Updates delayed' };
+});
 </script>
 
 <template>
@@ -102,9 +114,9 @@ const secondsSinceUpdate = computed(() => {
 
     <div class="network-rail">
       <div class="container network-rail-inner">
-        <div class="network-health" :class="{ online: network.blockStatus }">
+        <div class="network-health" :class="networkHealth.tone">
           <IconActivityHeartbeat aria-hidden="true" />
-          <span>{{ network.blockStatus ? 'Network healthy' : 'Connecting to network' }}</span>
+          <span>{{ networkHealth.label }}</span>
         </div>
 
         <template v-if="network.blockStatus">
@@ -120,7 +132,7 @@ const secondsSinceUpdate = computed(() => {
             <IconNetwork aria-hidden="true" />
             <strong>
               {{
-                network.blockStatus.nethash ? nethashLabel(network.blockStatus.nethash) : 'Mainnet'
+                network.blockStatus.nethash ? nethashLabel(network.blockStatus.nethash) : 'Unknown'
               }}
             </strong>
           </div>

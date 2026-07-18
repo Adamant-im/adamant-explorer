@@ -2,6 +2,7 @@ const transactions = require('../requests/transactions');
 const helpers = require('../helpers/transactions');
 const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
+const { isPublicOperationType } = require('../transactionTypes');
 
 /**
  * Get transaction by id
@@ -130,7 +131,7 @@ async function getLastTransfers(error, success) {
     });
 
     const unconfirmedTransactions = (await transactions.getUnconfirmedTransactions()).filter(
-      (transaction) => transaction.type !== 8 && transaction.type !== 9,
+      (transaction) => isPublicOperationType(transaction.type),
     );
 
     result.transactions = helpers.concatenateTransactions(

@@ -4,6 +4,7 @@ import { computed } from 'vue';
 import { useSort } from '../lib/sort';
 import OsIcon from './OsIcon.vue';
 import SortIndicator from './SortIndicator.vue';
+import { formatInteger } from '../lib/format.js';
 
 const props = defineProps({
   /** Peer list; `null`/`undefined` renders the waiting state. */
@@ -73,7 +74,7 @@ const rows = computed(() => sort.sorted(props.peers));
             <span class="text-muted">{{ peer.version }}</span>
           </td>
           <td><OsIcon :os="peer.os" :brand="peer.osBrand" /></td>
-          <td>{{ peer.height }}</td>
+          <td>{{ formatInteger(peer.height) }}</td>
         </tr>
       </tbody>
     </table>

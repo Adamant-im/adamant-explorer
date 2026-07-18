@@ -4,9 +4,12 @@ import {
   epochToDate,
   toAdm,
   formatCurrency,
+  formatFullCurrency,
+  formatInteger,
   compactAmountParts,
   formatHomeAmountParts,
   formatTimestamp,
+  formatUtcTimestamp,
   humanizeDuration,
   timeAgo,
   forgingTime,
@@ -71,6 +74,17 @@ describe('format.js', function () {
       const usd = { symbol: 'USD', tickers: { ADM: { USD: 2 } } };
       expect(formatCurrency(150000000, usd)).to.equal('3.00');
     });
+
+    it('preserves all eight ADAMANT decimal places for ledger values', function () {
+      expect(formatFullCurrency(23, adm)).to.equal('0.00000023');
+      expect(formatFullCurrency(100000000, adm)).to.equal('1.00000000');
+    });
+  });
+
+  describe('formatInteger()', function () {
+    it('groups heights and confirmations', function () {
+      expect(formatInteger(53733279)).to.equal('53,733,279');
+    });
   });
 
   describe('compactAmountParts()', function () {
@@ -98,8 +112,9 @@ describe('format.js', function () {
   });
 
   describe('formatTimestamp()', function () {
-    it('renders the YYYY/MM/DD HH:mm:ss shape', function () {
-      expect(formatTimestamp(0)).to.match(/^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}$/);
+    it('renders the YYYY-MM-DD HH:mm:ss shape', function () {
+      expect(formatTimestamp(0)).to.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
+      expect(formatUtcTimestamp(0)).to.equal('2017-09-02 17:00:00');
     });
   });
 
@@ -118,6 +133,10 @@ describe('format.js', function () {
 
     it('rounds to days', function () {
       expect(humanizeDuration(3 * 24 * 60 * 60 * 1000)).to.equal('3 days');
+    });
+
+    it('uses a single numeric unit for singular long spans', function () {
+      expect(humanizeDuration(365 * 24 * 60 * 60 * 1000)).to.equal('1 year');
     });
   });
 
