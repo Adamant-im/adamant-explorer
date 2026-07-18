@@ -11,6 +11,7 @@ describe('transactionTypes.js', function () {
   it('covers every adamant-api transaction type', function () {
     expect(TRANSACTION_TYPES.map(({ type }) => type)).to.deep.equal([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
     expect(OPERATION_TYPE_OPTIONS.map(({ id }) => id)).to.include.members([
+      'welcome-bonus',
       'deposit',
       'withdraw',
       'unvote',
@@ -23,6 +24,18 @@ describe('transactionTypes.js', function () {
     expect(operationTypeId({ type: 0, knownRecipient: { kind: 'exchange' } })).to.equal('deposit');
     expect(operationTypeId({ type: 0, knownSender: { kind: 'exchange' } })).to.equal('withdraw');
     expect(operationTypeId({ type: 0 })).to.equal('transfer');
+  });
+
+  it('derives the Adoption and Bounty welcome bonus', function () {
+    const welcomeBonus = {
+      type: 0,
+      amount: 10_000_000,
+      knownSender: { owner: 'Adoption and Bounty', kind: 'known' },
+    };
+
+    expect(operationTypeId(welcomeBonus)).to.equal('welcome-bonus');
+    expect(operationMeta(welcomeBonus).label).to.equal('Welcome bonus');
+    expect(operationTypeId({ ...welcomeBonus, amount: 10_000_001 })).to.equal('transfer');
   });
 
   it('derives unvotes from processed and raw vote assets', function () {

@@ -265,7 +265,7 @@ function amount(value) {
       <div class="network-map-shell">
         <div class="map-caption">
           <span>Connected node locations</span>
-          <small>Markers stay visually distinct in both themes</small>
+          <small>Clusters: green 2–9 · yellow 10–99 · orange 100+ nodes</small>
         </div>
         <div id="map"></div>
       </div>

@@ -8,6 +8,7 @@ import {
   IconArrowUpRight,
   IconDatabaseImport,
   IconDatabaseExport,
+  IconGift,
   IconMessage,
   IconSignature,
   IconUserPlus,
@@ -23,6 +24,7 @@ const props = defineProps({
 const meta = computed(() => operationMeta(props.tx));
 const icons = {
   transfer: IconArrowUpRight,
+  gift: IconGift,
   deposit: IconArrowDown,
   withdraw: IconArrowUp,
   signature: IconSignature,

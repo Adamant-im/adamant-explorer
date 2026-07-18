@@ -151,7 +151,8 @@ export function compactAmountParts(value) {
   }
 
   const fraction = rawFraction.slice(0, fractionLimit).replace(/0+$/, '');
-  const integer = `${negative ? '-' : ''}${rawInteger}`;
+  const groupedInteger = rawInteger.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const integer = `${negative ? '-' : ''}${groupedInteger}`;
   const text = fraction ? `${integer}.${fraction}` : integer;
 
   return { integer, fraction, text };

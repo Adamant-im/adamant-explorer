@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
 import { useLessMore } from '../lib/lessMore';
-import { formatFullCurrency, formatInteger } from '../lib/format';
+import { formatExactCurrency, formatInteger } from '../lib/format';
 import CopyButton from '../components/CopyButton.vue';
 import QrCode from '../components/QrCode.vue';
 import VotesList from '../components/VotesList.vue';
@@ -99,7 +99,7 @@ watch(
               <tr>
                 <td><strong>Total balance</strong></td>
                 <td class="text-right">
-                  {{ formatFullCurrency(account.balance, network.currency) }}
+                  {{ formatExactCurrency(account.balance, network.currency) }}
                   <span class="text-muted">{{ network.currency.symbol }}</span>
                 </td>
               </tr>

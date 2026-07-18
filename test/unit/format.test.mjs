@@ -98,7 +98,8 @@ describe('format.js', function () {
     it('uses the requested four-digit home-page precision', function () {
       expect(compactAmountParts(1.2345).text).to.equal('1.234');
       expect(compactAmountParts(10.234).text).to.equal('10.23');
-      expect(compactAmountParts(12345.13123).text).to.equal('12345');
+      expect(compactAmountParts(3456).text).to.equal('3,456');
+      expect(compactAmountParts(12345.13123).text).to.equal('12,345');
       expect(compactAmountParts(0.0012345).text).to.equal('0.0012');
       expect(compactAmountParts(0.00001234).text).to.equal('0.00001234');
     });

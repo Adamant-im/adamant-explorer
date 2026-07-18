@@ -139,7 +139,7 @@ const sortedActive = computed(() => sortActive.sorted(activeDelegates.value));
 const sortedStandby = computed(() => sortStandby.sorted(standbyDelegates.value));
 
 const activeColumns = [
-  { key: 'rate', label: 'Rank' },
+  { key: 'rate', label: 'Rank', class: 'text-center' },
   { key: 'username', label: 'Name' },
   { key: 'address', label: 'Address', hide: 'hide-sm' },
   { key: 'forged', label: 'Forged', hide: 'hide-md' },
@@ -150,7 +150,7 @@ const activeColumns = [
 ];
 
 const standbyColumns = [
-  { key: 'rate', label: 'Rank' },
+  { key: 'rate', label: 'Rank', class: 'text-center' },
   { key: 'username', label: 'Name' },
   { key: 'address', label: 'Address', hide: 'hide-sm' },
   { key: 'productivity', label: 'Productivity', hide: 'hide-sm' },
@@ -248,78 +248,80 @@ const standbyColumns = [
       </article>
     </div>
 
-    <div class="delegate-events">
-      <article>
-        <p class="small-title">Latest votes</p>
-        <div class="table-responsive">
-          <table class="table condensed">
-            <thead>
-              <tr>
-                <th>Voter</th>
-                <th class="hide-sm">Transaction</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-if="!votes">
-                <td colspan="3">Waiting for votes <span class="spinner"></span></td>
-              </tr>
-              <tr v-for="vote in votes" :key="vote.id">
-                <td>
-                  <router-link
-                    v-if="vote.delegate?.username"
-                    :to="`/delegate/${vote.delegate.address}`"
-                  >
-                    {{ vote.delegate.username }}
-                  </router-link>
-                  <router-link v-else-if="vote.senderId" :to="`/address/${vote.senderId}`">
-                    {{ vote.senderId }}
-                  </router-link>
-                </td>
-                <td class="hide-sm">
-                  <router-link class="ellipsis" :to="`/tx/${vote.id}`">{{ vote.id }}</router-link>
-                </td>
-                <td>
-                  <TimestampValue class="text-muted" :timestamp="vote.timestamp" relative />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
+    <div class="delegate-events-rail">
+      <div class="delegate-events">
+        <article>
+          <p class="small-title">Latest votes</p>
+          <div class="table-responsive">
+            <table class="table condensed">
+              <thead>
+                <tr>
+                  <th>Voter</th>
+                  <th class="hide-sm">Transaction</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="!votes">
+                  <td colspan="3">Waiting for votes <span class="spinner"></span></td>
+                </tr>
+                <tr v-for="vote in votes" :key="vote.id">
+                  <td>
+                    <router-link
+                      v-if="vote.delegate?.username"
+                      :to="`/delegate/${vote.delegate.address}`"
+                    >
+                      {{ vote.delegate.username }}
+                    </router-link>
+                    <router-link v-else-if="vote.senderId" :to="`/address/${vote.senderId}`">
+                      {{ vote.senderId }}
+                    </router-link>
+                  </td>
+                  <td class="hide-sm">
+                    <router-link class="ellipsis" :to="`/tx/${vote.id}`">{{ vote.id }}</router-link>
+                  </td>
+                  <td>
+                    <TimestampValue class="text-muted" :timestamp="vote.timestamp" relative />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
 
-      <article>
-        <p class="small-title">Newest delegates</p>
-        <div class="table-responsive">
-          <table class="table condensed">
-            <thead>
-              <tr>
-                <th>Delegate</th>
-                <th class="hide-sm">Transaction</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-if="!registrations">
-                <td colspan="3">Waiting for registrations <span class="spinner"></span></td>
-              </tr>
-              <tr v-for="reg in registrations" :key="reg.id">
-                <td>
-                  <router-link :to="`/delegate/${reg.delegate.address}`">
-                    {{ reg.delegate.username }}
-                  </router-link>
-                </td>
-                <td class="hide-sm">
-                  <router-link class="ellipsis" :to="`/tx/${reg.id}`">{{ reg.id }}</router-link>
-                </td>
-                <td>
-                  <TimestampValue class="text-muted" :timestamp="reg.timestamp" relative />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
+        <article>
+          <p class="small-title">Newest delegates</p>
+          <div class="table-responsive">
+            <table class="table condensed">
+              <thead>
+                <tr>
+                  <th>Delegate</th>
+                  <th class="hide-sm">Transaction</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="!registrations">
+                  <td colspan="3">Waiting for registrations <span class="spinner"></span></td>
+                </tr>
+                <tr v-for="reg in registrations" :key="reg.id">
+                  <td>
+                    <router-link :to="`/delegate/${reg.delegate.address}`">
+                      {{ reg.delegate.username }}
+                    </router-link>
+                  </td>
+                  <td class="hide-sm">
+                    <router-link class="ellipsis" :to="`/tx/${reg.id}`">{{ reg.id }}</router-link>
+                  </td>
+                  <td>
+                    <TimestampValue class="text-muted" :timestamp="reg.timestamp" relative />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
     </div>
 
     <TabsBar v-model="tab" :tabs="tabs" />
@@ -333,7 +335,7 @@ const standbyColumns = [
                 v-for="column in activeColumns"
                 :key="column.key"
                 role="button"
-                :class="column.hide"
+                :class="[column.hide, column.class]"
                 @click="sortActive.order(column.key)"
               >
                 {{ column.label }}
@@ -346,7 +348,7 @@ const standbyColumns = [
               <td colspan="8">Waiting for delegates <span class="spinner"></span></td>
             </tr>
             <tr v-for="delegate in sortedActive" :key="delegate.rate">
-              <td>{{ delegate.rate }}</td>
+              <td class="text-center">{{ delegate.rate }}</td>
               <td>
                 <router-link :to="`/delegate/${delegate.address}`">
                   {{ delegate.username }}
@@ -382,7 +384,7 @@ const standbyColumns = [
                 v-for="column in standbyColumns"
                 :key="column.key"
                 role="button"
-                :class="column.hide"
+                :class="[column.hide, column.class]"
                 @click="sortStandby.order(column.key)"
               >
                 {{ column.label }}
@@ -398,7 +400,7 @@ const standbyColumns = [
               <td colspan="5">Waiting for delegates <span class="spinner"></span></td>
             </tr>
             <tr v-for="delegate in sortedStandby" :key="delegate.rate">
-              <td>{{ delegate.rate }}</td>
+              <td class="text-center">{{ delegate.rate }}</td>
               <td>
                 <router-link :to="`/delegate/${delegate.address}`">
                   {{ delegate.username }}

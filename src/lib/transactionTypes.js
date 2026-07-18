@@ -22,6 +22,7 @@ export const TX_TYPE_LABELS = Object.freeze(
  */
 export const OPERATION_TYPE_OPTIONS = Object.freeze([
   { id: 'transfer', label: 'Transfer' },
+  { id: 'welcome-bonus', label: 'Welcome bonus' },
   { id: 'deposit', label: 'Deposit' },
   { id: 'withdraw', label: 'Withdraw' },
   { id: 'second-signature', label: 'Second signature' },
@@ -38,6 +39,7 @@ export const OPERATION_TYPE_OPTIONS = Object.freeze([
 
 const TYPE_META = {
   transfer: { label: 'Transfer', tone: 'green', icon: 'transfer' },
+  'welcome-bonus': { label: 'Welcome bonus', tone: 'violet', icon: 'gift' },
   deposit: { label: 'Deposit', tone: 'green', icon: 'deposit' },
   withdraw: { label: 'Withdraw', tone: 'red', icon: 'withdraw' },
   'second-signature': { label: 'Second signature', tone: 'blue', icon: 'signature' },
@@ -52,6 +54,16 @@ const TYPE_META = {
   state: { label: 'State', tone: 'neutral', icon: 'state' },
   unknown: { label: 'Unknown', tone: 'neutral', icon: 'state' },
 };
+
+const WELCOME_BONUS_OWNER = 'Adoption and Bounty';
+const WELCOME_BONUS_AMOUNT = 10_000_000;
+
+/** Returns whether a transfer is the fixed 0.1 ADM onboarding reward. */
+function isWelcomeBonus(tx) {
+  return (
+    tx.knownSender?.owner === WELCOME_BONUS_OWNER && Number(tx.amount) === WELCOME_BONUS_AMOUNT
+  );
+}
 
 /** Returns whether a vote transaction removes at least one vote. */
 function isUnvote(tx) {
@@ -76,6 +88,7 @@ function isUnvote(tx) {
 export function operationTypeId(tx) {
   switch (Number(tx?.type)) {
     case 0:
+      if (isWelcomeBonus(tx)) return 'welcome-bonus';
       if (tx.knownRecipient?.kind === 'exchange') return 'deposit';
       if (tx.knownSender?.kind === 'exchange') return 'withdraw';
       return 'transfer';

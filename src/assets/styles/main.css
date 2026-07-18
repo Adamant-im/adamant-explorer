@@ -1689,14 +1689,21 @@ main.container {
   white-space: nowrap;
 }
 
+.delegate-events-rail {
+  width: 100vw;
+  margin-bottom: 18px;
+  margin-left: calc(50% - 50vw);
+  background: var(--surface);
+  border-block: 1px solid var(--border);
+}
+
 .delegate-events {
+  width: 100%;
+  max-width: 1240px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-bottom: 18px;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  margin: 0 auto;
+  padding-inline: 20px;
 }
 
 .delegate-events > article {
@@ -1704,8 +1711,13 @@ main.container {
   padding: 16px;
 }
 
-.delegate-events > article:first-child {
-  border-right: 1px solid var(--border);
+.delegate-events .table-responsive {
+  border-radius: 0;
+}
+
+.delegate-events .table {
+  border: 0;
+  border-radius: 0;
 }
 
 .delegate-events > article > .small-title {
@@ -1756,6 +1768,14 @@ main.container {
   min-height: 27px;
   display: flex;
   align-items: center;
+}
+
+.top-accounts a.owner-name {
+  color: var(--blue);
+}
+
+.top-accounts a.owner-name:hover {
+  color: var(--blue-hover);
 }
 
 .table.summary .text-success + .text-danger {
@@ -1847,6 +1867,11 @@ main.container {
 
 :root[data-theme='dark'] #map .leaflet-tile-pane {
   filter: invert(0.9) hue-rotate(175deg) saturate(0.5) brightness(0.82) contrast(1.08);
+}
+
+:root[data-theme='dark'] #map .marker-cluster span {
+  color: #0b3654;
+  font-weight: 700;
 }
 
 #map .leaflet-popup-content p {
@@ -2247,6 +2272,10 @@ main.container {
     padding-inline: 14px;
   }
 
+  .delegate-events {
+    padding-inline: 14px;
+  }
+
   .site-header-inner {
     gap: 12px;
   }
@@ -2610,11 +2639,6 @@ main.container {
     grid-template-columns: 1fr;
   }
 
-  .delegate-events > article:first-child {
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
   .delegate-command > div,
   .delegate-command > div:nth-child(2) {
     grid-column: auto;
@@ -2785,6 +2809,10 @@ main.container {
 
 @media (max-width: 420px) {
   .container {
+    padding-inline: 10px;
+  }
+
+  .delegate-events {
     padding-inline: 10px;
   }
 
