@@ -4,6 +4,7 @@
 // over a graphology graph (replacing the unmaintained sigma v1 build),
 // fed by the `/activityGraph` socket namespace.
 import { computed, onBeforeUnmount, onMounted, reactive, ref, shallowRef } from 'vue';
+import { IconX } from '@tabler/icons-vue';
 import Graph from 'graphology';
 import Sigma from 'sigma';
 import { BLOCK_INTERVAL_SECONDS } from '../../api/lib/adamant/constants.mjs';
@@ -265,7 +266,7 @@ onBeforeUnmount(() => {
         </div>
         <div v-if="selected.id" class="hud hud-node">
           <button type="button" class="btn" title="Cancel node selection" @click="deselectNode">
-            ✕
+            <IconX class="inline-icon" aria-hidden="true" />
           </button>
           <router-link class="btn" :to="selectedHref" title="Open selected node in the explorer">
             Open

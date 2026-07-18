@@ -3,6 +3,7 @@
 import { computed } from 'vue';
 import { useSort } from '../lib/sort';
 import OsIcon from './OsIcon.vue';
+import SortIndicator from './SortIndicator.vue';
 
 const props = defineProps({
   /** Peer list; `null`/`undefined` renders the waiting state. */
@@ -38,9 +39,7 @@ const rows = computed(() => sort.sorted(props.peers));
             @click="sort.order(column.key)"
           >
             {{ column.label }}
-            <span v-if="sort.key === column.key" class="sort-arrow">{{
-              sort.reverse ? '▴' : '▾'
-            }}</span>
+            <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
           </th>
         </tr>
       </thead>

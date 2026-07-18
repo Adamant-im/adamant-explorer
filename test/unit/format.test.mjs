@@ -4,6 +4,8 @@ import {
   epochToDate,
   toAdm,
   formatCurrency,
+  compactAmountParts,
+  formatHomeAmountParts,
   formatTimestamp,
   humanizeDuration,
   timeAgo,
@@ -68,6 +70,30 @@ describe('format.js', function () {
     it('converts with the known ticker rate', function () {
       const usd = { symbol: 'USD', tickers: { ADM: { USD: 2 } } };
       expect(formatCurrency(150000000, usd)).to.equal('3.00');
+    });
+  });
+
+  describe('compactAmountParts()', function () {
+    it('uses the requested four-digit home-page precision', function () {
+      expect(compactAmountParts(1.2345).text).to.equal('1.234');
+      expect(compactAmountParts(10.234).text).to.equal('10.23');
+      expect(compactAmountParts(12345.13123).text).to.equal('12345');
+      expect(compactAmountParts(0.0012345).text).to.equal('0.0012');
+      expect(compactAmountParts(0.00001234).text).to.equal('0.00001234');
+    });
+
+    it('returns integer and fraction as separate display parts', function () {
+      expect(compactAmountParts(1.2345)).to.deep.equal({
+        integer: '1',
+        fraction: '234',
+        text: '1.234',
+      });
+    });
+
+    it('converts sats before compacting a home-page amount', function () {
+      expect(formatHomeAmountParts(123450000, { symbol: 'ADM', tickers: {} }).text).to.equal(
+        '1.234',
+      );
     });
   });
 
@@ -153,6 +179,9 @@ describe('format.js', function () {
       expect(
         nethashLabel('77265cf40a806763bc1e3ff0d899a1c0582b46e84ce8808b445dd9b95aa86da5'),
       ).to.equal('Mainnet');
+      expect(
+        nethashLabel('bd330166898377fb28743ceef5e43a5d9d0a3efd9b3451fb7bc53530bb0a6d64'),
+      ).to.equal('Mainnet');
     });
 
     it('recognizes the testnet hash', function () {
@@ -168,8 +197,8 @@ describe('format.js', function () {
 
   describe('transaction labels', function () {
     it('names transaction types', function () {
-      expect(txTypeLabel({ type: 3 })).to.equal('Delegate vote');
-      expect(txTypeLabel({ type: 8 })).to.equal('Chat message');
+      expect(txTypeLabel({ type: 3 })).to.equal('Vote / Unvote');
+      expect(txTypeLabel({ type: 8 })).to.equal('Message');
     });
 
     it('prefers the sender delegate username', function () {
@@ -186,7 +215,7 @@ describe('format.js', function () {
     });
 
     it('shows the type name for non-transfer types', function () {
-      expect(txRecipientLabel({ type: 2 })).to.equal('Delegate registration');
+      expect(txRecipientLabel({ type: 2 })).to.equal('Create delegate');
     });
   });
 

@@ -40,7 +40,7 @@ app.set('strict routing', true);
 app.set('exchange enabled', config.exchangeRates.enabled);
 
 // Security headers. The CSP allows only self-hosted resources, the explorer's
-// own WebSocket endpoint, OpenStreetMap tiles for the network map, and Google Fonts.
+// own WebSocket endpoint, and OpenStreetMap tiles for the network map.
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
     'Content-Security-Policy',
     "frame-ancestors 'none'; default-src 'self'; connect-src 'self' " +
       wsSrc +
-      "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com",
+      "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline'; font-src 'self'",
   );
 
   return next();

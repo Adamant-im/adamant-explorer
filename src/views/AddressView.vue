@@ -2,11 +2,13 @@
 // Address page: account summary, QR code, votes, and the transaction
 // history with direction filters and an advanced search form.
 import { computed, reactive, ref, watch } from 'vue';
+import { IconArrowDown, IconArrowUp, IconLock } from '@tabler/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
 import { useLessMore } from '../lib/lessMore';
 import { formatCurrency, SAT } from '../lib/format';
+import { TRANSACTION_TYPES } from '../lib/transactionTypes.js';
 import CopyButton from '../components/CopyButton.vue';
 import QrCode from '../components/QrCode.vue';
 import VotesList from '../components/VotesList.vue';
@@ -52,7 +54,7 @@ async function getAccount(address) {
 function filterTxs(dir = '') {
   direction.value = dir;
   txs.value = useLessMore({
-    url: '/api/getTransfersByAddress',
+    url: dir === 'others' ? '/api/getTransactionsByAddress' : '/api/getTransfersByAddress',
     key: 'transactions',
     parent: 'address',
     params: { address: route.params.address, direction: dir || undefined },
@@ -68,7 +70,7 @@ function runSearch() {
 
   if (search.senderId) params.senderId = search.senderId;
   if (search.recipientId) params.recipientId = search.recipientId;
-  if (search.type) params.type = search.type;
+  if (search.type !== '') params.type = search.type;
   // Amounts are entered in ADM but the API expects sats
   if (search.minAmount) params.minAmount = Math.floor(parseFloat(search.minAmount) * SAT);
   if (search.maxAmount) params.maxAmount = Math.floor(parseFloat(search.maxAmount) * SAT);
@@ -94,7 +96,7 @@ function runSearch() {
 
   direction.value = 'search';
   txs.value = useLessMore({
-    url: '/api/getTransfersByAddress',
+    url: params.type ? '/api/getTransactionsByAddress' : '/api/getTransfersByAddress',
     key: 'transactions',
     parent: 'address',
     params,
@@ -126,7 +128,9 @@ watch(
     <template v-else>
       <h2>
         Address Summary
-        <small v-if="account.secondSignature" title="Second signature">🔒</small>
+        <small v-if="account.secondSignature" title="Second signature">
+          <IconLock class="inline-icon" aria-label="Second signature" />
+        </small>
       </h2>
 
       <div class="address-layout">
@@ -164,8 +168,14 @@ watch(
               <tr>
                 <td><strong>Transactions</strong></td>
                 <td class="text-right">
-                  <span title="Incoming" class="text-success">↓ {{ account.incoming_cnt }}</span>
-                  <span title="Outgoing" class="text-danger">↑ {{ account.outgoing_cnt }}</span>
+                  <span title="Incoming" class="text-success">
+                    <IconArrowDown class="inline-icon" aria-hidden="true" />
+                    {{ account.incoming_cnt }}
+                  </span>
+                  <span title="Outgoing" class="text-danger">
+                    <IconArrowUp class="inline-icon" aria-hidden="true" />
+                    {{ account.outgoing_cnt }}
+                  </span>
                 </td>
               </tr>
               <tr v-if="account.delegate">
@@ -201,7 +211,12 @@ watch(
           <input v-model.trim="search.recipientId" placeholder="Recipient address" />
           <input v-model.trim="search.minAmount" placeholder="Min amount (ADM)" />
           <input v-model.trim="search.maxAmount" placeholder="Max amount (ADM)" />
-          <input v-model.trim="search.type" placeholder="Types, comma separated" />
+          <select v-model="search.type" aria-label="Transaction type">
+            <option value="">Any transaction type</option>
+            <option v-for="item in TRANSACTION_TYPES" :key="item.type" :value="String(item.type)">
+              {{ item.label }}
+            </option>
+          </select>
           <div class="btn-row">
             <button type="submit" class="btn btn-primary">Search</button>
             <button type="button" class="btn" @click="resetSearch">Reset</button>

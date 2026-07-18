@@ -3,6 +3,7 @@
 // (see `lib/lessMore.js`), used by the block and address pages.
 import { computed } from 'vue';
 import { useSort } from '../lib/sort';
+import SortIndicator from './SortIndicator.vue';
 import TransactionRow from './TransactionRow.vue';
 
 const props = defineProps({
@@ -15,6 +16,7 @@ const props = defineProps({
 const sort = useSort('timestamp');
 
 const columns = [
+  { key: 'type', label: 'Type' },
   { key: 'id', label: 'Transaction ID' },
   { key: 'timestamp', label: 'Date' },
   { key: 'senderId', label: 'Sender' },
@@ -45,9 +47,7 @@ const rows = computed(() => sort.sorted(props.txs.results));
               @click="sort.order(column.key)"
             >
               {{ column.label }}
-              <span v-if="sort.key === column.key" class="sort-arrow">{{
-                sort.reverse ? '▴' : '▾'
-              }}</span>
+              <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
             </th>
           </tr>
         </thead>

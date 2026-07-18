@@ -10,6 +10,7 @@ import { formatCurrency, forgingTime, timeAgo, SAT } from '../lib/format';
 import { forgingStatus, forgingTotals, forgingProgress, totalBlockRewards } from '../lib/forging';
 import TabsBar from '../components/TabsBar.vue';
 import ForgingStatusDot from '../components/ForgingStatusDot.vue';
+import SortIndicator from '../components/SortIndicator.vue';
 
 const network = useNetworkStore();
 
@@ -371,9 +372,7 @@ const standbyColumns = [
                 @click="sortActive.order(column.key)"
               >
                 {{ column.label }}
-                <span v-if="sortActive.key === column.key" class="sort-arrow">{{
-                  sortActive.reverse ? '▴' : '▾'
-                }}</span>
+                <SortIndicator v-if="sortActive.key === column.key" :reverse="sortActive.reverse" />
               </th>
             </tr>
           </thead>
@@ -422,9 +421,10 @@ const standbyColumns = [
                 @click="sortStandby.order(column.key)"
               >
                 {{ column.label }}
-                <span v-if="sortStandby.key === column.key" class="sort-arrow">{{
-                  sortStandby.reverse ? '▴' : '▾'
-                }}</span>
+                <SortIndicator
+                  v-if="sortStandby.key === column.key"
+                  :reverse="sortStandby.reverse"
+                />
               </th>
             </tr>
           </thead>

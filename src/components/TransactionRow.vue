@@ -5,8 +5,11 @@
 import { computed } from 'vue';
 import { useNetworkStore } from '../stores/network';
 import { formatCurrency, formatTimestamp, txSenderLabel, txRecipientLabel } from '../lib/format';
-import { txSenderPath, txRecipientPath } from '../lib/accounts';
+import { txSenderPath } from '../lib/accounts';
+import { operationRecipient } from '../lib/transactionTypes.js';
 import CopyButton from './CopyButton.vue';
+import IdentityCell from './IdentityCell.vue';
+import OperationType from './OperationType.vue';
 
 const props = defineProps({
   /** Transaction to render. */
@@ -33,22 +36,40 @@ const amountTone = computed(() => {
 });
 
 const confirmations = computed(() => props.tx.confirmations || 0);
+
+const sender = computed(() => ({
+  address: props.tx.senderId,
+  label: txSenderLabel(props.tx),
+  path: txSenderPath(props.tx),
+}));
+
+const recipient = computed(() => {
+  const identity = operationRecipient(props.tx);
+
+  if (identity) {
+    return {
+      ...identity,
+      path: `${identity.isDelegate ? '/delegate' : '/address'}/${identity.address}`,
+    };
+  }
+
+  return null;
+});
 </script>
 
 <template>
   <tr>
+    <td data-title="Type"><OperationType :tx="tx" /></td>
     <td data-title="Transaction ID" class="text-nowrap">
       <router-link class="ellipsis txid" :to="`/tx/${tx.id}`">{{ tx.id }}</router-link>
       <CopyButton :text="tx.id" />
     </td>
     <td data-title="Date">{{ formatTimestamp(tx.timestamp) }}</td>
     <td data-title="Sender">
-      <router-link class="ellipsis" :to="txSenderPath(tx)">{{ txSenderLabel(tx) }}</router-link>
+      <IdentityCell v-bind="sender" />
     </td>
     <td data-title="Recipient">
-      <router-link v-if="tx.type === 0 || tx.type === 8" class="ellipsis" :to="txRecipientPath(tx)">
-        {{ txRecipientLabel(tx) }}
-      </router-link>
+      <IdentityCell v-if="recipient" v-bind="recipient" />
       <span v-else class="ellipsis">{{ txRecipientLabel(tx) }}</span>
     </td>
     <td data-title="Amount">

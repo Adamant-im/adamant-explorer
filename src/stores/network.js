@@ -14,6 +14,8 @@ export const useNetworkStore = defineStore('network', {
     blockStatus: null,
     /** Block identity used by open pages to refresh after sockets or REST fallback */
     latestBlock: null,
+    /** Browser timestamp of the latest live network update */
+    lastUpdate: null,
     /** Display currency; the explorer currently shows amounts in ADM only */
     currency: {
       symbol: 'ADM',
@@ -42,6 +44,7 @@ export const useNetworkStore = defineStore('network', {
 
       this._socket.on('data', (res) => {
         if (res.status?.success) {
+          this.lastUpdate = Date.now();
           const height = Number(res.status.height);
 
           if (Number.isSafeInteger(height) && height > 0 && height !== this.latestBlock?.height) {
@@ -80,6 +83,7 @@ export const useNetworkStore = defineStore('network', {
           height,
           timestamp: block.timestamp,
         };
+        this.lastUpdate = Date.now();
 
         if (this.blockStatus) {
           this.blockStatus = { ...this.blockStatus, height };

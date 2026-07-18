@@ -3,6 +3,7 @@
 // delegate name through `/api/search` and navigates to the matching page.
 import { onBeforeUnmount, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { IconSearch } from '@tabler/icons-vue';
 import { apiGet } from '../lib/api';
 
 const emit = defineEmits(['found']);
@@ -56,14 +57,16 @@ onBeforeUnmount(() => {
 
 <template>
   <form class="search-box" role="search" @submit.prevent="search">
+    <IconSearch class="search-icon" aria-hidden="true" />
     <input
       v-model.trim="query"
       type="text"
       class="search-input"
       :class="{ error: badQuery, loading }"
-      placeholder="Find a block, transaction, address or delegate"
+      placeholder="Search blocks, transactions, addresses or delegates"
       aria-label="Search"
     />
+    <kbd>/</kbd>
     <div v-if="badQuery" class="search-error">No matching records found!</div>
   </form>
 </template>

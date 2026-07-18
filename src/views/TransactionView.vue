@@ -4,8 +4,11 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
-import { formatCurrency, formatTimestamp, txTypeLabel } from '../lib/format';
+import { formatCurrency, formatTimestamp, txSenderLabel, txRecipientLabel } from '../lib/format';
+import { txSenderPath, txRecipientPath } from '../lib/accounts';
 import CopyButton from '../components/CopyButton.vue';
+import IdentityCell from '../components/IdentityCell.vue';
+import OperationType from '../components/OperationType.vue';
 import TransactionRow from '../components/TransactionRow.vue';
 
 const route = useRoute();
@@ -20,12 +23,6 @@ async function getTransaction(txId) {
 
   try {
     const data = await apiGetOrThrow('/api/getTransaction', { transactionId: txId });
-
-    // Zero-amount service transactions are hidden, matching the
-    // legacy explorer behavior (fee threshold excludes votes etc.)
-    if (data.transaction.amount === 0 && data.transaction.fee < 3 * 1e8) {
-      throw new Error('Transaction is 0 ADM');
-    }
 
     tx.value = data.transaction;
   } catch {
@@ -56,26 +53,30 @@ watch(() => route.params.txId, getTransaction, { immediate: true });
         <table class="table summary">
           <tbody>
             <tr>
+              <td><strong>Type</strong></td>
+              <td class="text-right"><OperationType :tx="tx" /></td>
+            </tr>
+            <tr>
               <td><strong>Sender</strong></td>
               <td class="text-right">
-                <router-link :to="`/address/${tx.senderId}`">{{ tx.senderId }}</router-link>
-                <div v-if="tx.knownSender">
-                  <span class="owner-name">{{ tx.knownSender.owner }}</span>
-                  <span class="owner-desc text-muted">{{ tx.knownSender.description }}</span>
-                </div>
+                <IdentityCell
+                  :address="tx.senderId"
+                  :label="txSenderLabel(tx)"
+                  :path="txSenderPath(tx)"
+                />
               </td>
             </tr>
             <tr>
               <td><strong>Recipient</strong></td>
               <td class="text-right">
                 <div v-if="tx.type === 0 || tx.amount">
-                  <router-link :to="`/address/${tx.recipientId}`">{{ tx.recipientId }}</router-link>
-                  <div v-if="tx.knownRecipient">
-                    <span class="owner-name">{{ tx.knownRecipient.owner }}</span>
-                    <span class="owner-desc text-muted">{{ tx.knownRecipient.description }}</span>
-                  </div>
+                  <IdentityCell
+                    :address="tx.recipientId"
+                    :label="txRecipientLabel(tx)"
+                    :path="txRecipientPath(tx)"
+                  />
                 </div>
-                <div v-else>{{ txTypeLabel(tx) }}</div>
+                <div v-else>{{ txRecipientLabel(tx) }}</div>
               </td>
             </tr>
             <tr>

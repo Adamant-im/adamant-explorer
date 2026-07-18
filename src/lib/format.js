@@ -21,15 +21,16 @@ export const EPOCH_MS = Date.UTC(2017, 8, 2, 17, 0, 0, 0);
  * message transaction).
  */
 export const TX_TYPES = {
-  0: 'Normal transaction',
+  0: 'Transfer',
   1: 'Second signature creation',
-  2: 'Delegate registration',
-  3: 'Delegate vote',
+  2: 'Create delegate',
+  3: 'Vote / Unvote',
   4: 'Multi-signature creation',
-  5: 'Dapp registration',
-  6: 'Dapp deposit',
-  7: 'Dapp withdrawal',
-  8: 'Chat message',
+  5: 'DApp registration',
+  6: 'DApp deposit',
+  7: 'DApp withdrawal',
+  8: 'Message',
+  9: 'State',
 };
 
 /**
@@ -88,6 +89,62 @@ export function formatCurrency(amount, currency, decimals) {
   }
 
   return groupNumber(adm * factor, 3).replace(/\.?0+$/, '');
+}
+
+/**
+ * Compacts a decimal amount for the latest-operations list.
+ *
+ * Values of at least one keep four significant integer/fraction digits;
+ * smaller values keep four decimal places, except values below 0.0001
+ * where all eight ADM decimals remain visible. Digits are truncated, not
+ * rounded, so the UI never implies more value than the transaction holds.
+ *
+ * @param {number|string} value Decimal amount, not sats
+ * @returns {{integer: string, fraction: string, text: string}} Split display value
+ */
+export function compactAmountParts(value) {
+  const numeric = Number(value);
+
+  if (!Number.isFinite(numeric)) {
+    return { integer: '0', fraction: '', text: '0' };
+  }
+
+  const negative = numeric < 0;
+  const absolute = Math.abs(numeric);
+  const normalized = absolute.toFixed(8).replace(/\.?0+$/, '');
+  const [rawInteger = '0', rawFraction = ''] = normalized.split('.');
+  const integerDigits = rawInteger.replace(/^0+/, '').length || 1;
+  let fractionLimit;
+
+  if (absolute >= 1) {
+    fractionLimit = Math.max(0, 4 - integerDigits);
+  } else if (absolute >= 0.0001) {
+    fractionLimit = 4;
+  } else {
+    fractionLimit = 8;
+  }
+
+  const fraction = rawFraction.slice(0, fractionLimit).replace(/0+$/, '');
+  const integer = `${negative ? '-' : ''}${rawInteger}`;
+  const text = fraction ? `${integer}.${fraction}` : integer;
+
+  return { integer, fraction, text };
+}
+
+/**
+ * Converts sats to the selected currency and compacts the result for the
+ * latest-operations list.
+ *
+ * @param {number|string} amount Amount in sats
+ * @param {{symbol: string, tickers?: Object}} currency Selected currency
+ * @returns {{integer: string, fraction: string, text: string}} Split display value
+ */
+export function formatHomeAmountParts(amount, currency) {
+  const adm = Number(toAdm(amount));
+  const factor =
+    currency.symbol === 'ADM' ? 1 : Number(currency.tickers?.ADM?.[currency.symbol] ?? NaN);
+
+  return compactAmountParts(adm * factor);
 }
 
 /**
@@ -235,6 +292,7 @@ export function supplyPercent(amount, supply) {
 const KNOWN_NETHASHES = {
   '38f153a81332dea86751451fd992df26a9249f0834f72f58f84ac31cceb70f43': 'Testnet',
   '77265cf40a806763bc1e3ff0d899a1c0582b46e84ce8808b445dd9b95aa86da5': 'Mainnet',
+  bd330166898377fb28743ceef5e43a5d9d0a3efd9b3451fb7bc53530bb0a6d64: 'Mainnet',
 };
 
 /**

@@ -12,6 +12,17 @@ const api = require('./api');
  * of https://github.com/Adamant-im/adamant-explorer/issues/11.
  */
 const TRANSFER_TYPES = [TransactionType.SEND, TransactionType.CHAT_MESSAGE];
+const PUBLIC_OPERATION_TYPES = [
+  TransactionType.SEND,
+  TransactionType.SIGNATURE,
+  TransactionType.DELEGATE,
+  TransactionType.VOTE,
+  TransactionType.MULTI,
+  TransactionType.DAPP,
+  TransactionType.IN_TRANSFER,
+  TransactionType.OUT_TRANSFER,
+];
+const PUBLIC_OPERATION_FETCH_LIMIT = 100;
 
 /**
  * Extract the transaction list from a node response or throw its error.
@@ -78,12 +89,25 @@ async function getLastTransactions() {
 }
 
 /**
- * Get the latest 20 transfer transactions, including in-chat transfers.
- * @returns {Promise<Array>} List of transactions, newest first
+ * Get a candidate window for the latest public operations while excluding
+ * chat messages and internal state records.
+ *
+ * The route name remains `getLastTransfers` for backwards-compatible
+ * clients, but the refreshed home page deliberately includes service
+ * operations such as voting and delegate registration. The wider window lets
+ * the handler deterministically order transactions that share a timestamp
+ * before it selects the latest 20.
+ * @returns {Promise<Array>} Candidate transactions ordered by the node
  * @throws {string} Node error message when the request fails
  */
 async function getLastTransfers() {
-  return getTransfers({ orderBy: 'timestamp:desc', limit: 20 });
+  return unwrapTransactions(
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: PUBLIC_OPERATION_FETCH_LIMIT,
+      and: { types: PUBLIC_OPERATION_TYPES },
+    }),
+  );
 }
 
 /**

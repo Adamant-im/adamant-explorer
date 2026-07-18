@@ -1,6 +1,7 @@
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const knowledge = require('../../../../utils/knownAddresses');
+const { concatenateTransactions, sortTransactions } = require('./transactionList');
 
 /**
  * Enrich a transaction with knowledge, sender and recipient delegate info,
@@ -52,33 +53,11 @@ async function processTransaction(transaction) {
 }
 
 /**
- * Concatenate 2 arrays with transactions
- * @param {Array} transactions1
- * @param {Array} transactions2
- * @returns {Array}
- */
-function concatenateTransactions(transactions1, transactions2) {
-  transactions1 = transactions1.concat(transactions2);
-
-  transactions1.sort((a, b) => {
-    if (a.timestamp > b.timestamp) {
-      return -1;
-    } else if (a.timestamp < b.timestamp) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
-
-  return transactions1.slice(0, 20);
-}
-
-/**
  * Transaction types shown by the `others` direction of the address page:
  * every service type, that is everything except token transfers (0)
  * and chat messages (8).
  */
-const SERVICE_TYPES = [1, 2, 3, 4, 5, 6, 7];
+const SERVICE_TYPES = [1, 2, 3, 4, 5, 6, 7, 9];
 
 /**
  * Build an SDK-form transaction query from an explorer request query.
@@ -161,6 +140,7 @@ function param(p, d) {
 module.exports = {
   processTransaction,
   concatenateTransactions,
+  sortTransactions,
   normalizeTransactionParams,
   param,
 };
