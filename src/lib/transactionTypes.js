@@ -142,9 +142,9 @@ export function operationMeta(tx) {
 /**
  * Resolves a meaningful recipient for operation-list presentation.
  *
- * Delegate registrations point back to their creator, while votes point
- * to the first affected delegate. Other service operations have no
- * account recipient and return `null`.
+ * Delegate registrations point back to their creator. Vote and other
+ * service operations have no single account recipient and return `null`,
+ * allowing tables to show the canonical protocol operation name.
  *
  * @param {Object} tx Enriched transaction
  * @returns {{address: string, label: string, isDelegate: boolean}|null} Recipient identity
@@ -176,19 +176,6 @@ export function operationRecipient(tx) {
             tx.senderUsername ||
             tx.knownSender?.owner ||
             tx.senderId,
-          isDelegate: true,
-        }
-      : null;
-  }
-
-  if (type === 3) {
-    const vote = tx.votes?.deleted?.[0] || tx.votes?.added?.[0];
-    const delegate = vote?.delegate;
-
-    return delegate?.address
-      ? {
-          address: delegate.address,
-          label: delegate.username || delegate.address,
           isDelegate: true,
         }
       : null;

@@ -20,5 +20,5 @@ defineProps({
     </div>
     <CopyButton :text="address" />
   </div>
-  <span v-else class="text-muted">Protocol</span>
+  <span v-else class="text-muted">{{ label || 'Protocol' }}</span>
 </template>

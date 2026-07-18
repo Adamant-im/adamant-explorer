@@ -2,9 +2,26 @@ import { expect } from 'chai';
 import networkHealth from '../../api/lib/adamant/helpers/networkHealth.js';
 import { networkHealthStatus } from '../../src/lib/networkHealth.js';
 
-const { countActiveForgingDelegates } = networkHealth;
+const { countActiveForgingDelegates, mergeForgingHealthBlocks } = networkHealth;
 
 describe('network health', function () {
+  it('bridges a one-block schedule/cache race with focused REST blocks', function () {
+    const cached = [
+      { id: 'cached-99', height: 99 },
+      { id: 'cached-98', height: 98 },
+    ];
+    const fresh = [
+      { id: 'fresh-100', height: 100 },
+      { id: 'fresh-99', height: 99 },
+    ];
+
+    expect(mergeForgingHealthBlocks(cached, fresh, 100)).to.deep.equal([
+      { id: 'fresh-100', height: 100 },
+      { id: 'fresh-99', height: 99 },
+      { id: 'cached-98', height: 98 },
+    ]);
+  });
+
   it('uses active Delegate Monitor statuses instead of one block round', function () {
     const delegates = Array.from({ length: 101 }, (_, index) => `delegate-${index}`);
     const roundDelegates = delegates.slice(0, 50);

@@ -257,12 +257,12 @@ export function timeAgo(timestamp) {
 }
 
 /**
- * Builds a native date tooltip with exact UTC time and a concise age.
+ * Builds a date tooltip with exact UTC time and a concise age on its own line.
  * @param {number} timestamp Seconds since the ADAMANT epoch
  * @returns {string} Tooltip text
  */
 export function timestampTitle(timestamp) {
-  return `${formatUtcTimestamp(timestamp)} UTC+0 · ${timeAgo(timestamp)}`;
+  return `${formatUtcTimestamp(timestamp)} UTC+0\n${timeAgo(timestamp)}`;
 }
 
 /**

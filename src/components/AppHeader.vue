@@ -81,12 +81,7 @@ watch(
   <header class="site-header">
     <div class="site-header-main">
       <div class="container site-header-inner">
-        <router-link
-          v-tooltip="'ADAMANT Blockchain Explorer'"
-          to="/"
-          class="brand"
-          @click="closeMenus"
-        >
+        <router-link to="/" class="brand" @click="closeMenus">
           <img :src="logoUrl" alt="ADAMANT Blockchain Explorer" class="brand-logo" />
           <span>Explorer</span>
         </router-link>

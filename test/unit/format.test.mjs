@@ -11,6 +11,7 @@ import {
   formatHomeAmountParts,
   formatTimestamp,
   formatUtcTimestamp,
+  timestampTitle,
   humanizeDuration,
   timeAgo,
   forgingTime,
@@ -123,6 +124,10 @@ describe('format.js', function () {
     it('renders the YYYY-MM-DD HH:mm:ss shape', function () {
       expect(formatTimestamp(0)).to.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
       expect(formatUtcTimestamp(0)).to.equal('2017-09-02 17:00:00');
+    });
+
+    it('puts the relative age on a separate tooltip line', function () {
+      expect(timestampTitle(0)).to.match(/^2017-09-02 17:00:00 UTC\+0\n.+ ago$/);
     });
   });
 

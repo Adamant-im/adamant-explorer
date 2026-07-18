@@ -1,8 +1,12 @@
 const blocksHandler = require('../api/lib/adamant/handlers/blocks');
 const commonHandler = require('../api/lib/adamant/handlers/common');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const blocks = require('../api/lib/adamant/requests/blocks');
 const delegates = require('../api/lib/adamant/requests/delegates');
-const { countActiveForgingDelegates } = require('../api/lib/adamant/helpers/networkHealth');
+const {
+  countActiveForgingDelegates,
+  mergeForgingHealthBlocks,
+} = require('../api/lib/adamant/helpers/networkHealth');
 const async = require('async');
 const logger = require('../utils/log');
 const { getForgingSchedule, getRoundDelegates } = require('./delegateMonitorSchedule');
@@ -148,17 +152,9 @@ module.exports = function (app, connectionHandler, socket) {
 
     running.getForgingHealth = true;
 
-    delegates
-      .getNextForgersState()
-      .then((state) => {
+    getForgingHealthSnapshot()
+      .then(({ state, recentBlocks }) => {
         const currentBlock = Number(state.currentBlock);
-        const recentBlocks = statisticsHandler
-          .getCachedBlocks()
-          .filter((block) => Number(block.height) <= currentBlock);
-
-        if (Number(recentBlocks[0]?.height) !== currentBlock) {
-          throw new Error('Forging schedule and block cache heights do not match');
-        }
 
         const schedule = getForgingSchedule(state);
         const roundDelegates = getRoundDelegates(schedule, recentBlocks);
@@ -177,6 +173,38 @@ module.exports = function (app, connectionHandler, socket) {
         log('warn', `Forging health refresh failed; previous status remains active: ${error}`);
         cb(null, data.status?.forgingDelegates ?? null);
       });
+  };
+
+  /**
+   * Aligns the forging schedule with recent blocks, bridging the normal race
+   * between the schedule REST response and the shared WebSocket block cache.
+   * @returns {Promise<{state: Object, recentBlocks: Array<Object>}>} Coherent health input
+   */
+  const getForgingHealthSnapshot = async function () {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const state = await delegates.getNextForgersState();
+      const currentBlock = Number(state.currentBlock);
+      let recentBlocks = mergeForgingHealthBlocks(
+        statisticsHandler.getCachedBlocks(),
+        [],
+        currentBlock,
+      );
+
+      if (Number(recentBlocks[0]?.height) !== currentBlock) {
+        const latestBlocks = await blocks.getBlocks(0, 2);
+        recentBlocks = mergeForgingHealthBlocks(
+          statisticsHandler.getCachedBlocks(),
+          latestBlocks,
+          currentBlock,
+        );
+      }
+
+      if (Number(recentBlocks[0]?.height) === currentBlock) {
+        return { state, recentBlocks };
+      }
+    }
+
+    throw new Error('Could not align the forging schedule with recent blocks after 3 attempts');
   };
 
   const getPriceTicker = function (cb) {

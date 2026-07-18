@@ -60,7 +60,7 @@ describe('transactionTypes.js', function () {
     ).to.equal('vote-unvote');
   });
 
-  it('resolves delegate registration and vote recipients', function () {
+  it('resolves delegate registrations and keeps vote recipients protocol-level', function () {
     expect(
       operationRecipient({
         type: 2,
@@ -74,6 +74,6 @@ describe('transactionTypes.js', function () {
         type: 3,
         votes: { added: [{ delegate: { address: 'U2', username: 'delegate' } }] },
       }),
-    ).to.deep.equal({ address: 'U2', label: 'delegate', isDelegate: true });
+    ).to.equal(null);
   });
 });

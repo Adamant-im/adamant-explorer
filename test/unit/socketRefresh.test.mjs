@@ -100,6 +100,7 @@ describe('socket-driven refresh scheduling', function () {
   it('forwards shared new-block events through the Header namespace', async function () {
     const headerPath = require.resolve('../../sockets/header.js');
     const blocksPath = require.resolve('../../api/lib/adamant/handlers/blocks.js');
+    const blockRequestsPath = require.resolve('../../api/lib/adamant/requests/blocks.js');
     const commonPath = require.resolve('../../api/lib/adamant/handlers/common.js');
     const delegatesPath = require.resolve('../../api/lib/adamant/requests/delegates.js');
     const networkHealthPath = require.resolve('../../api/lib/adamant/helpers/networkHealth.js');
@@ -113,6 +114,11 @@ describe('socket-driven refresh scheduling', function () {
     stubModule(blocksPath, {
       getBlockStatus(error, success) {
         success({ success: true, height: 100, supply: 1, nethash: 'testnet' });
+      },
+    });
+    stubModule(blockRequestsPath, {
+      async getBlocks() {
+        return [{ height: 100, generatorPublicKey: 'delegate-0' }];
       },
     });
     stubModule(commonPath, {
@@ -131,6 +137,11 @@ describe('socket-driven refresh scheduling', function () {
     stubModule(networkHealthPath, {
       countActiveForgingDelegates() {
         return 101;
+      },
+      mergeForgingHealthBlocks(cachedBlocks, freshBlocks, currentBlock) {
+        return [...freshBlocks, ...cachedBlocks].filter(
+          (block) => Number(block.height) <= currentBlock,
+        );
       },
     });
     stubModule(statisticsPath, {

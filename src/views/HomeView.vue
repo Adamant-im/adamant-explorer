@@ -5,7 +5,7 @@ import { IconArrowRight, IconChevronRight, IconTopologyStar3 } from '@tabler/ico
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
 import { createBlockRefreshTrigger } from '../lib/blockRefresh';
-import { txSenderLabel } from '../lib/format';
+import { txRecipientLabel, txSenderLabel } from '../lib/format';
 import { txSenderPath } from '../lib/accounts';
 import { operationRecipient } from '../lib/transactionTypes.js';
 import HomeAmount from '../components/HomeAmount.vue';
@@ -43,7 +43,7 @@ function recipientIdentity(tx) {
   const recipient = operationRecipient(tx);
 
   if (!recipient) {
-    return { address: '', label: '', path: '' };
+    return { address: '', label: txRecipientLabel(tx), path: '' };
   }
 
   return {
