@@ -155,28 +155,26 @@ describe('Accounts API', function () {
       });
     });
 
-    it('using offset 0 and limit 0 should return 100', function (done) {
+    it('using limit 0 should fail validation', function (done) {
       getTopAccounts('0', '0', (err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body.accounts.length).to.equal(100);
-        checkTopAccounts(res.body.accounts);
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
 
-    it('using offset 0 and limit -1 and return 100', function (done) {
+    it('using a negative limit should fail validation', function (done) {
       getTopAccounts('0', '-1', (err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body.accounts.length).to.equal(100);
-        checkTopAccounts(res.body.accounts);
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });
 
-    it('using offset 100000 and no limit should return 0', function (done) {
+    it('using an offset beyond the UI maximum should fail validation', function (done) {
       getTopAccounts(params.excessive_offset, '', (err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body.accounts.length).to.equal(0);
+        testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
+        testUtils.expect(res.body).to.have.property('error');
         done();
       });
     });

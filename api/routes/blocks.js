@@ -1,7 +1,8 @@
 const blocksHandler = require('../lib/adamant/handlers/blocks');
+const { allowQueryParameters } = require('./validation');
 
 module.exports = function (app) {
-  app.get('/api/getLastBlocks', (req, res, next) => {
+  app.get('/api/getLastBlocks', allowQueryParameters('n'), (req, res, next) => {
     blocksHandler.getLastBlocks(
       req.query.n,
       (data) => {
@@ -14,7 +15,7 @@ module.exports = function (app) {
     );
   });
 
-  app.get('/api/getBlock', (req, res, next) => {
+  app.get('/api/getBlock', allowQueryParameters('blockId', 'height'), (req, res, next) => {
     blocksHandler.getBlock(
       req.query,
       (data) => {
@@ -27,32 +28,7 @@ module.exports = function (app) {
     );
   });
 
-  app.get('/api/getHeight', (req, res, next) => {
-    blocksHandler.getBlock(
-      req.query,
-      (data) => {
-        res.json(data);
-      },
-      (data) => {
-        req.json = data;
-        return next();
-      },
-    );
-  });
-
-  app.get('/api/getBlockStatus', (req, res, next) => {
-    blocksHandler.getBlockStatus(
-      (data) => {
-        res.json(data);
-      },
-      (data) => {
-        req.json = data;
-        return next();
-      },
-    );
-  });
-
-  app.get('/api/totalSupply', (req, res, next) => {
+  app.get('/api/totalSupply', allowQueryParameters(), (req, res, next) => {
     blocksHandler.getBlockStatus(
       (data) => {
         res.json(data);

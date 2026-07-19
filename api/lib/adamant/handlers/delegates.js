@@ -2,7 +2,10 @@ const blocks = require('../requests/blocks');
 const delegates = require('../requests/delegates');
 const transactions = require('../requests/transactions');
 const helpers = require('../helpers/delegates');
+const { isDelegateSearch, parseIntegerParameter } = require('../helpers/validation');
 const logger = require('../../../../utils/log');
+
+const STANDBY_MAX_OFFSET = 10_000;
 
 /**
  * Get active delegates info
@@ -35,10 +38,21 @@ async function getActive(error, success) {
  * @returns {Promise<*>}
  */
 async function getStandby(n, error, success) {
+  let offset;
+
+  try {
+    offset = parseIntegerParameter(n, {
+      name: 'n',
+      defaultValue: 0,
+      maximum: STANDBY_MAX_OFFSET,
+    });
+  } catch (err) {
+    return error({ success: false, error: err.message });
+  }
+
   try {
     const limit = 20;
-    const offset = parseInt(n);
-    const actualOffset = isNaN(offset) ? 101 : offset + 101;
+    const actualOffset = offset + 101;
 
     const result = await delegates.getStandby(actualOffset, limit);
 
@@ -50,9 +64,7 @@ async function getStandby(n, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.warn(
-      `Delegates handler: Failed to load standby delegates; offset=${Number.parseInt(n, 10) || 0}: ${err}`,
-    );
+    logger.warn(`Delegates handler: Failed to load standby delegates; offset=${offset}: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -194,14 +206,14 @@ async function getLastBlocks(params, error, success) {
  * @returns {Promise<*>}
  */
 async function getSearch(params, error, success) {
-  try {
-    if (!params || !params.match(/^(?![0-9]{1,21}[L]$)[0-9a-z.]+/i)) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid username parameter',
-      });
-    }
+  if (!isDelegateSearch(params)) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid username parameter',
+    });
+  }
 
+  try {
     const result = {};
 
     result.address = await delegates.getSearch(params);

@@ -50,7 +50,7 @@ describe('ADAMANT API readiness', function () {
       waitForReady: () => ready.promise,
     });
 
-    const result = middleware({ originalUrl: '/api/getHeight' }, {}, (error) => {
+    const result = middleware({ originalUrl: '/api/getBlock?height=1' }, {}, (error) => {
       calls.push(error);
     });
 
@@ -73,6 +73,40 @@ describe('ADAMANT API readiness', function () {
     const calls = [];
 
     await middleware({ originalUrl: '/delegateMonitor' }, {}, (error) => {
+      calls.push(error);
+    });
+
+    expect(calls).to.deep.equal([undefined]);
+  });
+
+  it('does not treat an API prefix lookalike as an API request', async function () {
+    const createMiddleware = require('../../api/lib/adamant/middleware/readiness.js');
+    const middleware = createMiddleware({
+      isReady: () => false,
+      waitForReady: () => {
+        throw new Error('should not wait');
+      },
+    });
+    const calls = [];
+
+    await middleware({ originalUrl: '/apiary?probe=1' }, {}, (error) => {
+      calls.push(error);
+    });
+
+    expect(calls).to.deep.equal([undefined]);
+  });
+
+  it('does not wait for a removed API route', async function () {
+    const createMiddleware = require('../../api/lib/adamant/middleware/readiness.js');
+    const middleware = createMiddleware({
+      isReady: () => false,
+      waitForReady: () => {
+        throw new Error('should not wait');
+      },
+    });
+    const calls = [];
+
+    await middleware({ originalUrl: '/api/getHeight' }, {}, (error) => {
       calls.push(error);
     });
 

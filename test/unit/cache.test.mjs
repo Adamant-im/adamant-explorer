@@ -16,10 +16,10 @@ describe('API cache policy', function () {
     ).to.equal('block:101:block-101:/api/getLastTransfers');
   });
 
-  it('bypasses volatile and ignored endpoints when no usable key exists', function () {
+  it('bypasses volatile and request-time health endpoints when no usable key exists', function () {
     expect(cache.getCacheKey('/api/getLastBlocks?n=0', '/api/getLastBlocks')).to.equal(null);
     expect(
-      cache.getCacheKey('/api/statistics/getPeers', '/api/statistics/getPeers', {
+      cache.getCacheKey('/api/networkHealth', '/api/networkHealth', {
         id: 'block-101',
         height: 101,
       }),

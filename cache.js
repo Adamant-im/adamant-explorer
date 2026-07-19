@@ -7,11 +7,9 @@
  * `cacheTTLOverride` — per-endpoint TTL in seconds; other endpoints
  * use the `redis.cacheTTL` config value
  */
-const cacheIgnoreList = ['/api/statistics/getPeers'];
+const cacheIgnoreList = ['/api/networkHealth'];
 const cacheByBlockList = ['/api/getLastBlocks', '/api/getLastTransfers'];
-const cacheTTLOverride = {
-  '/api/getUnconfirmedTransactions': 5,
-};
+const cacheTTLOverride = {};
 
 /**
  * Build the Redis key for one Explorer API request.

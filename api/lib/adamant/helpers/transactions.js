@@ -3,6 +3,11 @@ const delegates = require('../requests/delegates');
 const knowledge = require('../../../../utils/knownAddresses');
 const { SERVICE_TYPES } = require('../transactionTypes');
 const { concatenateTransactions, sortTransactions } = require('./transactionList');
+const { normalizeAdamantAddress, parseIntegerParameter } = require('./validation');
+
+const TRANSACTION_PAGE_MAX_OFFSET = 5000;
+const TRANSACTION_PAGE_MAX_LIMIT = 100;
+const TRANSACTION_DIRECTIONS = new Set(['sent', 'received', 'others']);
 
 /**
  * Enrich a transaction with knowledge, sender and recipient delegate info,
@@ -61,62 +66,52 @@ async function processTransaction(transaction) {
 }
 
 /**
- * Build an SDK-form transaction query from an explorer request query.
+ * Build an SDK-form transaction query from the address-history UI query.
  *
  * The query uses the adamant-api shape where filter conditions are
  * grouped under `and`/`or`, e.g. `{and: {senderId}, or: {recipientId}}`.
- * Type sets are expressed with the node's `types` filter, so every
- * request maps to a single node call.
+ * Only the four parameters used by the current Explorer UI are accepted by
+ * routes. This helper independently validates their values before forwarding.
  * @param {Object} params Explorer request query
  * @returns {Object} Query for `getTransactions` or `getTransfers`
- * @throws {string} `'Missing/Invalid address parameter'` when no filter is given
+ * @throws {TypeError} When address, direction, or pagination is invalid
  */
 function normalizeTransactionParams(params) {
-  if (!params || (!params.address && !params.senderId && !params.recipientId)) {
-    throw 'Missing/Invalid address parameter';
+  if (!params || typeof params !== 'object' || Array.isArray(params)) {
+    throw new TypeError('Missing/Invalid address parameter');
+  }
+
+  const address = normalizeAdamantAddress(params.address);
+  const direction = params.direction || '';
+
+  if (direction && !TRANSACTION_DIRECTIONS.has(direction)) {
+    throw new TypeError('Missing/Invalid direction parameter');
   }
 
   const query = {
     orderBy: 'timestamp:desc',
-    offset: param(params.offset, 0),
-    limit: param(params.limit, 100),
+    offset: parseIntegerParameter(params.offset, {
+      name: 'offset',
+      defaultValue: 0,
+      maximum: TRANSACTION_PAGE_MAX_OFFSET,
+    }),
+    limit: parseIntegerParameter(params.limit, {
+      name: 'limit',
+      defaultValue: TRANSACTION_PAGE_MAX_LIMIT,
+      minimum: 1,
+      maximum: TRANSACTION_PAGE_MAX_LIMIT,
+    }),
   };
 
-  if (params.direction === 'sent') {
-    query.and = { senderId: params.address, minAmount: 1 };
-  } else if (params.direction === 'received') {
-    query.and = { recipientId: params.address, minAmount: 1 };
-  } else if (params.direction === 'others') {
-    query.and = { senderId: params.address, types: SERVICE_TYPES };
-  } else if (params.address) {
-    query.and = { recipientId: params.address };
-    query.or = { senderId: params.address };
+  if (direction === 'sent') {
+    query.and = { senderId: address, minAmount: 1 };
+  } else if (direction === 'received') {
+    query.and = { recipientId: address, minAmount: 1 };
+  } else if (direction === 'others') {
+    query.and = { senderId: address, types: SERVICE_TYPES };
   } else {
-    // Advanced search: pass through any filter the node supports,
-    // except control and specially handled parameters
-    const advanced = {};
-    Object.keys(params).forEach((key) => {
-      if (!/key|url|parent|orderBy|offset|limit|type|recipientId|query/.test(key)) {
-        advanced[key] = params[key];
-      }
-    });
-
-    query.and = advanced;
-
-    const types = params.type ? params.type.split(',').filter(Boolean) : [];
-    if (types.length === 1) {
-      query.and.type = types[0];
-    } else if (types.length > 1) {
-      query.and.types = types;
-    }
-
-    // When only recipientId is given, senderId is not in the advanced
-    // filters, so add the recipient condition.
-    // When recipientId equals senderId, the senderId condition already
-    // covers the query and the recipientId filter is ignored
-    if (params.recipientId && !params.senderId) {
-      query.and.recipientId = params.recipientId;
-    }
+    query.and = { recipientId: address };
+    query.or = { senderId: address };
   }
 
   return query;
@@ -129,12 +124,13 @@ function normalizeTransactionParams(params) {
  * @returns {Number}
  */
 function param(p, d) {
-  p = parseInt(p);
-
-  if (isNaN(p) || p < 0) {
+  try {
+    return parseIntegerParameter(p, {
+      name: 'integer',
+      defaultValue: d,
+    });
+  } catch {
     return d;
-  } else {
-    return p;
   }
 }
 

@@ -40,9 +40,20 @@ module.exports = function (app, io) {
 
       socket.on('disconnect', () => {
         if (clients() <= 0) {
-          object.onDisconnect();
+          const wasInitialized = initialized;
           initialized = false;
-          logger.debug(`${name} Last client disconnected; page monitor stopped`);
+
+          if (wasInitialized) {
+            try {
+              object.onDisconnect();
+            } catch (error) {
+              logger.warn(`${name} Page monitor cleanup failed: ${error}`);
+            }
+          }
+
+          logger.debug(
+            `${name} Last client disconnected; page monitor ${wasInitialized ? 'stopped' : 'was not started'}`,
+          );
         } else {
           logger.debug(`${name} Client disconnected; clients=${clients()}`);
         }
@@ -72,11 +83,29 @@ module.exports = function (app, io) {
       }
 
       if (!initialized) {
-        initialized = true;
-        object.onInit();
-        logger.debug(`${name} First client connected; page monitor started; clients=${clients()}`);
+        try {
+          object.onInit();
+          initialized = true;
+          logger.debug(
+            `${name} First client connected; page monitor started; clients=${clients()}`,
+          );
+        } catch (error) {
+          // A partially started module must not retain timers after a bad
+          // upstream payload or another synchronous initialization failure.
+          try {
+            object.onDisconnect();
+          } catch (cleanupError) {
+            logger.warn(
+              `${name} Page monitor cleanup after initialization failure failed: ${cleanupError}`,
+            );
+          }
+
+          throw error;
+        }
       } else {
-        object.onConnect();
+        // Cache snapshots are sent only to the joining client. Broadcasting
+        // them again would make every existing browser process duplicate data.
+        object.onConnect(socket);
         logger.debug(`${name} Client connected; clients=${clients()}`);
       }
     };

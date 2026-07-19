@@ -46,6 +46,7 @@ class Exchange {
 
     /** @type {Object<string, Object<string, number>>} Latest known rates */
     this.tickers = {};
+    this.isLoading = false;
 
     if (config.exchangeRates.enabled) {
       setInterval(() => this.loadRates(), config.exchangeRates.updateInterval);
@@ -65,42 +66,47 @@ class Exchange {
    * @returns {Promise<void>}
    */
   async loadRates() {
-    if (!this.config.exchangeRates.enabled) {
+    if (!this.config.exchangeRates.enabled || this.isLoading) {
       return;
     }
 
+    this.isLoading = true;
     const tickers = {};
 
-    await Promise.all(
-      SOURCES.map(async ({ base, quote, name, url, parse }) => {
-        try {
-          const { data } = await axios.get(url, { timeout: REQUEST_TIMEOUT });
-          const rate = parse(data);
+    try {
+      await Promise.all(
+        SOURCES.map(async ({ base, quote, name, url, parse }) => {
+          try {
+            const { data } = await axios.get(url, { timeout: REQUEST_TIMEOUT });
+            const rate = parse(data);
 
-          if (Number.isFinite(rate) && rate > 0) {
-            tickers[base] = { ...tickers[base], [quote]: rate };
-          } else {
+            if (Number.isFinite(rate) && rate > 0) {
+              tickers[base] = { ...tickers[base], [quote]: rate };
+            } else {
+              logger.warn(
+                `Exchange rates: ${name} returned an invalid ${base}/${quote} rate; source skipped`,
+              );
+            }
+          } catch (error) {
             logger.warn(
-              `Exchange rates: ${name} returned an invalid ${base}/${quote} rate; source skipped`,
+              `Exchange rates: Failed to fetch ${base}/${quote} from ${name} within ${REQUEST_TIMEOUT}ms; source skipped: ${error.message}`,
             );
           }
-        } catch (error) {
-          logger.warn(
-            `Exchange rates: Failed to fetch ${base}/${quote} from ${name} within ${REQUEST_TIMEOUT}ms; source skipped: ${error.message}`,
-          );
-        }
-      }),
-    );
-
-    if (Object.keys(tickers).length > 0) {
-      this.tickers = tickers;
-      const pairCount = Object.values(tickers).reduce(
-        (count, quotes) => count + Object.keys(quotes).length,
-        0,
+        }),
       );
-      logger.debug(`Exchange rates: Refreshed ${pairCount} ticker pairs`);
-    } else {
-      logger.warn('Exchange rates: No source returned a usable ticker; keeping previous rates');
+
+      if (Object.keys(tickers).length > 0) {
+        this.tickers = tickers;
+        const pairCount = Object.values(tickers).reduce(
+          (count, quotes) => count + Object.keys(quotes).length,
+          0,
+        );
+        logger.debug(`Exchange rates: Refreshed ${pairCount} ticker pairs`);
+      } else {
+        logger.warn('Exchange rates: No source returned a usable ticker; keeping previous rates');
+      }
+    } finally {
+      this.isLoading = false;
     }
   }
 }

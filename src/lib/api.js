@@ -8,6 +8,36 @@
  * deal with a single failure path.
  */
 
+const SUPPORTED_API_PATHS = new Set([
+  '/api/getAccount',
+  '/api/getTopAccounts',
+  '/api/getLastBlocks',
+  '/api/getBlock',
+  '/api/totalSupply',
+  '/api/search',
+  '/api/getTransaction',
+  '/api/getLastTransfers',
+  '/api/getTransactionsByAddress',
+  '/api/getTransfersByAddress',
+  '/api/getTransactionsByBlock',
+  '/api/delegates/getStandby',
+  '/api/networkHealth',
+]);
+
+/**
+ * Whether a path is part of the Explorer UI's intentionally retained API surface.
+ *
+ * Keeping the allowlist next to the client prevents accidental calls to removed
+ * legacy endpoints and prevents caller-controlled paths from becoming arbitrary
+ * same-origin or cross-origin requests.
+ *
+ * @param {unknown} path Candidate request path
+ * @returns {boolean} True only for an exact supported API path
+ */
+export function isSupportedApiPath(path) {
+  return typeof path === 'string' && SUPPORTED_API_PATHS.has(path);
+}
+
 /**
  * Performs a GET request against the explorer API.
  *
@@ -17,6 +47,10 @@
  * @throws {Error} When the HTTP request fails or returns a non-2xx status
  */
 export async function apiGet(path, params = {}) {
+  if (!isSupportedApiPath(path)) {
+    throw new Error(`Unsupported Explorer API path: ${String(path)}`);
+  }
+
   const query = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {

@@ -1,3 +1,5 @@
+const { isSupportedApiPath } = require('../helpers/http');
+
 /**
  * Create middleware that delays `/api` requests until the shared
  * ADAMANT API client finishes its startup health check.
@@ -6,7 +8,10 @@
  */
 function createAdamantApiReadinessMiddleware(adamantApi) {
   return async function waitForAdamantApiReadiness(req, res, next) {
-    if (!req.originalUrl.startsWith('/api') || adamantApi.isReady()) {
+    const requestPath =
+      typeof req.path === 'string' ? req.path : String(req.originalUrl).split('?', 1)[0];
+
+    if (!isSupportedApiPath(requestPath) || adamantApi.isReady()) {
       return next();
     }
 

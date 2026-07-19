@@ -8,9 +8,10 @@ import { IconX } from '@tabler/icons-vue';
 import Graph from 'graphology';
 import Sigma from 'sigma';
 import { BLOCK_INTERVAL_SECONDS } from '../../api/lib/adamant/constants.mjs';
-import { useNetworkStore } from '../stores/network';
-import { useSocket } from '../composables/useSocket';
-import { formatCurrency, timeSpan, toAdm } from '../lib/format';
+import { useNetworkStore } from '../stores/network.js';
+import { useSocket } from '../composables/useSocket.js';
+import { formatCurrency, timeSpan, toAdm } from '../lib/format.js';
+import { searchResultRoute } from '../lib/routes.js';
 
 const network = useNetworkStore();
 
@@ -194,17 +195,17 @@ function deselectNode() {
   selected.type = null;
 }
 
-/** Explorer path for the selected node. */
-const selectedHref = computed(() => {
+/** Validated Explorer route for the selected node. */
+const selectedRoute = computed(() => {
   switch (selected.type) {
     case NODE_TYPES.TX:
-      return `/tx/${selected.id}`;
+      return searchResultRoute({ type: 'tx', id: selected.id });
     case NODE_TYPES.BLOCK:
-      return `/block/${selected.id}`;
+      return searchResultRoute({ type: 'block', id: selected.id });
     case NODE_TYPES.ACCOUNT:
-      return `/address/${selected.id}`;
+      return searchResultRoute({ type: 'address', id: selected.id });
     default:
-      return '#';
+      return null;
   }
 });
 
@@ -274,9 +275,10 @@ onBeforeUnmount(() => {
             <IconX class="inline-icon" aria-hidden="true" />
           </button>
           <router-link
+            v-if="selectedRoute"
             v-tooltip="'Open selected node in the explorer'"
             class="btn"
-            :to="selectedHref"
+            :to="selectedRoute"
           >
             Open
           </router-link>

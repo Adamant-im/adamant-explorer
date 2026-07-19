@@ -1,7 +1,8 @@
 <script setup>
 // Sortable peer table for the Network Monitor.
 import { computed } from 'vue';
-import { useSort } from '../lib/sort';
+import { useSort } from '../lib/sort.js';
+import { peerFlagClass, peerStateClass } from '../lib/peers.js';
 import OsIcon from './OsIcon.vue';
 import SortIndicator from './SortIndicator.vue';
 import { formatInteger } from '../lib/format.js';
@@ -64,14 +65,14 @@ const rows = computed(() => sort.sorted(props.peers));
             <span
               v-tooltip="peer.location?.country_name"
               class="flag"
-              :class="`flag-${(peer.location?.country_code || '').toLowerCase()}`"
+              :class="peerFlagClass(peer.location?.country_code)"
             ></span>
           </td>
           <td>
             <span
               v-tooltip="peer.humanState"
               class="peer-state"
-              :class="`state-${peer.state}`"
+              :class="peerStateClass(peer.state)"
             ></span>
           </td>
           <td>

@@ -4,7 +4,8 @@
 import { onBeforeUnmount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { IconSearch } from '@tabler/icons-vue';
-import { apiGet } from '../lib/api';
+import { apiGet } from '../lib/api.js';
+import { searchResultRoute } from '../lib/routes.js';
 
 const emit = defineEmits(['found']);
 
@@ -26,11 +27,12 @@ async function search() {
 
   try {
     const data = await apiGet('/api/search', { id: query.value });
+    const destination = data.success !== false ? searchResultRoute(data) : null;
 
-    if (data.success !== false && data.id) {
+    if (destination) {
       query.value = '';
       emit('found');
-      router.push(`/${data.type}/${data.id}`);
+      await router.push(destination);
     } else {
       showBadQuery();
     }

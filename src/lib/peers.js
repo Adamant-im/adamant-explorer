@@ -1,3 +1,100 @@
+const PLATFORM_NAMES = new Set(['darwin', 'linux', 'win', 'freebsd', 'unknown']);
+const PEER_STATES = new Set(['0', '1', '2']);
+
+/**
+ * Returns a supported peer platform name for icon and marker class selection.
+ *
+ * @param {unknown} value Platform name from a peer payload
+ * @returns {'darwin'|'linux'|'win'|'freebsd'|'unknown'} Allowlisted platform name
+ */
+export function peerPlatformName(value) {
+  return typeof value === 'string' && PLATFORM_NAMES.has(value.toLowerCase())
+    ? value.toLowerCase()
+    : 'unknown';
+}
+
+/**
+ * Builds the country flag class from an ISO 3166-1 alpha-2 code.
+ *
+ * @param {unknown} value Country code from geo-location data
+ * @returns {string} Safe flag class, or an empty string when the code is invalid
+ */
+export function peerFlagClass(value) {
+  const code = typeof value === 'string' ? value.trim().toLowerCase() : '';
+
+  return /^[a-z]{2}$/.test(code) ? `flag-${code}` : '';
+}
+
+/**
+ * Builds the peer state class without accepting arbitrary class tokens.
+ *
+ * @param {unknown} value ADAMANT peer state (`0`, `1`, or `2`)
+ * @returns {string} Safe state class; unknown values use a non-styled fallback
+ */
+export function peerStateClass(value) {
+  const state = String(value);
+
+  return PEER_STATES.has(state) ? `state-${state}` : 'state-unknown';
+}
+
+/**
+ * Extracts usable Leaflet coordinates from a peer payload.
+ *
+ * @param {Object} peer Enriched peer
+ * @returns {[number, number]|null} Latitude/longitude tuple, or `null`
+ */
+export function peerCoordinates(peer) {
+  const latitude = peer?.location?.latitude;
+  const longitude = peer?.location?.longitude;
+
+  if (
+    typeof latitude !== 'number' ||
+    !Number.isFinite(latitude) ||
+    latitude < -90 ||
+    latitude > 90 ||
+    typeof longitude !== 'number' ||
+    !Number.isFinite(longitude) ||
+    longitude < -180 ||
+    longitude > 180
+  ) {
+    return null;
+  }
+
+  return [latitude, longitude];
+}
+
+/**
+ * Selects the textual fields shown in a peer map popup.
+ *
+ * Values stay as plain text and are inserted with DOM text nodes by the view.
+ * Objects and other unexpected payload values are omitted instead of invoking
+ * attacker-influenced coercion behavior.
+ *
+ * @param {Object} peer Enriched peer
+ * @returns {Array<{label: string, value: string, className?: string}>} Popup rows
+ */
+export function peerPopupRows(peer) {
+  const location = peer?.location ?? {};
+  const rows = [
+    { label: '', value: peer?.ip, className: 'ip' },
+    { label: 'Hostname', value: location.hostname },
+    { label: 'Version', value: peer?.version },
+    { label: 'OS', value: peer?.os },
+    { label: 'City', value: location.city },
+    { label: 'Region', value: location.region_name },
+    { label: 'Country', value: location.country_name },
+  ];
+
+  return rows
+    .filter(({ value }) => typeof value === 'string' || typeof value === 'number')
+    .map(({ label, value, className }) => ({
+      label,
+      value: String(value),
+      ...(className ? { className } : {}),
+    }))
+    .filter(({ value }) => value.length > 0);
+}
+
 /**
  * Compare dotted software versions from newest to oldest.
  *

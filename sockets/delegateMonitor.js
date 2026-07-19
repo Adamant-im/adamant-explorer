@@ -22,6 +22,7 @@ const {
   parseActiveDelegateState,
   serializeActiveDelegateState,
 } = require('./delegateMonitorState');
+const { getRetryDelay } = require('./retrySchedule');
 
 const STATUS_REFRESH_GRACE_MILLISECONDS = 25;
 const ACTIVE_DELEGATE_STATE_KEY = 'adamant-explorer:delegate-monitor:active:v1';
@@ -29,6 +30,8 @@ const ACTIVE_DELEGATE_STATE_KEY = 'adamant-explorer:delegate-monitor:active:v1';
 module.exports = function (app, connectionHandler, socket) {
   let timers = [];
   let monitoring = false;
+  let generation = 0;
+  let retryAttempt = 0;
   let unsubscribeFromBlocks = null;
   new connectionHandler('Delegate Monitor:', socket, this);
   const data = {};
@@ -47,6 +50,8 @@ module.exports = function (app, connectionHandler, socket) {
   this.onInit = function () {
     const initializedAt = Date.now();
     monitoring = true;
+    generation++;
+    retryAttempt = 0;
 
     // Do not expose the previous page session while a fresh coherent
     // schedule/block snapshot is loading for the first connected client.
@@ -54,83 +59,28 @@ module.exports = function (app, connectionHandler, socket) {
       delete data[key];
     }
 
-    async.parallel(
-      [
-        getLastBlock,
-        getActive,
-        getRegistrations,
-        getVotes,
-        getNextForgers,
-        refreshForgingBaseline,
-        restoreActiveDelegateState,
-      ],
-      function (err, res) {
-        if (err) {
-          // A failed request must not leave the monitor empty forever
-          log('warn', `Initial data load failed (${err}); retrying in 10000ms`);
-          scheduleRetry();
-        } else {
-          if (!monitoring) {
-            return;
-          }
-
-          tmpData.nextForgers = getForgingSchedule(res[4]);
-
-          data.lastBlock = res[0];
-          data.active = updateActive(res[1]);
-          data.registrations = res[2];
-          data.votes = res[3];
-          data.nextForgers = cutNextForgers(10);
-          tmpData.forgingBaseline = res[5].baseline;
-          data.forgingTotals = {
-            success: true,
-            transactionFees: res[5].transactionFees,
-          };
-
-          // Status data is emitted by the first coherent schedule/block refresh.
-          socket.emit('data', {
-            forgingTotals: data.forgingTotals,
-            registrations: data.registrations,
-            votes: data.votes,
-          });
-
-          newSerializedLoop(0, BLOCK_INTERVAL_MILLISECONDS, refreshMetadata, 'metadata');
-          startMonitorUpdates().then((statusReady) => {
-            if (!monitoring) {
-              return;
-            }
-
-            const label = statusReady ? 'Initialized' : 'Metadata initialized; status pending';
-            log(
-              statusReady ? 'info' : 'warn',
-              `${label}; activeDelegates=${data.active?.delegates?.length ?? 0}; ` +
-                `scheduledDelegates=${tmpData.nextForgers?.delegates?.length ?? 0}; ` +
-                `height=${data.lastBlock?.block?.height ?? 'unknown'}; ` +
-                `initialLoadMs=${Date.now() - initializedAt}`,
-            );
-          });
-        }
-      }.bind(this),
-    );
+    initialize(generation, initializedAt);
   };
 
-  this.onConnect = function () {
+  this.onConnect = function (client = socket) {
     log('debug', `Emitted cached data; height=${data.lastBlock?.block?.height ?? 'unknown'}`);
-    socket.emit('data', data);
+    client.emit('data', data);
   };
 
   this.onDisconnect = function () {
     monitoring = false;
+    generation++;
+    retryAttempt = 0;
 
     for (const timer of timers) {
-      clearInterval(timer);
+      clearTimeout(timer);
     }
 
     timers = [];
 
     unsubscribeFromBlocks?.();
     unsubscribeFromBlocks = null;
-    tmpData.statusRefreshQueued = false;
+    tmpData.statusRefreshQueued = null;
   };
 
   // Private
@@ -139,24 +89,91 @@ module.exports = function (app, connectionHandler, socket) {
     logger[level](`Delegate Monitor: ${msg}`);
   };
 
+  const isActive = function (expectedGeneration) {
+    return monitoring && generation === expectedGeneration;
+  };
+
+  /**
+   * Load the minimum schedule and roster snapshot needed by the live monitor.
+   * Metadata and lifetime totals start independently so their failure cannot
+   * hold back forging status.
+   * @param {number} expectedGeneration Active namespace lifecycle generation
+   * @param {number} initializedAt Start timestamp used for diagnostics
+   */
+  const initialize = function (expectedGeneration, initializedAt) {
+    if (!isActive(expectedGeneration)) {
+      return;
+    }
+
+    async.parallel(
+      [getLastBlock, getActive, getNextForgers, restoreActiveDelegateState],
+      function (err, res) {
+        if (!isActive(expectedGeneration)) {
+          return;
+        }
+
+        if (err) {
+          scheduleRetry(expectedGeneration, initializedAt, err);
+          return;
+        }
+
+        try {
+          tmpData.nextForgers = getForgingSchedule(res[2]);
+
+          data.lastBlock = res[0];
+          data.active = updateActive(res[1]);
+          data.nextForgers = cutNextForgers(10);
+          retryAttempt = 0;
+        } catch (error) {
+          scheduleRetry(expectedGeneration, initializedAt, error);
+          return;
+        }
+
+        startMetadataUpdates(expectedGeneration);
+        initializeForgingTotals(expectedGeneration);
+        startMonitorUpdates(expectedGeneration)
+          .then((statusReady) => {
+            if (!isActive(expectedGeneration)) {
+              return;
+            }
+
+            const label = statusReady ? 'Initialized' : 'Core initialized; status pending';
+            log(
+              statusReady ? 'info' : 'warn',
+              `${label}; activeDelegates=${data.active?.delegates?.length ?? 0}; ` +
+                `scheduledDelegates=${tmpData.nextForgers?.delegates?.length ?? 0}; ` +
+                `height=${data.lastBlock?.block?.height ?? 'unknown'}; ` +
+                `initialLoadMs=${Date.now() - initializedAt}`,
+            );
+          })
+          .catch((error) => {
+            if (isActive(expectedGeneration)) {
+              log('warn', `Status monitor initialization failed: ${error}`);
+              scheduleNextStatusRefresh(expectedGeneration);
+            }
+          });
+      },
+    );
+  };
+
   /** Starts a polling loop whose delay begins after the previous run finishes. */
-  const newSerializedLoop = function (index, delay, callback, label) {
+  const newSerializedLoop = function (index, delay, callback, label, expectedGeneration) {
     if (timers[index] !== undefined) {
       return null;
     }
 
     const run = async () => {
-      if (!monitoring) {
+      if (!isActive(expectedGeneration)) {
         return;
       }
 
       try {
-        await callback();
+        await callback(expectedGeneration);
       } catch (error) {
         log('warn', `${label} refresh failed; next attempt in ${delay}ms: ${error}`);
       }
 
-      if (monitoring) {
+      if (isActive(expectedGeneration)) {
         timers[index] = setTimeout(run, delay);
       }
     };
@@ -165,28 +182,55 @@ module.exports = function (app, connectionHandler, socket) {
     return timers[index];
   };
 
-  const scheduleRetry = function () {
+  const scheduleRetry = function (expectedGeneration, initializedAt, error) {
     if (timers[3] !== undefined) {
       return;
     }
 
+    const delay = getRetryDelay(retryAttempt++);
+    log('warn', `Initial core data load failed (${error}); retrying in ${delay}ms`);
     timers[3] = setTimeout(() => {
       timers[3] = undefined;
 
-      if (monitoring) {
-        this.onInit();
+      if (isActive(expectedGeneration)) {
+        initialize(expectedGeneration, initializedAt);
       }
-    }, 10000);
-  }.bind(this);
+    }, delay);
+  };
+
+  /** Start optional metadata immediately, then continue in one serialized loop. */
+  const startMetadataUpdates = async function (expectedGeneration) {
+    try {
+      await refreshMetadata(expectedGeneration);
+    } catch (error) {
+      if (isActive(expectedGeneration)) {
+        log('warn', `Initial metadata refresh failed; successful sources remain active: ${error}`);
+      }
+    }
+
+    if (isActive(expectedGeneration)) {
+      newSerializedLoop(
+        0,
+        BLOCK_INTERVAL_MILLISECONDS,
+        refreshMetadata,
+        'metadata',
+        expectedGeneration,
+      );
+    }
+  };
 
   /** Loads status first, then starts bounded serialized refresh loops. */
-  const startMonitorUpdates = async function () {
+  const startMonitorUpdates = async function (expectedGeneration) {
     let statusReady = false;
 
     try {
       await statisticsHandler.ensureBlockStatistics();
-      await refreshRecentBlocks();
-      statusReady = true;
+
+      if (!isActive(expectedGeneration)) {
+        return false;
+      }
+
+      statusReady = await requestStatusRefresh('initial', expectedGeneration);
     } catch (error) {
       log(
         'warn',
@@ -194,7 +238,7 @@ module.exports = function (app, connectionHandler, socket) {
       );
     }
 
-    if (!monitoring) {
+    if (!isActive(expectedGeneration)) {
       return false;
     }
 
@@ -204,7 +248,7 @@ module.exports = function (app, connectionHandler, socket) {
       );
     }
 
-    scheduleNextStatusRefresh();
+    scheduleNextStatusRefresh(expectedGeneration);
     return statusReady;
   };
 
@@ -214,24 +258,31 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   /** Schedule one slot-aligned refresh; block events may bring it forward. */
-  const scheduleNextStatusRefresh = function () {
-    if (!monitoring || timers[1] !== undefined) {
+  const scheduleNextStatusRefresh = function (expectedGeneration) {
+    if (!isActive(expectedGeneration) || timers[1] !== undefined) {
       return;
     }
 
     timers[1] = setTimeout(() => {
       timers[1] = undefined;
-      emitPredictedSlot((tmpData.nextForgers?.currentSlot ?? -1) + 1);
-      requestStatusRefresh('slot');
+
+      if (!isActive(expectedGeneration)) {
+        return;
+      }
+
+      emitPredictedSlot((tmpData.nextForgers?.currentSlot ?? -1) + 1, expectedGeneration);
+      requestStatusRefresh('slot', expectedGeneration);
     }, getNextStatusRefreshDelay());
   };
 
   /**
    * Emit the deterministic slot transition immediately, then let REST confirm it.
    * @param {number} currentSlot Slot derived from the local timer or socket block
+   * @param {number} expectedGeneration Active namespace lifecycle generation
    */
-  const emitPredictedSlot = function (currentSlot) {
+  const emitPredictedSlot = function (currentSlot, expectedGeneration) {
     if (
+      !isActive(expectedGeneration) ||
       !Number.isInteger(currentSlot) ||
       !tmpData.nextForgers?.orderedDelegates?.length ||
       currentSlot <= tmpData.nextForgers.currentSlot ||
@@ -261,11 +312,15 @@ module.exports = function (app, connectionHandler, socket) {
 
   /**
    * Coalesce slot and block triggers into one serialized status refresh.
-   * A trigger received during a request causes exactly one follow-up refresh.
+   * A trigger received during a request replaces any older queued trigger, so
+   * bursts cause at most one follow-up refresh.
+   * @param {string} source Trigger name used for diagnostics
+   * @param {number} expectedGeneration Active namespace lifecycle generation
+   * @returns {Promise<boolean>} Whether an active refresh completed successfully
    */
-  const requestStatusRefresh = function (source) {
-    if (!monitoring) {
-      return Promise.resolve();
+  const requestStatusRefresh = function (source, expectedGeneration) {
+    if (!isActive(expectedGeneration)) {
+      return Promise.resolve(false);
     }
 
     if (timers[1] !== undefined) {
@@ -274,32 +329,50 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     if (tmpData.statusRefreshPromise) {
-      tmpData.statusRefreshQueued = true;
+      tmpData.statusRefreshQueued = { generation: expectedGeneration, source };
       return tmpData.statusRefreshPromise;
     }
 
     const run = async () => {
-      do {
-        tmpData.statusRefreshQueued = false;
+      let request = { generation: expectedGeneration, source };
+      let refreshed = false;
+      let lastProcessedGeneration = null;
 
-        try {
-          await refreshRecentBlocks();
-        } catch (error) {
-          log(
-            'warn',
-            `Recent-block refresh triggered by ${source} failed; next slot refresh remains scheduled: ${error}`,
-          );
+      while (request) {
+        tmpData.statusRefreshQueued = null;
+
+        if (isActive(request.generation)) {
+          lastProcessedGeneration = request.generation;
+
+          try {
+            refreshed = (await refreshRecentBlocks(request.generation)) || refreshed;
+          } catch (error) {
+            log(
+              'warn',
+              `Recent-block refresh triggered by ${request.source} failed; next slot refresh remains scheduled: ${error}`,
+            );
+          }
         }
-      } while (monitoring && tmpData.statusRefreshQueued);
-    };
 
-    const promise = run().finally(() => {
-      if (tmpData.statusRefreshPromise === promise) {
-        tmpData.statusRefreshPromise = null;
+        request = tmpData.statusRefreshQueued;
       }
 
-      scheduleNextStatusRefresh();
-    });
+      return { lastProcessedGeneration, refreshed };
+    };
+
+    const promise = run()
+      .then(({ lastProcessedGeneration, refreshed }) => {
+        if (lastProcessedGeneration !== null && isActive(lastProcessedGeneration)) {
+          scheduleNextStatusRefresh(lastProcessedGeneration);
+        }
+
+        return refreshed;
+      })
+      .finally(() => {
+        if (tmpData.statusRefreshPromise === promise) {
+          tmpData.statusRefreshPromise = null;
+        }
+      });
 
     tmpData.statusRefreshPromise = promise;
     return promise;
@@ -307,13 +380,15 @@ module.exports = function (app, connectionHandler, socket) {
 
   /** Refresh immediately when the shared accumulator receives a socket block. */
   const handleBlockStatisticsUpdate = function (update) {
-    if (!monitoring || update.source?.startsWith('delegate-rest')) {
+    const expectedGeneration = generation;
+
+    if (!isActive(expectedGeneration) || update.source?.startsWith('delegate-rest')) {
       return;
     }
 
     const blockSlot = Math.floor(Number(update.lastBlock?.timestamp ?? 0) / BLOCK_INTERVAL_SECONDS);
-    emitPredictedSlot(blockSlot);
-    requestStatusRefresh(update.source ?? 'block');
+    emitPredictedSlot(blockSlot, expectedGeneration);
+    requestStatusRefresh(update.source ?? 'block', expectedGeneration);
   };
 
   const getNextForgerPublicKeys = function () {
@@ -462,6 +537,42 @@ module.exports = function (app, connectionHandler, socket) {
     }
   };
 
+  /**
+   * Load optional lifetime forging totals without blocking live status.
+   * Consecutive failures back off with jitter instead of repeating the
+   * all-delegate request burst every network slot.
+   */
+  const initializeForgingTotals = async function (expectedGeneration, attempt = 0) {
+    try {
+      const result = await refreshForgingBaseline();
+
+      if (!isActive(expectedGeneration)) {
+        return;
+      }
+
+      tmpData.forgingBaseline = result.baseline;
+      data.forgingTotals = {
+        success: true,
+        transactionFees: result.transactionFees,
+      };
+      socket.emit('data', { forgingTotals: data.forgingTotals });
+    } catch (error) {
+      if (!isActive(expectedGeneration) || timers[2] !== undefined) {
+        return;
+      }
+
+      const delay = getRetryDelay(attempt);
+      log('warn', `Initial all-delegate forging totals failed; retrying in ${delay}ms: ${error}`);
+      timers[2] = setTimeout(() => {
+        timers[2] = undefined;
+
+        if (isActive(expectedGeneration)) {
+          initializeForgingTotals(expectedGeneration, attempt + 1);
+        }
+      }, delay);
+    }
+  };
+
   /** Project lifetime fees through the latest cached block. */
   const updateTransactionFees = function (recentBlocks, height) {
     if (!tmpData.forgingBaseline) {
@@ -479,11 +590,11 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   /** Refresh account-level totals after Node credits a completed round. */
-  const refreshCompletedRoundBaseline = async function () {
+  const refreshCompletedRoundBaseline = async function (expectedGeneration) {
     try {
       const result = await refreshForgingBaseline();
 
-      if (!monitoring) {
+      if (!isActive(expectedGeneration)) {
         return;
       }
 
@@ -494,10 +605,12 @@ module.exports = function (app, connectionHandler, socket) {
       };
       socket.emit('data', { forgingTotals: data.forgingTotals });
     } catch (error) {
-      log(
-        'warn',
-        `All-delegate forging totals refresh failed; previous totals remain active: ${error}`,
-      );
+      if (isActive(expectedGeneration)) {
+        log(
+          'warn',
+          `All-delegate forging totals refresh failed; previous totals remain active: ${error}`,
+        );
+      }
     }
   };
 
@@ -666,14 +779,25 @@ module.exports = function (app, connectionHandler, socket) {
     throw new Error('Could not obtain matching schedule and block heights');
   };
 
-  /** Refresh forging state from one schedule, roster, and block snapshot. */
-  const refreshRecentBlocks = async function () {
+  /**
+   * Refresh forging state from one schedule, roster, and block snapshot.
+   * @param {number} expectedGeneration Active namespace lifecycle generation
+   */
+  const refreshRecentBlocks = async function (expectedGeneration) {
     const [{ nextForgers, latestBlocks }, activeResults] = await Promise.all([
       getForgingSnapshot(),
       getActiveState(),
     ]);
 
+    if (!isActive(expectedGeneration)) {
+      return false;
+    }
+
     await statisticsHandler.ingestBlocks(latestBlocks, 'delegate-rest');
+
+    if (!isActive(expectedGeneration)) {
+      return false;
+    }
 
     // A socket block may arrive after the snapshot. Keep this emission on the
     // matched height; the queued socket refresh will immediately advance it.
@@ -681,8 +805,8 @@ module.exports = function (app, connectionHandler, socket) {
       .getCachedBlocks()
       .filter((block) => block.height <= latestBlocks[0].height);
 
-    if (!monitoring || !recentBlocks.length) {
-      return;
+    if (!recentBlocks.length) {
+      return false;
     }
 
     const fetchedAt = new Date().toISOString();
@@ -759,7 +883,7 @@ module.exports = function (app, connectionHandler, socket) {
       tmpData.forgingBaseline?.creditedHeight < latestBlock.height &&
       !running.getForgingBaseline
     ) {
-      refreshCompletedRoundBaseline();
+      refreshCompletedRoundBaseline(expectedGeneration);
     }
 
     log(
@@ -768,30 +892,73 @@ module.exports = function (app, connectionHandler, socket) {
         `nextForgers=${data.nextForgers.length}; historyBlocks=${recentBlocks.length}`,
     );
     socket.emit('data', data);
+    return true;
   };
 
-  /** Refresh page metadata without replacing the atomic forging state. */
-  const refreshMetadata = function () {
-    return new Promise((resolve, reject) => {
-      async.parallel([getRegistrations, getVotes], function (err, res) {
-        if (err) {
-          reject(new Error(err));
-        } else {
-          data.registrations = res[0];
-          data.votes = res[1];
-
-          socket.emit('data', {
-            registrations: data.registrations,
-            votes: data.votes,
-          });
-          log(
-            'debug',
-            `Emitted metadata; registrations=${data.registrations?.transactions?.length ?? 0}; ` +
-              `votes=${data.votes?.transactions?.length ?? 0}`,
-          );
-          resolve();
+  /** Resolve a callback-style source without failing its independent peers. */
+  const loadSettled = function (loader) {
+    return new Promise((resolve) => {
+      let settled = false;
+      const done = (error, result) => {
+        if (settled) {
+          return;
         }
-      });
+
+        settled = true;
+        resolve({ error, result });
+      };
+
+      try {
+        loader(done);
+      } catch (error) {
+        done(error);
+      }
     });
+  };
+
+  /**
+   * Refresh page metadata without replacing the atomic forging state.
+   * A failed registrations or votes source preserves the other source.
+   * @param {number} expectedGeneration Active namespace lifecycle generation
+   */
+  const refreshMetadata = async function (expectedGeneration) {
+    const [registrations, votes] = await Promise.all([
+      loadSettled(getRegistrations),
+      loadSettled(getVotes),
+    ]);
+
+    if (!isActive(expectedGeneration)) {
+      return;
+    }
+
+    const payload = {};
+    const failures = [];
+
+    if (registrations.error) {
+      failures.push(`registrations (${registrations.error})`);
+    } else {
+      data.registrations = registrations.result;
+      payload.registrations = data.registrations;
+    }
+
+    if (votes.error) {
+      failures.push(`votes (${votes.error})`);
+    } else {
+      data.votes = votes.result;
+      payload.votes = data.votes;
+    }
+
+    if (Object.keys(payload).length) {
+      socket.emit('data', payload);
+      log(
+        'debug',
+        `Emitted metadata; registrations=${data.registrations?.transactions?.length ?? 0}; ` +
+          `votes=${data.votes?.transactions?.length ?? 0}`,
+      );
+    }
+
+    if (failures.length) {
+      throw new Error(failures.join(', '));
+    }
   };
 };

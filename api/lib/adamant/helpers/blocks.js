@@ -1,3 +1,5 @@
+const { parseIntegerParameter } = require('./validation');
+
 /**
  * Build pagination info for the given offset and blockchain height
  * @param {Number} n
@@ -28,17 +30,19 @@ function pagination(n, height) {
 }
 
 /**
- * Parse integer or return 0
- * @param {*} n
- * @returns {Number|0}
+ * Parse a strict non-negative block offset or return zero.
+ * @param {*} value Candidate offset
+ * @returns {number} Parsed offset or zero
  */
-function offset(n) {
-  n = parseInt(n);
-
-  if (isNaN(n) || n < 0) {
+function offset(value) {
+  try {
+    return parseIntegerParameter(value, {
+      name: 'n',
+      defaultValue: 0,
+      maximum: 200_000_000,
+    });
+  } catch {
     return 0;
-  } else {
-    return n;
   }
 }
 

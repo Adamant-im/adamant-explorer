@@ -16,16 +16,12 @@ describe('Blocks API', function () {
     testUtils.httpRequest.get('/api/getLastBlocks?n=' + id, done);
   }
 
-  function getBlockStatus(done) {
-    testUtils.httpRequest.get('/api/getBlockStatus', done);
-  }
-
   function getBlock(id, done) {
     testUtils.httpRequest.get('/api/getBlock?blockId=' + id, done);
   }
 
-  function getHeight(id, done) {
-    testUtils.httpRequest.get('/api/getHeight?height=' + id, done);
+  function getBlockByHeight(id, done) {
+    testUtils.httpRequest.get('/api/getBlock?height=' + id, done);
   }
 
   function checkPagination(id) {
@@ -129,23 +125,6 @@ describe('Blocks API', function () {
     });
   });
 
-  describe('GET /api/getBlockStatus', function () {
-    it('should be ok', function (done) {
-      getBlockStatus((err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body).to.have.property('broadhash').to.be.a('string');
-        testUtils.expect(res.body).to.have.property('epoch').to.be.a('string');
-        testUtils.expect(res.body).to.have.property('height').to.be.a('number');
-        testUtils.expect(res.body).to.have.property('fee').to.be.a('number');
-        testUtils.expect(res.body).to.have.property('milestone').to.be.a('number');
-        testUtils.expect(res.body).to.have.property('nethash').to.be.a('string');
-        testUtils.expect(res.body).to.have.property('reward').to.be.a('number');
-        testUtils.expect(res.body).to.have.property('supply').to.be.a('number');
-        done();
-      });
-    });
-  });
-
   describe('GET /api/getBlock', function () {
     it('using known blockId should be ok', function (done) {
       getBlock(params.id, (err, res) => {
@@ -184,9 +163,9 @@ describe('Blocks API', function () {
     });
   });
 
-  describe('GET /api/getHeight', function () {
-    it('using known height be ok', function (done) {
-      getHeight(params.height, (err, res) => {
+  describe('GET /api/getBlock by height', function () {
+    it('using a known height should be ok', function (done) {
+      getBlockByHeight(params.height, (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
         testUtils.expect(res.body).to.have.property('block').to.be.a('object');
         testUtils.expect(res.body.block.id).to.equal(params.id);
@@ -195,7 +174,7 @@ describe('Blocks API', function () {
     });
 
     it('using invalid height should fail', function (done) {
-      getHeight('-1', (err, res) => {
+      getBlockByHeight('-1', (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
         testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();
@@ -203,7 +182,7 @@ describe('Blocks API', function () {
     });
 
     it('using no height should fail', function (done) {
-      getHeight('', (err, res) => {
+      getBlockByHeight('', (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.not.ok;
         testUtils.expect(res.body).to.have.property('error').to.be.a('string');
         done();

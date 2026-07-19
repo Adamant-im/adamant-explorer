@@ -2,7 +2,7 @@ const accounts = require('./accounts.js');
 const blocks = require('./blocks.js');
 const common = require('./common.js');
 const delegates = require('./delegates.js');
-const statistics = require('./statistics.js');
+const networkHealth = require('./networkHealth.js');
 const transactions = require('./transactions.js');
 
 /**
@@ -14,6 +14,6 @@ module.exports = (app) => {
   blocks(app);
   common(app);
   delegates(app);
-  statistics(app);
+  networkHealth(app);
   transactions(app);
 };

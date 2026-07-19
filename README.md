@@ -61,6 +61,38 @@ Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` i
 
 Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Results are requested in batches, normalized for the frontend, cached by IP, and refreshed daily. Failed lookups are retried after five minutes; peers still render when GeoJS is disabled or unavailable.
 
+`trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. Every trusted proxy must overwrite forwarding headers.
+
+For a local nginx process, use the real client socket address rather than preserving a client-supplied chain:
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Forwarded-For $remote_addr;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_pass http://127.0.0.1:6040;
+```
+
+### Explorer HTTP API
+
+Explorer HTTP routes are same-origin UI implementation details, not a general-purpose ADAMANT developer API. Integrations should use [adamant-api](https://github.com/Adamant-im/adamant-api-jsclient). The UI currently uses these routes:
+
+- `/api/getAccount`
+- `/api/getTopAccounts`
+- `/api/getLastBlocks`
+- `/api/getBlock`
+- `/api/totalSupply`
+- `/api/search`
+- `/api/getTransaction`
+- `/api/getLastTransfers`
+- `/api/getTransactionsByAddress`
+- `/api/getTransfersByAddress`
+- `/api/getTransactionsByBlock`
+- `/api/delegates/getStandby`
+
+Responses do not opt into cross-origin browser access. API requests are limited in-process to 300 requests per minute per client IP; static assets and Socket.IO are excluded. The limit applies independently in each Explorer process.
+
+`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` when no coherent snapshot can be produced.
+
 ### Build the frontend
 
 Build the production bundle into `public/`:
@@ -136,6 +168,10 @@ npm run lint
 npm run format:check
 npm run benchmark
 ```
+
+## Security
+
+The repository includes the current [threat model](./adamant-explorer-threat-model.md) and [security and reliability review](./security_best_practices_report.md). Report suspected vulnerabilities privately to the maintainers before public disclosure when exploitation could put users or infrastructure at risk.
 
 ## Contribution
 

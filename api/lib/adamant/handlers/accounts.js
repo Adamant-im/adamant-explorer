@@ -1,8 +1,12 @@
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const helpers = require('../helpers/accounts');
+const { normalizeAdamantAddress, parseIntegerParameter } = require('../helpers/validation');
 const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
+
+const TOP_ACCOUNTS_MAX_OFFSET = 2000;
+const TOP_ACCOUNTS_MAX_LIMIT = 100;
 
 /**
  * Get account info
@@ -12,32 +16,40 @@ const logger = require('../../../../utils/log');
  * @returns {Promise<*>}
  */
 async function getAccount(params, error, success) {
+  const hasAddress = typeof params?.address === 'string' && params.address.length > 0;
+  const hasPublicKey = typeof params?.publicKey === 'string' && params.publicKey.length > 0;
+
+  if (hasAddress === hasPublicKey) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid address or publicKey parameter',
+    });
+  }
+
+  let lookup;
+
+  if (hasAddress) {
+    try {
+      lookup = { address: normalizeAdamantAddress(params.address) };
+    } catch (err) {
+      return error({ success: false, error: err.message });
+    }
+  } else if (helpers.validatePublicKey(params.publicKey)) {
+    lookup = { publicKey: params.publicKey.toLowerCase() };
+  } else {
+    return error({
+      success: false,
+      error: 'Missing/Invalid publicKey parameter',
+    });
+  }
+
   try {
-    if (params.address && !helpers.validateAddress(params.address)) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid address parameter',
-      });
-    }
-
-    if (params.publicKey && !helpers.validatePublicKey(params.publicKey)) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid publicKey parameter',
-      });
-    }
-
     let result;
 
-    if (params.address) {
-      result = await accounts.getAccountByAddress(params.address);
-    } else if (params.publicKey) {
-      result = await accounts.getAccountByPublicKey(params.publicKey);
+    if (lookup.address) {
+      result = await accounts.getAccountByAddress(lookup.address);
     } else {
-      return error({
-        success: false,
-        error: 'Missing/Invalid address or publicKey parameter',
-      });
+      result = await accounts.getAccountByPublicKey(lookup.publicKey);
     }
 
     result.knowledge = knowledge.inAccount(result);
@@ -87,16 +99,30 @@ async function getAccount(params, error, success) {
 }
 
 async function getTopAccounts(query, error, success) {
+  let normalizedQuery;
+
+  try {
+    normalizedQuery = {
+      offset: parseIntegerParameter(query?.offset, {
+        name: 'offset',
+        defaultValue: 0,
+        maximum: TOP_ACCOUNTS_MAX_OFFSET,
+      }),
+      limit: parseIntegerParameter(query?.limit, {
+        name: 'limit',
+        defaultValue: TOP_ACCOUNTS_MAX_LIMIT,
+        minimum: 1,
+        maximum: TOP_ACCOUNTS_MAX_LIMIT,
+      }),
+    };
+  } catch (err) {
+    return error({ success: false, error: err.message });
+  }
+
   try {
     const result = {};
 
-    query.offset = helpers.param(query.offset, 0);
-    query.limit = helpers.param(query.limit, 100);
-    if (query.limit === 0) {
-      query.limit = 100;
-    }
-
-    result.accounts = await accounts.getTopAccounts(query);
+    result.accounts = await accounts.getTopAccounts(normalizedQuery);
     result.accounts = result.accounts.map((account) => ({
       // The top-accounts response already carries delegate usernames. Avoid
       // one delegate request per row, which delayed and destabilized this page.
@@ -111,7 +137,7 @@ async function getTopAccounts(query, error, success) {
     return success(result);
   } catch (err) {
     logger.warn(
-      `Accounts handler: Failed to load top accounts; offset=${query.offset}; limit=${query.limit}: ${err}`,
+      `Accounts handler: Failed to load top accounts; offset=${normalizedQuery.offset}; limit=${normalizedQuery.limit}: ${err}`,
     );
     return error({
       success: false,

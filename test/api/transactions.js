@@ -14,14 +14,6 @@ describe('Transactions API', function () {
     testUtils.httpRequest.get('/api/getTransaction?transactionId=' + id, done);
   }
 
-  function getUnconfirmedTransactions(done) {
-    testUtils.httpRequest.get('/api/getUnconfirmedTransactions', done);
-  }
-
-  function getLastTransactions(done) {
-    testUtils.httpRequest.get('/api/getLastTransactions', done);
-  }
-
   function getTransactionsByAddress(id, id2, id3, done) {
     testUtils.httpRequest.get(
       '/api/getTransactionsByAddress?address=' + id + '&offset=' + id2 + '&limit=' + id3,
@@ -104,27 +96,6 @@ describe('Transactions API', function () {
         done();
       });
     });
-  });
-
-  describe('GET /api/getUnconfirmedTransactions', function () {
-    it('should be ok', function (done) {
-      getUnconfirmedTransactions((err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
-        done();
-      });
-    });
-  });
-
-  describe('GET /api/getLastTransactions', function () {
-    it('should be ok', function (done) {
-      getLastTransactions((err, res) => {
-        testUtils.expect(res.body).to.have.property('success').to.be.ok;
-        testUtils.expect(res.body).to.have.property('transactions').that.is.an('array');
-        checkTransactionsBody(res.body.transactions);
-        done();
-      });
-    }).timeout(10000);
   });
 
   describe('GET /api/getTransactionsByAddress', function () {

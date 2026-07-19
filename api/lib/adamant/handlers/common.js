@@ -2,6 +2,13 @@ const accountsHandler = require('./accounts');
 const blocksHandler = require('./blocks');
 const delegatesHandler = require('./delegates');
 const transactionsHandler = require('./transactions');
+const {
+  isAdamantAddress,
+  isDelegateSearch,
+  isPublicKey,
+  isUnsignedIdentifier,
+  normalizeAdamantAddress,
+} = require('../helpers/validation');
 const logger = require('../../../../utils/log');
 
 /**
@@ -23,17 +30,17 @@ function version(app) {
  * @returns {Promise<*>}
  */
 async function search(id, error, success) {
+  if (typeof id !== 'string' || !id.length || id.length > 64) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid search criteria',
+    });
+  }
+
   try {
-    if (!id) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid search criteria',
-      });
-    }
-
-    if (id.match(/^[U|u][0-9]{1,21}$/g)) {
+    if (isAdamantAddress(id)) {
       return accountsHandler.getAccount(
-        { address: id },
+        { address: normalizeAdamantAddress(id) },
         () => {
           return error({ success: false, error: null, found: false });
         },
@@ -43,9 +50,9 @@ async function search(id, error, success) {
       );
     }
 
-    if (id.match(/^([A-Fa-f0-9]{2}){32}$/g)) {
+    if (isPublicKey(id)) {
       return accountsHandler.getAccount(
-        { publicKey: id },
+        { publicKey: id.toLowerCase() },
         () => {
           return error({ success: false, error: null, found: false });
         },
@@ -55,7 +62,7 @@ async function search(id, error, success) {
       );
     }
 
-    if (!isNaN(id)) {
+    if (isUnsignedIdentifier(id)) {
       return blocksHandler.getBlock(
         { blockId: id },
         () => {
@@ -81,7 +88,9 @@ async function search(id, error, success) {
           return success({ success: true, type: 'block', id: response.block.id });
         },
       );
-    } else {
+    }
+
+    if (isDelegateSearch(id)) {
       return delegatesHandler.getSearch(
         id,
         () => {
@@ -92,6 +101,11 @@ async function search(id, error, success) {
         },
       );
     }
+
+    return error({
+      success: false,
+      error: 'Missing/Invalid search criteria',
+    });
   } catch (err) {
     logger.warn(`Search handler: Unexpected lookup failure; criteria omitted from logs: ${err}`);
     return error({
