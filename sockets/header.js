@@ -1,8 +1,15 @@
 const blocksHandler = require('../api/lib/adamant/handlers/blocks');
 const commonHandler = require('../api/lib/adamant/handlers/common');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
+const blocks = require('../api/lib/adamant/requests/blocks');
+const delegates = require('../api/lib/adamant/requests/delegates');
+const {
+  countActiveForgingDelegates,
+  mergeForgingHealthBlocks,
+} = require('../api/lib/adamant/helpers/networkHealth');
 const async = require('async');
 const logger = require('../utils/log');
+const { getForgingSchedule, getRoundDelegates } = require('./delegateMonitorSchedule');
 
 /**
  * Header socket namespace. Periodically emits the network status
@@ -20,6 +27,7 @@ module.exports = function (app, connectionHandler, socket) {
 
   const running = {
     getBlockStatus: false,
+    getForgingHealth: false,
     getPriceTicker: false,
   };
 
@@ -31,7 +39,7 @@ module.exports = function (app, connectionHandler, socket) {
     this.onConnect(); // Prevents data wipe
 
     async.parallel(
-      [getBlockStatus, getPriceTicker],
+      [getBlockStatus, getPriceTicker, getForgingHealth],
       function (err, res) {
         if (err) {
           // A failed request must not leave the header empty forever:
@@ -39,7 +47,10 @@ module.exports = function (app, connectionHandler, socket) {
           log('warn', `Initial data load failed (${err}); retrying in 10000ms`);
           setTimeout(() => this.onInit(), 10000);
         } else {
-          data.status = res[0];
+          data.status = {
+            ...res[0],
+            forgingDelegates: res[2],
+          };
           data.ticker = res[1];
 
           log(
@@ -98,6 +109,7 @@ module.exports = function (app, connectionHandler, socket) {
       id: block.id,
       height,
       timestamp: block.timestamp,
+      forgingDelegates: data.status?.forgingDelegates ?? null,
     });
     log('debug', `Forwarded block event; height=${height}; source=${update.source ?? 'unknown'}`);
   };
@@ -128,6 +140,73 @@ module.exports = function (app, connectionHandler, socket) {
     );
   };
 
+  /**
+   * Builds the same coherent forging snapshot used by Delegate Monitor.
+   * Failures preserve the last known count without interrupting header data.
+   * @param {Function} cb Node-style completion callback
+   */
+  const getForgingHealth = function (cb) {
+    if (running.getForgingHealth) {
+      return cb(null, data.status?.forgingDelegates ?? null);
+    }
+
+    running.getForgingHealth = true;
+
+    getForgingHealthSnapshot()
+      .then(({ state, recentBlocks }) => {
+        const currentBlock = Number(state.currentBlock);
+
+        const schedule = getForgingSchedule(state);
+        const roundDelegates = getRoundDelegates(schedule, recentBlocks);
+        const count = countActiveForgingDelegates(
+          schedule.orderedDelegates,
+          recentBlocks,
+          currentBlock,
+          roundDelegates,
+        );
+
+        running.getForgingHealth = false;
+        cb(null, count);
+      })
+      .catch((error) => {
+        running.getForgingHealth = false;
+        log('warn', `Forging health refresh failed; previous status remains active: ${error}`);
+        cb(null, data.status?.forgingDelegates ?? null);
+      });
+  };
+
+  /**
+   * Aligns the forging schedule with recent blocks, bridging the normal race
+   * between the schedule REST response and the shared WebSocket block cache.
+   * @returns {Promise<{state: Object, recentBlocks: Array<Object>}>} Coherent health input
+   */
+  const getForgingHealthSnapshot = async function () {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const state = await delegates.getNextForgersState();
+      const currentBlock = Number(state.currentBlock);
+      let recentBlocks = mergeForgingHealthBlocks(
+        statisticsHandler.getCachedBlocks(),
+        [],
+        currentBlock,
+      );
+
+      if (Number(recentBlocks[0]?.height) !== currentBlock) {
+        const latestBlocks = await blocks.getBlocks(0, 2);
+        recentBlocks = mergeForgingHealthBlocks(
+          statisticsHandler.getCachedBlocks(),
+          latestBlocks,
+          currentBlock,
+        );
+      }
+
+      if (Number(recentBlocks[0]?.height) === currentBlock) {
+        return { state, recentBlocks };
+      }
+    }
+
+    throw new Error('Could not align the forging schedule with recent blocks after 3 attempts');
+  };
+
   const getPriceTicker = function (cb) {
     if (running.getPriceTicker) {
       return cb('getPriceTicker (already running)');
@@ -151,12 +230,15 @@ module.exports = function (app, connectionHandler, socket) {
     const thisData = {};
 
     async.parallel(
-      [getBlockStatus, getPriceTicker],
+      [getBlockStatus, getPriceTicker, getForgingHealth],
       function (err, res) {
         if (err) {
           log('warn', `Periodic data refresh failed (${err}); next attempt in 10000ms`);
         } else {
-          thisData.status = res[0];
+          thisData.status = {
+            ...res[0],
+            forgingDelegates: res[2],
+          };
           thisData.ticker = res[1];
 
           data = thisData;

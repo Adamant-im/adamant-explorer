@@ -5,13 +5,13 @@ import { useRoute } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
 import { createBlockRefreshTrigger } from '../lib/blockRefresh';
-import { formatCurrency, formatTimestamp } from '../lib/format';
+import { formatCurrency, formatInteger } from '../lib/format';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const route = useRoute();
 const network = useNetworkStore();
 
 const blocks = ref(null);
-const pagination = ref(null);
 
 /**
  * Loads one page of blocks. The API takes a row offset (`n`); pages are
@@ -26,7 +26,6 @@ async function getLastBlocks(page) {
     const data = await apiGet('/api/getLastBlocks', { n: offset });
 
     blocks.value = data.success ? data.blocks : [];
-    pagination.value = data.pagination ?? null;
   } catch {
     blocks.value = [];
   }
@@ -55,7 +54,8 @@ watch(
       <h1>
         Blocks
         <small v-if="blocks && blocks.length > 1">
-          {{ blocks[0].height }} → {{ blocks[blocks.length - 1].height }}
+          {{ formatInteger(blocks[0].height) }} →
+          {{ formatInteger(blocks[blocks.length - 1].height) }}
         </small>
       </h1>
       <hr />
@@ -82,9 +82,9 @@ watch(
             <td>
               <router-link class="ellipsis" :to="`/block/${block.id}`">{{ block.id }}</router-link>
             </td>
-            <td class="text-right">{{ block.height }}</td>
-            <td class="text-right hide-sm">{{ formatTimestamp(block.timestamp) }}</td>
-            <td class="text-right hide-sm">{{ block.transactionsCount }}</td>
+            <td class="text-right">{{ formatInteger(block.height) }}</td>
+            <td class="text-right hide-sm"><TimestampValue :timestamp="block.timestamp" /></td>
+            <td class="text-right hide-sm">{{ formatInteger(block.transactionsCount) }}</td>
             <td class="text-right hide-md">
               <router-link :to="`/delegate/${block.generator}`">
                 {{ block.delegate?.username || block.generator }}
@@ -99,23 +99,6 @@ watch(
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div v-if="pagination && (pagination.more || pagination.before)" class="pagination-links">
-      <router-link
-        v-if="pagination.before"
-        class="btn btn-primary"
-        :to="`/blocks/${pagination.previousPage}`"
-      >
-        Previous page
-      </router-link>
-      <router-link
-        v-if="pagination.more && pagination.nextPage !== 0"
-        class="btn btn-primary"
-        :to="`/blocks/${pagination.nextPage}`"
-      >
-        Next page
-      </router-link>
     </div>
 
     <h2 v-if="blocks && !blocks.length" class="text-center text-muted">No blocks yet.</h2>

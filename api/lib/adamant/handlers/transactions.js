@@ -2,6 +2,7 @@ const transactions = require('../requests/transactions');
 const helpers = require('../helpers/transactions');
 const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
+const { isPublicOperationType } = require('../transactionTypes');
 
 /**
  * Get transaction by id
@@ -111,7 +112,9 @@ async function getLastTransactions(error, success) {
 }
 
 /**
- * Get latest 20 transactions without clutter and unconfirmed transactions
+ * Get latest 20 public operations and non-message unconfirmed transactions.
+ *
+ * The handler name is retained for API compatibility.
  * @param {Function} error
  * @param {Function} success
  * @returns {Promise<*>}
@@ -121,12 +124,15 @@ async function getLastTransfers(error, success) {
     const result = {};
 
     result.transactions = await transactions.getLastTransfers();
+    result.transactions = helpers.sortTransactions(result.transactions).slice(0, 20);
 
     result.transactions = result.transactions.map((transaction) => {
       return knowledge.inTx(transaction);
     });
 
-    const unconfirmedTransactions = await transactions.getUnconfirmedTransactions();
+    const unconfirmedTransactions = (await transactions.getUnconfirmedTransactions()).filter(
+      (transaction) => isPublicOperationType(transaction.type),
+    );
 
     result.transactions = helpers.concatenateTransactions(
       result.transactions,

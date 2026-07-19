@@ -42,13 +42,20 @@ async function getAccount(params, error, success) {
 
     result.knowledge = knowledge.inAccount(result);
 
-    result.delegate = await delegates.getDelegate(result.publicKey);
+    const [delegate, votes, voters, incomingCount, outgoingCount] = await Promise.all([
+      delegates.getDelegate(result.publicKey),
+      delegates.getVotes(result.address),
+      delegates.getVoters(result.publicKey),
+      accounts.getIncomingTxsCnt(result.address),
+      accounts.getOutgoingTxsCnt(result.address),
+    ]);
 
+    result.delegate = delegate;
     if (result.delegate) {
       result.delegate.forged = await delegates.getForged(result.publicKey);
     }
 
-    result.votes = await delegates.getVotes(result.address);
+    result.votes = votes;
     if (result.votes) {
       result.votes = result.votes.map((d) => {
         d.knowledge = knowledge.inAccount(d);
@@ -56,7 +63,7 @@ async function getAccount(params, error, success) {
       });
     }
 
-    result.voters = await delegates.getVoters(result.publicKey);
+    result.voters = voters;
     if (result.voters) {
       result.voters = result.voters.map((d) => {
         d.knowledge = knowledge.inAccount(d);
@@ -64,9 +71,8 @@ async function getAccount(params, error, success) {
       });
     }
 
-    result.incoming_cnt = await accounts.getIncomingTxsCnt(result.address);
-
-    result.outgoing_cnt = await accounts.getOutgoingTxsCnt(result.address);
+    result.incoming_cnt = incomingCount;
+    result.outgoing_cnt = outgoingCount;
 
     result.success = true;
 
@@ -91,25 +97,14 @@ async function getTopAccounts(query, error, success) {
     }
 
     result.accounts = await accounts.getTopAccounts(query);
-    result.accounts = await Promise.all(
-      result.accounts.map(async (account) => {
-        let accountKnowledge = knowledge.inAccount(account);
-
-        if (!accountKnowledge && account.publicKey) {
-          const delegate = await delegates.getDelegate(account.publicKey);
-          accountKnowledge = knowledge.inDelegate(delegate);
-        }
-
-        // Preserve the Explorer endpoint's stable public response while the
-        // node may add fields such as `username` and `isDelegate`
-        return {
-          address: account.address,
-          balance: account.balance,
-          publicKey: account.publicKey,
-          knowledge: accountKnowledge,
-        };
-      }),
-    );
+    result.accounts = result.accounts.map((account) => ({
+      // The top-accounts response already carries delegate usernames. Avoid
+      // one delegate request per row, which delayed and destabilized this page.
+      address: account.address,
+      balance: account.balance,
+      publicKey: account.publicKey,
+      knowledge: knowledge.inAccount(account),
+    }));
 
     result.success = true;
 

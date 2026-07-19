@@ -1,5 +1,9 @@
 const api = require('./api');
 
+const delegateCache = new Map();
+const MISSING_DELEGATE_TTL_MS = 60 * 1000;
+const MAX_DELEGATE_CACHE_SIZE = 5000;
+
 /**
  * Get delegate info by public key.
  * @param {string} publicKey Delegate public key
@@ -14,15 +18,45 @@ async function getDelegate(publicKey, rejectUnsuccessful) {
     return undefined;
   }
 
-  const response = await api.getDelegate({ publicKey });
+  const cached = delegateCache.get(publicKey);
+  let request;
 
-  const delegate = response.success ? response.delegate : null;
+  if (cached && cached.expiresAt > Date.now()) {
+    request = cached.promise;
+  } else {
+    const entry = { expiresAt: Infinity, promise: null };
 
-  if (rejectUnsuccessful && delegate === null) {
-    throw response.errorMessage;
+    entry.promise = api
+      .getDelegate({ publicKey })
+      .then((response) => ({
+        delegate: response.success ? response.delegate : null,
+        errorMessage: response.errorMessage,
+      }))
+      .catch((error) => ({
+        delegate: null,
+        errorMessage: error?.message ?? String(error),
+      }))
+      .then((result) => {
+        entry.expiresAt = result.delegate ? Infinity : Date.now() + MISSING_DELEGATE_TTL_MS;
+        return result;
+      });
+
+    delegateCache.delete(publicKey);
+    delegateCache.set(publicKey, entry);
+    request = entry.promise;
+
+    if (delegateCache.size > MAX_DELEGATE_CACHE_SIZE) {
+      delegateCache.delete(delegateCache.keys().next().value);
+    }
   }
 
-  return delegate;
+  const result = await request;
+
+  if (rejectUnsuccessful && result.delegate === null) {
+    throw result.errorMessage;
+  }
+
+  return result.delegate;
 }
 
 /**

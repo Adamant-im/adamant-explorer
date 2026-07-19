@@ -45,8 +45,14 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onInit = function () {
+    const initializedAt = Date.now();
     monitoring = true;
-    this.onConnect();
+
+    // Do not expose the previous page session while a fresh coherent
+    // schedule/block snapshot is loading for the first connected client.
+    for (const key of Object.keys(data)) {
+      delete data[key];
+    }
 
     async.parallel(
       [
@@ -64,6 +70,10 @@ module.exports = function (app, connectionHandler, socket) {
           log('warn', `Initial data load failed (${err}); retrying in 10000ms`);
           scheduleRetry();
         } else {
+          if (!monitoring) {
+            return;
+          }
+
           tmpData.nextForgers = getForgingSchedule(res[4]);
 
           data.lastBlock = res[0];
@@ -84,15 +94,21 @@ module.exports = function (app, connectionHandler, socket) {
             votes: data.votes,
           });
 
-          log(
-            'info',
-            `Initialized; activeDelegates=${data.active?.delegates?.length ?? 0}; ` +
-              `scheduledDelegates=${tmpData.nextForgers?.delegates?.length ?? 0}; ` +
-              `height=${data.lastBlock?.block?.height ?? 'unknown'}`,
-          );
-
           newSerializedLoop(0, BLOCK_INTERVAL_MILLISECONDS, refreshMetadata, 'metadata');
-          startMonitorUpdates();
+          startMonitorUpdates().then((statusReady) => {
+            if (!monitoring) {
+              return;
+            }
+
+            const label = statusReady ? 'Initialized' : 'Metadata initialized; status pending';
+            log(
+              statusReady ? 'info' : 'warn',
+              `${label}; activeDelegates=${data.active?.delegates?.length ?? 0}; ` +
+                `scheduledDelegates=${tmpData.nextForgers?.delegates?.length ?? 0}; ` +
+                `height=${data.lastBlock?.block?.height ?? 'unknown'}; ` +
+                `initialLoadMs=${Date.now() - initializedAt}`,
+            );
+          });
         }
       }.bind(this),
     );
@@ -165,9 +181,12 @@ module.exports = function (app, connectionHandler, socket) {
 
   /** Loads status first, then starts bounded serialized refresh loops. */
   const startMonitorUpdates = async function () {
+    let statusReady = false;
+
     try {
       await statisticsHandler.ensureBlockStatistics();
       await refreshRecentBlocks();
+      statusReady = true;
     } catch (error) {
       log(
         'warn',
@@ -176,7 +195,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     if (!monitoring) {
-      return;
+      return false;
     }
 
     if (!unsubscribeFromBlocks) {
@@ -186,6 +205,7 @@ module.exports = function (app, connectionHandler, socket) {
     }
 
     scheduleNextStatusRefresh();
+    return statusReady;
   };
 
   /** Align the next status refresh just after the absolute five-second slot boundary. */

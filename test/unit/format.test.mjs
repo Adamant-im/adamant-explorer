@@ -2,9 +2,17 @@ import { expect } from 'chai';
 import {
   EPOCH_MS,
   epochToDate,
+  formatIsoTimestamp,
   toAdm,
   formatCurrency,
+  formatExactCurrency,
+  formatFullCurrency,
+  formatInteger,
+  compactAmountParts,
+  formatHomeAmountParts,
   formatTimestamp,
+  formatUtcTimestamp,
+  timestampTitle,
   humanizeDuration,
   timeAgo,
   forgingTime,
@@ -29,6 +37,10 @@ describe('format.js', function () {
 
     it('advances one second per unit', function () {
       expect(epochToDate(10).getTime()).to.equal(EPOCH_MS + 10000);
+    });
+
+    it('formats valid ISO 8601 markup timestamps', function () {
+      expect(formatIsoTimestamp(0)).to.equal('2017-09-02T17:00:00.000Z');
     });
   });
 
@@ -69,11 +81,59 @@ describe('format.js', function () {
       const usd = { symbol: 'USD', tickers: { ADM: { USD: 2 } } };
       expect(formatCurrency(150000000, usd)).to.equal('3.00');
     });
+
+    it('preserves all eight ADAMANT decimal places for ledger values', function () {
+      expect(formatFullCurrency(23, adm)).to.equal('0.00000023');
+      expect(formatFullCurrency(100000000, adm)).to.equal('1.00000000');
+    });
+
+    it('keeps exact base units while trimming insignificant trailing zeros', function () {
+      expect(formatExactCurrency(0, adm)).to.equal('0');
+      expect(formatExactCurrency(23, adm)).to.equal('0.00000023');
+      expect(formatExactCurrency(50000000, adm)).to.equal('0.5');
+      expect(formatExactCurrency(123450000, adm)).to.equal('1.2345');
+    });
+  });
+
+  describe('formatInteger()', function () {
+    it('groups heights and confirmations', function () {
+      expect(formatInteger(53733279)).to.equal('53,733,279');
+    });
+  });
+
+  describe('compactAmountParts()', function () {
+    it('uses the requested four-digit home-page precision', function () {
+      expect(compactAmountParts(1.2345).text).to.equal('1.234');
+      expect(compactAmountParts(10.234).text).to.equal('10.23');
+      expect(compactAmountParts(3456).text).to.equal('3,456');
+      expect(compactAmountParts(12345.13123).text).to.equal('12,345');
+      expect(compactAmountParts(0.0012345).text).to.equal('0.0012');
+      expect(compactAmountParts(0.00001234).text).to.equal('0.00001234');
+    });
+
+    it('returns integer and fraction as separate display parts', function () {
+      expect(compactAmountParts(1.2345)).to.deep.equal({
+        integer: '1',
+        fraction: '234',
+        text: '1.234',
+      });
+    });
+
+    it('converts sats before compacting a home-page amount', function () {
+      expect(formatHomeAmountParts(123450000, { symbol: 'ADM', tickers: {} }).text).to.equal(
+        '1.234',
+      );
+    });
   });
 
   describe('formatTimestamp()', function () {
-    it('renders the YYYY/MM/DD HH:mm:ss shape', function () {
-      expect(formatTimestamp(0)).to.match(/^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}$/);
+    it('renders the YYYY-MM-DD HH:mm:ss shape', function () {
+      expect(formatTimestamp(0)).to.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
+      expect(formatUtcTimestamp(0)).to.equal('2017-09-02 17:00:00');
+    });
+
+    it('puts the relative age on a separate tooltip line', function () {
+      expect(timestampTitle(0)).to.match(/^2017-09-02 17:00:00 UTC\+0\n.+ ago$/);
     });
   });
 
@@ -92,6 +152,10 @@ describe('format.js', function () {
 
     it('rounds to days', function () {
       expect(humanizeDuration(3 * 24 * 60 * 60 * 1000)).to.equal('3 days');
+    });
+
+    it('uses a single numeric unit for singular long spans', function () {
+      expect(humanizeDuration(365 * 24 * 60 * 60 * 1000)).to.equal('1 year');
     });
   });
 
@@ -153,6 +217,9 @@ describe('format.js', function () {
       expect(
         nethashLabel('77265cf40a806763bc1e3ff0d899a1c0582b46e84ce8808b445dd9b95aa86da5'),
       ).to.equal('Mainnet');
+      expect(
+        nethashLabel('bd330166898377fb28743ceef5e43a5d9d0a3efd9b3451fb7bc53530bb0a6d64'),
+      ).to.equal('Mainnet');
     });
 
     it('recognizes the testnet hash', function () {
@@ -168,8 +235,8 @@ describe('format.js', function () {
 
   describe('transaction labels', function () {
     it('names transaction types', function () {
-      expect(txTypeLabel({ type: 3 })).to.equal('Delegate vote');
-      expect(txTypeLabel({ type: 8 })).to.equal('Chat message');
+      expect(txTypeLabel({ type: 3 })).to.equal('Vote / Unvote');
+      expect(txTypeLabel({ type: 8 })).to.equal('Message');
     });
 
     it('prefers the sender delegate username', function () {
@@ -186,7 +253,7 @@ describe('format.js', function () {
     });
 
     it('shows the type name for non-transfer types', function () {
-      expect(txRecipientLabel({ type: 2 })).to.equal('Delegate registration');
+      expect(txRecipientLabel({ type: 2 })).to.equal('Create delegate');
     });
   });
 

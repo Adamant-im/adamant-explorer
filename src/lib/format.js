@@ -5,6 +5,7 @@
  * (`currency`, `timestamp`, `timeAgo`, `txType`, and friends). They are
  * framework-free on purpose: unit tests import them directly in Node.
  */
+import { TX_TYPE_LABELS } from './transactionTypes.js';
 
 /** Number of sats in one ADM token. */
 export const SAT = 1e8;
@@ -20,18 +21,6 @@ export const EPOCH_MS = Date.UTC(2017, 8, 2, 17, 0, 0, 0);
  * protocol (inherited from Lisk types 0-7, type 8 is the ADAMANT chat
  * message transaction).
  */
-export const TX_TYPES = {
-  0: 'Normal transaction',
-  1: 'Second signature creation',
-  2: 'Delegate registration',
-  3: 'Delegate vote',
-  4: 'Multi-signature creation',
-  5: 'Dapp registration',
-  6: 'Dapp deposit',
-  7: 'Dapp withdrawal',
-  8: 'Chat message',
-};
-
 /**
  * Converts a blockchain timestamp into a JavaScript Date.
  *
@@ -40,6 +29,16 @@ export const TX_TYPES = {
  */
 export function epochToDate(timestamp) {
   return new Date(EPOCH_MS + timestamp * 1000);
+}
+
+/**
+ * Formats a blockchain timestamp for the HTML `time[datetime]` attribute.
+ *
+ * @param {number} timestamp Seconds since the ADAMANT epoch
+ * @returns {string} ISO 8601 timestamp in UTC
+ */
+export function formatIsoTimestamp(timestamp) {
+  return epochToDate(timestamp).toISOString();
 }
 
 /**
@@ -83,11 +82,106 @@ export function formatCurrency(amount, currency, decimals) {
 
   const fixed = currency.symbol === 'ADM' || currency.symbol === 'BTC' ? decimals : 2;
 
-  if (fixed && adm > 0) {
+  if (fixed !== undefined && fixed !== null) {
     return groupNumber(adm * factor, fixed);
   }
 
   return groupNumber(adm * factor, 3).replace(/\.?0+$/, '');
+}
+
+/**
+ * Formats the complete on-chain precision for a balance or ledger value.
+ * ADAMANT and BTC use eight decimal places; fiat currencies use two.
+ * @param {number|string} amount Amount in sats
+ * @param {{symbol: string, tickers?: Object}} currency Selected currency
+ * @returns {string} Fully formatted amount
+ */
+export function formatFullCurrency(amount, currency) {
+  const decimals = currency.symbol === 'ADM' || currency.symbol === 'BTC' ? 8 : 2;
+
+  return formatCurrency(amount, currency, decimals);
+}
+
+/**
+ * Formats every meaningful on-chain decimal without insignificant trailing
+ * zeros. Unlike the compact list formatter, this never rounds away a non-zero
+ * base-unit digit.
+ * @param {number|string} amount Amount in sats
+ * @param {{symbol: string, tickers?: Object}} currency Selected currency
+ * @returns {string} Exact amount with grouped integer digits
+ */
+export function formatExactCurrency(amount, currency) {
+  return formatFullCurrency(amount, currency)
+    .replace(/(\.\d*?)0+$/, '$1')
+    .replace(/\.$/, '');
+}
+
+/**
+ * Formats an integer with thousands separators.
+ * @param {number|string} value Integer-like value
+ * @returns {string} Grouped value, or `'0'` for invalid input
+ */
+export function formatInteger(value) {
+  const number = Number(value);
+
+  return Number.isFinite(number) ? Math.trunc(number).toLocaleString('en-US') : '0';
+}
+
+/**
+ * Compacts a decimal amount for the latest-operations list.
+ *
+ * Values of at least one keep four significant integer/fraction digits;
+ * smaller values keep four decimal places, except values below 0.0001
+ * where all eight ADM decimals remain visible. Digits are truncated, not
+ * rounded, so the UI never implies more value than the transaction holds.
+ *
+ * @param {number|string} value Decimal amount, not sats
+ * @returns {{integer: string, fraction: string, text: string}} Split display value
+ */
+export function compactAmountParts(value) {
+  const numeric = Number(value);
+
+  if (!Number.isFinite(numeric)) {
+    return { integer: '0', fraction: '', text: '0' };
+  }
+
+  const negative = numeric < 0;
+  const absolute = Math.abs(numeric);
+  const normalized = absolute.toFixed(8).replace(/\.?0+$/, '');
+  const [rawInteger = '0', rawFraction = ''] = normalized.split('.');
+  const integerDigits = rawInteger.replace(/^0+/, '').length || 1;
+  let fractionLimit;
+
+  if (absolute >= 1) {
+    fractionLimit = Math.max(0, 4 - integerDigits);
+  } else if (absolute >= 0.0001) {
+    fractionLimit = 4;
+  } else {
+    fractionLimit = 8;
+  }
+
+  const fraction = rawFraction.slice(0, fractionLimit).replace(/0+$/, '');
+  const groupedInteger = rawInteger.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const integer = `${negative ? '-' : ''}${groupedInteger}`;
+  const text = fraction ? `${integer}.${fraction}` : integer;
+
+  return { integer, fraction, text };
+}
+
+/**
+ * Converts sats to the selected currency and compacts the result for the
+ * latest-operations list.
+ *
+ * @param {number|string} amount Amount in sats
+ * @param {{symbol: string, tickers?: Object}} currency Selected currency
+ * @returns {{integer: string, fraction: string, text: string}} Split display value
+ */
+export function formatHomeAmountParts(amount, currency) {
+  const adm = Number(toAdm(amount));
+  const factor =
+    currency.symbol === 'ADM' ? 1 : Number(currency.tickers?.ADM?.[currency.symbol] ?? NaN);
+
+  return compactAmountParts(adm * factor);
 }
 
 /**
@@ -106,7 +200,7 @@ export function groupNumber(value, decimals) {
 }
 
 /**
- * Formats a blockchain timestamp as `YYYY/MM/DD HH:mm:ss` in local time.
+ * Formats a blockchain timestamp as `YYYY-MM-DD HH:mm:ss` in local time.
  *
  * @param {number} timestamp Seconds since the ADAMANT epoch
  * @returns {string} Formatted date-time string
@@ -116,14 +210,24 @@ export function formatTimestamp(timestamp) {
   const pad = (n) => String(n).padStart(2, '0');
 
   return (
-    `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ` +
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
     `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
   );
 }
 
 /**
- * Humanizes a duration the way moment.js does: "a few seconds",
- * "a minute", "25 minutes", "an hour", "3 days", and so on.
+ * Formats a blockchain timestamp in UTC for hover details.
+ * @param {number} timestamp Seconds since the ADAMANT epoch
+ * @returns {string} UTC date-time in `YYYY-MM-DD HH:mm:ss` form
+ */
+export function formatUtcTimestamp(timestamp) {
+  const date = epochToDate(timestamp);
+
+  return date.toISOString().slice(0, 19).replace('T', ' ');
+}
+
+/**
+ * Humanizes a duration with only the most significant time unit.
  *
  * @param {number} ms Duration in milliseconds (sign is ignored)
  * @returns {string} Human-readable approximate duration
@@ -137,15 +241,15 @@ export function humanizeDuration(ms) {
   const years = days / 365;
 
   if (seconds < 45) return 'a few seconds';
-  if (minutes < 1.5) return 'a minute';
+  if (minutes < 1.5) return '1 minute';
   if (minutes < 45) return `${Math.round(minutes)} minutes`;
-  if (hours < 1.5) return 'an hour';
+  if (hours < 1.5) return '1 hour';
   if (hours < 22) return `${Math.round(hours)} hours`;
-  if (days < 1.5) return 'a day';
+  if (days < 1.5) return '1 day';
   if (days < 26) return `${Math.round(days)} days`;
-  if (months < 1.5) return 'a month';
+  if (months < 1.5) return '1 month';
   if (months < 11) return `${Math.round(months)} months`;
-  if (years < 1.5) return 'a year';
+  if (years < 1.5) return '1 year';
   return `${Math.round(years)} years`;
 }
 
@@ -160,6 +264,15 @@ export function timeAgo(timestamp) {
   const phrase = humanizeDuration(diff);
 
   return diff >= 0 ? `${phrase} ago` : `in ${phrase}`;
+}
+
+/**
+ * Builds a date tooltip with exact UTC time and a concise age on its own line.
+ * @param {number} timestamp Seconds since the ADAMANT epoch
+ * @returns {string} Tooltip text
+ */
+export function timestampTitle(timestamp) {
+  return `${formatUtcTimestamp(timestamp)} UTC+0\n${timeAgo(timestamp)}`;
 }
 
 /**
@@ -235,6 +348,7 @@ export function supplyPercent(amount, supply) {
 const KNOWN_NETHASHES = {
   '38f153a81332dea86751451fd992df26a9249f0834f72f58f84ac31cceb70f43': 'Testnet',
   '77265cf40a806763bc1e3ff0d899a1c0582b46e84ce8808b445dd9b95aa86da5': 'Mainnet',
+  bd330166898377fb28743ceef5e43a5d9d0a3efd9b3451fb7bc53530bb0a6d64: 'Mainnet',
 };
 
 /**
@@ -254,7 +368,7 @@ export function nethashLabel(nethash) {
  * @returns {string} Type name, e.g. `'Delegate vote'`
  */
 export function txTypeLabel(tx) {
-  return TX_TYPES[parseInt(tx.type)];
+  return TX_TYPE_LABELS[parseInt(tx.type)];
 }
 
 /**

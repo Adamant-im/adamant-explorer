@@ -5,9 +5,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { useNetworkStore } from '../stores/network';
 import { apiGetOrThrow } from '../lib/api';
 import { useLessMore } from '../lib/lessMore';
-import { formatCurrency, formatTimestamp } from '../lib/format';
+import { formatExactCurrency, formatInteger } from '../lib/format';
+import { liveConfirmations } from '../lib/confirmations';
 import CopyButton from '../components/CopyButton.vue';
 import TransactionsList from '../components/TransactionsList.vue';
+import TimestampValue from '../components/TimestampValue.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -40,49 +42,52 @@ watch(() => route.params.blockId, getBlock, { immediate: true });
 
 /** Rows of the summary table: label plus rendered value. */
 const summary = [
-  { label: 'Transactions', value: (b) => b.numberOfTransactions },
-  { label: 'Confirmations', value: (b) => b.confirmations },
-  { label: 'Height', value: (b) => b.height },
-  { label: 'Reward', value: (b) => amount(b.reward, network.decimalPlaces), currency: true },
+  { label: 'Transactions', value: (b) => formatInteger(b.numberOfTransactions) },
+  {
+    label: 'Confirmations',
+    value: (b) =>
+      formatInteger(liveConfirmations(b.height, network.blockStatus?.height, b.confirmations)),
+  },
+  { label: 'Height', value: (b) => formatInteger(b.height) },
+  { label: 'Reward', value: (b) => amount(b.reward), currency: true },
   { label: 'Total Fee', value: (b) => amount(b.totalFee), currency: true },
   {
     label: 'Total Forged',
-    value: (b) => amount(b.totalForged, network.decimalPlaces),
+    value: (b) => amount(b.totalForged),
     currency: true,
   },
   {
     label: 'Total Amount',
-    value: (b) => amount(b.totalAmount, network.decimalPlaces),
+    value: (b) => amount(b.totalAmount),
     currency: true,
   },
-  { label: 'Timestamp', value: (b) => formatTimestamp(b.timestamp) },
 ];
 
 /** Shorthand for currency formatting in the summary rows. */
-function amount(value, decimals) {
-  return formatCurrency(value, network.currency, decimals);
+function amount(value) {
+  return formatExactCurrency(value, network.currency);
 }
 </script>
 
 <template>
   <section>
-    <h1>
-      Block <small class="ellipsis">{{ route.params.blockId }}</small>
-    </h1>
+    <h1>Block</h1>
 
     <div v-if="!block" class="text-muted">Loading block <span class="spinner"></span></div>
 
     <template v-else>
-      <div class="well ellipsis">
-        <strong>Block ID</strong>
-        <span class="txid text-muted">{{ block.id }}</span>
-        <CopyButton :text="block.id" />
-      </div>
-
-      <h2>Summary</h2>
       <div class="table-responsive">
         <table class="table summary">
           <tbody>
+            <tr>
+              <td><strong>Block ID</strong></td>
+              <td class="text-right">
+                <span class="copy-value"
+                  ><span class="txid">{{ block.id }}</span
+                  ><CopyButton :text="block.id"
+                /></span>
+              </td>
+            </tr>
             <tr v-for="row in summary" :key="row.label">
               <td>
                 <strong>{{ row.label }}</strong>
@@ -91,6 +96,10 @@ function amount(value, decimals) {
                 {{ row.value(block) }}
                 <span v-if="row.currency" class="text-muted">{{ network.currency.symbol }}</span>
               </td>
+            </tr>
+            <tr>
+              <td><strong>Timestamp</strong></td>
+              <td class="text-right"><TimestampValue :timestamp="block.timestamp" /></td>
             </tr>
             <tr v-if="block.nextBlock">
               <td><strong>Next block</strong></td>
@@ -119,7 +128,7 @@ function amount(value, decimals) {
       </div>
 
       <h2>Transactions</h2>
-      <TransactionsList v-if="txs" :txs="txs" />
+      <TransactionsList v-if="txs" :txs="txs" neutral-amounts full-amounts />
     </template>
   </section>
 </template>

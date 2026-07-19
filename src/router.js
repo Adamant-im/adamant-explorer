@@ -5,8 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router';
  *
  * Paths are kept byte-for-byte compatible with the AngularJS explorer so
  * existing links (bookmarks, messenger deep links, search engines) keep
- * working. Every route carries `meta.title` for the document title and
- * `meta.parent` for breadcrumb hierarchy (see `BreadCrumbs.vue`).
+ * working. Every route carries `meta.title` for the document title.
  *
  * Views are lazy-loaded so each page becomes its own chunk; the heavy
  * pages (map, graph) do not weigh down the initial bundle.
@@ -22,67 +21,67 @@ const routes = [
     path: '/blocks/:page?',
     name: 'blocks',
     component: () => import('./views/BlocksView.vue'),
-    meta: { title: 'Blocks', parent: 'home' },
+    meta: { title: 'Blocks' },
   },
   {
     path: '/block/:blockId',
     name: 'block',
     component: () => import('./views/BlockView.vue'),
-    meta: { title: 'Block', parent: 'blocks' },
+    meta: { title: 'Block' },
   },
   {
     path: '/tx/:txId',
     name: 'transaction',
     component: () => import('./views/TransactionView.vue'),
-    meta: { title: 'Transaction', parent: 'home' },
+    meta: { title: 'Transaction' },
   },
   {
     path: '/address/:address',
     name: 'address',
     component: () => import('./views/AddressView.vue'),
-    meta: { title: 'Address', parent: 'home' },
+    meta: { title: 'Address' },
   },
   {
     path: '/delegate/:delegateId',
     name: 'delegate',
     component: () => import('./views/DelegateView.vue'),
-    meta: { title: 'Delegate', parent: 'address' },
+    meta: { title: 'Delegate' },
   },
   {
     path: '/topAccounts',
     name: 'top-accounts',
     component: () => import('./views/TopAccountsView.vue'),
-    meta: { title: 'Top Accounts', parent: 'home' },
+    meta: { title: 'Top Accounts' },
   },
   {
     path: '/reservedWallets',
     name: 'reserved-wallets',
     component: () => import('./views/ReservedWalletsView.vue'),
-    meta: { title: 'Reserved Wallets', parent: 'home' },
+    meta: { title: 'Reserved Wallets' },
   },
   {
     path: '/activityGraph',
     name: 'activity-graph',
     component: () => import('./views/ActivityGraphView.vue'),
-    meta: { title: 'Activity Graph', parent: 'home' },
+    meta: { title: 'Activity Graph' },
   },
   {
     path: '/delegateMonitor',
     name: 'delegate-monitor',
     component: () => import('./views/DelegateMonitorView.vue'),
-    meta: { title: 'Delegate Monitor', parent: 'home' },
+    meta: { title: 'Delegate Monitor' },
   },
   {
     path: '/networkMonitor',
     name: 'network-monitor',
     component: () => import('./views/NetworkMonitorView.vue'),
-    meta: { title: 'Network Monitor', parent: 'home' },
+    meta: { title: 'Network Monitor' },
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('./views/NotFoundView.vue'),
-    meta: { title: 'Page Not Found', parent: 'home' },
+    meta: { title: 'Page Not Found' },
   },
 ];
 

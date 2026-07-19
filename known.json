@@ -1,50 +1,170 @@
 {
-    "address": {
-        "owner": "owner",
-        "description": "description"
-    },
-    "U13113937065479682572": {
-        "owner": "Genesis Account",
-        "description": ""
-    },
-    "U2065436277795836384": {
-        "description": "ADAMANT",
-        "owner": "Development and Support"
-    },
-    "U8842529089226485961": {
-        "description": "ADAMANT",
-        "owner": "Marketing"
-    },
-    "U8842068055848619621": {
-        "description": "ADAMANT",
-        "owner": "Investors"
-    },
-    "U15423595369615486571": {
-        "description": "ADAMANT",
-        "owner": "Adoption and Bounty"
-    },
-    "U1973842998847463129": {
-        "description": "ADAMANT",
-        "owner": "Donates"
-    },
-    "U1835325601873095435": {
-        "description": "ADAMANT Foundation",
-        "owner": "Adoption (Hot wallet)"
-    },
-    "U5875207477212018391": {
-        "description": "ADAMANT Foundation",
-        "owner": "Adoption"
-    },
-    "U8181868247557556851": {
-        "description": "ADAMANT Foundation",
-        "owner": "Marketing"
-    },
-    "U9701591031505109687": {
-        "description": "ADAMANT Foundation",
-        "owner": "Development"
-    },
-    "U380651761819723095": {
-        "description": "ADAMANT Foundation",
-        "owner": "Donates"
-    }
+  "address": {
+    "owner": "owner",
+    "description": "description"
+  },
+  "U13113937065479682572": {
+    "owner": "Genesis Account",
+    "description": ""
+  },
+  "U2065436277795836384": {
+    "description": "ADAMANT",
+    "owner": "Development and Support"
+  },
+  "U8842529089226485961": {
+    "description": "ADAMANT",
+    "owner": "Marketing"
+  },
+  "U8842068055848619621": {
+    "description": "ADAMANT",
+    "owner": "Investors"
+  },
+  "U15423595369615486571": {
+    "description": "ADAMANT",
+    "owner": "Adoption and Bounty"
+  },
+  "U1973842998847463129": {
+    "description": "ADAMANT",
+    "owner": "Donates"
+  },
+  "U1835325601873095435": {
+    "description": "ADAMANT Foundation",
+    "owner": "Adoption (Hot wallet)"
+  },
+  "U5875207477212018391": {
+    "description": "ADAMANT Foundation",
+    "owner": "Adoption"
+  },
+  "U8181868247557556851": {
+    "description": "ADAMANT Foundation",
+    "owner": "Marketing"
+  },
+  "U9701591031505109687": {
+    "description": "ADAMANT Foundation",
+    "owner": "Development"
+  },
+  "U380651761819723095": {
+    "description": "ADAMANT Foundation",
+    "owner": "Donates"
+  },
+  "U9297769165692482157": {
+    "description": "Exchange",
+    "owner": "BiteBTC"
+  },
+  "U4014868297596277218": {
+    "description": "Exchange",
+    "owner": "Bit-Z"
+  },
+  "U535501431941300255": {
+    "description": "Exchange",
+    "owner": "IDCM"
+  },
+  "U5149447931090026688": {
+    "description": "Exchange",
+    "owner": "Exchange Bot"
+  },
+  "U13151154215656691634": {
+    "description": "Exchange",
+    "owner": "Resfinex"
+  },
+  "U11189337096888963052": {
+    "description": "Exchange",
+    "owner": "Resfinex-2"
+  },
+  "U8107868892424415199": {
+    "description": "Exchange",
+    "owner": "Atomars"
+  },
+  "U5101357317624218301": {
+    "description": "Exchange",
+    "owner": "Coindeal"
+  },
+  "U18210383484852850087": {
+    "description": "Exchange",
+    "owner": "Azbit"
+  },
+  "U7172242865735709555": {
+    "description": "Exchange",
+    "owner": "StakeCube"
+  },
+  "U2865601723450288885": {
+    "description": "Exchange",
+    "owner": "Azbit-2"
+  },
+  "U11850062950476370884": {
+    "description": "Exchange",
+    "owner": "Coinstore"
+  },
+  "U4566114185242584837": {
+    "description": "Exchange",
+    "owner": "FameEX-02"
+  },
+  "U6264905194743685013": {
+    "description": "Exchange",
+    "owner": "FameEX-01"
+  },
+  "U5182758014950879510": {
+    "description": "Exchange",
+    "owner": "NonKYC"
+  },
+  "U9600352766311110750": {
+    "description": "Exchange",
+    "owner": "XeggeX"
+  },
+  "U14896035773883208990": {
+    "description": "Exchange",
+    "owner": "Biconomy"
+  },
+  "U1349902942708610281": {
+    "description": "Exchange",
+    "owner": "Tapbit"
+  },
+  "U8661386084403575057": {
+    "description": "Exchange",
+    "owner": "Bitcastle"
+  },
+  "U13391265038371967188": {
+    "description": "Exchange",
+    "owner": "DigiFinex"
+  },
+  "U12154214274606185882": {
+    "description": "Exchange",
+    "owner": "BigONE"
+  },
+  "U13552275059481832440": {
+    "description": "Exchange",
+    "owner": "Hotcoin"
+  },
+  "U4303970200685919308": {
+    "description": "Exchange",
+    "owner": "KoinBX"
+  },
+  "U14209493970755488723": {
+    "description": "Exchange",
+    "owner": "KoinBX-2"
+  },
+  "U14409764399342362497": {
+    "description": "Exchange",
+    "owner": "Biconomy-2"
+  },
+  "U13068387843550910698": {
+    "description": "Exchange",
+    "owner": "Biconomy-3"
+  },
+  "U6423399539021809352": {
+    "description": "Exchange",
+    "owner": "FameEXnet-1"
+  },
+  "U10181109575158506339": {
+    "description": "Exchange",
+    "owner": "FameEXnet-2"
+  },
+  "U5945759447329460822": {
+    "description": "Exchange",
+    "owner": "Digifinex-2"
+  },
+  "U4238546078217566409": {
+    "description": "Exchange",
+    "owner": "FameEXnet-3"
+  }
 }

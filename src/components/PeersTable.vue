@@ -3,6 +3,8 @@
 import { computed } from 'vue';
 import { useSort } from '../lib/sort';
 import OsIcon from './OsIcon.vue';
+import SortIndicator from './SortIndicator.vue';
+import { formatInteger } from '../lib/format.js';
 
 const props = defineProps({
   /** Peer list; `null`/`undefined` renders the waiting state. */
@@ -38,9 +40,7 @@ const rows = computed(() => sort.sorted(props.peers));
             @click="sort.order(column.key)"
           >
             {{ column.label }}
-            <span v-if="sort.key === column.key" class="sort-arrow">{{
-              sort.reverse ? '▴' : '▾'
-            }}</span>
+            <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
           </th>
         </tr>
       </thead>
@@ -56,25 +56,29 @@ const rows = computed(() => sort.sorted(props.peers));
             <span class="text-muted">{{ peer.port }}</span>
           </td>
           <td>
-            <span class="text-muted ellipsis hostname" :title="peer.location?.hostname">
+            <span v-tooltip="peer.location?.hostname" class="text-muted ellipsis hostname">
               {{ peer.location?.hostname || 'N/A' }}
             </span>
           </td>
           <td>
             <span
+              v-tooltip="peer.location?.country_name"
               class="flag"
               :class="`flag-${(peer.location?.country_code || '').toLowerCase()}`"
-              :title="peer.location?.country_name"
             ></span>
           </td>
           <td>
-            <span class="peer-state" :class="`state-${peer.state}`" :title="peer.humanState"></span>
+            <span
+              v-tooltip="peer.humanState"
+              class="peer-state"
+              :class="`state-${peer.state}`"
+            ></span>
           </td>
           <td>
             <span class="text-muted">{{ peer.version }}</span>
           </td>
           <td><OsIcon :os="peer.os" :brand="peer.osBrand" /></td>
-          <td>{{ peer.height }}</td>
+          <td>{{ formatInteger(peer.height) }}</td>
         </tr>
       </tbody>
     </table>

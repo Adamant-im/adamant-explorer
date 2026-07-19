@@ -1,5 +1,5 @@
-const { TransactionType } = require('adamant-api');
 const api = require('./api');
+const { PUBLIC_OPERATION_TYPES, TRANSFER_TYPES } = require('../transactionTypes');
 
 /**
  * Transaction types shown in transfer views: token transfers and
@@ -11,7 +11,7 @@ const api = require('./api');
  * Moving this list to the explorer config is planned as a follow-up
  * of https://github.com/Adamant-im/adamant-explorer/issues/11.
  */
-const TRANSFER_TYPES = [TransactionType.SEND, TransactionType.CHAT_MESSAGE];
+const PUBLIC_OPERATION_FETCH_LIMIT = 100;
 
 /**
  * Extract the transaction list from a node response or throw its error.
@@ -74,16 +74,32 @@ async function getUnconfirmedTransactions() {
  * @throws {string} Node error message when the request fails
  */
 async function getLastTransactions() {
-  return unwrapTransactions(await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20 }));
+  return unwrapTransactions(
+    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20, returnAsset: 1 }),
+  );
 }
 
 /**
- * Get the latest 20 transfer transactions, including in-chat transfers.
- * @returns {Promise<Array>} List of transactions, newest first
+ * Get a candidate window for the latest public operations while excluding
+ * chat messages and internal state records.
+ *
+ * The route name remains `getLastTransfers` for backwards-compatible
+ * clients, but the refreshed home page deliberately includes service
+ * operations such as voting and delegate registration. The wider window lets
+ * the handler deterministically order transactions that share a timestamp
+ * before it selects the latest 20.
+ * @returns {Promise<Array>} Candidate transactions ordered by the node
  * @throws {string} Node error message when the request fails
  */
 async function getLastTransfers() {
-  return getTransfers({ orderBy: 'timestamp:desc', limit: 20 });
+  return unwrapTransactions(
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: PUBLIC_OPERATION_FETCH_LIMIT,
+      and: { types: PUBLIC_OPERATION_TYPES },
+      returnAsset: 1,
+    }),
+  );
 }
 
 /**
@@ -94,7 +110,7 @@ async function getLastTransfers() {
  * @throws {string} Node error message when the request fails
  */
 async function getTransactions(query) {
-  return unwrapTransactions(await api.getTransactions(query));
+  return unwrapTransactions(await api.getTransactions({ ...query, returnAsset: 1 }));
 }
 
 /**
@@ -110,6 +126,7 @@ async function getTransfers(query) {
     await api.getTransactions({
       ...query,
       and: { ...query.and, types: TRANSFER_TYPES, minAmount: 1 },
+      returnAsset: 1,
     }),
   );
 }
@@ -127,6 +144,7 @@ async function getTransactionsByBlock(query) {
       orderBy: 'timestamp:desc',
       offset: query.offset,
       limit: query.limit,
+      returnAsset: 1,
     }),
   );
 }
@@ -138,7 +156,12 @@ async function getTransactionsByBlock(query) {
  */
 async function getRegistrationTransactions() {
   return unwrapTransactions(
-    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 2 }),
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 2,
+      returnAsset: 1,
+    }),
   );
 }
 
@@ -149,7 +172,12 @@ async function getRegistrationTransactions() {
  */
 async function getVoteTransactions() {
   return unwrapTransactions(
-    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 5, type: 3 }),
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 3,
+      returnAsset: 1,
+    }),
   );
 }
 

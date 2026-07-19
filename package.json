@@ -41,7 +41,8 @@
   "scripts": {
     "start": "node app.js",
     "start:testnet": "node app.js dev",
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:frontend": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
     "test": "mocha",
@@ -53,7 +54,8 @@
     "benchmark": "node benchmark"
   },
   "dependencies": {
-    "adamant-api": "^3.0.0",
+    "@tabler/icons-vue": "^3.45.0",
+    "adamant-api": "^3.1.0",
     "async": "^3.2.6",
     "axios": "^1.18.1",
     "commander": "^15.0.0",

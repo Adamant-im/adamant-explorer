@@ -10,5 +10,5 @@ defineProps({
 </script>
 
 <template>
-  <span class="os-icon" :class="`os-${brand.name}`" :title="os" :aria-label="os"></span>
+  <span v-tooltip="os" class="os-icon" :class="`os-${brand.name}`" :aria-label="os"></span>
 </template>

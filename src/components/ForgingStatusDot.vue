@@ -2,7 +2,7 @@
 // Colored status dot for a delegate's forging state with a hover
 // tooltip describing the state and the last forged block.
 import { computed } from 'vue';
-import { timeAgo } from '../lib/format';
+import { timestampTitle } from '../lib/format';
 
 const props = defineProps({
   /** Status descriptor produced by `forgingStatus()` in `lib/forging.js`. */
@@ -39,10 +39,10 @@ const tooltip = computed(() => {
 
   if (props.status.code < 5) {
     text += props.status.blockAt
-      ? ` — last block at ${props.status.lastBlock.height}, ${timeAgo(props.status.lastBlock.timestamp)}`
-      : ' — no block in the observed forging history';
+      ? `\nLast block ${props.status.lastBlock.height} · ${timestampTitle(props.status.lastBlock.timestamp)}`
+      : '\nNo block in the observed forging history';
   } else if (props.status.reason === 'insufficient-history') {
-    text += ' — fewer than five observed rounds';
+    text += '\nFewer than five observed rounds';
   }
 
   return text;
@@ -51,8 +51,8 @@ const tooltip = computed(() => {
 
 <template>
   <span
+    v-tooltip="{ content: tooltip, tone: view.tone, placement: 'left' }"
     class="forging-dot"
     :class="[`tone-${view.tone}`, { hollow: view.hollow }]"
-    :title="tooltip"
   ></span>
 </template>

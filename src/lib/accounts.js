@@ -32,9 +32,13 @@ export function txRecipientPath(tx) {
 /**
  * Router path for an account-like object from vote and voter lists.
  *
- * @param {Object} account Account with `address` and optional `username`
+ * @param {Object} account Account with `address` and optional delegate metadata
  * @returns {string} `/delegate/...` when a username is known, `/address/...` otherwise
  */
 export function accountPath(account) {
-  return account.username ? `/delegate/${account.address}` : `/address/${account.address}`;
+  const isDelegate = Boolean(
+    account.username || account.isDelegate || account.knowledge?.kind === 'delegate',
+  );
+
+  return `${isDelegate ? '/delegate' : '/address'}/${account.address}`;
 }
