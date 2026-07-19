@@ -13,18 +13,14 @@ const { concatenateTransactions, sortTransactions } = require('./transactionList
 async function processTransaction(transaction) {
   transaction = knowledge.inTx(transaction);
 
-  const senderDelegateRequest =
-    transaction.senderPublicKey && !transaction.senderUsername && !transaction.knownSender
-      ? delegates.getDelegate(transaction.senderPublicKey)
-      : Promise.resolve(null);
+  const senderDelegateRequest = transaction.senderPublicKey
+    ? delegates.getDelegate(transaction.senderPublicKey)
+    : Promise.resolve(null);
 
-  // Only plain transfer recipients need an extra account lookup. Known
-  // identities and usernames already provide the label and destination.
+  // Preserve the public enrichment fields for every plain transfer. The
+  // request adapters coalesce and cache immutable delegate/public-key results.
   const recipientPublicKeyRequest =
-    transaction.recipientId &&
-    transaction.type === 0 &&
-    !transaction.recipientUsername &&
-    !transaction.knownRecipient
+    transaction.recipientId && transaction.type === 0
       ? transaction.recipientId === transaction.senderId
         ? Promise.resolve(transaction.senderPublicKey || null)
         : accounts.getPublicKey(transaction.recipientId)

@@ -22,6 +22,19 @@ function compareTransactionIdsDescending(a, b) {
 }
 
 /**
+ * Resolves a sortable timestamp while keeping malformed transactions after
+ * every valid timestamp.
+ *
+ * @param {Object} transaction Transaction with second or millisecond timestamp
+ * @returns {number} Finite timestamp, or negative infinity when malformed
+ */
+function sortableTimestamp(transaction) {
+  const timestamp = Number(transaction.timestampMs ?? Number(transaction.timestamp) * 1000);
+
+  return Number.isFinite(timestamp) ? timestamp : Number.NEGATIVE_INFINITY;
+}
+
+/**
  * Sort transactions newest first with deterministic tie breakers.
  *
  * ADAMANT Node accepts one `orderBy` field. Transactions created in a batch
@@ -34,8 +47,8 @@ function compareTransactionIdsDescending(a, b) {
  */
 function sortTransactions(transactions) {
   return [...transactions].sort((a, b) => {
-    const aTimestamp = Number(a.timestampMs ?? Number(a.timestamp) * 1000);
-    const bTimestamp = Number(b.timestampMs ?? Number(b.timestamp) * 1000);
+    const aTimestamp = sortableTimestamp(a);
+    const bTimestamp = sortableTimestamp(b);
 
     if (aTimestamp !== bTimestamp) {
       return bTimestamp - aTimestamp;

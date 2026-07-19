@@ -50,21 +50,19 @@ const TYPE_META = {
   'vote-unvote': { label: 'Vote & Unvote', tone: 'violet', icon: 'vote' },
   multisignature: { label: 'Multisignature', tone: 'blue', icon: 'multisignature' },
   'dapp-registration': { label: 'DApp registration', tone: 'blue', icon: 'dapp' },
-  'dapp-deposit': { label: 'DApp deposit', tone: 'green', icon: 'deposit' },
-  'dapp-withdrawal': { label: 'DApp withdrawal', tone: 'red', icon: 'withdraw' },
+  'dapp-deposit': { label: 'DApp deposit', tone: 'green', icon: 'dapp-deposit' },
+  'dapp-withdrawal': { label: 'DApp withdrawal', tone: 'red', icon: 'dapp-withdrawal' },
   message: { label: 'Message', tone: 'neutral', icon: 'message' },
   state: { label: 'State', tone: 'neutral', icon: 'state' },
   unknown: { label: 'Unknown', tone: 'neutral', icon: 'state' },
 };
 
-const WELCOME_BONUS_OWNER = 'Adoption and Bounty';
+const WELCOME_BONUS_SENDER = 'U15423595369615486571';
 const WELCOME_BONUS_AMOUNT = 10_000_000;
 
 /** Returns whether a transfer is the fixed 0.1 ADM onboarding reward. */
 function isWelcomeBonus(tx) {
-  return (
-    tx.knownSender?.owner === WELCOME_BONUS_OWNER && Number(tx.amount) === WELCOME_BONUS_AMOUNT
-  );
+  return tx.senderId === WELCOME_BONUS_SENDER && Number(tx.amount) === WELCOME_BONUS_AMOUNT;
 }
 
 /**

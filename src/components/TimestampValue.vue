@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { formatTimestamp, timeAgo, timestampTitle } from '../lib/format.js';
+import { formatIsoTimestamp, formatTimestamp, timeAgo, timestampTitle } from '../lib/format.js';
 
 const props = defineProps({
   /** Timestamp in seconds since the ADAMANT epoch. */
@@ -12,12 +12,13 @@ const props = defineProps({
 const label = computed(() =>
   props.relative ? timeAgo(Number(props.timestamp)) : formatTimestamp(Number(props.timestamp)),
 );
+const datetime = computed(() => formatIsoTimestamp(Number(props.timestamp)));
 </script>
 
 <template>
   <time
     v-tooltip="timestampTitle(Number(timestamp))"
-    :datetime="String(timestamp)"
+    :datetime="datetime"
     :aria-label="timestampTitle(Number(timestamp))"
   >
     {{ label }}

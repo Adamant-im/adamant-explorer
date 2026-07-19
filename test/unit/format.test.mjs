@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import {
   EPOCH_MS,
   epochToDate,
+  formatIsoTimestamp,
   toAdm,
   formatCurrency,
   formatExactCurrency,
@@ -36,6 +37,10 @@ describe('format.js', function () {
 
     it('advances one second per unit', function () {
       expect(epochToDate(10).getTime()).to.equal(EPOCH_MS + 10000);
+    });
+
+    it('formats valid ISO 8601 markup timestamps', function () {
+      expect(formatIsoTimestamp(0)).to.equal('2017-09-02T17:00:00.000Z');
     });
   });
 
@@ -83,6 +88,7 @@ describe('format.js', function () {
     });
 
     it('keeps exact base units while trimming insignificant trailing zeros', function () {
+      expect(formatExactCurrency(0, adm)).to.equal('0');
       expect(formatExactCurrency(23, adm)).to.equal('0.00000023');
       expect(formatExactCurrency(50000000, adm)).to.equal('0.5');
       expect(formatExactCurrency(123450000, adm)).to.equal('1.2345');

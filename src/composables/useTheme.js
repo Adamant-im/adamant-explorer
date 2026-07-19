@@ -4,9 +4,36 @@ const STORAGE_KEY = 'adamant-explorer-theme';
 const LIGHT_THEME_COLOR = '#f4f7f9';
 const DARK_THEME_COLOR = '#0b1218';
 
+/**
+ * Reads the local preference without making storage availability a startup
+ * requirement. Some privacy modes expose `localStorage` but reject access.
+ *
+ * @returns {string|null} Stored theme, or `null` when storage is unavailable
+ */
+function storedTheme() {
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Persists the preference when browser storage is available.
+ *
+ * @param {string} value Theme name
+ */
+function persistTheme(value) {
+  try {
+    localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    // The active theme still works for this page when persistence is blocked.
+  }
+}
+
 /** Resolves the persisted preference or the operating-system theme. */
 function initialTheme() {
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved = storedTheme();
 
   if (saved === 'light' || saved === 'dark') {
     return saved;
@@ -40,7 +67,7 @@ export function useTheme() {
 
   function toggleTheme() {
     theme.value = isDark.value ? 'light' : 'dark';
-    localStorage.setItem(STORAGE_KEY, theme.value);
+    persistTheme(theme.value);
     applyTheme(theme.value);
   }
 

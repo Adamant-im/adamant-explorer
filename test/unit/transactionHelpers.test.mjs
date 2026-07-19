@@ -34,6 +34,16 @@ describe('transaction list helpers', function () {
     expect(sortTransactions(transactions).map(({ id }) => id)).to.deep.equal(['10', '20']);
   });
 
+  it('sorts malformed timestamps after valid transactions', function () {
+    const transactions = [
+      { id: '30', timestamp: 'invalid', height: 30 },
+      { id: '10', timestamp: 100, height: 10 },
+      { id: '20', timestampMs: Number.NaN, height: 20 },
+    ];
+
+    expect(sortTransactions(transactions).map(({ id }) => id)).to.deep.equal(['10', '30', '20']);
+  });
+
   it('merges confirmed and unconfirmed lists into a stable 20-row page', function () {
     const confirmed = Array.from({ length: 20 }, (_, index) => ({
       id: String(index + 1),

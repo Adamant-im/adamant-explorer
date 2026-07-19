@@ -31,12 +31,25 @@ describe('transactionTypes.js', function () {
     const welcomeBonus = {
       type: 0,
       amount: 10_000_000,
-      knownSender: { owner: 'Adoption and Bounty', kind: 'known' },
+      senderId: 'U15423595369615486571',
+      knownSender: { owner: 'Renamed onboarding wallet', kind: 'known' },
     };
 
     expect(operationTypeId(welcomeBonus)).to.equal('welcome-bonus');
     expect(operationMeta(welcomeBonus).label).to.equal('Welcome bonus');
     expect(operationTypeId({ ...welcomeBonus, amount: 10_000_001 })).to.equal('transfer');
+    expect(
+      operationTypeId({
+        ...welcomeBonus,
+        senderId: 'U1',
+        knownSender: { owner: 'Adoption and Bounty', kind: 'known' },
+      }),
+    ).to.equal('transfer');
+  });
+
+  it('uses dedicated DApp transfer icons', function () {
+    expect(operationMeta({ type: 6 }).icon).to.equal('dapp-deposit');
+    expect(operationMeta({ type: 7 }).icon).to.equal('dapp-withdrawal');
   });
 
   it('derives unvotes from processed and raw vote assets', function () {

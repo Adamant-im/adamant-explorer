@@ -26,15 +26,20 @@ async function getDelegate(publicKey, rejectUnsuccessful) {
   } else {
     const entry = { expiresAt: Infinity, promise: null };
 
-    entry.promise = api.getDelegate({ publicKey }).then((response) => {
-      const result = {
+    entry.promise = api
+      .getDelegate({ publicKey })
+      .then((response) => ({
         delegate: response.success ? response.delegate : null,
         errorMessage: response.errorMessage,
-      };
-
-      entry.expiresAt = result.delegate ? Infinity : Date.now() + MISSING_DELEGATE_TTL_MS;
-      return result;
-    });
+      }))
+      .catch((error) => ({
+        delegate: null,
+        errorMessage: error?.message ?? String(error),
+      }))
+      .then((result) => {
+        entry.expiresAt = result.delegate ? Infinity : Date.now() + MISSING_DELEGATE_TTL_MS;
+        return result;
+      });
 
     delegateCache.delete(publicKey);
     delegateCache.set(publicKey, entry);

@@ -32,6 +32,16 @@ export function epochToDate(timestamp) {
 }
 
 /**
+ * Formats a blockchain timestamp for the HTML `time[datetime]` attribute.
+ *
+ * @param {number} timestamp Seconds since the ADAMANT epoch
+ * @returns {string} ISO 8601 timestamp in UTC
+ */
+export function formatIsoTimestamp(timestamp) {
+  return epochToDate(timestamp).toISOString();
+}
+
+/**
  * Converts an amount in sats to a decimal ADM string with trailing
  * zeros trimmed, e.g. `150000000` becomes `'1.5'`.
  *
