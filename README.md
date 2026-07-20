@@ -9,6 +9,10 @@ Deployed at:
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
+> Built and maintained by the ADAMANT developer community and **cryptofoundry**.
+> Want custom crypto software, bots, payments or blockchain infrastructure built by engineers with production blockchain experience? [Tell us what to build](https://adamant.business#contact).
+>
+
 ## Features
 
 - Blocks, transactions, accounts, and delegate pages with search
@@ -17,14 +21,11 @@ Deployed at:
 - Activity Graph: live visualization of the latest blocks and transactions
 - Top Accounts and reserved wallets
 - Live updates over WebSocket
-- Redis-backed API response cache and persistent rolling block-statistics window
-- All node interaction through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) with node health checks and failover
-- Vue 3 frontend (vue-router, Pinia) built with Vite; each page loads as its own chunk
 
 ## Requirements
 
 - Node.js 22.13 or newer
-- Redis — caches API responses and retains the rolling block-statistics window between Explorer restarts. Enable Redis RDB or AOF persistence if the window must also survive Redis or host restarts
+- Redis (recommended) — enables API response caching and preserves the rolling block-statistics window between Explorer restarts. Explorer remains available without Redis, but caching and persisted statistics are disabled.
 
   ```sh
   sudo apt-get install -y redis-server
@@ -44,6 +45,7 @@ Deployed at:
 git clone https://github.com/Adamant-im/adamant-explorer.git
 cd adamant-explorer
 npm install
+npm run build
 ```
 
 ### Configuration
@@ -59,7 +61,7 @@ Parameters are documented with comments in the config file. Provide several inde
 
 Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` is the most verbose troubleshooting level.
 
-Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Results are requested in batches, normalized for the frontend, cached by IP, and refreshed daily. Failed lookups are retried after five minutes; peers still render when GeoJS is disabled or unavailable.
+Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Peers still render when GeoJS is disabled or unavailable.
 
 `trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. The accepted `proxy-addr` names expand as follows:
 
@@ -80,54 +82,7 @@ proxy_set_header X-Forwarded-Proto $scheme;
 proxy_pass http://127.0.0.1:6040;
 ```
 
-### Explorer HTTP API
-
-Explorer HTTP routes are same-origin UI implementation details, not a general-purpose ADAMANT developer API. Integrations should use [adamant-api](https://github.com/Adamant-im/adamant-api-jsclient). The UI currently uses these routes:
-
-- `/api/getAccount`
-- `/api/getTopAccounts`
-- `/api/getLastBlocks`
-- `/api/getBlock`
-- `/api/totalSupply`
-- `/api/search`
-- `/api/getTransaction`
-- `/api/getLastTransfers`
-- `/api/getTransactionsByAddress`
-- `/api/getTransfersByAddress`
-- `/api/getTransactionsByBlock`
-- `/api/delegates/getStandby`
-
-Responses do not opt into cross-origin browser access. API requests are limited in-process to 300 requests per minute per client IP; static assets and Socket.IO are excluded. The limit applies independently in each Explorer process.
-
-`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` when no coherent snapshot can be produced.
-
-### Build the frontend
-
-Build the production bundle into `public/`:
-
-```sh
-npm run build
-```
-
-During development, either rebuild on every change:
-
-```sh
-npm run watch
-```
-
-Or start the backend and Vite dev server together. Vite provides hot reload and proxies `/api` and Socket.IO traffic to the backend on `localhost:6040`:
-
-```sh
-npm run dev
-```
-
-Open <http://localhost:5173>. To run only Vite against an already running backend on `localhost:6040`, use:
-
-```sh
-npm run dev:frontend
-```
-
-## Usage
+## Running Explorer
 
 Check that the explorer is configured correctly:
 
@@ -147,6 +102,7 @@ Runtime status and log locations:
 
 ```sh
 pm2 list
+pm2 logs adamant-explorer
 ```
 
 Stop the explorer:
@@ -155,35 +111,19 @@ Stop the explorer:
 pm2 stop adamant-explorer
 ```
 
-## Tests
+### Monitoring and integrations
 
-Frontend utility unit tests run in plain Node and need no services:
+Explorer HTTP routes support its own UI and are not a general-purpose ADAMANT developer API. Browser responses are same-origin and API traffic is rate-limited. Applications and integrations should use [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) instead.
 
-```sh
-npm run test:unit
-```
-
-The API test suite runs against a live explorer connected to the ADAMANT Testnet. Configure the explorer and a local node for testnet, start the explorer, and run:
-
-```sh
-npm test
-```
-
-Run other checks:
-
-```sh
-npm run lint
-npm run format:check
-npm run benchmark
-```
+`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` when no coherent snapshot can be produced.
 
 ## Security
 
 The repository includes the current [threat model](./adamant-explorer-threat-model.md) and [security and reliability review](./security_best_practices_report.md). Report suspected vulnerabilities privately to the maintainers before public disclosure when exploitation could put users or infrastructure at risk.
 
-## Contribution
+## Development and contributing
 
-Contributions are welcome. Read the [contribution guidelines](./CONTRIBUTING.md) for development setup, validation, and pull request conventions.
+Contributions are welcome. Development setup, tests, debugging, code style, and pull request conventions are documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Links
 

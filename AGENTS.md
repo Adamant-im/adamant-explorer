@@ -27,6 +27,13 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - Keep documentation aligned with current code and passing validation commands
 - If documentation sources disagree, prefer current repository behavior and document the mismatch
 
+## Documentation Ownership
+
+- `README.md` is for Explorer users and self-hosting operators: features, installation, runtime configuration, operation, privacy, security, and public integration guidance
+- `CONTRIBUTING.md` is the developer guide and the source of truth for local setup, development commands, testing, debugging, code style, and pull request preparation
+- `AGENTS.md` owns repository architecture, implementation contracts, security invariants, agent workflows, and organization conventions
+- Link to the owning document instead of copying command lists, route lists, or implementation details across files
+
 ## Project Layout
 
 - `app.js`: Express application, middleware, Redis response cache, and startup
@@ -34,7 +41,7 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - `api/lib/adamant/requests/`: the only layer that talks to ADAMANT nodes, through `adamant-api`
 - `api/lib/adamant/handlers/` and `api/lib/adamant/helpers/`: response assembly and data shaping
 - `sockets/`: Socket.IO namespaces for live pages (header, Delegate Monitor, Network Monitor, Activity Graph)
-- `modules/configReader.js`: config loading and validation for `config.jsonc` / `config.default.jsonc`
+- `modules/`: config loading and validation, API surface/rate limiting, and HTTP security policy
 - `utils/`: logger, exchange rates, known addresses
 - `src/`: Vue 3 frontend (Composition API, vue-router, Pinia) built with Vite into `public/`
 - `src/views/` and `src/components/`: page and shared single-file components; `src/lib/`: framework-free utilities; `src/static/`: files copied to `public/` verbatim
@@ -52,13 +59,21 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - Prettier formats the code (2-space indentation, single quotes); ESLint flat config in `eslint.config.mjs` must pass with no errors
 - Config files are JSONC parsed with `jsonminify` and `JSON.parse`: comments are allowed, trailing commas are not
 
+## Runtime And API Contracts
+
+- Middleware order in `app.js` is security-sensitive: headers and static serving precede API rate limiting; the exact API surface guard precedes Redis lookup and ADAMANT readiness; route responses are cached only after successful handlers
+- `api/lib/adamant/constants.mjs` is the only source of truth for `SUPPORTED_API_PATHS`; backend guards, frontend calls, routes, and tests must remain aligned with it
+- Explorer exposes 12 same-origin UI routes plus `GET /api/networkHealth`; do not add wildcard CORS or present the UI routes as a general-purpose integration API
+- The API limiter is an in-process fixed window of 300 requests per minute per client IP; it applies to `/api` paths, including health, and excludes static files and Socket.IO
+- `GET /api/networkHealth` returns HTTP `200` for computed `live`, `degraded`, or `critical` states and HTTP `503` with `status: "unavailable"` when no coherent snapshot is possible
+- Redis is optional at runtime: read/write failures bypass the response cache, while the rolling statistics handlers retry persistence without taking down core HTTP/static serving
+- `api/lib/adamant/requests/` is the only ADAMANT Node boundary; successful Node payloads remain untrusted until normalized or validated by handlers/helpers
+- Socket.IO retains four public namespaces for Header, Delegate Monitor, Network Monitor, and Activity Graph; polling must remain serialized, lifecycle-aware, and bounded during upstream failures
+- The Vue frontend is built from `src/` into ignored/generated `public/`; never edit generated bundle files directly
+
 ## Validation Commands
 
-- `npm run lint` and `npm run format:check` for static checks
-- `npm run build` for the frontend bundle (Vite); `npm run dev` serves the frontend with a proxy to a locally running backend
-- `npm start` to run the explorer; `node app.js dev` uses `config.test.jsonc`
-- `npm run test:unit` runs the frontend utility unit tests in plain Node
-- `npm test` runs the API suite against a live explorer connected to the ADAMANT Testnet
+`CONTRIBUTING.md` is the source of truth for development, debugging, and validation commands. Agents must run its baseline checks when relevant, add focused checks for the changed risk area, and report every command result or explicit blocker.
 
 ## Markdown Rules For AI-Generated Docs
 
@@ -82,7 +97,7 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 
 Use these sources when implementing or reviewing changes:
 
-- Current repository code, `README.md`, and passing validation commands
+- Current repository code, `README.md`, `CONTRIBUTING.md`, and passing validation commands
 - ADAMANT organization governance: <https://github.com/Adamant-im/.github>
 - Recommended issue title prefixes: <https://github.com/orgs/Adamant-im/discussions/5>
 - Recommended labels for issues and discussions: <https://github.com/orgs/Adamant-im/discussions/1>

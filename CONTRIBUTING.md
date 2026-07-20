@@ -4,11 +4,11 @@ Thank you for improving ADAMANT Explorer. Changes should protect data correctnes
 
 ## Before you start
 
-- Search [existing issues](https://github.com/Adamant-im/adamant-explorer/issues) before opening a new one.
-- Use a concise issue prefix such as `[Bug]`, `[Feat]`, `[Refactor]`, `[Docs]`, `[Test]`, or `[Chore]`.
-- Base work on `dev` and target `dev` in pull requests. `master` represents stable releases.
-- Keep changes focused and easy to review.
-- Never commit or log passphrases, private keys, or sensitive tokens.
+- Search [existing issues](https://github.com/Adamant-im/adamant-explorer/issues) before opening a new one
+- Use a concise issue prefix such as `[Bug]`, `[Feat]`, `[Refactor]`, `[Docs]`, `[Test]`, or `[Chore]`
+- Base work on `dev` and target `dev` in pull requests; `master` represents stable releases
+- Keep changes focused and easy to review
+- Never commit or log passphrases, private keys, or sensitive tokens
 
 All repository artifacts—including code, comments, documentation, commits, issues, and pull requests—must be written in English.
 
@@ -23,13 +23,64 @@ git switch dev
 npm install
 ```
 
-Create a dedicated branch for your work:
+Copy and adjust the runtime configuration:
+
+```sh
+cp config.default.jsonc config.jsonc
+```
+
+The self-hosting requirements and configuration options are documented in the [README](./README.md). Create a dedicated branch for your work:
 
 ```sh
 git switch -c feat/short-description
 ```
 
-The explorer needs Redis and access to ADAMANT nodes to run, see the [README](./README.md) for the full setup.
+## Development workflow
+
+Start the backend and Vite development server together:
+
+```sh
+npm run dev
+```
+
+The backend listens on <http://localhost:6040>. Vite provides hot reload at <http://localhost:5173> and proxies `/api` and Socket.IO traffic to the backend.
+
+To run only Vite against an already running backend on port `6040`, use:
+
+```sh
+npm run dev:frontend
+```
+
+To continuously rebuild the production bundle into `public/` without the Vite development server, use:
+
+```sh
+npm run watch
+```
+
+Create a one-time production bundle with:
+
+```sh
+npm run build
+```
+
+## Debugging
+
+Set `log_level` to `debug` in the active configuration file for the most detailed application and ADAMANT API client output. Request logs deliberately omit query strings so public addresses and user-supplied values are not collected unnecessarily.
+
+For backend-only debugging, run:
+
+```sh
+npm start
+```
+
+For Testnet debugging, copy the default configuration, replace `nodes_adm` with Testnet nodes, and start the dedicated mode:
+
+```sh
+cp config.default.jsonc config.test.jsonc
+npm run start:testnet
+```
+
+Redis failures are non-fatal: Explorer continues without response caching or persisted rolling statistics. If all configured ADAMANT nodes are unavailable, Node-backed API responses and live views remain unavailable until the shared client recovers.
 
 ## Validation
 
@@ -42,45 +93,41 @@ npm run build
 npm run test:unit
 ```
 
-During frontend work, `npm run dev` starts the backend and Vite dev server together. Vite provides hot reload and proxies `/api` and Socket.IO traffic to the backend on `localhost:6040`. Use `npm run dev:frontend` only when the backend is already running separately.
-
-The API test suite runs against a live explorer instance connected to the ADAMANT Testnet:
+The API test suite runs against a live explorer instance connected to the ADAMANT Testnet. Start the instance in one terminal:
 
 ```sh
-npm start          # in a separate terminal, with a testnet config
+npm run start:testnet
+```
+
+Run the suite in another terminal:
+
+```sh
 npm test
+```
+
+Run API handler benchmarks when a change affects request performance:
+
+```sh
+npm run benchmark
 ```
 
 Report the exact commands run and any skipped or blocked validation in the pull request.
 
-## Project structure
-
-- `app.js`: Express application, middleware, caching, and startup
-- `api/routes/`: HTTP API route definitions
-- `api/lib/adamant/`: node request layer, response handlers, and helpers
-- `sockets/`: Socket.IO namespaces for live pages (header, monitors, activity graph)
-- `modules/`: config reader
-- `utils/`: logger, exchange rates, known addresses
-- `src/`: Vue 3 frontend (vue-router, Pinia) built with Vite into `public/`
-- `vite.config.mjs`: frontend build configuration and dev-server proxy
-- `test/`: API test suite (Mocha, Chai, and Supertest) and Node-only unit tests in `test/unit/`
-- `benchmark/`: API handler benchmarks
-
-All interaction with ADAMANT nodes goes through [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) in `api/lib/adamant/requests/`. Do not call node endpoints with a raw HTTP client elsewhere.
-
 ## Code style
 
-- Prettier formats the code: 2-space indentation, single quotes. Run `npm run format`.
-- ESLint (flat config in `eslint.config.mjs`) must pass with no errors: `npm run lint`.
-- Write JSDoc for exported functions and reusable helpers: purpose, parameters, return values, and error behavior.
-- Add short comments only where the code cannot explain itself: non-obvious control flow, data normalization, security decisions, or workaround rationale.
+- Prettier formats the code with 2-space indentation and single quotes; run `npm run format`
+- ESLint uses the flat configuration in `eslint.config.mjs` and must pass without errors
+- Write JSDoc for exported functions and reusable helpers, including purpose, parameters, return values, and error behavior
+- Add comments only for non-obvious control flow, normalization, security decisions, compatibility behavior, or workarounds
+
+Architecture, implementation boundaries, API contracts, and detailed repository invariants are maintained in [AGENTS.md](./AGENTS.md).
 
 ## Pull requests
 
-- Use a title in `Type: Short summary` form, for example `Fix: Handle empty peer list in Network Monitor`.
-- Link related issues explicitly.
-- Explain API or config changes and include migration notes when behavior changes.
-- Update documentation when behavior, setup, or workflows change.
-- Keep dependency additions minimal and explain networking or parsing dependencies.
+- Use a title in `Type: Short summary` form, for example `Fix: Handle empty peer list in Network Monitor`
+- Link related issues explicitly
+- Explain API or config changes and include migration notes when behavior changes
+- Update documentation when behavior, setup, or workflows change
+- Keep dependency additions minimal and explain networking or parsing dependencies
 
 Small reviewable commits are welcome; maintainers may squash them when merging.
