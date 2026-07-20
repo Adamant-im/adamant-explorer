@@ -1,11 +1,53 @@
+import {
+  ADAMANT_ADDRESS_PATTERN,
+  MAX_UINT64,
+  UNSIGNED_DECIMAL_PATTERN,
+} from '../../api/lib/adamant/constants.mjs';
+
 const SEARCH_RESULT_ROUTES = new Map([
   [
     'address',
-    Object.freeze({ name: 'address', parameter: 'address', idPattern: /^[Uu]\d{1,21}$/ }),
+    Object.freeze({
+      name: 'address',
+      parameter: 'address',
+      normalizeIdentifier: normalizeAddressIdentifier,
+    }),
   ],
-  ['block', Object.freeze({ name: 'block', parameter: 'blockId', idPattern: /^\d{1,21}$/ })],
-  ['tx', Object.freeze({ name: 'transaction', parameter: 'txId', idPattern: /^\d{1,21}$/ })],
+  [
+    'block',
+    Object.freeze({
+      name: 'block',
+      parameter: 'blockId',
+      normalizeIdentifier: normalizeUnsignedIdentifier,
+    }),
+  ],
+  [
+    'tx',
+    Object.freeze({
+      name: 'transaction',
+      parameter: 'txId',
+      normalizeIdentifier: normalizeUnsignedIdentifier,
+    }),
+  ],
 ]);
+
+/** Normalize an ADAMANT address under the shared backend contract. */
+function normalizeAddressIdentifier(value) {
+  if (!ADAMANT_ADDRESS_PATTERN.test(value) || BigInt(value.slice(1)) > MAX_UINT64) {
+    return null;
+  }
+
+  return `U${value.slice(1)}`;
+}
+
+/** Normalize a canonical unsigned uint64 identifier. */
+function normalizeUnsignedIdentifier(value) {
+  if (!UNSIGNED_DECIMAL_PATTERN.test(value) || BigInt(value) > MAX_UINT64) {
+    return null;
+  }
+
+  return value;
+}
 
 /**
  * Builds a named Vue Router target for a successful Explorer search response.
@@ -33,7 +75,13 @@ export function searchResultRoute(result) {
     return null;
   }
 
-  if (!route || !route.idPattern.test(id)) {
+  if (!route) {
+    return null;
+  }
+
+  id = route.normalizeIdentifier(id);
+
+  if (id === null) {
     return null;
   }
 

@@ -62,4 +62,61 @@ describe('Explorer API route surface', function () {
       }
     }
   });
+
+  it('passes successful top-account responses to the shared cache store path', function () {
+    const handlerPath = require.resolve('../../api/lib/adamant/handlers/accounts.js');
+    const routePath = require.resolve('../../api/routes/accounts.js');
+    const originalHandler = require.cache[handlerPath];
+    const originalRoute = require.cache[routePath];
+
+    try {
+      const response = { success: true, accounts: [] };
+      require.cache[handlerPath] = {
+        exports: {
+          getAccount() {},
+          getTopAccounts(query, error, success) {
+            success(response);
+          },
+        },
+      };
+      delete require.cache[routePath];
+
+      const registered = [];
+      const app = {
+        get(path, ...handlers) {
+          registered.push({ path, handlers });
+        },
+      };
+
+      require(routePath)(app);
+
+      const route = registered.find(({ path }) => path === '/api/getTopAccounts');
+      const req = { query: {} };
+      const res = {
+        json() {
+          throw new Error('successful response bypassed the cache store');
+        },
+      };
+      let continued = false;
+
+      route.handlers.at(-1)(req, res, () => {
+        continued = true;
+      });
+
+      expect(req.json).to.equal(response);
+      expect(continued).to.equal(true);
+    } finally {
+      if (originalHandler) {
+        require.cache[handlerPath] = originalHandler;
+      } else {
+        delete require.cache[handlerPath];
+      }
+
+      if (originalRoute) {
+        require.cache[routePath] = originalRoute;
+      } else {
+        delete require.cache[routePath];
+      }
+    }
+  });
 });

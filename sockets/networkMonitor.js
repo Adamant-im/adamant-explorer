@@ -2,6 +2,7 @@ const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
 const { getRetryDelay } = require('./retrySchedule');
+const { scheduleTimerSlot } = require('./timerSchedule');
 
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
@@ -117,13 +118,16 @@ module.exports = function (app, connectionHandler, socket) {
         log('warn', `Initial ${key} load failed (${err}); retrying in ${retryDelay}ms`);
 
         if (timers[index] === undefined) {
-          timers[index] = setTimeout(() => {
-            timers[index] = undefined;
-
-            if (isActive(expectedGeneration)) {
-              initializeSource(index, key, loader, delay, event, expectedGeneration, attempt + 1);
-            }
-          }, retryDelay);
+          scheduleTimerSlot(
+            timers,
+            index,
+            () => {
+              if (isActive(expectedGeneration)) {
+                initializeSource(index, key, loader, delay, event, expectedGeneration, attempt + 1);
+              }
+            },
+            retryDelay,
+          );
         }
 
         return;
@@ -181,10 +185,12 @@ module.exports = function (app, connectionHandler, socket) {
       return;
     }
 
-    timers[index] = setTimeout(() => {
-      timers[index] = undefined;
-      refreshSource(index, key, loader, delay, event, expectedGeneration);
-    }, nextDelay);
+    scheduleTimerSlot(
+      timers,
+      index,
+      () => refreshSource(index, key, loader, delay, event, expectedGeneration),
+      nextDelay,
+    );
   };
 
   /**

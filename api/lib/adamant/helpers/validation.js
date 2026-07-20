@@ -1,9 +1,11 @@
 'use strict';
 
-const MAX_UINT64 = 18446744073709551615n;
-const ADAMANT_ADDRESS_PATTERN = /^U[0-9]{6,20}$/i;
+const {
+  ADAMANT_ADDRESS_PATTERN,
+  MAX_UINT64,
+  UNSIGNED_DECIMAL_PATTERN,
+} = require('../constants.mjs');
 const PUBLIC_KEY_PATTERN = /^[a-f0-9]{64}$/i;
-const UNSIGNED_DECIMAL_PATTERN = /^(0|[1-9][0-9]*)$/;
 const DELEGATE_SEARCH_PATTERN = /^[a-z0-9!@$&_.]{1,20}$/i;
 
 /** Public request validation failure safe to return to an API client. */

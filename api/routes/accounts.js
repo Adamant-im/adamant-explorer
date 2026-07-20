@@ -15,14 +15,15 @@ module.exports = function (app) {
     );
   });
 
-  app.get('/api/getTopAccounts', allowQueryParameters('offset', 'limit'), (req, res) => {
+  app.get('/api/getTopAccounts', allowQueryParameters('offset', 'limit'), (req, res, next) => {
     accountsHandler.getTopAccounts(
       req.query,
       (data) => {
         res.json(data);
       },
       (data) => {
-        res.json(data);
+        req.json = data;
+        return next();
       },
     );
   });

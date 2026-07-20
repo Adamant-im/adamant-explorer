@@ -3,9 +3,10 @@ const transactionsHandler = require('../api/lib/adamant/handlers/transactions');
 const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
 const { getRetryDelay } = require('./retrySchedule');
+const { scheduleTimerSlot } = require('./timerSchedule');
 
 module.exports = function (app, connectionHandler, socket) {
-  let timer = null;
+  let timers = [];
   let data = {};
   let monitoring = false;
   let generation = 0;
@@ -29,8 +30,11 @@ module.exports = function (app, connectionHandler, socket) {
     monitoring = false;
     generation++;
     retryAttempt = 0;
-    clearTimeout(timer);
-    timer = null;
+
+    for (const timer of timers) {
+      clearTimeout(timer);
+    }
+    timers = [];
     data = {};
   };
 
@@ -101,14 +105,11 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   const scheduleRefresh = function (expectedGeneration, delay) {
-    if (!isActive(expectedGeneration) || timer !== null) {
+    if (!isActive(expectedGeneration) || timers[0] !== undefined) {
       return;
     }
 
-    timer = setTimeout(() => {
-      timer = null;
-      emitLastBlock(expectedGeneration);
-    }, delay);
+    scheduleTimerSlot(timers, 0, () => emitLastBlock(expectedGeneration), delay);
   };
 
   /**

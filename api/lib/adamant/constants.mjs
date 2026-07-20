@@ -10,6 +10,15 @@ export const ACTIVE_DELEGATES = 101;
 /** Initial ADM supply before block rewards, in 1/10^8 ADM base units. */
 export const INITIAL_SUPPLY_BASE_UNITS = 9800000000000000n;
 
+/** Maximum unsigned 64-bit value accepted by ADAMANT identifiers. */
+export const MAX_UINT64 = 18446744073709551615n;
+
+/** Canonical ADAMANT address shape before the uint64 range check. */
+export const ADAMANT_ADDRESS_PATTERN = /^U[0-9]{6,20}$/i;
+
+/** Canonical unsigned decimal identifier shape before the uint64 range check. */
+export const UNSIGNED_DECIMAL_PATTERN = /^(0|[1-9][0-9]*)$/;
+
 /** Maximum number of blocks accepted by one Node `/api/blocks` request. */
 export const BLOCKS_PAGE_SIZE = 100;
 

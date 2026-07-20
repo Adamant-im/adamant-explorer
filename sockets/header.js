@@ -11,6 +11,7 @@ const async = require('async');
 const logger = require('../utils/log');
 const { getForgingSchedule, getRoundDelegates } = require('./delegateMonitorSchedule');
 const { getRetryDelay } = require('./retrySchedule');
+const { scheduleTimerSlot } = require('./timerSchedule');
 
 /**
  * Header socket namespace. Periodically emits the network status
@@ -148,10 +149,7 @@ module.exports = function (app, connectionHandler, socket) {
 
     const delay = getRetryDelay(retryAttempt++);
     log('warn', `Initial data load failed (${error}); retrying in ${delay}ms`);
-    timers[1] = setTimeout(() => {
-      timers[1] = undefined;
-      initialize(expectedGeneration);
-    }, delay);
+    scheduleTimerSlot(timers, 1, () => initialize(expectedGeneration), delay);
   };
 
   /** Schedule the next refresh only after every current source has settled. */
@@ -160,10 +158,7 @@ module.exports = function (app, connectionHandler, socket) {
       return;
     }
 
-    timers[0] = setTimeout(() => {
-      timers[0] = undefined;
-      emitData(expectedGeneration);
-    }, delay);
+    scheduleTimerSlot(timers, 0, () => emitData(expectedGeneration), delay);
   };
 
   /**
