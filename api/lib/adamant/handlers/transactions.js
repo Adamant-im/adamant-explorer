@@ -4,7 +4,11 @@ const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
 const { isPublicOperationType } = require('../transactionTypes');
 const { TRANSACTION_PAGE_MAX_LIMIT, TRANSACTION_PAGE_MAX_OFFSET } = require('../constants.mjs');
-const { isUnsignedIdentifier, parseIntegerParameter } = require('../helpers/validation');
+const {
+  ValidationError,
+  isUnsignedIdentifier,
+  parseIntegerParameter,
+} = require('../helpers/validation');
 
 /**
  * Get transaction by id
@@ -184,7 +188,7 @@ async function getTransactionsByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
-    if (err instanceof TypeError) {
+    if (err instanceof ValidationError) {
       return error({ success: false, error: err.message });
     }
 
@@ -231,7 +235,7 @@ async function getTransfersByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
-    if (err instanceof TypeError) {
+    if (err instanceof ValidationError) {
       return error({ success: false, error: err.message });
     }
 

@@ -13,14 +13,20 @@ const logger = require('../../../../utils/log');
  * @param {Function} success Callback for a computed response
  * @param {Object} [dependencies] Test-only dependency overrides
  * @param {Function} [dependencies.getSnapshot] Coherent snapshot provider
+ * @param {Function} [dependencies.isReady] Shared API startup readiness check
  * @param {Function} [dependencies.now] Current time provider
  * @returns {Promise<*>} Result of the invoked callback
  */
 async function getNetworkHealth(error, success, dependencies = {}) {
   const getSnapshot = dependencies.getSnapshot ?? getNetworkHealthSnapshot;
+  const isReady = dependencies.isReady ?? (() => require('../requests/api').isReady());
   const now = dependencies.now ?? (() => new Date());
 
   try {
+    if (!isReady()) {
+      throw new Error('ADAMANT API startup health check is not complete');
+    }
+
     const snapshot = await getSnapshot();
 
     return success({

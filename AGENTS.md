@@ -64,8 +64,8 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 - Middleware order in `app.js` is security-sensitive: headers and static serving precede API rate limiting; the exact API surface guard precedes Redis lookup and ADAMANT readiness; route responses are cached only after successful handlers
 - `api/lib/adamant/constants.mjs` is the only source of truth for `SUPPORTED_API_PATHS`; backend guards, frontend calls, routes, and tests must remain aligned with it
 - Explorer exposes 12 same-origin UI routes plus `GET /api/networkHealth`; do not add wildcard CORS or present the UI routes as a general-purpose integration API
-- The API limiter is an in-process fixed window of 300 requests per minute per client IP; it applies to `/api` paths, including health, and excludes static files and Socket.IO
-- `GET /api/networkHealth` returns HTTP `200` for computed `live`, `degraded`, or `critical` states and HTTP `503` with `status: "unavailable"` when no coherent snapshot is possible
+- The API limiter is an in-process fixed window of 300 requests per minute per client IP; it tracks at most 10,000 identities, puts excess identities into one fail-closed overflow bucket, applies to `/api` paths including health, and excludes static files and Socket.IO
+- `GET /api/networkHealth` bypasses startup readiness waiting, returns HTTP `200` for computed `live`, `degraded`, or `critical` states, and returns HTTP `503` with `status: "unavailable"` before SDK readiness or when no coherent snapshot is possible
 - Redis is optional at runtime: read/write failures bypass the response cache, while the rolling statistics handlers retry persistence without taking down core HTTP/static serving
 - `api/lib/adamant/requests/` is the only ADAMANT Node boundary; successful Node payloads remain untrusted until normalized or validated by handlers/helpers
 - Socket.IO retains four public namespaces for Header, Delegate Monitor, Network Monitor, and Activity Graph; polling must remain serialized, lifecycle-aware, and bounded during upstream failures

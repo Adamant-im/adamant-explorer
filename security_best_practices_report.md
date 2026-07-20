@@ -54,7 +54,7 @@ No critical findings were confirmed.
 - Rule ID: EXPRESS-INPUT-001 / data-integrity control
 - Severity: Medium, remediated
 - Location: `app.js:97`, `app.js:100`, `app.js:139`, and `cache.js:10`
-- Evidence: Exact supported-path guarding now precedes cache lookup; cache reads/stores accept only supported GET routes; request-time network health bypasses Redis; block-sensitive keys include height and block ID
+- Evidence: Exact supported-path guarding now precedes cache lookup; cache reads/stores accept only supported GET/HEAD routes; request-time network health bypasses Redis; block-sensitive keys include height and block ID
 - Impact: A stale legacy key could temporarily return a removed endpoint, unsupported methods could receive cached GET data, and volatile chain data could outlive a fork or block transition
 - Fix: Gate cache operations by method and exact route contract, reject unsupported routes before Redis, and version volatile keys by trusted block identity
 - Mitigation: Keep Redis private and monitor parse/read errors

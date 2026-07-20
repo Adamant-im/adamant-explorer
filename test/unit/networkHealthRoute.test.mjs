@@ -37,6 +37,7 @@ describe('GET /api/networkHealth', function () {
             forgingDelegates,
             activeDelegates: 101,
           }),
+          isReady: () => true,
           now: () => new Date(checkedAt),
         }),
       );
@@ -55,6 +56,7 @@ describe('GET /api/networkHealth', function () {
         getSnapshot: async () => {
           throw new Error('No coherent node snapshot');
         },
+        isReady: () => true,
         now: () => new Date(checkedAt),
       }),
     );
@@ -78,5 +80,26 @@ describe('GET /api/networkHealth', function () {
       error: 'Unexpected details query parameter',
     });
     expect(calls).to.equal(0);
+  });
+
+  it('returns unavailable immediately while the shared API is starting', async function () {
+    const app = express();
+    let snapshotCalls = 0;
+
+    mountNetworkHealthRoute(app, (error, success) =>
+      networkHealthHandler.getNetworkHealth(error, success, {
+        getSnapshot: async () => {
+          snapshotCalls++;
+          return {};
+        },
+        isReady: () => false,
+        now: () => new Date(checkedAt),
+      }),
+    );
+
+    const result = await supertest(app).get('/api/networkHealth').expect(503);
+
+    expect(result.body).to.deep.equal(response('unavailable', null));
+    expect(snapshotCalls).to.equal(0);
   });
 });

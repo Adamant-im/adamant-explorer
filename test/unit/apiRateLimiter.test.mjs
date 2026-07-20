@@ -95,6 +95,39 @@ describe('API rate limiter', function () {
     }
   });
 
+  it('bounds tracked identities and rate-limits excess clients together', function () {
+    let currentTime = 1_000;
+    const limiter = createApiRateLimiter({
+      limit: 1,
+      maxClients: 2,
+      windowMs: 60_000,
+      now: () => currentTime,
+    });
+
+    function send(ip) {
+      const req = { ip, path: '/api/networkHealth', socket: {} };
+      const res = createResponse();
+      let continued = false;
+
+      limiter(req, res, () => {
+        continued = true;
+      });
+
+      return { continued, res };
+    }
+
+    expect(send('192.0.2.1').continued).to.equal(true);
+    expect(send('192.0.2.2').continued).to.equal(true);
+    expect(send('192.0.2.3').continued).to.equal(true);
+
+    const overflowLimited = send('192.0.2.4');
+    expect(overflowLimited.continued).to.equal(false);
+    expect(overflowLimited.res.statusCode).to.equal(429);
+
+    currentTime += 60_000;
+    expect(send('192.0.2.4').continued).to.equal(true);
+  });
+
   it('separates forwarded clients only when the immediate proxy is trusted', async function () {
     const proxiedApp = express();
     proxiedApp.set('trust proxy', ['loopback']);

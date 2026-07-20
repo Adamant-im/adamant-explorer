@@ -5,6 +5,12 @@ const require = createRequire(import.meta.url);
 const cache = require('../../cache.js');
 
 describe('API cache policy', function () {
+  it('uses the same cache path for GET and Express-compatible HEAD requests', function () {
+    expect(cache.isApiCacheMethod('GET')).to.equal(true);
+    expect(cache.isApiCacheMethod('HEAD')).to.equal(true);
+    expect(cache.isApiCacheMethod('POST')).to.equal(false);
+  });
+
   it('versions latest blocks and transfers by the trusted block identity', function () {
     const latestBlock = { id: 'block-101', height: 101 };
 

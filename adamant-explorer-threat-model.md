@@ -117,7 +117,7 @@ flowchart LR
 | --- | --- | --- | --- | --- |
 | Retained HTTP API | Same-origin or direct GET/HEAD | Internet → Express | 12 UI routes plus network health | `api/lib/adamant/constants.mjs` / `SUPPORTED_API_PATHS` |
 | Query parsing | API query strings | Internet → handlers/Node | Unknown, duplicate, structured, and out-of-range values are rejected | `api/routes/validation.js`; `api/lib/adamant/helpers/validation.js` |
-| Rate limiter and client IP | Any `/api`-segment request | Internet/proxy → Express | Fixed 300/minute/process; explicit proxy trust | `modules/apiRateLimiter.js`; `config.default.jsonc` / `trustedProxies` |
+| Rate limiter and client IP | Any `/api`-segment request | Internet/proxy → Express | Fixed 300/minute/process; 10,000 tracked identities plus one fail-closed overflow bucket; explicit proxy trust | `modules/apiRateLimiter.js`; `config.default.jsonc` / `trustedProxies` |
 | Static and SPA fallback | Browser GET/HEAD | Internet → filesystem | Fixed `public/` root; API-like paths are guarded | `app.js` / `express.static`, `guardApiSurface` |
 | Socket.IO namespaces | Browser connections | Internet → monitor schedulers | Four fixed namespaces; shared namespace state | `sockets/index.js` |
 | ADAMANT Node calls | API and monitor work | Express → Node network | SDK health/failover; operator-controlled node list | `api/lib/adamant/requests/api.js` |

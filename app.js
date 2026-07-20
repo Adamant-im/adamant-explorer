@@ -98,7 +98,7 @@ app.use(guardApiSurface);
 
 // Cache lookup: serve a cached API response when one exists
 app.use(async (req, res, next) => {
-  if (req.method !== 'GET' || !isSupportedApiPath(req.path)) {
+  if (!cache.isApiCacheMethod(req.method) || !isSupportedApiPath(req.path)) {
     return next();
   }
 
@@ -137,7 +137,11 @@ logger.debug('Explorer startup: API routes registered');
 
 // Cache store: routes that support caching call next() with the response in req.json
 app.use((req, res, next) => {
-  if (req.method !== 'GET' || !isSupportedApiPath(req.path) || req.json === undefined) {
+  if (
+    !cache.isApiCacheMethod(req.method) ||
+    !isSupportedApiPath(req.path) ||
+    req.json === undefined
+  ) {
     return next();
   }
 

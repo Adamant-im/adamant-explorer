@@ -12,6 +12,18 @@ const cacheByBlockList = ['/api/getLastBlocks', '/api/getLastTransfers'];
 const cacheTTLOverride = {};
 
 /**
+ * Check whether an HTTP method has GET-compatible API cache semantics.
+ *
+ * Express automatically routes HEAD requests through GET handlers and strips
+ * their bodies, so both methods must traverse the same lookup/store path.
+ * @param {string} method HTTP request method
+ * @returns {boolean} Whether the method may use the response cache
+ */
+function isApiCacheMethod(method) {
+  return method === 'GET' || method === 'HEAD';
+}
+
+/**
  * Build the Redis key for one Explorer API request.
  *
  * Block-sensitive endpoints bypass the cache until the trusted accumulator
@@ -47,4 +59,5 @@ module.exports = {
   cacheIgnoreList,
   cacheTTLOverride,
   getCacheKey,
+  isApiCacheMethod,
 };

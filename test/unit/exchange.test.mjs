@@ -79,4 +79,37 @@ describe('Exchange-rate refresh', function () {
       },
     });
   });
+
+  it('keeps the last known rate for each source that fails independently', async function () {
+    const Exchange = loadExchange(async (url) => {
+      if (url.includes('btceur')) {
+        throw new Error('EUR source unavailable');
+      }
+
+      return { data: { last: '123.45' } };
+    });
+    const config = {
+      exchangeRates: {
+        enabled: false,
+        updateInterval: 30_000,
+      },
+    };
+    const exchange = new Exchange(config);
+    exchange.tickers = {
+      BTC: {
+        USD: 100,
+        EUR: 90,
+      },
+    };
+
+    config.exchangeRates.enabled = true;
+    await exchange.loadRates();
+
+    expect(exchange.tickers).to.deep.equal({
+      BTC: {
+        USD: 123.45,
+        EUR: 90,
+      },
+    });
+  });
 });

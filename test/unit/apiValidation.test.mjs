@@ -55,6 +55,12 @@ describe('API input validation', function () {
         maximum: 2000,
       }),
     ).to.throw('Missing/Invalid offset parameter');
+
+    expect(() =>
+      validation.parseIntegerParameter('invalid', {
+        name: 'offset',
+      }),
+    ).to.throw(validation.ValidationError);
   });
 
   it('enforces route query allowlists and scalar values', function () {

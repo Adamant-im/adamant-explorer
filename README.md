@@ -115,7 +115,7 @@ pm2 stop adamant-explorer
 
 Explorer HTTP routes support its own UI and are not a general-purpose ADAMANT developer API. Browser responses are same-origin and API traffic is rate-limited. Applications and integrations should use [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) instead.
 
-`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` when no coherent snapshot can be produced.
+`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` immediately while the Node SDK is starting or when no coherent snapshot can be produced.
 
 ## Security
 

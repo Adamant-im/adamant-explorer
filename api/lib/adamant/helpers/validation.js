@@ -6,6 +6,17 @@ const PUBLIC_KEY_PATTERN = /^[a-f0-9]{64}$/i;
 const UNSIGNED_DECIMAL_PATTERN = /^(0|[1-9][0-9]*)$/;
 const DELEGATE_SEARCH_PATTERN = /^[a-z0-9!@$&_.]{1,20}$/i;
 
+/** Public request validation failure safe to return to an API client. */
+class ValidationError extends TypeError {
+  /**
+   * @param {string} message Bounded public error message
+   */
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+
 /**
  * Check whether a value is a syntactically valid ADAMANT address.
  *
@@ -26,11 +37,11 @@ function isAdamantAddress(value) {
  * Normalize a validated ADAMANT address to its canonical uppercase prefix.
  * @param {string} value Valid ADAMANT address
  * @returns {string} Canonical address
- * @throws {TypeError} When the address is malformed or outside uint64 range
+ * @throws {ValidationError} When the address is malformed or outside uint64 range
  */
 function normalizeAdamantAddress(value) {
   if (!isAdamantAddress(value)) {
-    throw new TypeError('Missing/Invalid address parameter');
+    throw new ValidationError('Missing/Invalid address parameter');
   }
 
   return `U${value.slice(1)}`;
@@ -80,7 +91,7 @@ function isDelegateSearch(value) {
  * @param {number} [options.minimum=0] Inclusive lower bound
  * @param {number} [options.maximum=Number.MAX_SAFE_INTEGER] Inclusive upper bound
  * @returns {number} Parsed integer
- * @throws {TypeError} When the value is missing, malformed, or out of bounds
+ * @throws {ValidationError} When the value is missing, malformed, or out of bounds
  */
 function parseIntegerParameter(
   value,
@@ -94,13 +105,13 @@ function parseIntegerParameter(
   const isIntegerNumber = typeof value === 'number' && Number.isSafeInteger(value);
 
   if (!isCanonicalString && !isIntegerNumber) {
-    throw new TypeError(`Missing/Invalid ${name} parameter`);
+    throw new ValidationError(`Missing/Invalid ${name} parameter`);
   }
 
   const parsed = Number(value);
 
   if (!Number.isSafeInteger(parsed) || parsed < minimum || parsed > maximum) {
-    throw new TypeError(`Missing/Invalid ${name} parameter`);
+    throw new ValidationError(`Missing/Invalid ${name} parameter`);
   }
 
   return parsed;
@@ -136,6 +147,7 @@ function validateQueryKeys(query, allowedKeys) {
 }
 
 module.exports = {
+  ValidationError,
   isAdamantAddress,
   isDelegateSearch,
   isPublicKey,

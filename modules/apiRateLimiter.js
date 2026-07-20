@@ -4,6 +4,7 @@ const { isApiPath } = require('../api/lib/adamant/helpers/http');
 
 const DEFAULT_API_RATE_LIMIT = 300;
 const DEFAULT_API_RATE_LIMIT_WINDOW_MS = 60_000;
+const DEFAULT_API_RATE_LIMIT_MAX_CLIENTS = 10_000;
 
 /**
  * Add rate-limit metadata to an API response.
@@ -33,12 +34,15 @@ function setRateLimitHeaders(res, limit, remaining, resetAt, now, windowMs) {
  * Create a fixed-window, in-process rate limiter for Explorer API requests.
  *
  * Client identity comes from `req.ip`, so callers must configure Express
- * `trust proxy` before installing this middleware. Entries expire after one
- * window and are removed opportunistically without background timers.
+ * `trust proxy` before installing this middleware. Individually tracked
+ * entries are capped; additional identities share a fail-closed overflow
+ * bucket until capacity becomes available. Entries expire after one window
+ * and are removed opportunistically without background timers.
  *
  * @param {Object} [options] Limiter options
  * @param {number} [options.limit=300] Requests allowed per client and window
  * @param {number} [options.windowMs=60000] Window duration in milliseconds
+ * @param {number} [options.maxClients=10000] Maximum individually tracked client identities
  * @param {() => number} [options.now=Date.now] Clock used by tests
  * @returns {Function} Express middleware
  * @throws {TypeError} When an option is not a positive integer
@@ -46,6 +50,7 @@ function setRateLimitHeaders(res, limit, remaining, resetAt, now, windowMs) {
 function createApiRateLimiter({
   limit = DEFAULT_API_RATE_LIMIT,
   windowMs = DEFAULT_API_RATE_LIMIT_WINDOW_MS,
+  maxClients = DEFAULT_API_RATE_LIMIT_MAX_CLIENTS,
   now = Date.now,
 } = {}) {
   if (!Number.isSafeInteger(limit) || limit <= 0) {
@@ -56,11 +61,16 @@ function createApiRateLimiter({
     throw new TypeError('API rate-limit window must be a positive safe integer');
   }
 
+  if (!Number.isSafeInteger(maxClients) || maxClients <= 0) {
+    throw new TypeError('API rate-limit client cap must be a positive safe integer');
+  }
+
   if (typeof now !== 'function') {
     throw new TypeError('API rate-limit clock must be a function');
   }
 
   const clients = new Map();
+  let overflowState = null;
   let nextSweepAt = 0;
 
   return function apiRateLimiter(req, res, next) {
@@ -84,11 +94,26 @@ function createApiRateLimiter({
     let state = clients.get(client);
 
     if (!state || state.resetAt <= currentTime) {
-      state = {
-        count: 0,
-        resetAt: currentTime + windowMs,
-      };
-      clients.set(client, state);
+      if (state) {
+        clients.delete(client);
+      }
+
+      if (clients.size < maxClients) {
+        state = {
+          count: 0,
+          resetAt: currentTime + windowMs,
+        };
+        clients.set(client, state);
+      } else {
+        if (!overflowState || overflowState.resetAt <= currentTime) {
+          overflowState = {
+            count: 0,
+            resetAt: currentTime + windowMs,
+          };
+        }
+
+        state = overflowState;
+      }
     }
 
     state.count += 1;
@@ -112,6 +137,7 @@ function createApiRateLimiter({
 
 module.exports = {
   DEFAULT_API_RATE_LIMIT,
+  DEFAULT_API_RATE_LIMIT_MAX_CLIENTS,
   DEFAULT_API_RATE_LIMIT_WINDOW_MS,
   createApiRateLimiter,
 };

@@ -3,7 +3,7 @@ const MAX_RETRY_DELAY_MILLISECONDS = 60000;
 const RETRY_JITTER_RATIO = 0.2;
 
 /**
- * Calculate an exponential retry delay with bounded positive jitter.
+ * Calculate an exponential retry delay with bounded jitter.
  *
  * Jitter keeps independent socket namespaces from retrying a failed Node in
  * lockstep, while the cap keeps recovery responsive after a long outage.

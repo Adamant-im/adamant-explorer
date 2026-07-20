@@ -4,7 +4,7 @@ const knowledge = require('../../../../utils/knownAddresses');
 const { TRANSACTION_PAGE_MAX_LIMIT, TRANSACTION_PAGE_MAX_OFFSET } = require('../constants.mjs');
 const { SERVICE_TYPES } = require('../transactionTypes');
 const { concatenateTransactions, sortTransactions } = require('./transactionList');
-const { normalizeAdamantAddress, parseIntegerParameter } = require('./validation');
+const { ValidationError, normalizeAdamantAddress, parseIntegerParameter } = require('./validation');
 
 const TRANSACTION_DIRECTIONS = new Set(['sent', 'received', 'others']);
 
@@ -73,18 +73,18 @@ async function processTransaction(transaction) {
  * routes. This helper independently validates their values before forwarding.
  * @param {Object} params Explorer request query
  * @returns {Object} Query for `getTransactions` or `getTransfers`
- * @throws {TypeError} When address, direction, or pagination is invalid
+ * @throws {ValidationError} When address, direction, or pagination is invalid
  */
 function normalizeTransactionParams(params) {
   if (!params || typeof params !== 'object' || Array.isArray(params)) {
-    throw new TypeError('Missing/Invalid address parameter');
+    throw new ValidationError('Missing/Invalid address parameter');
   }
 
   const address = normalizeAdamantAddress(params.address);
   const direction = params.direction || '';
 
   if (direction && !TRANSACTION_DIRECTIONS.has(direction)) {
-    throw new TypeError('Missing/Invalid direction parameter');
+    throw new ValidationError('Missing/Invalid direction parameter');
   }
 
   const query = {

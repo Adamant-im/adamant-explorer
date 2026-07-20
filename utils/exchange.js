@@ -59,10 +59,10 @@ class Exchange {
   }
 
   /**
-   * Fetch all tickers and replace `tickers` with fresh values.
+   * Fetch all tickers and merge fresh values into the latest known rates.
    *
-   * Failed sources are logged and skipped; the previous rates are kept
-   * when every source fails. Never rejects.
+   * Failed sources are logged and skipped; their previous pair values are
+   * retained independently. Never rejects.
    * @returns {Promise<void>}
    */
   async loadRates() {
@@ -96,7 +96,15 @@ class Exchange {
       );
 
       if (Object.keys(tickers).length > 0) {
-        this.tickers = tickers;
+        this.tickers = Object.fromEntries(
+          [...new Set([...Object.keys(this.tickers), ...Object.keys(tickers)])].map((base) => [
+            base,
+            {
+              ...this.tickers[base],
+              ...tickers[base],
+            },
+          ]),
+        );
         const pairCount = Object.values(tickers).reduce(
           (count, quotes) => count + Object.keys(quotes).length,
           0,

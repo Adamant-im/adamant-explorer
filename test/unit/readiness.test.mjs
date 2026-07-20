@@ -113,6 +113,23 @@ describe('ADAMANT API readiness', function () {
     expect(calls).to.deep.equal([undefined]);
   });
 
+  it('does not delay the operational health response during API startup', async function () {
+    const createMiddleware = require('../../api/lib/adamant/middleware/readiness.js');
+    const middleware = createMiddleware({
+      isReady: () => false,
+      waitForReady: () => {
+        throw new Error('should not wait');
+      },
+    });
+    const calls = [];
+
+    await middleware({ originalUrl: '/api/networkHealth' }, {}, (error) => {
+      calls.push(error);
+    });
+
+    expect(calls).to.deep.equal([undefined]);
+  });
+
   it('defers first monitor initialization until the shared API client is ready', async function () {
     const ready = deferred();
     const modules = {};
@@ -204,5 +221,112 @@ describe('ADAMANT API readiness', function () {
 
     expect(modules['/header'].initCount).to.equal(1);
     expect(modules['/header'].connectCount).to.equal(0);
+  });
+
+  it('retries a synchronous monitor initialization failure while clients remain', async function () {
+    const modules = {};
+    const namespaces = {};
+    const scheduled = [];
+    const originalSetTimeout = global.setTimeout;
+    const originalClearTimeout = global.clearTimeout;
+
+    socketsIndexPath = require.resolve('../../sockets/index.js');
+    apiPath = require.resolve('../../api/lib/adamant/requests/api.js');
+    socketModulePaths = ['header', 'activityGraph', 'delegateMonitor', 'networkMonitor'].map(
+      (name) => require.resolve(`../../sockets/${name}.js`),
+    );
+
+    require.cache[apiPath] = {
+      exports: {
+        isReady: () => true,
+        waitForReady: async () => {},
+      },
+    };
+
+    for (const modulePath of socketModulePaths) {
+      require.cache[modulePath] = {
+        exports: function socketModule(app, connectionHandler, namespace) {
+          const moduleState = {
+            initCount: 0,
+            disconnectCount: 0,
+            onInit() {
+              this.initCount++;
+
+              if (namespace.name === '/header' && this.initCount === 1) {
+                throw new Error('synchronous startup failure');
+              }
+            },
+            onConnect() {},
+            onDisconnect() {
+              this.disconnectCount++;
+            },
+          };
+          modules[namespace.name] = moduleState;
+          new connectionHandler(`${namespace.name}:`, namespace, moduleState);
+        },
+      };
+    }
+
+    const io = {
+      of(name) {
+        const namespace = {
+          name,
+          sockets: new Map(),
+          handlers: {},
+          on(event, handler) {
+            this.handlers[event] = handler;
+          },
+        };
+        namespaces[name] = namespace;
+        return namespace;
+      },
+    };
+
+    global.setTimeout = (callback, delay) => {
+      const timer = { callback, delay };
+      scheduled.push(timer);
+      return timer;
+    };
+    global.clearTimeout = () => {};
+
+    try {
+      require(socketsIndexPath)({}, io);
+
+      const namespace = namespaces['/header'];
+      const socket = {
+        id: 'socket-1',
+        emitted: [],
+        handlers: {},
+        emit(event, payload) {
+          this.emitted.push({ event, payload });
+        },
+        on(event, handler) {
+          this.handlers[event] = handler;
+        },
+      };
+      namespace.sockets.set(socket.id, socket);
+      namespace.handlers.connection(socket);
+
+      await nextTick();
+
+      expect(modules['/header'].initCount).to.equal(1);
+      expect(modules['/header'].disconnectCount).to.equal(1);
+      expect(socket.emitted).to.deep.include({
+        event: 'status',
+        payload: {
+          status: 'retrying',
+          message: 'Page monitor initialization failed; retrying',
+        },
+      });
+      expect(scheduled).to.have.length(1);
+
+      scheduled[0].callback();
+      await nextTick();
+
+      expect(modules['/header'].initCount).to.equal(2);
+    } finally {
+      global.setTimeout = originalSetTimeout;
+      global.clearTimeout = originalClearTimeout;
+    }
   });
 });
