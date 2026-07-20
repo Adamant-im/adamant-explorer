@@ -39,7 +39,8 @@ describe('HTTP security policy', function () {
   it('keeps the map and runtime-style allowances required by the current UI', function () {
     const policy = buildContentSecurityPolicy('explorer.adamant.im');
 
-    expect(policy).to.include("img-src 'self' https://*.tile.openstreetmap.org data:");
+    expect(policy).to.include("img-src 'self' data:");
+    expect(policy).not.to.include('openstreetmap.org');
     expect(policy).to.include("style-src 'self' 'unsafe-inline'");
     expect(policy).to.include("object-src 'none'");
     expect(policy).to.include("base-uri 'self'");

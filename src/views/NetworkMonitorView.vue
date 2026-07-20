@@ -48,9 +48,12 @@ function createMap() {
   map = L.map('map', { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 });
   cluster = L.markerClusterGroup({ maxClusterRadius: 50 });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // Same-origin proxy: Tor Browser omits Referer on .onion, and OSM blocks
+  // browser tile requests without a valid Referer (tile usage policy).
+  L.tileLayer('/osm-tiles/{z}/{x}/{y}.png', {
     attribution:
       '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    referrerPolicy: 'same-origin',
   }).addTo(map);
 
   const PlatformIcon = L.Icon.extend({
