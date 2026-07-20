@@ -21,7 +21,7 @@ const { createApiRateLimiter } = require('./modules/apiRateLimiter');
 const { guardApiSurface } = require('./modules/apiSurface');
 const { normalizePort } = require('./modules/configValidation');
 const { buildContentSecurityPolicy } = require('./modules/httpSecurity');
-const { createOsmTileProxy } = require('./modules/osmTileProxy');
+const { createOsmTileProxy, createOsmTileRateLimiter } = require('./modules/osmTileProxy');
 const config = require('./modules/configReader');
 
 const app = express();
@@ -76,13 +76,15 @@ app.use((req, res, next) => {
 
 // Proxy OSM raster tiles so Tor Browser on .onion (no Referer) and other
 // referrer-stripping clients still receive map imagery under OSM tile policy.
+// Registered before morgan intentionally: tile fan-out would drown access logs.
+// Per-IP limiting and an in-process LRU cache reduce abuse and OSM upstream load.
 app.get(
   '/osm-tiles/:z/:x/:y.png',
+  createOsmTileRateLimiter(),
   createOsmTileProxy({
     userAgent: `ADAMANT-Explorer/${packageJson.version} (+${packageJson.homepage})`,
   }),
 );
-
 app.use(
   express.static(path.join(__dirname, 'public'), {
     dotfiles: 'deny',
