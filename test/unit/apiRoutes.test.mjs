@@ -1,8 +1,8 @@
 import { createRequire } from 'node:module';
 import { expect } from 'chai';
+import { SUPPORTED_API_PATHS } from '../../api/lib/adamant/constants.mjs';
 
 const require = createRequire(import.meta.url);
-const { SUPPORTED_API_PATHS } = require('../../api/lib/adamant/helpers/http.js');
 
 describe('Explorer API route surface', function () {
   it('registers only the UI routes and the operational health endpoint', function () {

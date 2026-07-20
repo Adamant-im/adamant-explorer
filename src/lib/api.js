@@ -8,21 +8,9 @@
  * deal with a single failure path.
  */
 
-const SUPPORTED_API_PATHS = new Set([
-  '/api/getAccount',
-  '/api/getTopAccounts',
-  '/api/getLastBlocks',
-  '/api/getBlock',
-  '/api/totalSupply',
-  '/api/search',
-  '/api/getTransaction',
-  '/api/getLastTransfers',
-  '/api/getTransactionsByAddress',
-  '/api/getTransfersByAddress',
-  '/api/getTransactionsByBlock',
-  '/api/delegates/getStandby',
-  '/api/networkHealth',
-]);
+import { SUPPORTED_API_PATHS } from '../../api/lib/adamant/constants.mjs';
+
+const supportedApiPathSet = new Set(SUPPORTED_API_PATHS);
 
 /**
  * Whether a path is part of the Explorer UI's intentionally retained API surface.
@@ -35,7 +23,7 @@ const SUPPORTED_API_PATHS = new Set([
  * @returns {boolean} True only for an exact supported API path
  */
 export function isSupportedApiPath(path) {
-  return typeof path === 'string' && SUPPORTED_API_PATHS.has(path);
+  return typeof path === 'string' && supportedApiPathSet.has(path);
 }
 
 /**

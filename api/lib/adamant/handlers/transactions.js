@@ -3,10 +3,8 @@ const helpers = require('../helpers/transactions');
 const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
 const { isPublicOperationType } = require('../transactionTypes');
+const { TRANSACTION_PAGE_MAX_LIMIT, TRANSACTION_PAGE_MAX_OFFSET } = require('../constants.mjs');
 const { isUnsignedIdentifier, parseIntegerParameter } = require('../helpers/validation');
-
-const TRANSACTION_PAGE_MAX_OFFSET = 5000;
-const TRANSACTION_PAGE_MAX_LIMIT = 100;
 
 /**
  * Get transaction by id

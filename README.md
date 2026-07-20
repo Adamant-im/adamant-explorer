@@ -55,13 +55,21 @@ cp config.default.jsonc config.jsonc
 nano config.jsonc
 ```
 
-Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically.
+Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically. Prefer HTTPS nodes because plaintext HTTP does not authenticate the remote endpoint or protect responses from modification in transit.
 
 Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` is the most verbose troubleshooting level.
 
 Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Results are requested in batches, normalized for the frontend, cached by IP, and refreshed daily. Failed lookups are retried after five minutes; peers still render when GeoJS is disabled or unavailable.
 
-`trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. Every trusted proxy must overwrite forwarding headers.
+`trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. The accepted `proxy-addr` names expand as follows:
+
+| Name | Trusted networks |
+| --- | --- |
+| `loopback` | `127.0.0.0/8`, `::1/128` |
+| `linklocal` | `169.254.0.0/16`, `fe80::/10` |
+| `uniquelocal` | `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `fc00::/7` |
+
+Prefer exact proxy IPs or CIDRs. A named range trusts every address in that range, so use `linklocal` or `uniquelocal` only when every possible proxy hop in that range is controlled. Every trusted proxy must overwrite forwarding headers.
 
 For a local nginx process, use the real client socket address rather than preserving a client-supplied chain:
 

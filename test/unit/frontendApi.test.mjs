@@ -1,24 +1,12 @@
 import { expect } from 'chai';
+import { SUPPORTED_API_PATHS } from '../../api/lib/adamant/constants.mjs';
 import { apiGet, isSupportedApiPath } from '../../src/lib/api.js';
-
-const RETAINED_UI_ROUTES = [
-  '/api/getAccount',
-  '/api/getTopAccounts',
-  '/api/getLastBlocks',
-  '/api/getBlock',
-  '/api/totalSupply',
-  '/api/search',
-  '/api/getTransaction',
-  '/api/getLastTransfers',
-  '/api/getTransactionsByAddress',
-  '/api/getTransfersByAddress',
-  '/api/getTransactionsByBlock',
-  '/api/delegates/getStandby',
-];
 
 describe('frontend Explorer API client', function () {
   it('allowlists the retained UI routes and network health endpoint', function () {
-    for (const path of [...RETAINED_UI_ROUTES, '/api/networkHealth']) {
+    expect(SUPPORTED_API_PATHS).to.have.length(13);
+
+    for (const path of SUPPORTED_API_PATHS) {
       expect(isSupportedApiPath(path), path).to.equal(true);
     }
   });

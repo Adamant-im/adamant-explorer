@@ -2,6 +2,12 @@
 
 const { isIP } = require('node:net');
 
+/**
+ * `proxy-addr` names accepted by Express:
+ * loopback = 127.0.0.0/8 and ::1/128;
+ * linklocal = 169.254.0.0/16 and fe80::/10;
+ * uniquelocal = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, and fc00::/7.
+ */
 const NAMED_PROXY_RANGES = new Set(['loopback', 'linklocal', 'uniquelocal']);
 
 /**
@@ -92,7 +98,7 @@ function validateTrustedProxies(value) {
   }
 
   if (value.some((entry) => !isTrustedProxyEntry(entry))) {
-    return 'Field "trustedProxies" must contain only explicit IPs, CIDRs, or named private ranges';
+    return 'Field "trustedProxies" must contain only explicit IPs, CIDRs, or the named ranges "loopback", "linklocal", and "uniquelocal"';
   }
 
   return null;

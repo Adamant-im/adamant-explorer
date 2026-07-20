@@ -22,3 +22,29 @@ export const BLOCK_STATISTICS_WINDOW_SECONDS = 24 * 60 * 60;
 /** Maximum possible blocks in the rolling statistics window. */
 export const BLOCK_STATISTICS_WINDOW_BLOCKS =
   BLOCK_STATISTICS_WINDOW_SECONDS / BLOCK_INTERVAL_SECONDS;
+
+/** Maximum offset accepted by the Explorer block-list API. */
+export const BLOCK_PAGE_MAX_OFFSET = 200_000_000;
+
+/** Maximum offset accepted by Explorer transaction-list APIs. */
+export const TRANSACTION_PAGE_MAX_OFFSET = 5000;
+
+/** Maximum page size accepted by Explorer transaction-list APIs. */
+export const TRANSACTION_PAGE_MAX_LIMIT = 100;
+
+/** Exact HTTP endpoints supported by the Explorer backend and frontend client. */
+export const SUPPORTED_API_PATHS = Object.freeze([
+  '/api/getAccount',
+  '/api/getTopAccounts',
+  '/api/getLastBlocks',
+  '/api/getBlock',
+  '/api/totalSupply',
+  '/api/search',
+  '/api/getTransaction',
+  '/api/getLastTransfers',
+  '/api/getTransactionsByAddress',
+  '/api/getTransfersByAddress',
+  '/api/getTransactionsByBlock',
+  '/api/delegates/getStandby',
+  '/api/networkHealth',
+]);

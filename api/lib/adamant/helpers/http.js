@@ -1,21 +1,6 @@
 'use strict';
 
-/** Exact HTTP endpoints supported by Explorer. */
-const SUPPORTED_API_PATHS = Object.freeze([
-  '/api/getAccount',
-  '/api/getTopAccounts',
-  '/api/getLastBlocks',
-  '/api/getBlock',
-  '/api/totalSupply',
-  '/api/search',
-  '/api/getTransaction',
-  '/api/getLastTransfers',
-  '/api/getTransactionsByAddress',
-  '/api/getTransfersByAddress',
-  '/api/getTransactionsByBlock',
-  '/api/delegates/getStandby',
-  '/api/networkHealth',
-]);
+const { SUPPORTED_API_PATHS } = require('../constants.mjs');
 const supportedApiPathSet = new Set(SUPPORTED_API_PATHS);
 
 /**
@@ -39,7 +24,6 @@ function isSupportedApiPath(path) {
 }
 
 module.exports = {
-  SUPPORTED_API_PATHS,
   isApiPath,
   isSupportedApiPath,
 };

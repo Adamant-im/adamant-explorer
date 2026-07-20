@@ -1,10 +1,9 @@
 const blocks = require('../requests/blocks');
 const delegates = require('../requests/delegates');
 const helpers = require('../helpers/blocks');
+const { BLOCK_PAGE_MAX_OFFSET } = require('../constants.mjs');
 const { isUnsignedIdentifier, parseIntegerParameter } = require('../helpers/validation');
 const logger = require('../../../../utils/log');
-
-const MAX_BLOCK_OFFSET = 200_000_000;
 
 /**
  * Get last 20 blocks with offset n
@@ -20,7 +19,7 @@ async function getLastBlocks(n, error, success) {
     offset = parseIntegerParameter(n, {
       name: 'n',
       defaultValue: 0,
-      maximum: MAX_BLOCK_OFFSET,
+      maximum: BLOCK_PAGE_MAX_OFFSET,
     });
   } catch (err) {
     return error({ success: false, error: err.message });

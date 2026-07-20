@@ -1,12 +1,11 @@
 const accounts = require('../requests/accounts');
 const delegates = require('../requests/delegates');
 const knowledge = require('../../../../utils/knownAddresses');
+const { TRANSACTION_PAGE_MAX_LIMIT, TRANSACTION_PAGE_MAX_OFFSET } = require('../constants.mjs');
 const { SERVICE_TYPES } = require('../transactionTypes');
 const { concatenateTransactions, sortTransactions } = require('./transactionList');
 const { normalizeAdamantAddress, parseIntegerParameter } = require('./validation');
 
-const TRANSACTION_PAGE_MAX_OFFSET = 5000;
-const TRANSACTION_PAGE_MAX_LIMIT = 100;
 const TRANSACTION_DIRECTIONS = new Set(['sent', 'received', 'others']);
 
 /**

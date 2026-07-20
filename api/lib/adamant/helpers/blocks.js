@@ -1,3 +1,4 @@
+const { BLOCK_PAGE_MAX_OFFSET } = require('../constants.mjs');
 const { parseIntegerParameter } = require('./validation');
 
 /**
@@ -39,7 +40,7 @@ function offset(value) {
     return parseIntegerParameter(value, {
       name: 'n',
       defaultValue: 0,
-      maximum: 200_000_000,
+      maximum: BLOCK_PAGE_MAX_OFFSET,
     });
   } catch {
     return 0;

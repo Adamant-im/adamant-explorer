@@ -6,7 +6,7 @@
 
 ## Executive summary
 
-The review found no unauthenticated code execution, authentication bypass, secret exposure, or transaction-submission path. The highest confirmed issue was an HTML interpretation path in Network Monitor popups fed by untrusted Node/geo data. Medium findings covered permissive and oversized API behavior, missing abuse controls, stale-cache route resurrection, overlapping monitor polling, and unsafe proxy/CSP assumptions. These findings are remediated in this branch with focused tests. Remaining work is bounded to peer-privacy policy (#20), incompatible dependency upgrades (#34), and comprehensive successful Node-payload schema validation (#35).
+The review found no unauthenticated code execution, authentication bypass, secret exposure, or transaction-submission path. The highest confirmed issue was an HTML interpretation path in Network Monitor popups fed by untrusted Node/geo data. Medium findings covered permissive and oversized API behavior, missing abuse controls, stale-cache route resurrection, overlapping monitor polling, and unsafe proxy/CSP assumptions. These findings are remediated in this branch with focused tests. Remaining work is bounded to peer-privacy policy (#20), incompatible dependency upgrades (#34), comprehensive successful Node-payload schema validation (#35), and outage retry/log coalescing (#36).
 
 ## Critical findings
 
@@ -125,6 +125,7 @@ No dependency was changed in this focused patch because no advisory requires an 
 - Public ledger metadata remains intentionally visible; Explorer does not expose message content through the reviewed history/list paths
 - The limiter is intentionally in-process and does not provide a cross-replica aggregate
 - Reverse-proxy TLS, WAF, firewall, Redis network isolation, and CSP reporting are deployment controls not represented in this repository
+- The default Node list retains one legacy plaintext HTTP fallback for compatibility; HTTPS entries are preferred and operators can remove the fallback
 - Successful ADAMANT Node response shapes are not yet validated uniformly; #35 tracks that larger trust-boundary change
 - Complete dependency outages still produce repeated background Node health and Redis reconnect logs; #36 tracks shared single-flight refresh, backoff, and log deduplication
 

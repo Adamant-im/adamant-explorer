@@ -66,7 +66,7 @@ describe('Explorer config validation', function () {
   describe('Trusted proxy config', function () {
     it('accepts direct exposure, loopback nginx, and explicit proxy networks', function () {
       expect(validateTrustedProxies([])).to.equal(null);
-      expect(validateTrustedProxies(['loopback'])).to.equal(null);
+      expect(validateTrustedProxies(['loopback', 'linklocal', 'uniquelocal'])).to.equal(null);
       expect(validateTrustedProxies(['127.0.0.1', '10.20.0.0/16', '2001:db8::/64'])).to.equal(null);
     });
 
