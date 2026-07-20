@@ -86,7 +86,9 @@ function normalizeHostHeader(value) {
  * Build the Explorer's Content Security Policy.
  *
  * Explicit same-host WebSocket sources preserve Socket.IO compatibility in
- * browsers where `'self'` does not cover `ws:` and `wss:`.
+ * browsers where `'self'` does not cover `ws:` and `wss:`. Map tiles are loaded
+ * from the same origin (`/osm-tiles/`), so no third-party image hosts are
+ * listed in `img-src`.
  * @param {*} hostHeader Request Host header
  * @returns {string} CSP header value
  */
@@ -96,7 +98,7 @@ function buildContentSecurityPolicy(hostHeader) {
 
   return (
     `frame-ancestors 'none'; default-src 'self'; connect-src 'self'${websocketSources}; ` +
-    "img-src 'self' https://*.tile.openstreetmap.org data:; " +
+    "img-src 'self' data:; " +
     "style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; base-uri 'self'"
   );
 }

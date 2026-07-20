@@ -63,6 +63,8 @@ Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` i
 
 Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Peers still render when GeoJS is disabled or unavailable.
 
+Network Monitor map imagery is fetched by the explorer process from [OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/) and served at `/osm-tiles/{z}/{x}/{y}.png`. Same-origin tiles keep the map working in Tor Browser on onion sites (which omit `Referer`) and avoid exposing browser tile requests directly to OSM.
+
 `trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. The accepted `proxy-addr` names expand as follows:
 
 | Name | Trusted networks |

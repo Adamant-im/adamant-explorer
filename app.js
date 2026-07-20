@@ -21,6 +21,7 @@ const { createApiRateLimiter } = require('./modules/apiRateLimiter');
 const { guardApiSurface } = require('./modules/apiSurface');
 const { normalizePort } = require('./modules/configValidation');
 const { buildContentSecurityPolicy } = require('./modules/httpSecurity');
+const { createOsmTileProxy } = require('./modules/osmTileProxy');
 const config = require('./modules/configReader');
 
 const app = express();
@@ -56,8 +57,8 @@ app.set('strict routing', true);
 app.set('case sensitive routing', true);
 app.set('exchange enabled', config.exchangeRates.enabled);
 
-// Security headers allow self-hosted application resources and the fixed
-// OpenStreetMap tile origin used by Network Monitor.
+// Security headers allow self-hosted application resources. Network Monitor
+// map tiles are served from the same origin via /osm-tiles/ (see below).
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -72,6 +73,15 @@ app.use((req, res, next) => {
 
   return next();
 });
+
+// Proxy OSM raster tiles so Tor Browser on .onion (no Referer) and other
+// referrer-stripping clients still receive map imagery under OSM tile policy.
+app.get(
+  '/osm-tiles/:z/:x/:y.png',
+  createOsmTileProxy({
+    userAgent: `ADAMANT-Explorer/${packageJson.version} (+${packageJson.homepage})`,
+  }),
+);
 
 app.use(
   express.static(path.join(__dirname, 'public'), {

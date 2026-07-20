@@ -52,6 +52,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': 'http://localhost:6040',
+      '/osm-tiles': 'http://localhost:6040',
       '/socket.io': {
         target: 'http://localhost:6040',
         ws: true,
