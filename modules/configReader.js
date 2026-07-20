@@ -1,6 +1,10 @@
 const fs = require('fs');
 const jsonminify = require('jsonminify');
-const { validateGeoLocationConfig } = require('./configValidation');
+const {
+  normalizePort,
+  validateGeoLocationConfig,
+  validateTrustedProxies,
+} = require('./configValidation');
 
 // `node app.js dev` runs the explorer with the testnet config
 const isDev = process.argv.includes('dev');
@@ -20,6 +24,10 @@ const fields = {
     type: Number,
     default: 6040,
     isRequired: true,
+  },
+  trustedProxies: {
+    type: Array,
+    default: ['loopback'],
   },
   nodes_adm: {
     type: Array,
@@ -85,15 +93,24 @@ try {
     }
   });
 
+  config.port = normalizePort(config.port);
+
   const geoLocationError = validateGeoLocationConfig(config.geoLocation);
 
   if (geoLocationError) {
     exit(`Explorer config: ${geoLocationError}; startup aborted`);
   }
 
+  const trustedProxiesError = validateTrustedProxies(config.trustedProxies);
+
+  if (trustedProxiesError) {
+    exit(`Explorer config: ${trustedProxiesError}; startup aborted`);
+  }
+
   console.info(
     `Explorer config: Loaded ${configFile}; mode=${isDev ? 'development' : 'production'}; ` +
       `nodes=${config.nodes_adm.length}; port=${config.port}; logLevel=${config.log_level}; ` +
+      `trustedProxies=${config.trustedProxies.length}; ` +
       `exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
       `geoLocation=${config.geoLocation.enabled ? config.geoLocation.provider : 'disabled'}`,
   );

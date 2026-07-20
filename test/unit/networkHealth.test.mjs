@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import networkHealth from '../../api/lib/adamant/helpers/networkHealth.js';
 import { networkHealthStatus } from '../../src/lib/networkHealth.js';
 
-const { countActiveForgingDelegates, mergeForgingHealthBlocks } = networkHealth;
+const {
+  classifyNetworkHealth,
+  countActiveForgingDelegates,
+  getNetworkHealthSnapshot,
+  mergeForgingHealthBlocks,
+} = networkHealth;
 
 describe('network health', function () {
   it('bridges a one-block schedule/cache race with focused REST blocks', function () {
@@ -54,6 +59,45 @@ describe('network health', function () {
     expect(networkHealthStatus({ ...input, forgingDelegates: 50 }).label).to.equal(
       'Network critical',
     );
+  });
+
+  it('uses the monitoring thresholds at their exact boundaries', function () {
+    expect(classifyNetworkHealth(101)).to.equal('live');
+    expect(classifyNetworkHealth(80)).to.equal('live');
+    expect(classifyNetworkHealth(79)).to.equal('degraded');
+    expect(classifyNetworkHealth(51)).to.equal('degraded');
+    expect(classifyNetworkHealth(50)).to.equal('critical');
+    expect(classifyNetworkHealth(0)).to.equal('critical');
+    expect(() => classifyNetworkHealth(null)).to.throw('Invalid operational delegate count');
+  });
+
+  it('builds a coherent request-time height and forging snapshot', async function () {
+    const delegates = Array.from({ length: 101 }, (_, index) => `delegate-${index}`);
+    const blocks = delegates.map((generatorPublicKey, index) => ({
+      height: 606 - index,
+      generatorPublicKey,
+    }));
+    let statusCalls = 0;
+
+    const snapshot = await getNetworkHealthSnapshot({
+      ensureBlocks: async () => {},
+      getBlockStatus: async () => {
+        statusCalls++;
+        return { success: true, height: statusCalls === 1 ? 605 : 606 };
+      },
+      getCachedBlocks: () => blocks,
+      getLatestBlocks: async () => [],
+      getNextForgersState: async () => ({ currentBlock: 606 }),
+      getForgingSchedule: () => ({ orderedDelegates: delegates }),
+      getRoundDelegates: () => [],
+    });
+
+    expect(snapshot).to.deep.equal({
+      height: 606,
+      forgingDelegates: 101,
+      activeDelegates: 101,
+    });
+    expect(statusCalls).to.equal(2);
   });
 
   it('prioritizes stale and incomplete data', function () {

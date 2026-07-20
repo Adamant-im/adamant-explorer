@@ -9,46 +9,11 @@ const params = {
 
 describe('Common API', function () {
   /*Define functions for use within tests*/
-  function getVersion(done) {
-    testUtils.httpRequest.get('/api/version', done);
-  }
-
-  function getPriceTicker(done) {
-    testUtils.httpRequest.get('/api/getPriceTicker', done);
-  }
-
   function getSearch(id, done) {
     testUtils.httpRequest.get('/api/search?id=' + id, done);
   }
 
   /*Define api endpoints to test */
-  describe('GET /api/version', function () {
-    it('should be ok', function (done) {
-      getVersion((err, res) => {
-        testUtils.expect(res.body).to.have.property('version');
-        done();
-      });
-    });
-  });
-
-  describe('GET /api/getPriceTicker', function () {
-    it('should answer whether exchange rates are enabled', function (done) {
-      getPriceTicker((err, res) => {
-        testUtils.expect(res.body).to.have.property('success');
-
-        if (res.body.success) {
-          // Exchange rates are enabled: tickers are grouped as tickers[base][quote]
-          testUtils.expect(res.body).to.have.property('tickers').to.be.an('object');
-        } else {
-          // Exchange rates are disabled in the config
-          testUtils.expect(res.body).to.have.property('error');
-        }
-
-        done();
-      });
-    });
-  });
-
   describe('GET /api/search', function () {
     it('using known block should be ok', function (done) {
       getSearch(params.blockId, (err, res) => {

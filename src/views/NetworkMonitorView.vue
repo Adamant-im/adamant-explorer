@@ -6,10 +6,16 @@ import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import { useNetworkStore } from '../stores/network';
-import { useSocket } from '../composables/useSocket';
-import { formatCurrency, formatInteger, timeSpan } from '../lib/format';
-import { compareVersionsDescending, groupPeerHeights } from '../lib/peers.js';
+import { useNetworkStore } from '../stores/network.js';
+import { useSocket } from '../composables/useSocket.js';
+import { formatCurrency, formatInteger, timeSpan } from '../lib/format.js';
+import {
+  compareVersionsDescending,
+  groupPeerHeights,
+  peerCoordinates,
+  peerPlatformName,
+  peerPopupRows,
+} from '../lib/peers.js';
 import TabsBar from '../components/TabsBar.vue';
 import PeersTable from '../components/PeersTable.vue';
 import OsIcon from '../components/OsIcon.vue';
@@ -33,10 +39,10 @@ const tabs = [
 let map = null;
 let cluster = null;
 /** Marker per connected peer, keyed by peer IP. */
-const markers = {};
+const markers = new Map();
 
 /** Marker icons per OS brand; unknown platforms share one icon. */
-const platformIcons = {};
+const platformIcons = new Map();
 
 function createMap() {
   map = L.map('map', { center: L.latLng(40, 0), zoom: 1, minZoom: 1, maxZoom: 10 });
@@ -52,37 +58,38 @@ function createMap() {
   });
 
   for (const name of ['darwin', 'linux', 'win', 'freebsd', 'unknown']) {
-    platformIcons[name] = new PlatformIcon({ iconUrl: `/leaflet/marker-icon-${name}.png` });
+    platformIcons.set(name, new PlatformIcon({ iconUrl: `/leaflet/marker-icon-${name}.png` }));
   }
 }
 
-/** Escapes text interpolated into Leaflet popup HTML. */
-function escapeHtml(value) {
-  return String(value).replace(
-    /[&<>"']/g,
-    (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch],
-  );
-}
+/**
+ * Builds a peer popup with DOM text nodes so node and geo data are never parsed as HTML.
+ *
+ * @param {Object} peer Enriched peer
+ * @returns {HTMLDivElement} Leaflet popup content
+ */
+function createPeerPopup(peer) {
+  const popup = document.createElement('div');
 
-/** Builds the HTML content of a peer's map popup. */
-function popupContent(peer) {
-  const lines = [`<p class="ip">${escapeHtml(peer.ip)}</p>`];
-  const fields = [
-    ['Hostname', peer.location.hostname],
-    ['Version', peer.version],
-    ['OS', peer.os],
-    ['City', peer.location.city],
-    ['Region', peer.location.region_name],
-    ['Country', peer.location.country_name],
-  ];
+  for (const { label, value, className } of peerPopupRows(peer)) {
+    const row = document.createElement('p');
 
-  for (const [label, value] of fields) {
-    if (value) {
-      lines.push(`<p><span class="label">${label}: </span>${escapeHtml(value)}</p>`);
+    if (className) {
+      row.className = className;
     }
+
+    if (label) {
+      const labelElement = document.createElement('span');
+      labelElement.className = 'label';
+      labelElement.textContent = `${label}: `;
+      row.append(labelElement);
+    }
+
+    row.append(document.createTextNode(value));
+    popup.append(row);
   }
 
-  return lines.join('');
+  return popup;
 }
 
 /** Adds markers for newly connected peers and drops disconnected ones. */
@@ -91,34 +98,33 @@ function updateMap(list) {
     return;
   }
 
-  const connectedIps = [];
+  const connectedIps = new Set();
 
   for (const peer of list.connected) {
-    const location = peer.location;
+    const coordinates = peerCoordinates(peer);
+    const ip = typeof peer.ip === 'string' ? peer.ip : '';
 
-    if (
-      !location ||
-      typeof location.latitude !== 'number' ||
-      typeof location.longitude !== 'number'
-    ) {
+    if (!coordinates || !ip) {
       continue;
     }
 
-    if (!markers[peer.ip]) {
-      markers[peer.ip] = L.marker([location.latitude, location.longitude], {
-        title: peer.ipString ?? peer.ip,
-        icon: platformIcons[peer.osBrand.name] ?? platformIcons.unknown,
-      }).bindPopup(popupContent(peer));
-      cluster.addLayer(markers[peer.ip]);
+    if (!markers.has(ip)) {
+      const marker = L.marker(coordinates, {
+        title: typeof peer.ipString === 'string' ? peer.ipString : ip,
+        icon:
+          platformIcons.get(peerPlatformName(peer.osBrand?.name)) ?? platformIcons.get('unknown'),
+      }).bindPopup(createPeerPopup(peer));
+      markers.set(ip, marker);
+      cluster.addLayer(marker);
     }
 
-    connectedIps.push(peer.ip);
+    connectedIps.add(ip);
   }
 
-  for (const ip of Object.keys(markers)) {
-    if (!connectedIps.includes(ip)) {
-      cluster.removeLayer(markers[ip]);
-      delete markers[ip];
+  for (const [ip, marker] of markers) {
+    if (!connectedIps.has(ip)) {
+      cluster.removeLayer(marker);
+      markers.delete(ip);
     }
   }
 
@@ -132,7 +138,7 @@ function dedupe(list) {
   const seen = new Set();
 
   return list.filter((peer) => {
-    if (!peer.id || seen.has(peer.id)) {
+    if (!peer || typeof peer !== 'object' || !peer.id || seen.has(peer.id)) {
       return false;
     }
 
@@ -156,9 +162,12 @@ const counter = computed(() => {
 
   for (const peer of connected) {
     // Platform groups: 0 other, 1 darwin, 2 linux, 3 freebsd
-    if (typeof peer.osBrand?.group === 'number') {
-      platformCounter[peer.osBrand.group]++;
-    }
+    const platformGroup = peer.osBrand?.group;
+    const platformIndex =
+      Number.isInteger(platformGroup) && platformGroup >= 1 && platformGroup <= 3
+        ? platformGroup
+        : 0;
+    platformCounter[platformIndex]++;
 
     const versionIndex = versions.indexOf(peer.version);
     versionCounter[versionIndex === -1 ? 3 : versionIndex]++;
@@ -183,6 +192,10 @@ const socket = useSocket('/networkMonitor');
 
 /** Applies a peers payload to the view state and the map. */
 function updatePeers(payload) {
+  if (!Array.isArray(payload?.list?.connected) || !Array.isArray(payload.list.disconnected)) {
+    return;
+  }
+
   const list = {
     connected: dedupe(payload.list.connected),
     disconnected: dedupe(payload.list.disconnected),

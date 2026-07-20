@@ -10,6 +10,8 @@ const {
 const async = require('async');
 const logger = require('../utils/log');
 const { getForgingSchedule, getRoundDelegates } = require('./delegateMonitorSchedule');
+const { getRetryDelay } = require('./retrySchedule');
+const { scheduleTimerSlot } = require('./timerSchedule');
 
 /**
  * Header socket namespace. Periodically emits the network status
@@ -19,8 +21,11 @@ const { getForgingSchedule, getRoundDelegates } = require('./delegateMonitorSche
  * @param {Object} socket Socket.IO namespace
  */
 module.exports = function (app, connectionHandler, socket) {
-  let intervals = [];
+  let timers = [];
   let data = {};
+  let monitoring = false;
+  let generation = 0;
+  let retryAttempt = 0;
   let unsubscribeFromBlocks = null;
 
   new connectionHandler('Header:', socket, this);
@@ -32,50 +37,32 @@ module.exports = function (app, connectionHandler, socket) {
   };
 
   this.onInit = function () {
+    monitoring = true;
+    generation++;
+    retryAttempt = 0;
+
     if (!unsubscribeFromBlocks) {
       unsubscribeFromBlocks = statisticsHandler.subscribeBlockStatistics(handleBlockUpdate);
     }
 
     this.onConnect(); // Prevents data wipe
-
-    async.parallel(
-      [getBlockStatus, getPriceTicker, getForgingHealth],
-      function (err, res) {
-        if (err) {
-          // A failed request must not leave the header empty forever:
-          // retry until the initial data set is collected
-          log('warn', `Initial data load failed (${err}); retrying in 10000ms`);
-          setTimeout(() => this.onInit(), 10000);
-        } else {
-          data.status = {
-            ...res[0],
-            forgingDelegates: res[2],
-          };
-          data.ticker = res[1];
-
-          log(
-            'info',
-            `Initialized; height=${data.status?.height ?? 'unknown'}; tickerCurrencies=${Object.keys(data.ticker?.tickers ?? {}).length}`,
-          );
-          log('debug', 'Emitted initial data snapshot');
-          socket.emit('data', data);
-
-          newInterval(0, 10000, emitData);
-        }
-      }.bind(this),
-    );
+    initialize(generation);
   };
 
-  this.onConnect = function () {
+  this.onConnect = function (client = socket) {
     log('debug', `Emitted cached data; height=${data.status?.height ?? 'unknown'}`);
-    socket.emit('data', data);
+    client.emit('data', data);
   };
 
   this.onDisconnect = function () {
-    for (let i = 0; i < intervals.length; i++) {
-      clearInterval(intervals[i]);
+    monitoring = false;
+    generation++;
+    retryAttempt = 0;
+
+    for (const timer of timers) {
+      clearTimeout(timer);
     }
-    intervals = [];
+    timers = [];
 
     unsubscribeFromBlocks?.();
     unsubscribeFromBlocks = null;
@@ -85,6 +72,93 @@ module.exports = function (app, connectionHandler, socket) {
 
   const log = function (level, msg) {
     logger[level]('Header: ' + msg);
+  };
+
+  const isActive = function (expectedGeneration) {
+    return monitoring && generation === expectedGeneration;
+  };
+
+  /**
+   * Run all independent header loaders to completion without allowing one
+   * early failure to overlap the next polling attempt with a slow loader.
+   * @param {Function} callback Node-style completion callback
+   */
+  const loadData = function (callback) {
+    const settle = (loader) => (done) => {
+      try {
+        loader((error, result) => done(null, { error, result }));
+      } catch (error) {
+        done(null, { error });
+      }
+    };
+
+    async.parallel(
+      [settle(getBlockStatus), settle(getPriceTicker), settle(getForgingHealth)],
+      (unexpectedError, outcomes) => {
+        if (unexpectedError) {
+          callback(unexpectedError);
+          return;
+        }
+
+        const failure = outcomes.find(({ error }) => error);
+        callback(
+          failure?.error ?? null,
+          outcomes.map(({ result }) => result),
+        );
+      },
+    );
+  };
+
+  /** Load the first complete snapshot and retry with bounded backoff on failure. */
+  const initialize = function (expectedGeneration) {
+    if (!isActive(expectedGeneration)) {
+      return;
+    }
+
+    loadData((error, result) => {
+      if (!isActive(expectedGeneration)) {
+        return;
+      }
+
+      if (error) {
+        scheduleInitializationRetry(expectedGeneration, error);
+        return;
+      }
+
+      data.status = {
+        ...result[0],
+        forgingDelegates: result[2],
+      };
+      data.ticker = result[1];
+      retryAttempt = 0;
+
+      log(
+        'info',
+        `Initialized; height=${data.status?.height ?? 'unknown'}; tickerCurrencies=${Object.keys(data.ticker?.tickers ?? {}).length}`,
+      );
+      log('debug', 'Emitted initial data snapshot');
+      socket.emit('data', data);
+      scheduleRefresh(expectedGeneration, 10000);
+    });
+  };
+
+  const scheduleInitializationRetry = function (expectedGeneration, error) {
+    if (!isActive(expectedGeneration) || timers[1] !== undefined) {
+      return;
+    }
+
+    const delay = getRetryDelay(retryAttempt++);
+    log('warn', `Initial data load failed (${error}); retrying in ${delay}ms`);
+    scheduleTimerSlot(timers, 1, () => initialize(expectedGeneration), delay);
+  };
+
+  /** Schedule the next refresh only after every current source has settled. */
+  const scheduleRefresh = function (expectedGeneration, delay) {
+    if (!isActive(expectedGeneration) || timers[0] !== undefined) {
+      return;
+    }
+
+    scheduleTimerSlot(timers, 0, () => emitData(expectedGeneration), delay);
   };
 
   /**
@@ -112,15 +186,6 @@ module.exports = function (app, connectionHandler, socket) {
       forgingDelegates: data.status?.forgingDelegates ?? null,
     });
     log('debug', `Forwarded block event; height=${height}; source=${update.source ?? 'unknown'}`);
-  };
-
-  const newInterval = function (i, delay, cb) {
-    if (intervals[i] !== undefined) {
-      return null;
-    } else {
-      intervals[i] = setInterval(cb, delay);
-      return intervals[i];
-    }
   };
 
   const getBlockStatus = function (cb) {
@@ -226,26 +291,35 @@ module.exports = function (app, connectionHandler, socket) {
     );
   };
 
-  const emitData = function () {
+  const emitData = function (expectedGeneration) {
+    if (!isActive(expectedGeneration)) {
+      return;
+    }
+
     const thisData = {};
 
-    async.parallel(
-      [getBlockStatus, getPriceTicker, getForgingHealth],
-      function (err, res) {
-        if (err) {
-          log('warn', `Periodic data refresh failed (${err}); next attempt in 10000ms`);
-        } else {
-          thisData.status = {
-            ...res[0],
-            forgingDelegates: res[2],
-          };
-          thisData.ticker = res[1];
+    loadData((error, result) => {
+      if (!isActive(expectedGeneration)) {
+        return;
+      }
 
-          data = thisData;
-          log('debug', `Emitted refreshed data; height=${thisData.status?.height ?? 'unknown'}`);
-          socket.emit('data', thisData);
-        }
-      }.bind(this),
-    );
+      if (error) {
+        const delay = getRetryDelay(retryAttempt++);
+        log('warn', `Periodic data refresh failed (${error}); next attempt in ${delay}ms`);
+        scheduleRefresh(expectedGeneration, delay);
+      } else {
+        retryAttempt = 0;
+        thisData.status = {
+          ...result[0],
+          forgingDelegates: result[2],
+        };
+        thisData.ticker = result[1];
+
+        data = thisData;
+        log('debug', `Emitted refreshed data; height=${thisData.status?.height ?? 'unknown'}`);
+        socket.emit('data', thisData);
+        scheduleRefresh(expectedGeneration, 10000);
+      }
+    });
   };
 };

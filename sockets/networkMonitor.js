@@ -1,14 +1,22 @@
-const async = require('async');
 const statisticsHandler = require('../api/lib/adamant/handlers/statistics');
 const { BLOCK_INTERVAL_MILLISECONDS } = require('../api/lib/adamant/constants.mjs');
 const logger = require('../utils/log');
+const { getRetryDelay } = require('./retrySchedule');
+const { scheduleTimerSlot } = require('./timerSchedule');
 
 module.exports = function (app, connectionHandler, socket) {
   let data = {};
-  let intervals = [];
+  let timers = [];
   let monitoring = false;
+  let generation = 0;
   let unsubscribeFromBlocks = null;
   let unsubscribeFromPeers = null;
+  const refreshAttempts = [];
+  const sourceRevisions = {
+    blocks: 0,
+    lastBlock: 0,
+    peers: 0,
+  };
   new connectionHandler('Network Monitor:', socket, this);
 
   const running = {
@@ -19,6 +27,8 @@ module.exports = function (app, connectionHandler, socket) {
 
   this.onInit = function () {
     monitoring = true;
+    generation++;
+    refreshAttempts.fill(0);
     this.onConnect();
 
     if (!unsubscribeFromBlocks) {
@@ -33,23 +43,32 @@ module.exports = function (app, connectionHandler, socket) {
 
     // Load independent cards separately. Peers normally resolve immediately
     // from the process-wide cache while a background refresh continues.
-    initializeSource(0, 'lastBlock', getLastBlock, BLOCK_INTERVAL_MILLISECONDS, emitData1);
-    initializeSource(1, 'blocks', getBlocks, 300000, emitData2);
-    initializeSource(2, 'peers', getPeers);
+    initializeSource(
+      0,
+      'lastBlock',
+      getLastBlock,
+      BLOCK_INTERVAL_MILLISECONDS,
+      'data1',
+      generation,
+    );
+    initializeSource(1, 'blocks', getBlocks, 300000, 'data2', generation);
+    initializeSource(2, 'peers', getPeers, undefined, undefined, generation);
   };
 
-  this.onConnect = function () {
+  this.onConnect = function (client = socket) {
     log('debug', `Emitted cached data; sources=${Object.keys(data).join(',') || 'none'}`);
-    socket.emit('data', data);
+    client.emit('data', data);
   };
 
   this.onDisconnect = function () {
     monitoring = false;
+    generation++;
+    refreshAttempts.fill(0);
 
-    for (let i = 0; i < intervals.length; i++) {
-      clearInterval(intervals[i]);
+    for (const timer of timers) {
+      clearTimeout(timer);
     }
-    intervals = [];
+    timers = [];
 
     unsubscribeFromBlocks?.();
     unsubscribeFromBlocks = null;
@@ -63,13 +82,8 @@ module.exports = function (app, connectionHandler, socket) {
     logger[level](`Network Monitor: ${msg}`);
   };
 
-  const newInterval = function (i, delay, cb) {
-    if (intervals[i] !== undefined) {
-      return null;
-    } else {
-      intervals[i] = setInterval(cb, delay);
-      return intervals[i];
-    }
+  const isActive = function (expectedGeneration) {
+    return monitoring && generation === expectedGeneration;
   };
 
   /**
@@ -79,36 +93,140 @@ module.exports = function (app, connectionHandler, socket) {
    * @param {string} key Data property emitted to clients
    * @param {Function} loader Callback-style source loader
    * @param {number} [delay] Refresh interval in milliseconds
-   * @param {Function} [refresh] Periodic refresh callback
+   * @param {string} [event] Periodic Socket.IO event name
+   * @param {number} expectedGeneration Active namespace lifecycle generation
+   * @param {number} [attempt=0] Consecutive initial failure count
    */
-  const initializeSource = function (index, key, loader, delay, refresh) {
-    loader((err, result) => {
+  const initializeSource = function (
+    index,
+    key,
+    loader,
+    delay,
+    event,
+    expectedGeneration,
+    attempt = 0,
+  ) {
+    const revision = sourceRevisions[key];
+
+    invokeLoader(loader, (err, result) => {
+      if (!isActive(expectedGeneration)) {
+        return;
+      }
+
       if (err) {
-        log('warn', `Initial ${key} load failed (${err}); retrying in 10000ms`);
+        const retryDelay = getRetryDelay(attempt);
+        log('warn', `Initial ${key} load failed (${err}); retrying in ${retryDelay}ms`);
 
-        if (monitoring && intervals[index] === undefined) {
-          intervals[index] = setTimeout(() => {
-            intervals[index] = undefined;
-
-            if (monitoring) {
-              initializeSource(index, key, loader, delay, refresh);
-            }
-          }, 10000);
+        if (timers[index] === undefined) {
+          scheduleTimerSlot(
+            timers,
+            index,
+            () => {
+              if (isActive(expectedGeneration)) {
+                initializeSource(index, key, loader, delay, event, expectedGeneration, attempt + 1);
+              }
+            },
+            retryDelay,
+          );
         }
 
         return;
       }
 
-      if (!monitoring) {
+      refreshAttempts[index] = 0;
+
+      if (sourceRevisions[key] === revision) {
+        data[key] = result;
+        log('debug', `Emitted initial ${key} snapshot`);
+        socket.emit('data', { [key]: result });
+      } else {
+        log('debug', `Ignored stale initial ${key} snapshot after a shared update`);
+      }
+
+      if (delay && event) {
+        scheduleSourceRefresh(index, key, loader, delay, event, expectedGeneration, delay);
+      }
+    });
+  };
+
+  /**
+   * Contain synchronous loader failures and normalize callback invocation.
+   * @param {Function} loader Callback-style data source
+   * @param {Function} callback Node-style completion callback
+   */
+  const invokeLoader = function (loader, callback) {
+    let settled = false;
+    const done = (error, result) => {
+      if (settled) {
         return;
       }
 
-      data[key] = result;
-      log('debug', `Emitted initial ${key} snapshot`);
-      socket.emit('data', { [key]: result });
-      if (delay && refresh) {
-        newInterval(index, delay, refresh);
+      settled = true;
+      callback(error, result);
+    };
+
+    try {
+      loader(done);
+    } catch (error) {
+      done(error);
+    }
+  };
+
+  const scheduleSourceRefresh = function (
+    index,
+    key,
+    loader,
+    delay,
+    event,
+    expectedGeneration,
+    nextDelay,
+  ) {
+    if (!isActive(expectedGeneration) || timers[index] !== undefined) {
+      return;
+    }
+
+    scheduleTimerSlot(
+      timers,
+      index,
+      () => refreshSource(index, key, loader, delay, event, expectedGeneration),
+      nextDelay,
+    );
+  };
+
+  /**
+   * Refresh a source serially so a slow request cannot overlap the next tick.
+   * Shared accumulator updates win over older in-flight polling responses.
+   */
+  const refreshSource = function (index, key, loader, delay, event, expectedGeneration) {
+    if (!isActive(expectedGeneration)) {
+      return;
+    }
+
+    const revision = sourceRevisions[key];
+
+    invokeLoader(loader, (error, result) => {
+      if (!isActive(expectedGeneration)) {
+        return;
       }
+
+      let nextDelay = delay;
+
+      if (error) {
+        nextDelay = Math.max(delay, getRetryDelay(refreshAttempts[index]++));
+        log('warn', `${key} refresh failed (${error}); next attempt in ${nextDelay}ms`);
+      } else {
+        refreshAttempts[index] = 0;
+
+        if (sourceRevisions[key] === revision) {
+          data[key] = result;
+          socket.emit(event, { [key]: result });
+          log('debug', `Emitted ${key} refresh`);
+        } else {
+          log('debug', `Ignored stale ${key} refresh after a shared update`);
+        }
+      }
+
+      scheduleSourceRefresh(index, key, loader, delay, event, expectedGeneration, nextDelay);
     });
   };
 
@@ -169,6 +287,7 @@ module.exports = function (app, connectionHandler, socket) {
       return;
     }
 
+    sourceRevisions.blocks++;
     data.blocks = update.blocks;
     socket.emit('data2', { blocks: update.blocks });
     log(
@@ -177,6 +296,7 @@ module.exports = function (app, connectionHandler, socket) {
     );
 
     if (update.lastBlock) {
+      sourceRevisions.lastBlock++;
       data.lastBlock = { success: true, block: update.lastBlock };
       socket.emit('data1', { lastBlock: data.lastBlock });
     }
@@ -188,57 +308,13 @@ module.exports = function (app, connectionHandler, socket) {
       return;
     }
 
+    sourceRevisions.peers++;
     data.peers = update.peers;
     socket.emit('data3', { peers: update.peers });
     log(
       'debug',
       `Forwarded peer statistics; source=${update.source ?? 'unknown'}; ` +
         `connected=${update.peers.list?.connected?.length ?? 0}; disconnected=${update.peers.list?.disconnected?.length ?? 0}`,
-    );
-  };
-
-  const emitData1 = function () {
-    const thisData = {};
-
-    async.parallel(
-      [getLastBlock],
-      function (err, res) {
-        if (err) {
-          log(
-            'warn',
-            `Latest-block refresh failed (${err}); next attempt in ${BLOCK_INTERVAL_MILLISECONDS}ms`,
-          );
-        } else {
-          thisData.lastBlock = data.lastBlock = res[0];
-
-          log(
-            'debug',
-            `Emitted latest-block refresh; height=${thisData.lastBlock?.block?.height ?? 'unknown'}`,
-          );
-          socket.emit('data1', thisData);
-        }
-      }.bind(this),
-    );
-  };
-
-  const emitData2 = function () {
-    const thisData = {};
-
-    async.parallel(
-      [getBlocks],
-      function (err, res) {
-        if (err) {
-          log('warn', `Block-statistics refresh failed (${err}); next attempt in 300000ms`);
-        } else {
-          thisData.blocks = data.blocks = res[0];
-
-          log(
-            'debug',
-            `Emitted block-statistics refresh; blocks=${thisData.blocks?.volume?.blocks ?? 0}`,
-          );
-          socket.emit('data2', thisData);
-        }
-      }.bind(this),
     );
   };
 };

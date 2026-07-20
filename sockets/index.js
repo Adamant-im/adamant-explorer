@@ -1,5 +1,6 @@
 const adamantApi = require('../api/lib/adamant/requests/api');
 const logger = require('../utils/log');
+const { getRetryDelay } = require('./retrySchedule');
 
 /**
  * Wire up Socket.IO namespaces for live explorer pages.
@@ -30,6 +31,8 @@ module.exports = function (app, io) {
    */
   const connectionHandler = function (name, ns, object) {
     let initialized = false;
+    let initializationRetryAttempt = 0;
+    let initializationRetryTimer = null;
 
     ns.on('connection', (socket) => {
       handleConnection(socket).catch((error) => {
@@ -40,9 +43,23 @@ module.exports = function (app, io) {
 
       socket.on('disconnect', () => {
         if (clients() <= 0) {
-          object.onDisconnect();
+          const wasInitialized = initialized;
           initialized = false;
-          logger.debug(`${name} Last client disconnected; page monitor stopped`);
+          initializationRetryAttempt = 0;
+          clearTimeout(initializationRetryTimer);
+          initializationRetryTimer = null;
+
+          if (wasInitialized) {
+            try {
+              object.onDisconnect();
+            } catch (error) {
+              logger.warn(`${name} Page monitor cleanup failed: ${error}`);
+            }
+          }
+
+          logger.debug(
+            `${name} Last client disconnected; page monitor ${wasInitialized ? 'stopped' : 'was not started'}`,
+          );
         } else {
           logger.debug(`${name} Client disconnected; clients=${clients()}`);
         }
@@ -72,13 +89,73 @@ module.exports = function (app, io) {
       }
 
       if (!initialized) {
-        initialized = true;
-        object.onInit();
-        logger.debug(`${name} First client connected; page monitor started; clients=${clients()}`);
+        try {
+          object.onInit();
+          initialized = true;
+          initializationRetryAttempt = 0;
+          clearTimeout(initializationRetryTimer);
+          initializationRetryTimer = null;
+          logger.debug(
+            `${name} First client connected; page monitor started; clients=${clients()}`,
+          );
+        } catch (error) {
+          // A partially started module must not retain timers after a bad
+          // upstream payload or another synchronous initialization failure.
+          try {
+            object.onDisconnect();
+          } catch (cleanupError) {
+            logger.warn(
+              `${name} Page monitor cleanup after initialization failure failed: ${cleanupError}`,
+            );
+          }
+
+          scheduleInitializationRetry();
+          throw error;
+        }
       } else {
-        object.onConnect();
+        // Cache snapshots are sent only to the joining client. Broadcasting
+        // them again would make every existing browser process duplicate data.
+        object.onConnect(socket);
         logger.debug(`${name} Client connected; clients=${clients()}`);
       }
+    };
+
+    /**
+     * Retry a synchronous monitor startup failure while clients remain.
+     *
+     * Namespace modules own retries for asynchronous upstream loads. This
+     * fallback covers failures thrown before those module-level loops start.
+     */
+    const scheduleInitializationRetry = function () {
+      if (initializationRetryTimer !== null || clients() <= 0) {
+        return;
+      }
+
+      const retryDelay = getRetryDelay(initializationRetryAttempt++);
+
+      for (const client of ns.sockets.values()) {
+        client.emit('status', {
+          status: 'retrying',
+          message: 'Page monitor initialization failed; retrying',
+        });
+      }
+
+      logger.warn(`${name} Retrying page monitor initialization in ${retryDelay}ms`);
+
+      initializationRetryTimer = setTimeout(() => {
+        initializationRetryTimer = null;
+        const socket = ns.sockets.values().next().value;
+
+        if (!socket) {
+          return;
+        }
+
+        handleConnection(socket).catch((error) => {
+          logger.warn(
+            `${name} Client initialization retry failed; connection remains available: ${error}`,
+          );
+        });
+      }, retryDelay);
     };
 
     const clients = function () {

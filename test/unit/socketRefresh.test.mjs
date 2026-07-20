@@ -5,6 +5,8 @@ import { BLOCK_INTERVAL_MILLISECONDS } from '../../api/lib/adamant/constants.mjs
 const require = createRequire(import.meta.url);
 const originalSetInterval = global.setInterval;
 const originalClearInterval = global.clearInterval;
+const originalSetTimeout = global.setTimeout;
+const originalClearTimeout = global.clearTimeout;
 
 describe('socket-driven refresh scheduling', function () {
   const originalModules = new Map();
@@ -29,9 +31,11 @@ describe('socket-driven refresh scheduling', function () {
     originalModules.clear();
     global.setInterval = originalSetInterval;
     global.clearInterval = originalClearInterval;
+    global.setTimeout = originalSetTimeout;
+    global.clearTimeout = originalClearTimeout;
   });
 
-  it('polls Activity Graph once per block slot from the shared constant', function () {
+  it('schedules Activity Graph after the current block refresh settles', function () {
     const activityGraphPath = require.resolve('../../sockets/activityGraph.js');
     const statisticsPath = require.resolve('../../api/lib/adamant/handlers/statistics.js');
     const transactionsPath = require.resolve('../../api/lib/adamant/handlers/transactions.js');
@@ -61,11 +65,11 @@ describe('socket-driven refresh scheduling', function () {
     originalModules.set(activityGraphPath, require.cache[activityGraphPath]);
     delete require.cache[activityGraphPath];
 
-    global.setInterval = (callback, delay) => {
+    global.setTimeout = (callback, delay) => {
       intervalDelay = delay;
       return callback;
     };
-    global.clearInterval = (timer) => {
+    global.clearTimeout = (timer) => {
       clearedTimer = timer;
     };
 

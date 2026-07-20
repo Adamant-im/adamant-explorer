@@ -1,34 +1,39 @@
+const { isAdamantAddress, isPublicKey, parseIntegerParameter } = require('./validation');
+
 /**
  * Validate account address
- * @param {String} address
- * @returns {Boolean}
+ * @param {*} address Candidate address
+ * @returns {boolean} Whether the address is valid
  */
 function validateAddress(address) {
-  return typeof address === 'string' && address.match(/^[U|u][0-9]{1,21}$/g);
+  return isAdamantAddress(address);
 }
 
 /**
  * Validate account public key
- * @param {String} publicKey
- * @returns {Boolean}
+ * @param {*} publicKey Candidate public key
+ * @returns {boolean} Whether the public key is valid
  */
 function validatePublicKey(publicKey) {
-  return typeof publicKey === 'string' && publicKey.match(/^([A-Fa-f0-9]{2}){32}$/g);
+  return isPublicKey(publicKey);
 }
 
 /**
- * Parse integer or return default value
- * @param {*} p parameter
- * @param {Number} d default value
- * @returns {Number}
+ * Parse a non-negative integer or return a default value.
+ *
+ * Retained for internal compatibility. Public handlers use explicit bounds.
+ * @param {*} value Candidate integer
+ * @param {number} defaultValue Value returned for invalid input
+ * @returns {number} Parsed integer or the default
  */
-function param(p, d) {
-  p = parseInt(p);
-
-  if (isNaN(p) || p < 0) {
-    return d;
-  } else {
-    return p;
+function param(value, defaultValue) {
+  try {
+    return parseIntegerParameter(value, {
+      name: 'integer',
+      defaultValue,
+    });
+  } catch {
+    return defaultValue;
   }
 }
 

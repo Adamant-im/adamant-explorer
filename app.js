@@ -16,6 +16,11 @@ const packageJson = require('./package.json');
 const utils = require('./utils');
 const logger = require('./utils/log');
 const { createHttpLogFormatter } = require('./utils/httpLogging');
+const { isApiPath, isSupportedApiPath } = require('./api/lib/adamant/helpers/http');
+const { createApiRateLimiter } = require('./modules/apiRateLimiter');
+const { guardApiSurface } = require('./modules/apiSurface');
+const { normalizePort } = require('./modules/configValidation');
+const { buildContentSecurityPolicy } = require('./modules/httpSecurity');
 const config = require('./modules/configReader');
 
 const app = express();
@@ -27,9 +32,20 @@ program
   .parse(process.argv);
 
 const cliOptions = program.opts();
+let listeningPort = config.port;
+
+if (cliOptions.port !== undefined) {
+  try {
+    listeningPort = normalizePort(cliOptions.port);
+  } catch (error) {
+    program.error(error.message);
+  }
+}
 
 app.set('host', cliOptions.host ?? config.host);
-app.set('port', cliOptions.port ?? config.port);
+app.set('port', listeningPort);
+app.set('trust proxy', config.trustedProxies);
+app.disable('x-powered-by');
 
 const client = require('./redis')(config);
 
@@ -37,28 +53,31 @@ app.exchange = new utils.exchange(config);
 
 app.set('version', packageJson.version);
 app.set('strict routing', true);
+app.set('case sensitive routing', true);
 app.set('exchange enabled', config.exchangeRates.enabled);
 
-// Security headers. The CSP allows only self-hosted resources, the explorer's
-// own WebSocket endpoint, and OpenStreetMap tiles for the network map.
+// Security headers allow self-hosted application resources and the fixed
+// OpenStreetMap tile origin used by Network Monitor.
 app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-
-  const wsSrc = `ws://${req.get('host')} wss://${req.get('host')}`;
-
+  res.setHeader('X-XSS-Protection', '0');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader(
-    'Content-Security-Policy',
-    "frame-ancestors 'none'; default-src 'self'; connect-src 'self' " +
-      wsSrc +
-      "; img-src 'self' https://*.tile.openstreetmap.org data:; style-src 'self' 'unsafe-inline'; font-src 'self'",
+    'Permissions-Policy',
+    'camera=(), geolocation=(), microphone=(), payment=(), usb=()',
   );
+
+  res.setHeader('Content-Security-Policy', buildContentSecurityPolicy(req.get('host')));
 
   return next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    dotfiles: 'deny',
+  }),
+);
 
 // Share the Redis client with routes through the request object
 app.locals.redis = client;
@@ -73,17 +92,13 @@ app.use(morgan(createHttpLogFormatter(logger)));
 
 app.use(compression());
 
-// The API is public and read-only, so allow cross-origin GET requests
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  return next();
-});
+app.use(createApiRateLimiter());
+
+app.use(guardApiSurface);
 
 // Cache lookup: serve a cached API response when one exists
 app.use(async (req, res, next) => {
-  if (!req.originalUrl.startsWith('/api')) {
+  if (!cache.isApiCacheMethod(req.method) || !isSupportedApiPath(req.path)) {
     return next();
   }
 
@@ -122,7 +137,11 @@ logger.debug('Explorer startup: API routes registered');
 
 // Cache store: routes that support caching call next() with the response in req.json
 app.use((req, res, next) => {
-  if (!req.originalUrl.startsWith('/api')) {
+  if (
+    !cache.isApiCacheMethod(req.method) ||
+    !isSupportedApiPath(req.path) ||
+    req.json === undefined
+  ) {
     return next();
   }
 
@@ -144,42 +163,82 @@ app.use((req, res, next) => {
   return res.json(req.json);
 });
 
+app.use((req, res, next) => {
+  if (!isApiPath(req.path)) {
+    return next();
+  }
+
+  return res.status(404).json({
+    success: false,
+    error: 'API endpoint not found',
+  });
+});
+
 // Serve the single-page application for any non-API path
 app.use((req, res, next) => {
-  if (req.originalUrl.startsWith('/api')) {
+  if (!['GET', 'HEAD'].includes(req.method)) {
     return next();
   }
 
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.use((req, res) => {
+  return res.status(404).json({
+    success: false,
+    error: 'Not found',
+  });
+});
+
+// Keep internal error details in operational logs and return a stable response.
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  logger.error(`HTTP: Unhandled ${req.method} ${req.path}: ${error}`);
+
+  return res.status(503).json({
+    success: false,
+    error: 'Service temporarily unavailable',
+  });
+});
+
 // Initial rates load runs in the background; the periodic update
 // is scheduled by the Exchange constructor
 app.exchange.loadRates();
 
-const server = app.listen(app.get('port'), app.get('host'), (err) => {
-  if (err) {
-    logger.error(
-      `Explorer startup: Failed to listen on ${app.get('host')}:${app.get('port')}: ${err}`,
-    );
-  } else {
-    logger.info(
-      `Explorer startup: v${app.get('version')} listening on ${app.get('host')}:${app.get('port')}; ` +
-        `nodes=${config.nodes_adm.length}; exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
-        `logLevel=${config.log_level}`,
-    );
+const server = app.listen(app.get('port'), app.get('host'), () => {
+  logger.info(
+    `Explorer startup: v${app.get('version')} listening on ${app.get('host')}:${app.get('port')}; ` +
+      `nodes=${config.nodes_adm.length}; exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
+      `logLevel=${config.log_level}`,
+  );
 
-    const io = new Server(server);
-    require('./sockets')(app, io);
-    statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
-      logger.warn(
-        `Explorer startup: Block statistics cache initialization failed; background recovery remains active: ${error}`,
-      );
-    });
-    statisticsHandler.startPeerStatisticsCache(client).catch((error) => {
-      logger.warn(
-        `Explorer startup: Peer statistics cache initialization failed; background retry remains active: ${error}`,
-      );
-    });
-  }
+  const io = new Server(server);
+  require('./sockets')(app, io);
+  statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
+    logger.warn(
+      `Explorer startup: Block statistics cache initialization failed; background recovery remains active: ${error}`,
+    );
+  });
+  statisticsHandler.startPeerStatisticsCache(client).catch((error) => {
+    logger.warn(
+      `Explorer startup: Peer statistics cache initialization failed; background retry remains active: ${error}`,
+    );
+  });
+});
+
+// Bound slow or incomplete HTTP requests even when Explorer is exposed
+// without the recommended reverse proxy. Upgraded Socket.IO connections are
+// not governed by these HTTP request timers.
+server.headersTimeout = 15_000;
+server.requestTimeout = 30_000;
+server.keepAliveTimeout = 5_000;
+
+server.once('error', (error) => {
+  logger.error(
+    `Explorer startup: Failed to listen on ${app.get('host')}:${app.get('port')}: ${error}`,
+  );
+  process.exit(1);
 });

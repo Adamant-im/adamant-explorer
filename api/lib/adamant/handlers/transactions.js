@@ -3,6 +3,12 @@ const helpers = require('../helpers/transactions');
 const knowledge = require('../../../../utils/knownAddresses');
 const logger = require('../../../../utils/log');
 const { isPublicOperationType } = require('../transactionTypes');
+const { TRANSACTION_PAGE_MAX_LIMIT, TRANSACTION_PAGE_MAX_OFFSET } = require('../constants.mjs');
+const {
+  ValidationError,
+  isUnsignedIdentifier,
+  parseIntegerParameter,
+} = require('../helpers/validation');
 
 /**
  * Get transaction by id
@@ -12,14 +18,14 @@ const { isPublicOperationType } = require('../transactionTypes');
  * @returns {Promise<*>}
  */
 async function getTransaction(transactionId, error, success) {
-  try {
-    if (!transactionId) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid transactionId parameter',
-      });
-    }
+  if (!isUnsignedIdentifier(transactionId)) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid transactionId parameter',
+    });
+  }
 
+  try {
     const result = {};
 
     result.transaction = await transactions.getConfirmedTransaction(transactionId).catch(() => {
@@ -182,6 +188,10 @@ async function getTransactionsByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
+    if (err instanceof ValidationError) {
+      return error({ success: false, error: err.message });
+    }
+
     logger.warn(
       `Transactions handler: Failed to load address transactions; query values omitted from logs: ${err}`,
     );
@@ -225,6 +235,10 @@ async function getTransfersByAddress(query, error, success) {
 
     return success(result);
   } catch (err) {
+    if (err instanceof ValidationError) {
+      return error({ success: false, error: err.message });
+    }
+
     logger.warn(
       `Transactions handler: Failed to load address transfers; query values omitted from logs: ${err}`,
     );
@@ -242,20 +256,38 @@ async function getTransfersByAddress(query, error, success) {
  * @returns {Promise<*>}
  */
 async function getTransactionsByBlock(query, error, success) {
+  if (!isUnsignedIdentifier(query?.blockId)) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid blockId parameter',
+    });
+  }
+
+  let normalizedQuery;
+
   try {
-    if (!query.blockId) {
-      return error({
-        success: false,
-        error: 'Missing/Invalid blockId parameter',
-      });
-    }
+    normalizedQuery = {
+      blockId: query.blockId,
+      offset: parseIntegerParameter(query.offset, {
+        name: 'offset',
+        defaultValue: 0,
+        maximum: TRANSACTION_PAGE_MAX_OFFSET,
+      }),
+      limit: parseIntegerParameter(query.limit, {
+        name: 'limit',
+        defaultValue: TRANSACTION_PAGE_MAX_LIMIT,
+        minimum: 1,
+        maximum: TRANSACTION_PAGE_MAX_LIMIT,
+      }),
+    };
+  } catch (err) {
+    return error({ success: false, error: err.message });
+  }
 
-    query.offset = helpers.param(query.offset, 0);
-    query.limit = helpers.param(query.limit, 100);
-
+  try {
     const result = {};
 
-    result.transactions = await transactions.getTransactionsByBlock(query);
+    result.transactions = await transactions.getTransactionsByBlock(normalizedQuery);
 
     result.transactions = await Promise.all(
       result.transactions.map(async (transaction) => {
@@ -268,7 +300,7 @@ async function getTransactionsByBlock(query, error, success) {
     return success(result);
   } catch (err) {
     logger.warn(
-      `Transactions handler: Failed to load block transactions; offset=${query.offset}; limit=${query.limit}: ${err}`,
+      `Transactions handler: Failed to load block transactions; offset=${normalizedQuery.offset}; limit=${normalizedQuery.limit}: ${err}`,
     );
     return error({
       success: false,

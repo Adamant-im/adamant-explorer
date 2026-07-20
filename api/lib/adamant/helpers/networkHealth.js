@@ -1,6 +1,10 @@
 const { ACTIVE_DELEGATES } = require('../constants.mjs');
 const { classifyForgingStatus, forgingRound } = require('../../../../forgingStatus.mjs');
 
+const NETWORK_LIVE_MINIMUM = 80;
+const NETWORK_DEGRADED_MINIMUM = 51;
+const NETWORK_HEALTH_MAX_ATTEMPTS = 3;
+
 /**
  * Builds one descending, height-unique block list for a schedule height.
  *
@@ -56,6 +60,7 @@ function countActiveForgingDelegates(
 
   if (
     delegates.length !== ACTIVE_DELEGATES ||
+    delegates.some((publicKey) => typeof publicKey !== 'string' || !publicKey) ||
     !Number.isSafeInteger(height) ||
     height < 1 ||
     !recentBlocks.length
@@ -89,7 +94,125 @@ function countActiveForgingDelegates(
   }, 0);
 }
 
+/**
+ * Map an operational-delegate count to the monitoring status contract.
+ * @param {number} forgingDelegates Operational active delegates
+ * @returns {'live'|'degraded'|'critical'} Network status
+ * @throws {TypeError} When the count is not between zero and 101
+ */
+function classifyNetworkHealth(forgingDelegates) {
+  if (
+    !Number.isSafeInteger(forgingDelegates) ||
+    forgingDelegates < 0 ||
+    forgingDelegates > ACTIVE_DELEGATES
+  ) {
+    throw new TypeError('Invalid operational delegate count');
+  }
+
+  if (forgingDelegates >= NETWORK_LIVE_MINIMUM) {
+    return 'live';
+  }
+
+  if (forgingDelegates >= NETWORK_DEGRADED_MINIMUM) {
+    return 'degraded';
+  }
+
+  return 'critical';
+}
+
+/**
+ * Obtain a coherent request-time Node height and forging-health count.
+ *
+ * The routine uses the same schedule mapping, unresolved-round logic, recent
+ * block merge, and Delegate Monitor status classifier as the Explorer header.
+ * A height race is retried with fresh Node responses instead of combining
+ * fields from different chain tips.
+ *
+ * Dependencies are injectable so every health state can be tested without a
+ * live Explorer or ADAMANT node.
+ * @param {Object} [dependencies] Snapshot dependencies
+ * @param {Function} [dependencies.ensureBlocks] Ensure the shared block window is ready
+ * @param {Function} [dependencies.getBlockStatus] Get normalized Node status
+ * @param {Function} [dependencies.getCachedBlocks] Get the shared recent block window
+ * @param {Function} [dependencies.getLatestBlocks] Get a focused recent block page
+ * @param {Function} [dependencies.getNextForgersState] Get the 101-delegate schedule state
+ * @param {Function} [dependencies.getForgingSchedule] Map Node state to absolute slots
+ * @param {Function} [dependencies.getRoundDelegates] Get unresolved current-round delegates
+ * @returns {Promise<{height: number, forgingDelegates: number, activeDelegates: number}>} Coherent snapshot
+ * @throws {Error} When no coherent snapshot can be obtained in three attempts
+ */
+async function getNetworkHealthSnapshot(dependencies = {}) {
+  const ensureBlocks =
+    dependencies.ensureBlocks ?? (() => require('../handlers/statistics').ensureBlockStatistics());
+  const getBlockStatus =
+    dependencies.getBlockStatus ?? (() => require('../requests/blocks').getBlockStatus());
+  const getCachedBlocks =
+    dependencies.getCachedBlocks ?? (() => require('../handlers/statistics').getCachedBlocks());
+  const getLatestBlocks =
+    dependencies.getLatestBlocks ?? (() => require('../requests/blocks').getBlocks(0, 2));
+  const getNextForgersState =
+    dependencies.getNextForgersState ??
+    (() => require('../requests/delegates').getNextForgersState());
+  const getForgingSchedule =
+    dependencies.getForgingSchedule ??
+    ((state) => require('../../../../sockets/delegateMonitorSchedule').getForgingSchedule(state));
+  const getRoundDelegates =
+    dependencies.getRoundDelegates ??
+    ((schedule, blocks) =>
+      require('../../../../sockets/delegateMonitorSchedule').getRoundDelegates(schedule, blocks));
+
+  await ensureBlocks();
+
+  for (let attempt = 0; attempt < NETWORK_HEALTH_MAX_ATTEMPTS; attempt++) {
+    const [status, state] = await Promise.all([getBlockStatus(), getNextForgersState()]);
+    const height = Number(state?.currentBlock);
+    const statusHeight = Number(status?.height);
+
+    if (
+      !Number.isSafeInteger(height) ||
+      height < 1 ||
+      !Number.isSafeInteger(statusHeight) ||
+      statusHeight !== height
+    ) {
+      continue;
+    }
+
+    let recentBlocks = mergeForgingHealthBlocks(getCachedBlocks(), [], height);
+
+    if (Number(recentBlocks[0]?.height) !== height) {
+      recentBlocks = mergeForgingHealthBlocks(getCachedBlocks(), await getLatestBlocks(), height);
+    }
+
+    if (Number(recentBlocks[0]?.height) !== height) {
+      continue;
+    }
+
+    const schedule = getForgingSchedule(state);
+    const roundDelegates = getRoundDelegates(schedule, recentBlocks);
+    const forgingDelegates = countActiveForgingDelegates(
+      schedule.orderedDelegates,
+      recentBlocks,
+      height,
+      roundDelegates,
+    );
+
+    if (forgingDelegates !== null) {
+      return {
+        height,
+        forgingDelegates,
+        activeDelegates: ACTIVE_DELEGATES,
+      };
+    }
+  }
+
+  throw new Error(
+    `Could not obtain coherent network health after ${NETWORK_HEALTH_MAX_ATTEMPTS} attempts`,
+  );
+}
+
 module.exports = {
+  classifyNetworkHealth,
   countActiveForgingDelegates,
+  getNetworkHealthSnapshot,
   mergeForgingHealthBlocks,
 };

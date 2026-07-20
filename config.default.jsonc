@@ -5,6 +5,11 @@
   /** Port to listen on **/
   "port": 6040,
 
+  /** Reverse proxies allowed to supply the client IP. Accepted named ranges
+      are "loopback", "linklocal", and "uniquelocal"; exact IPs/CIDRs are
+      preferred. "loopback" supports local nginx; use [] without a proxy **/
+  "trustedProxies": ["loopback"],
+
   /** ADAMANT node list. Provide several independently operated nodes
       running ADAMANT Node v0.10.2 or newer **/
   "nodes_adm": [
@@ -12,8 +17,10 @@
     "https://bid.adamant.im",
     "https://endless.adamant.im",
     "https://node2.blockchain2fa.io",
-    "https://sunshine.adamant.im",
-    "http://184.94.215.92:45555"
+    "https://sunshine.adamant.im"
+    /** Legacy plaintext fallback retained for compatibility. Prefer HTTPS:
+        HTTP traffic can be observed or modified in transit **/
+    // "http://184.94.215.92:45555"
   ],
 
   /** Network Monitor peer geo-location through GeoJS. This sends peer IP

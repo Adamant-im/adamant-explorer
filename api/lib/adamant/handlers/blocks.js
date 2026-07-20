@@ -1,6 +1,8 @@
 const blocks = require('../requests/blocks');
 const delegates = require('../requests/delegates');
 const helpers = require('../helpers/blocks');
+const { BLOCK_PAGE_MAX_OFFSET } = require('../constants.mjs');
+const { isUnsignedIdentifier, parseIntegerParameter } = require('../helpers/validation');
 const logger = require('../../../../utils/log');
 
 /**
@@ -11,14 +13,26 @@ const logger = require('../../../../utils/log');
  * @returns {Promise<*>}
  */
 async function getLastBlocks(n, error, success) {
+  let offset;
+
+  try {
+    offset = parseIntegerParameter(n, {
+      name: 'n',
+      defaultValue: 0,
+      maximum: BLOCK_PAGE_MAX_OFFSET,
+    });
+  } catch (err) {
+    return error({ success: false, error: err.message });
+  }
+
   try {
     const result = {};
 
     const height = await blocks.getBlockHeight();
 
-    result.pagination = helpers.pagination(n, height);
+    result.pagination = helpers.pagination(offset, height);
 
-    result.blocks = await blocks.getBlocks(helpers.offset(n));
+    result.blocks = await blocks.getBlocks(offset);
     result.blocks = await Promise.all(
       result.blocks.map(async (b) => {
         b.delegate = await delegates.getDelegate(b.generatorPublicKey);
@@ -31,9 +45,7 @@ async function getLastBlocks(n, error, success) {
 
     return success(result);
   } catch (err) {
-    logger.warn(
-      `Blocks handler: Failed to load the latest blocks; page=${Number.parseInt(n, 10) || 0}: ${err}`,
-    );
+    logger.warn(`Blocks handler: Failed to load the latest blocks; offset=${offset}: ${err}`);
     return error({
       success: false,
       error: 'Request unsuccessful',
@@ -49,17 +61,47 @@ async function getLastBlocks(n, error, success) {
  * @returns {Promise<*>}
  */
 async function getBlock(params, error, success) {
-  try {
-    let result;
-    if (params.blockId) {
-      result = await blocks.getBlockById(params.blockId);
-    } else if (params.height) {
-      result = await blocks.getBlockByHeight(params.height);
-    } else {
+  const hasBlockId = typeof params?.blockId === 'string' && params.blockId.length > 0;
+  const hasHeight = params?.height !== undefined && params.height !== '';
+
+  if (hasBlockId === hasHeight) {
+    return error({
+      success: false,
+      error: 'Missing/Invalid blockId or height parameter',
+    });
+  }
+
+  let lookup;
+
+  if (hasBlockId) {
+    if (!isUnsignedIdentifier(params.blockId)) {
       return error({
         success: false,
-        error: 'Missing/Invalid blockId or height parameter',
+        error: 'Missing/Invalid blockId parameter',
       });
+    }
+
+    lookup = { blockId: params.blockId };
+  } else {
+    try {
+      lookup = {
+        height: parseIntegerParameter(params.height, {
+          name: 'height',
+          minimum: 1,
+        }),
+      };
+    } catch (err) {
+      return error({ success: false, error: err.message });
+    }
+  }
+
+  try {
+    let result;
+
+    if (lookup.blockId) {
+      result = await blocks.getBlockById(lookup.blockId);
+    } else {
+      result = await blocks.getBlockByHeight(lookup.height);
     }
 
     const height = await blocks.getBlockHeight();
@@ -73,7 +115,7 @@ async function getBlock(params, error, success) {
     return success(result);
   } catch (err) {
     logger.warn(
-      `Blocks handler: Failed to load block details; lookup=${params.blockId ? 'id' : 'height'}: ${err}`,
+      `Blocks handler: Failed to load block details; lookup=${lookup.blockId ? 'id' : 'height'}: ${err}`,
     );
     return error({
       success: false,

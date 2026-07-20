@@ -5,6 +5,12 @@ const require = createRequire(import.meta.url);
 const cache = require('../../cache.js');
 
 describe('API cache policy', function () {
+  it('uses the same cache path for GET and Express-compatible HEAD requests', function () {
+    expect(cache.isApiCacheMethod('GET')).to.equal(true);
+    expect(cache.isApiCacheMethod('HEAD')).to.equal(true);
+    expect(cache.isApiCacheMethod('POST')).to.equal(false);
+  });
+
   it('versions latest blocks and transfers by the trusted block identity', function () {
     const latestBlock = { id: 'block-101', height: 101 };
 
@@ -16,10 +22,10 @@ describe('API cache policy', function () {
     ).to.equal('block:101:block-101:/api/getLastTransfers');
   });
 
-  it('bypasses volatile and ignored endpoints when no usable key exists', function () {
+  it('bypasses volatile and request-time health endpoints when no usable key exists', function () {
     expect(cache.getCacheKey('/api/getLastBlocks?n=0', '/api/getLastBlocks')).to.equal(null);
     expect(
-      cache.getCacheKey('/api/statistics/getPeers', '/api/statistics/getPeers', {
+      cache.getCacheKey('/api/networkHealth', '/api/networkHealth', {
         id: 'block-101',
         height: 101,
       }),
