@@ -85,7 +85,7 @@ watch(
         </thead>
         <tbody>
           <tr v-if="!txs.length">
-            <td colspan="6">Waiting for operations <span class="spinner"></span></td>
+            <td colspan="6">Loading operations <span class="spinner"></span></td>
           </tr>
           <tr v-for="tx in txs" :key="tx.id">
             <td data-title="Type">
