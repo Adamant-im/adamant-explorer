@@ -2964,7 +2964,7 @@ main.container {
 
   .footer-links {
     justify-content: space-between;
-    gap: 12px;
+    padding-left: 10px;
   }
 
   .footer-links a {
