@@ -813,6 +813,14 @@ main.container {
   white-space: nowrap;
 }
 
+/* Down arrow shown only inside the narrow (<=420px) stacked card. */
+.operation-route-down {
+  display: none;
+  width: 17px;
+  height: 17px;
+  color: var(--muted);
+}
+
 .home-amount {
   color: var(--text);
   font-family: var(--font-mono);
@@ -1333,6 +1341,7 @@ main.container {
 
 .app-tooltip.visible {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -2797,15 +2806,16 @@ main.container {
   }
 
   /*
-   * Each operation renders as a card: type and time in the header row,
-   * a divider, the sender/recipient pair, then amount with an open
-   * affordance. The open link stretches over the whole card.
+   * Each operation renders as a card. Type and time sit in the header row
+   * above a divider; below it the route runs on a single line as
+   * "sender -> recipient  amount  open". Only the open control navigates;
+   * the card body is not a link. The <=420px block restacks this route.
    */
   .latest-transactions tbody tr {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 11px 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto;
+    gap: 11px 12px;
     padding: 13px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -2841,7 +2851,7 @@ main.container {
 
   .latest-transactions .operation-time {
     grid-row: 1;
-    grid-column: 2;
+    grid-column: 2 / -1;
     justify-self: end;
     align-self: center;
     max-width: 100%;
@@ -2853,24 +2863,26 @@ main.container {
   .latest-transactions tbody td[data-title='Sender'] {
     grid-row: 3;
     grid-column: 1;
+    align-self: center;
   }
 
   .latest-transactions tbody td[data-title='Recipient'] {
     grid-row: 3;
     grid-column: 2;
+    align-self: center;
   }
 
   .latest-transactions .operation-amount {
-    grid-row: 4;
-    grid-column: 1;
+    grid-row: 3;
+    grid-column: 3;
     align-self: center;
-    text-align: left !important;
+    text-align: right;
   }
 
   .latest-transactions .operation-open {
     width: auto;
-    grid-row: 4;
-    grid-column: 2;
+    grid-row: 3;
+    grid-column: 4;
     justify-self: end;
     align-self: center;
     padding: 0 !important;
@@ -2884,19 +2896,6 @@ main.container {
     background: var(--surface-subtle);
     border: 1px solid var(--border);
     border-radius: 50%;
-  }
-
-  .latest-transactions .operation-open a::after {
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius);
-    content: '';
-  }
-
-  .latest-transactions .identity-link,
-  .latest-transactions .copy-button {
-    position: relative;
-    z-index: 1;
   }
 
   .latest-transactions .operation-sender {
@@ -3244,19 +3243,22 @@ main.container {
     overflow-wrap: anywhere;
   }
 
-  .table.summary .public-key {
-    max-width: calc(100% - 36px);
-    vertical-align: middle;
-  }
-
+  /*
+   * The value fills the cell instead of shrinking to its min-content:
+   * flexbox would otherwise collapse a break-anywhere token to a single
+   * character, wrapping addresses/keys that actually fit the column.
+   */
   .table.summary .copy-value {
+    display: flex;
     justify-content: flex-end;
   }
 
   .table.summary .copy-value > .txid,
   .table.summary .copy-value > .public-key {
+    flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
+    text-align: right;
     white-space: normal;
   }
 
@@ -3447,34 +3449,52 @@ main.container {
     --operations-type-inset: 12px;
   }
 
+  /*
+   * Narrow cards stack the route vertically: sender, then a centered down
+   * arrow with the amount right after it (open control on the far right),
+   * then recipient.
+   */
   .latest-transactions tbody tr {
-    row-gap: 9px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    row-gap: 10px;
     padding: 12px;
   }
 
-  .latest-transactions tbody td[data-title='Sender'],
-  .latest-transactions tbody td[data-title='Recipient'] {
+  .latest-transactions tbody td[data-title='Sender'] {
+    grid-row: 3;
     grid-column: 1 / -1;
   }
 
   .latest-transactions tbody td[data-title='Recipient'] {
-    grid-row: 4;
-  }
-
-  .latest-transactions .operation-sender {
-    grid-template-columns: minmax(0, max-content) 20px;
+    grid-row: 5;
+    grid-column: 1 / -1;
   }
 
   .latest-transactions .operation-amount {
-    grid-row: 5;
+    grid-row: 4;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .latest-transactions .operation-route-down {
+    display: inline-block;
   }
 
   .latest-transactions .operation-open {
-    grid-row: 5;
+    grid-row: 4;
+    grid-column: 3;
   }
 
-  .latest-transactions .operation-route-arrow {
-    transform: rotate(90deg);
+  .latest-transactions .operation-sender {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .latest-transactions .operation-sender .operation-route-arrow {
+    display: none;
   }
 
   .footer-links a:first-child {

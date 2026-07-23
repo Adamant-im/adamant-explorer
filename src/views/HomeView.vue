@@ -1,7 +1,12 @@
 <script setup>
 // Home page: latest public operations, refreshed after every new block.
 import { ref, watch } from 'vue';
-import { IconArrowRight, IconChevronRight, IconTopologyStar3 } from '@tabler/icons-vue';
+import {
+  IconArrowDown,
+  IconArrowRight,
+  IconChevronRight,
+  IconTopologyStar3,
+} from '@tabler/icons-vue';
 import { useNetworkStore } from '../stores/network';
 import { apiGet } from '../lib/api';
 import { createBlockRefreshTrigger } from '../lib/blockRefresh';
@@ -104,6 +109,7 @@ watch(
               <IdentityCell v-bind="recipientIdentity(tx)" />
             </td>
             <td data-title="Amount" class="text-right operation-amount">
+              <IconArrowDown class="operation-route-down" aria-hidden="true" />
               <HomeAmount :amount="tx.amount" />
             </td>
             <td class="operation-open">
