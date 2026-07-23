@@ -566,6 +566,8 @@ main.container {
 /* Latest operations */
 
 .operations-panel {
+  --operations-type-inset: clamp(15px, 2.5vw, 44px);
+
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -580,7 +582,7 @@ main.container {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 12px 24px;
+  padding: 12px 24px 14px calc(var(--operations-type-inset) - 2px);
   border-bottom: 1px solid var(--border);
 }
 
@@ -2681,7 +2683,7 @@ main.container {
 
   .latest-transactions thead th:first-child,
   .latest-transactions tbody td:first-child {
-    padding-left: clamp(15px, 2.5vw, 44px);
+    padding-left: var(--operations-type-inset);
   }
 }
 
@@ -2709,6 +2711,8 @@ main.container {
   }
 
   .operations-panel {
+    --operations-type-inset: 14px;
+
     overflow: visible;
     background: transparent;
     border: 0;
@@ -2717,7 +2721,7 @@ main.container {
 
   .operations-heading {
     min-height: 56px;
-    padding: 8px 2px 13px;
+    padding: 8px 2px 13px calc(var(--operations-type-inset) - 1px);
     border-bottom: 0;
   }
 
@@ -2740,10 +2744,6 @@ main.container {
   }
 
   .heading-link-label {
-    display: none;
-  }
-
-  .section-mark {
     display: none;
   }
 
@@ -3303,6 +3303,10 @@ main.container {
 @media (max-width: 420px) {
   .container {
     padding-inline: 10px;
+  }
+
+  .operations-panel {
+    --operations-type-inset: 12px;
   }
 
   .latest-transactions tbody tr {
