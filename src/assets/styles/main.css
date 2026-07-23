@@ -2681,7 +2681,7 @@ main.container {
 
   .latest-transactions thead th:first-child,
   .latest-transactions tbody td:first-child {
-    padding-left: clamp(20px, 3vw, 44px);
+    padding-left: clamp(15px, 2.5vw, 44px);
   }
 }
 
