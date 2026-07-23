@@ -3379,22 +3379,22 @@ main.container {
 
   .active-delegates-table th:nth-child(1),
   .active-delegates-table td:nth-child(1) {
-    width: 14%;
+    width: 20%;
   }
 
   .active-delegates-table th:nth-child(2),
   .active-delegates-table td:nth-child(2) {
-    width: 32%;
+    width: 38%;
   }
 
   .active-delegates-table th:nth-child(6),
   .active-delegates-table td:nth-child(6) {
-    width: 20%;
+    width: 16%;
   }
 
   .active-delegates-table th:nth-child(7),
   .active-delegates-table td:nth-child(7) {
-    width: 34%;
+    width: 30%;
   }
 
   .standby-delegates-table th:nth-child(1),
