@@ -3470,6 +3470,15 @@ main.container {
     grid-column: 1 / -1;
   }
 
+  .latest-transactions .identity-cell {
+    justify-content: center;
+  }
+
+  .latest-transactions .identity-link {
+    align-items: center;
+    text-align: center;
+  }
+
   .latest-transactions .operation-amount {
     grid-row: 4;
     grid-column: 2;
