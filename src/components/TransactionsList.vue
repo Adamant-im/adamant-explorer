@@ -21,7 +21,7 @@ const sort = useSort('timestamp', true);
 
 const columns = [
   { key: 'type', label: 'Type' },
-  { key: 'id', label: 'Transaction ID' },
+  { key: 'id', label: 'Transaction ID', short: 'ID' },
   { key: 'timestamp', label: 'Date' },
   { key: 'senderId', label: 'Sender' },
   { key: 'recipientId', label: 'Recipient' },
@@ -32,14 +32,9 @@ const columns = [
 
 const rows = computed(() => sort.sorted(props.txs.results));
 
-/** Selects a transaction sort field without toggling the current direction. */
-function selectSort(event) {
-  const key = event.target.value;
-
-  if (key !== sort.key) {
-    sort.order(key);
-  }
-}
+// Block pages show a compact static list on small screens: the date
+// column and sorting are dropped there (see `main.css`).
+const isBlockList = computed(() => props.txs.parent === 'block');
 
 /** Loads another page without moving the reader away from the button. */
 async function loadMore() {
@@ -57,26 +52,11 @@ async function loadMore() {
       There are no transactions involving this {{ txs.parent }}.
     </div>
 
-    <div v-if="txs.results.length" class="table-responsive table-mobile">
-      <div class="mobile-sort-controls" role="group" aria-label="Transaction sorting controls">
-        <select :value="sort.key" aria-label="Sort transactions by" @change="selectSort">
-          <option v-for="column in columns" :key="column.key" :value="column.key">
-            {{ column.label }}
-          </option>
-        </select>
-        <button
-          type="button"
-          class="btn mobile-sort-direction"
-          :aria-label="`${sort.reverse ? 'Descending' : 'Ascending'} order; activate to sort ${
-            sort.reverse ? 'ascending' : 'descending'
-          }`"
-          @click="sort.order(sort.key)"
-        >
-          {{ sort.reverse ? 'Descending' : 'Ascending' }}
-          <SortIndicator :reverse="sort.reverse" />
-        </button>
-      </div>
-
+    <div
+      v-if="txs.results.length"
+      class="table-responsive"
+      :class="{ 'no-mobile-date no-mobile-sort': isBlockList }"
+    >
       <table class="table transactions">
         <thead>
           <tr>
@@ -89,7 +69,11 @@ async function loadMore() {
               "
             >
               <button type="button" class="table-sort-button" @click="sort.order(column.key)">
-                {{ column.label }}
+                <template v-if="column.short">
+                  <span class="hide-sm">{{ column.label }}</span>
+                  <span class="show-sm">{{ column.short }}</span>
+                </template>
+                <template v-else>{{ column.label }}</template>
                 <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
               </button>
             </th>
