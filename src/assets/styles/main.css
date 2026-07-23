@@ -825,10 +825,12 @@ main.container {
 }
 
 .home-amount small {
+  display: inline-block;
   margin-left: 7px;
   color: var(--muted);
   font-family: var(--font);
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .operation-open {
@@ -2633,16 +2635,9 @@ main.container {
   }
 
   .latest-transactions .operation-type {
-    max-width: 100%;
     gap: 8px;
     font-size: 14px;
     line-height: 1.2;
-    white-space: normal;
-  }
-
-  .latest-transactions .operation-type > span:last-child {
-    min-width: 0;
-    overflow-wrap: anywhere;
   }
 
   .latest-transactions .operation-time,
@@ -2670,6 +2665,23 @@ main.container {
   .latest-transactions .operation-route-arrow {
     margin-left: 0;
     justify-self: end;
+  }
+}
+
+@media (min-width: 721px) {
+  .latest-transactions .operation-type {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .latest-transactions .operation-type > span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .latest-transactions thead th:first-child,
+  .latest-transactions tbody td:first-child {
+    padding-left: clamp(20px, 3vw, 44px);
   }
 }
 
