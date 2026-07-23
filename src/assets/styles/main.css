@@ -2928,7 +2928,6 @@ main.container {
   .copy-button {
     width: 32px;
     height: 40px;
-    flex-basis: 32px;
   }
 
   .forging-status-control {
