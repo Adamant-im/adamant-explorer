@@ -85,15 +85,19 @@ watch(
               <tr>
                 <td><strong>Address</strong></td>
                 <td class="text-right">
-                  {{ account.address }}
-                  <CopyButton :text="account.address" />
+                  <span class="copy-value">
+                    <span class="public-key">{{ account.address }}</span>
+                    <CopyButton :text="account.address" />
+                  </span>
                 </td>
               </tr>
               <tr v-if="account.publicKey">
                 <td><strong>Public Key</strong></td>
                 <td class="text-right">
-                  <span class="public-key">{{ account.publicKey }}</span>
-                  <CopyButton :text="account.publicKey" />
+                  <span class="copy-value">
+                    <span class="public-key">{{ account.publicKey }}</span>
+                    <CopyButton :text="account.publicKey" />
+                  </span>
                 </td>
               </tr>
               <tr>

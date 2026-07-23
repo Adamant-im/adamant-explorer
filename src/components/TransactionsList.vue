@@ -32,6 +32,15 @@ const columns = [
 
 const rows = computed(() => sort.sorted(props.txs.results));
 
+/** Selects a transaction sort field without toggling the current direction. */
+function selectSort(event) {
+  const key = event.target.value;
+
+  if (key !== sort.key) {
+    sort.order(key);
+  }
+}
+
 /** Loads another page without moving the reader away from the button. */
 async function loadMore() {
   const scrollTop = window.scrollY;
@@ -49,18 +58,40 @@ async function loadMore() {
     </div>
 
     <div v-if="txs.results.length" class="table-responsive table-mobile">
+      <div class="mobile-sort-controls" role="group" aria-label="Transaction sorting controls">
+        <select :value="sort.key" aria-label="Sort transactions by" @change="selectSort">
+          <option v-for="column in columns" :key="column.key" :value="column.key">
+            {{ column.label }}
+          </option>
+        </select>
+        <button
+          type="button"
+          class="btn mobile-sort-direction"
+          :aria-label="`${sort.reverse ? 'Descending' : 'Ascending'} order; activate to sort ${
+            sort.reverse ? 'ascending' : 'descending'
+          }`"
+          @click="sort.order(sort.key)"
+        >
+          {{ sort.reverse ? 'Descending' : 'Ascending' }}
+          <SortIndicator :reverse="sort.reverse" />
+        </button>
+      </div>
+
       <table class="table transactions">
         <thead>
           <tr>
             <th
               v-for="column in columns"
               :key="column.key"
-              role="button"
               :class="sort.key === column.key ? 'sorted' : ''"
-              @click="sort.order(column.key)"
+              :aria-sort="
+                sort.key === column.key ? (sort.reverse ? 'descending' : 'ascending') : 'none'
+              "
             >
-              {{ column.label }}
-              <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
+              <button type="button" class="table-sort-button" @click="sort.order(column.key)">
+                {{ column.label }}
+                <SortIndicator v-if="sort.key === column.key" :reverse="sort.reverse" />
+              </button>
             </th>
           </tr>
         </thead>

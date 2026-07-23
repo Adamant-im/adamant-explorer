@@ -126,6 +126,7 @@ describe('WebSocket block REST hydration', function () {
     const context = await loadHandler({
       idResponses: [new Error('Block not found'), { block: hydrated }],
     });
+    const initialLogCount = context.logCalls.length;
 
     await context.emitBlock(makeBlock('block-101', 101, { compact: true }));
 
@@ -133,9 +134,11 @@ describe('WebSocket block REST hydration', function () {
     expect(context.heightRequests).to.deep.equal([]);
     expect(context.timeoutDelays).to.deep.equal([200]);
     expect(context.getCachedBlocks()[0]).to.equal(hydrated);
-    expect(
-      context.logCalls.filter(({ message }) => message.includes('REST confirmation')),
-    ).to.deep.equal([]);
+    expect(context.logCalls.slice(initialLogCount)).to.have.length(1);
+    expect(context.logCalls.at(-1).level).to.equal('debug');
+    expect(context.logCalls.at(-1).message).to.match(
+      /^Block statistics: Published websocket snapshot;/,
+    );
   });
 
   it('falls back to a matching height after both id confirmations miss', async function () {
@@ -187,6 +190,33 @@ describe('WebSocket block REST hydration', function () {
     expect(
       context.logCalls.some(
         ({ level, message }) => level === 'debug' && message.includes('REST confirmation'),
+      ),
+    ).to.equal(false);
+  });
+
+  it('stops retrying when the second id lookup fails for another reason', async function () {
+    const compact = makeBlock('block-101', 101, { compact: true });
+    const context = await loadHandler({
+      idResponses: [new Error('Block not found'), new Error('Connection timed out')],
+    });
+
+    await context.emitBlock(compact);
+
+    expect(context.idRequests).to.deep.equal(['block-101', 'block-101']);
+    expect(context.heightRequests).to.deep.equal([]);
+    expect(context.timeoutDelays).to.deep.equal([200]);
+    expect(context.getCachedBlocks()[0]).to.equal(compact);
+    expect(
+      context.logCalls.filter(
+        ({ level, message }) =>
+          level === 'warn' &&
+          message.includes('compact payload will be used') &&
+          message.includes('Connection timed out'),
+      ),
+    ).to.have.length(1);
+    expect(
+      context.logCalls.some(
+        ({ level, message }) => level === 'debug' && message.includes('retrying with'),
       ),
     ).to.equal(false);
   });
@@ -300,6 +330,27 @@ describe('WebSocket block REST hydration', function () {
           message.includes('compact payload will be used') &&
           message.includes('periodic REST reconciliation of the latest 100 blocks') &&
           message.includes('every 30000ms'),
+      ),
+    ).to.have.length(1);
+  });
+
+  it('rejects a height fallback that does not confirm the announced height', async function () {
+    const compact = makeBlock('block-101', 101, { compact: true });
+    const context = await loadHandler({
+      idResponses: [new Error('Block not found'), new Error('Block not found')],
+      heightResponse: { block: makeBlock('block-101', 102) },
+    });
+
+    await context.emitBlock(compact);
+
+    expect(context.heightRequests).to.deep.equal([101]);
+    expect(context.getCachedBlocks()[0]).to.equal(compact);
+    expect(
+      context.logCalls.filter(
+        ({ level, message }) =>
+          level === 'warn' &&
+          message.includes('compact payload will be used') &&
+          message.includes('block height=102 instead of 101'),
       ),
     ).to.have.length(1);
   });
