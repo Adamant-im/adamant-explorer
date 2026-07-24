@@ -512,6 +512,8 @@ main.container {
   background: var(--surface-subtle);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
+  /* 16px keeps iOS Safari from auto-zooming (and scrolling) on focus. */
+  font-size: 16px;
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease;
