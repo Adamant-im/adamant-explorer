@@ -47,7 +47,7 @@ for (const wallet of wallets) {
       <h1>Reserved ADAMANT Wallets</h1>
     </div>
     <hr />
-    <div class="table-responsive">
+    <div class="table-responsive table-mobile">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -59,17 +59,23 @@ for (const wallet of wallets) {
         </thead>
         <tbody>
           <tr v-for="(wallet, index) in wallets" :key="wallet.address">
-            <td class="text-left hide-sm">#{{ index + 1 }}</td>
-            <td class="text-right">
-              <router-link :to="`/address/${wallet.address}`">{{ wallet.address }}</router-link>
+            <td data-title="Id" class="text-left hide-sm">#{{ index + 1 }}</td>
+            <td data-title="Address" class="text-right">
+              <router-link class="mobile-address" :to="`/address/${wallet.address}`">
+                {{ wallet.address }}
+              </router-link>
             </td>
-            <td class="text-right">
-              {{ formatCurrency(wallet.balance, network.currency, 2) }}
-              <span class="text-muted">{{ network.currency.symbol }}</span>
+            <td data-title="Balance" class="text-right">
+              <span class="mobile-cell-value">
+                {{ formatCurrency(wallet.balance, network.currency, 2) }}
+                <span class="text-muted">{{ network.currency.symbol }}</span>
+              </span>
             </td>
-            <td class="text-right">
-              {{ wallet.name }}
-              <span class="owner-desc text-muted">{{ wallet.description }}</span>
+            <td data-title="Name" class="text-right">
+              <span class="mobile-cell-value">
+                {{ wallet.name }}
+                <span class="owner-desc text-muted">{{ wallet.description }}</span>
+              </span>
             </td>
           </tr>
         </tbody>

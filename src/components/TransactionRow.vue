@@ -79,8 +79,10 @@ const recipient = computed(() => {
   <tr>
     <td data-title="Type"><OperationType :tx="tx" /></td>
     <td data-title="Transaction ID" class="text-nowrap">
-      <router-link class="ellipsis txid" :to="`/tx/${tx.id}`">{{ tx.id }}</router-link>
-      <CopyButton :text="tx.id" />
+      <span class="copy-value">
+        <router-link class="ellipsis txid" :to="`/tx/${tx.id}`">{{ tx.id }}</router-link>
+        <CopyButton :text="tx.id" />
+      </span>
     </td>
     <td data-title="Date"><TimestampValue :timestamp="tx.timestamp" /></td>
     <td data-title="Sender">

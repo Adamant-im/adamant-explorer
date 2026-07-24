@@ -68,7 +68,7 @@ async function loadMore() {
       </article>
     </div>
 
-    <div v-if="topAccounts.results.length" class="table-responsive">
+    <div v-if="topAccounts.results.length" class="table-responsive table-mobile">
       <table class="table table-striped top-accounts">
         <thead>
           <tr>
@@ -81,15 +81,19 @@ async function loadMore() {
         </thead>
         <tbody>
           <tr v-for="(account, index) in topAccounts.results" :key="account.address">
-            <td>{{ index + 1 }}</td>
-            <td class="text-right">
-              <router-link :to="accountPath(account)">{{ account.address }}</router-link>
+            <td data-title="Rank">{{ index + 1 }}</td>
+            <td data-title="Address" class="text-right">
+              <router-link class="mobile-address" :to="accountPath(account)">
+                {{ account.address }}
+              </router-link>
             </td>
-            <td class="text-right"><HomeAmount :amount="account.balance" /></td>
-            <td class="text-right hide-sm">
+            <td data-title="Balance" class="text-right">
+              <HomeAmount :amount="account.balance" />
+            </td>
+            <td data-title="Supply" class="text-right hide-sm">
               {{ supplyPercent(account.balance, network.blockStatus?.supply) }}%
             </td>
-            <td class="text-right hide-md">
+            <td data-title="Owner" class="text-right hide-md">
               <template v-if="account.knowledge">
                 <router-link
                   v-if="account.knowledge.kind === 'delegate'"

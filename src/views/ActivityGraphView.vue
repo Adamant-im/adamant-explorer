@@ -270,6 +270,7 @@ onBeforeUnmount(() => {
             v-tooltip="'Cancel node selection'"
             type="button"
             class="btn"
+            aria-label="Cancel node selection"
             @click="deselectNode"
           >
             <IconX class="inline-icon" aria-hidden="true" />

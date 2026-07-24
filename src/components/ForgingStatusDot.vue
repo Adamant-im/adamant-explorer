@@ -52,7 +52,13 @@ const tooltip = computed(() => {
 <template>
   <span
     v-tooltip="{ content: tooltip, tone: view.tone, placement: 'left' }"
-    class="forging-dot"
-    :class="[`tone-${view.tone}`, { hollow: view.hollow }]"
-  ></span>
+    class="forging-status-control"
+    :aria-label="view.label"
+  >
+    <span
+      class="forging-dot"
+      :class="[`tone-${view.tone}`, { hollow: view.hollow }]"
+      aria-hidden="true"
+    ></span>
+  </span>
 </template>

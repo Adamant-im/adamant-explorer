@@ -86,6 +86,8 @@ watch(
           <span>Explorer</span>
         </router-link>
 
+        <SearchBox class="header-search" @found="closeMenus" />
+
         <button
           type="button"
           class="menu-toggle"
@@ -98,8 +100,6 @@ watch(
         </button>
 
         <div class="site-nav" :class="{ open: menuOpen }">
-          <SearchBox class="header-search" @found="closeMenus" />
-
           <nav class="nav-links">
             <router-link to="/blocks" @click="closeMenus">Blocks</router-link>
             <div class="dropdown" :class="{ open: toolsOpen }">

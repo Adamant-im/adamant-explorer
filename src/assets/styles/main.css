@@ -244,10 +244,10 @@ main.container {
 
 .site-nav {
   min-width: 0;
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 24px;
+  margin-left: auto;
 }
 
 .header-search {
@@ -257,7 +257,6 @@ main.container {
 }
 
 .nav-links {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -552,6 +551,7 @@ main.container {
   top: calc(100% + 7px);
   left: 0;
   z-index: 30;
+  max-width: 100%;
   padding: 8px 12px;
   color: var(--red);
   background: var(--surface-raised);
@@ -559,11 +559,14 @@ main.container {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 /* Latest operations */
 
 .operations-panel {
+  --operations-type-inset: clamp(15px, 2.5vw, 44px);
+
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -578,7 +581,7 @@ main.container {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 12px 24px;
+  padding: 12px 24px 14px calc(var(--operations-type-inset) - 2px);
   border-bottom: 1px solid var(--border);
 }
 
@@ -622,7 +625,7 @@ main.container {
   height: 21px;
 }
 
-.operations-table-wrap {
+.table-responsive.operations-table-wrap {
   overflow: visible;
 }
 
@@ -810,6 +813,14 @@ main.container {
   white-space: nowrap;
 }
 
+/* Down arrow shown only inside the narrow (<=420px) stacked card. */
+.operation-route-down {
+  display: none;
+  width: 17px;
+  height: 17px;
+  color: var(--muted);
+}
+
 .home-amount {
   color: var(--text);
   font-family: var(--font-mono);
@@ -823,10 +834,12 @@ main.container {
 }
 
 .home-amount small {
+  display: inline-block;
   margin-left: 7px;
   color: var(--muted);
   font-family: var(--font);
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .operation-open {
@@ -916,6 +929,8 @@ main.container {
   max-width: 100%;
   overflow-x: auto;
   border-radius: var(--radius);
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
@@ -948,6 +963,43 @@ main.container {
 .table thead th[role='button'] {
   cursor: pointer;
   user-select: none;
+}
+
+.table-sort-button {
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 13px 15px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.peers-table thead th,
+.table.transactions thead th,
+.active-delegates-table thead th,
+.standby-delegates-table thead th {
+  padding: 0;
+}
+
+.text-center > .table-sort-button {
+  justify-content: center;
+}
+
+.text-right > .table-sort-button {
+  justify-content: flex-end;
+}
+
+.table-sort-button:hover,
+.table-sort-button:focus-visible {
+  color: var(--blue);
 }
 
 .table thead th[role='button']:hover,
@@ -1221,9 +1273,15 @@ main.container {
 }
 
 .copy-value {
+  min-width: 0;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 7px;
+}
+
+.copy-value > .ellipsis {
+  min-width: 0;
 }
 
 .copy-button:hover {
@@ -1283,6 +1341,7 @@ main.container {
 
 .app-tooltip.visible {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -1509,11 +1568,19 @@ main.container {
   gap: 16px;
 }
 
+.forging-status-control {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
 .forging-dot {
   width: 10px;
   height: 10px;
   display: inline-block;
-  margin-right: 7px;
   background: currentColor;
   border-radius: 50%;
   box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 14%, transparent);
@@ -1795,11 +1862,13 @@ main.container {
 }
 
 .delegate-events-rail {
-  width: 100vw;
+  width: 100%;
   margin-bottom: 18px;
-  margin-left: calc(50% - 50vw);
+  margin-left: 0;
   background: var(--surface);
   border-block: 1px solid var(--border);
+  box-shadow: 0 0 0 100vmax var(--surface);
+  clip-path: inset(0 -100vmax);
 }
 
 .delegate-events {
@@ -1808,7 +1877,7 @@ main.container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0 auto;
-  padding-inline: 20px;
+  padding-inline: 0;
 }
 
 .delegate-events > article {
@@ -2142,6 +2211,24 @@ main.container {
   background: var(--orange);
 }
 
+.peer-country,
+.peer-status,
+.peer-platform {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.peer-mobile-label {
+  display: none;
+}
+
+.mobile-sort-controls {
+  display: none;
+}
+
 .hostname {
   max-width: 250px;
 }
@@ -2270,6 +2357,10 @@ main.container {
   white-space: nowrap;
 }
 
+.show-sm {
+  display: none !important;
+}
+
 .ellipsis {
   min-width: 0;
   overflow: hidden;
@@ -2311,7 +2402,7 @@ main.container {
   }
 
   .latest-transactions th:nth-child(1) {
-    width: 16%;
+    width: 18%;
   }
 
   .latest-transactions th:nth-child(2) {
@@ -2374,15 +2465,17 @@ main.container {
   }
 
   .container {
-    padding-inline: 14px;
-  }
-
-  .delegate-events {
-    padding-inline: 14px;
+    padding-inline: 16px;
   }
 
   .site-header-inner {
-    gap: 12px;
+    gap: 10px;
+  }
+
+  .site-header-main {
+    position: relative;
+    z-index: 2;
+    background: var(--surface);
   }
 
   .brand-logo {
@@ -2390,13 +2483,25 @@ main.container {
     height: 42px;
   }
 
-  .brand span {
-    display: inline;
-    font-size: 20px;
+  .header-search .search-input {
+    height: 44px;
+    padding: 0 12px 0 40px;
+  }
+
+  .header-search .search-icon {
+    left: 12px;
+    width: 19px;
+    height: 19px;
+  }
+
+  .header-search kbd {
+    display: none;
   }
 
   .menu-toggle {
     display: inline-flex;
+    width: 44px;
+    height: 44px;
   }
 
   .site-nav {
@@ -2404,15 +2509,20 @@ main.container {
     top: var(--header-main);
     right: 0;
     left: 0;
+    z-index: 10;
     display: none;
+    max-height: calc(100dvh - var(--header-main));
+    overflow-y: auto;
     padding: 14px;
     background: var(--surface-raised);
     border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow);
+    overscroll-behavior: contain;
   }
 
   .site-nav.open {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
@@ -2422,14 +2532,17 @@ main.container {
   }
 
   .nav-links {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 7px;
+    align-items: stretch;
+    margin-left: 0;
   }
 
   .nav-links > a,
   .dropdown-toggle {
-    min-height: 42px;
+    min-height: 44px;
     padding: 9px 11px;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -2437,6 +2550,10 @@ main.container {
 
   .dropdown {
     position: static;
+  }
+
+  .dropdown.open {
+    grid-column: 1 / -1;
   }
 
   .dropdown-toggle {
@@ -2447,8 +2564,15 @@ main.container {
   .dropdown-menu {
     position: static;
     grid-column: 1 / -1;
+    width: 100%;
     margin-top: 6px;
     box-shadow: none;
+  }
+
+  .dropdown-menu a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 
   .nav-divider {
@@ -2458,6 +2582,11 @@ main.container {
   .currency-badge,
   .theme-toggle {
     width: 100%;
+    min-height: 44px;
+  }
+
+  .theme-toggle {
+    grid-column: 1 / -1;
   }
 
   .network-rail-inner {
@@ -2502,6 +2631,84 @@ main.container {
   }
 }
 
+@media (min-width: 721px) and (max-width: 1080px) {
+  .latest-transactions th:nth-child(1) {
+    width: 18%;
+  }
+
+  .latest-transactions th:nth-child(2) {
+    width: 17%;
+  }
+
+  .latest-transactions th:nth-child(3),
+  .latest-transactions th:nth-child(4) {
+    width: 22%;
+  }
+
+  .latest-transactions th:nth-child(5) {
+    width: 14%;
+  }
+
+  .latest-transactions th:nth-child(6) {
+    width: 7%;
+  }
+
+  .latest-transactions thead th,
+  .latest-transactions tbody td {
+    padding-inline: 12px;
+  }
+
+  .latest-transactions .operation-type {
+    gap: 8px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .latest-transactions .operation-time,
+  .latest-transactions .operation-time time {
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .latest-transactions .operation-amount {
+    white-space: normal;
+  }
+
+  .latest-transactions .home-amount {
+    font-size: 14px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .latest-transactions .operation-open {
+    padding-right: 12px !important;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+  .latest-transactions .operation-route-arrow {
+    margin-left: 0;
+    justify-self: end;
+  }
+}
+
+@media (min-width: 721px) {
+  .latest-transactions .operation-type {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .latest-transactions .operation-type > span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .latest-transactions thead th:first-child,
+  .latest-transactions tbody td:first-child {
+    padding-left: var(--operations-type-inset);
+  }
+}
+
 @media (max-width: 720px) {
   body {
     font-size: 13px;
@@ -2512,15 +2719,32 @@ main.container {
     padding-bottom: 20px;
   }
 
-  .brand span {
-    display: none;
+  .btn,
+  .tab-button {
+    min-height: 44px;
+  }
+
+  h1,
+  h2 {
+    margin-bottom: 0.75em;
+  }
+
+  .page-title h1,
+  .page-title h2 {
+    margin-bottom: 0.6em;
+  }
+
+  .show-sm {
+    display: inline !important;
   }
 
   .network-health {
-    padding-left: 2px;
+    padding-left: 8px;
   }
 
   .operations-panel {
+    --operations-type-inset: 14px;
+
     overflow: visible;
     background: transparent;
     border: 0;
@@ -2529,7 +2753,7 @@ main.container {
 
   .operations-heading {
     min-height: 56px;
-    padding: 8px 2px 13px;
+    padding: 8px 2px 18px calc(var(--operations-type-inset) - 1px);
     border-bottom: 0;
   }
 
@@ -2552,10 +2776,6 @@ main.container {
   }
 
   .heading-link-label {
-    display: none;
-  }
-
-  .section-mark {
     display: none;
   }
 
@@ -2582,66 +2802,100 @@ main.container {
 
   .latest-transactions tbody {
     display: grid;
-    gap: 9px;
+    gap: 10px;
   }
 
+  /*
+   * Each operation renders as a card. Type and time sit in the header row
+   * above a divider; below it the route runs on a single line as
+   * "sender -> recipient  amount  open". Only the open control navigates;
+   * the card body is not a link. The <=420px block restacks this route.
+   */
   .latest-transactions tbody tr {
     position: relative;
-    padding: 14px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto;
+    gap: 11px 12px;
+    padding: 13px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: 0 8px 28px rgba(15, 28, 36, 0.035);
   }
 
+  .latest-transactions tbody tr:not(:only-child)::before {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--border);
+    content: '';
+  }
+
   .latest-transactions tbody td {
+    min-width: 0;
     height: auto;
     padding: 0;
     border: 0;
   }
 
-  .latest-transactions tbody td::before {
-    display: none;
+  .latest-transactions tbody td[colspan] {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .latest-transactions tbody td[data-title='Type'] {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: center;
   }
 
   .latest-transactions .operation-time {
-    position: absolute;
-    top: 18px;
-    right: 46px;
-    max-width: 42%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .latest-transactions .operation-route {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
-    gap: 7px;
-    margin-top: 15px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
+    grid-row: 1;
+    grid-column: 2 / -1;
+    justify-self: end;
+    align-self: center;
+    max-width: 100%;
+    text-align: right;
+    white-space: normal;
+    line-height: 1.35;
   }
 
   .latest-transactions tbody td[data-title='Sender'] {
-    margin-top: 15px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
+    grid-row: 3;
+    grid-column: 1;
+    align-self: center;
   }
 
   .latest-transactions tbody td[data-title='Recipient'] {
-    margin-top: 9px;
+    grid-row: 3;
+    grid-column: 2;
+    align-self: center;
   }
 
   .latest-transactions .operation-amount {
-    margin-top: 12px;
-    text-align: left !important;
+    grid-row: 3;
+    grid-column: 3;
+    align-self: center;
+    text-align: right;
   }
 
   .latest-transactions .operation-open {
-    position: absolute;
-    top: 16px;
-    right: 14px;
     width: auto;
+    grid-row: 3;
+    grid-column: 4;
+    justify-self: end;
+    align-self: center;
+    padding: 0 !important;
+  }
+
+  .latest-transactions .operation-open a {
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    color: var(--muted);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    border-radius: 50%;
   }
 
   .latest-transactions .operation-sender {
@@ -2649,7 +2903,7 @@ main.container {
   }
 
   .latest-transactions .operation-route-arrow {
-    transform: rotate(90deg);
+    margin-left: 0;
   }
 
   .operation-type {
@@ -2672,8 +2926,12 @@ main.container {
 
   .copy-button {
     width: 32px;
-    height: 32px;
-    flex-basis: 32px;
+    height: 40px;
+  }
+
+  .forging-status-control {
+    width: 44px;
+    height: 44px;
   }
 
   .operations-summary {
@@ -2692,10 +2950,6 @@ main.container {
     text-align: center;
   }
 
-  .site-footer {
-    padding-inline: 14px;
-  }
-
   .site-footer-inner {
     min-height: auto;
     display: grid;
@@ -2709,7 +2963,12 @@ main.container {
 
   .footer-links {
     justify-content: space-between;
-    gap: 12px;
+    padding-left: 10px;
+  }
+
+  .footer-links a {
+    min-height: 44px;
+    padding-block: 8px;
   }
 
   .page-title,
@@ -2810,6 +3069,12 @@ main.container {
     min-height: 340px;
   }
 
+  #map .leaflet-control-zoom a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+
   .hide-sm {
     display: none !important;
   }
@@ -2869,6 +3134,17 @@ main.container {
     border-bottom: 0;
   }
 
+  .table-mobile td.table-empty {
+    min-height: 56px;
+    display: block;
+    padding: 18px 12px;
+    text-align: center;
+  }
+
+  .table-mobile td.table-empty::before {
+    display: none;
+  }
+
   .table-mobile td::before {
     color: var(--muted);
     font-size: 11px;
@@ -2888,8 +3164,73 @@ main.container {
     justify-self: end;
   }
 
+  .table-mobile .copy-value,
+  .table-mobile .peer-country,
+  .table-mobile .peer-status,
+  .table-mobile .peer-platform {
+    max-width: 100%;
+    justify-self: end;
+  }
+
+  .table-mobile .copy-value > .ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .table-mobile .mobile-address,
+  .table-mobile .mobile-cell-value {
+    min-width: 0;
+    max-width: 100%;
+    display: block;
+    justify-self: end;
+    overflow-wrap: anywhere;
+  }
+
+  .peers-table .peer-mobile-label {
+    min-width: 0;
+    display: inline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-sort-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .mobile-sort-controls select {
+    min-width: 0;
+    height: 44px;
+    flex: 1;
+    padding: 0 10px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+  }
+
+  .mobile-sort-direction {
+    flex: 0 0 auto;
+    gap: 3px;
+    padding-inline: 10px;
+  }
+
+  .peers-table .peer-ip {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .peers-table .peer-state {
+    flex: 0 0 8px;
+    margin-right: 0;
+  }
+
   .table.summary td:first-child {
-    width: auto;
+    width: 34%;
   }
 
   .table.summary td {
@@ -2902,39 +3243,279 @@ main.container {
     overflow-wrap: anywhere;
   }
 
-  .table.summary .public-key {
-    max-width: calc(100% - 36px);
-    vertical-align: middle;
+  /*
+   * The value fills the cell instead of shrinking to its min-content:
+   * flexbox would otherwise collapse a break-anywhere token to a single
+   * character, wrapping addresses/keys that actually fit the column.
+   */
+  .table.summary .copy-value {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table.summary .copy-value > .txid,
+  .table.summary .copy-value > .public-key {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    text-align: right;
+    white-space: normal;
+  }
+
+  /*
+   * The block and address transaction lists stay real tables on small
+   * screens: a fixed compact column set (no Fee, Confirmations or copy
+   * buttons) scrolling inside `.table-responsive`. Block pages also
+   * drop the date column and sorting via `no-mobile-*` wrapper classes.
+   */
+  .table.transactions {
+    min-width: 640px;
+    table-layout: fixed;
+  }
+
+  .no-mobile-date .table.transactions {
+    min-width: 560px;
+  }
+
+  .table.transactions thead th:nth-child(1) {
+    width: 104px;
+  }
+
+  .table.transactions thead th:nth-child(2) {
+    width: 84px;
+  }
+
+  .table.transactions thead th:nth-child(3) {
+    width: 92px;
+  }
+
+  .table.transactions thead th:nth-child(6) {
+    width: 104px;
+  }
+
+  .table.transactions thead th:nth-child(7),
+  .table.transactions thead th:nth-child(8),
+  .table.transactions td[data-title='Fee'],
+  .table.transactions td[data-title='Confirmations'],
+  .table.transactions .copy-button {
+    display: none;
+  }
+
+  .no-mobile-date .table.transactions thead th:nth-child(3),
+  .no-mobile-date .table.transactions td[data-title='Date'] {
+    display: none;
+  }
+
+  .table.transactions td {
+    padding: 10px;
+  }
+
+  .table.transactions .table-sort-button {
+    min-height: 40px;
+    padding: 10px;
+  }
+
+  .table.transactions td[data-title='Date'] {
+    white-space: normal;
+  }
+
+  .table.transactions .operation-type {
+    gap: 8px;
+    font-size: 13px;
+    white-space: normal;
+  }
+
+  .table.transactions .operation-icon {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+
+  .table.transactions .txvalues {
+    padding: 0;
+    background: transparent;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .no-mobile-sort .table-sort-button {
+    pointer-events: none;
+  }
+
+  .no-mobile-sort .sort-arrow {
+    display: none;
+  }
+
+  .voters-table,
+  .active-delegates-table,
+  .standby-delegates-table {
+    table-layout: fixed;
+  }
+
+  .voters-table th:first-child {
+    width: 60%;
+  }
+
+  .voters-table th,
+  .voters-table td {
+    padding-inline: 10px;
+  }
+
+  .voters-table td:last-child {
+    white-space: normal;
+  }
+
+  .voters-table .home-amount {
+    font-size: 14px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .active-delegates-table th,
+  .active-delegates-table td,
+  .standby-delegates-table th,
+  .standby-delegates-table td {
+    padding-inline: 6px;
+    overflow: hidden;
+  }
+
+  .active-delegates-table th:nth-child(1),
+  .active-delegates-table td:nth-child(1) {
+    width: 20%;
+  }
+
+  .active-delegates-table th:nth-child(2),
+  .active-delegates-table td:nth-child(2) {
+    width: 38%;
+  }
+
+  .active-delegates-table th:nth-child(6),
+  .active-delegates-table td:nth-child(6) {
+    width: 16%;
+  }
+
+  .active-delegates-table th:nth-child(7),
+  .active-delegates-table td:nth-child(7) {
+    width: 30%;
+  }
+
+  .standby-delegates-table th:nth-child(1),
+  .standby-delegates-table td:nth-child(1) {
+    width: 22%;
+  }
+
+  .standby-delegates-table th:nth-child(2),
+  .standby-delegates-table td:nth-child(2) {
+    width: 78%;
+  }
+
+  .active-delegates-table th,
+  .standby-delegates-table th {
+    overflow-wrap: anywhere;
+  }
+
+  .active-delegates-table .table-sort-button,
+  .standby-delegates-table .table-sort-button {
+    min-width: 0;
+    flex-wrap: wrap;
+    padding: 9px 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .active-delegates-table td:nth-child(2) a,
+  .standby-delegates-table td:nth-child(2) a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .transactions-filter {
     flex-wrap: wrap;
   }
+
+  .transactions-filter .btn {
+    min-width: 0;
+    flex: 1 1 calc(50% - 4px);
+  }
 }
 
 @media (max-width: 420px) {
   .container {
-    padding-inline: 10px;
+    padding-inline: 12px;
   }
 
-  .delegate-events {
-    padding-inline: 10px;
+  .operations-panel {
+    --operations-type-inset: 12px;
   }
 
+  /*
+   * Narrow cards stack the route vertically: sender, then a centered down
+   * arrow with the amount right after it (open control on the far right),
+   * then recipient.
+   */
   .latest-transactions tbody tr {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    row-gap: 10px;
     padding: 12px;
   }
 
-  .latest-transactions .operation-route {
-    grid-template-columns: 1fr;
+  .latest-transactions tbody td[data-title='Sender'] {
+    grid-row: 3;
+    grid-column: 1 / -1;
   }
 
-  .latest-transactions .route-arrow {
-    transform: rotate(90deg);
+  .latest-transactions tbody td[data-title='Recipient'] {
+    grid-row: 5;
+    grid-column: 1 / -1;
+  }
+
+  .latest-transactions .identity-cell {
+    justify-content: center;
+  }
+
+  .latest-transactions .identity-link {
+    align-items: center;
+    text-align: center;
+  }
+
+  .latest-transactions .operation-amount {
+    grid-row: 4;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .latest-transactions .operation-route-down {
+    display: inline-block;
+  }
+
+  .latest-transactions .operation-open {
+    grid-row: 4;
+    grid-column: 3;
+  }
+
+  .latest-transactions .operation-sender {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .latest-transactions .operation-sender .operation-route-arrow {
+    display: none;
   }
 
   .footer-links a:first-child {
     display: none;
+  }
+
+  .search-box kbd {
+    display: none;
+  }
+
+  .search-input {
+    padding-right: 14px;
   }
 
   .big-info {
@@ -2942,7 +3523,18 @@ main.container {
   }
 
   .graph-controls {
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .graph-controls p {
+    margin: 0;
+    text-align: center;
+  }
+
+  .map-caption {
+    display: grid;
+    gap: 3px;
   }
 }
 

@@ -15,6 +15,7 @@ const locator = new helpers.Locator();
 const blockWindow = new helpers.RollingBlocksWindow();
 const blockStatisticsEvents = new EventEmitter();
 const peerStatisticsEvents = new EventEmitter();
+const BLOCK_CONFIRMATION_RETRY_DELAY = 200;
 const BLOCK_STATISTICS_REST_REFRESH_INTERVAL = BLOCK_INTERVAL_MILLISECONDS * 6;
 const BLOCK_STATISTICS_PERSIST_INTERVAL = 300000;
 const BLOCK_STATISTICS_CACHE_KEY = 'adamant-explorer:block-statistics:v1';
@@ -36,6 +37,101 @@ let peerStatisticsStart = null;
 let peerStatisticsRefresh = null;
 let peerStatisticsTimer = null;
 let peerStatisticsPersistTimer = null;
+
+/** Resolve after a short block-confirmation visibility window. */
+function waitForBlockConfirmation() {
+  return new Promise((resolve) => setTimeout(resolve, BLOCK_CONFIRMATION_RETRY_DELAY));
+}
+
+/** Identify the expected cross-node visibility miss without retrying unrelated outages. */
+function isBlockNotFoundError(error) {
+  const message = error instanceof Error ? error.message : String(error);
+  return /\bblock not found\b/i.test(message);
+}
+
+/**
+ * Validate that a REST response confirms the block announced over WebSocket.
+ * @param {Object} notification Compact WebSocket block notification
+ * @param {Object} block Hydrated REST block
+ * @returns {Object} The validated REST block
+ * @throws {Error} When REST returned a malformed or different block
+ */
+function validateConfirmedBlock(notification, block) {
+  if (!block || typeof block !== 'object') {
+    throw new Error('Node REST API returned a malformed block confirmation');
+  }
+
+  if (
+    notification.id !== undefined &&
+    notification.id !== null &&
+    String(block.id) !== String(notification.id)
+  ) {
+    throw new Error(
+      `Node REST API returned block id=${block.id ?? 'unknown'} instead of ${notification.id}`,
+    );
+  }
+
+  const notificationHeight = Number(notification.height);
+
+  if (Number.isSafeInteger(notificationHeight) && Number(block.height) !== notificationHeight) {
+    throw new Error(
+      `Node REST API returned block height=${block.height ?? 'unknown'} instead of ${notificationHeight}`,
+    );
+  }
+
+  return block;
+}
+
+/**
+ * Hydrate a compact WebSocket block while tolerating short cross-node SQL visibility lag.
+ * Only the expected `Block not found` response is retried. A second miss falls back to
+ * a height lookup, whose id and height must still match the original notification.
+ * @param {Object} notification Compact WebSocket block notification
+ * @returns {Promise<Object>} Validated full block returned by the Node REST API
+ * @throws {*} The final request or validation error when confirmation is unavailable
+ */
+async function hydrateWebSocketBlock(notification) {
+  const requestById = async () => {
+    const result = await blocks.getBlockById(notification.id);
+    return validateConfirmedBlock(notification, result.block);
+  };
+
+  try {
+    return await requestById();
+  } catch (error) {
+    if (!isBlockNotFoundError(error)) {
+      throw error;
+    }
+  }
+
+  await waitForBlockConfirmation();
+
+  let retryError;
+
+  try {
+    return await requestById();
+  } catch (error) {
+    if (!isBlockNotFoundError(error)) {
+      throw error;
+    }
+
+    retryError = error;
+  }
+
+  const height = Number(notification.height);
+
+  if (!Number.isSafeInteger(height) || height < 0) {
+    throw retryError;
+  }
+
+  logger.debug(
+    `Block statistics: WebSocket block at height=${height} is still unavailable after 2 REST confirmation attempts; ` +
+      `retrying with a height lookup: ${retryError}`,
+  );
+
+  const result = await blocks.getBlockByHeight(height);
+  return validateConfirmedBlock(notification, result.block);
+}
 
 /** Serialize mutations so WebSocket events cannot race REST recovery. */
 function queueBlockStatisticsUpdate(callback) {
@@ -376,10 +472,12 @@ async function startBlockStatisticsCache(client) {
         try {
           // The socket payload is intentionally compact. Confirm and hydrate it
           // over REST so public statistics keep returning the full block shape.
-          block = (await blocks.getBlockById(notification.id)).block;
+          block = await hydrateWebSocketBlock(notification);
         } catch (error) {
           logger.warn(
-            `Block statistics: REST confirmation failed for WebSocket block at height=${notification.height ?? 'unknown'}; compact payload will be used: ${error}`,
+            `Block statistics: REST confirmation exhausted for WebSocket block at height=${notification.height ?? 'unknown'}; ` +
+              `compact payload will be used; periodic REST reconciliation of the latest ${BLOCKS_PAGE_SIZE} blocks ` +
+              `will keep attempting recovery every ${BLOCK_STATISTICS_REST_REFRESH_INTERVAL}ms: ${error}`,
           );
         }
 

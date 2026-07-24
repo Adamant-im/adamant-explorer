@@ -166,8 +166,8 @@ const confirmations = computed(() =>
         </p>
       </section>
 
-      <h2>Ledger entry</h2>
-      <div class="table-responsive table-mobile">
+      <h2 class="hide-sm">Ledger entry</h2>
+      <div class="table-responsive table-mobile hide-sm">
         <table class="table details">
           <thead>
             <tr>

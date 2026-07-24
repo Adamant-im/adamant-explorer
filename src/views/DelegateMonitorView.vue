@@ -328,18 +328,32 @@ const standbyColumns = [
 
     <div v-if="tab === 'active'" class="tab-content">
       <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped active-delegates-table">
           <thead>
             <tr>
               <th
                 v-for="column in activeColumns"
                 :key="column.key"
-                role="button"
-                :class="[column.hide, column.class]"
-                @click="sortActive.order(column.key)"
+                :class="[column.hide, column.class, sortActive.key === column.key ? 'sorted' : '']"
+                :aria-sort="
+                  sortActive.key === column.key
+                    ? sortActive.reverse
+                      ? 'descending'
+                      : 'ascending'
+                    : 'none'
+                "
               >
-                {{ column.label }}
-                <SortIndicator v-if="sortActive.key === column.key" :reverse="sortActive.reverse" />
+                <button
+                  type="button"
+                  class="table-sort-button"
+                  @click="sortActive.order(column.key)"
+                >
+                  {{ column.label }}
+                  <SortIndicator
+                    v-if="sortActive.key === column.key"
+                    :reverse="sortActive.reverse"
+                  />
+                </button>
               </th>
             </tr>
           </thead>
@@ -382,21 +396,32 @@ const standbyColumns = [
 
     <div v-else class="tab-content">
       <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped standby-delegates-table">
           <thead>
             <tr>
               <th
                 v-for="column in standbyColumns"
                 :key="column.key"
-                role="button"
-                :class="[column.hide, column.class]"
-                @click="sortStandby.order(column.key)"
+                :class="[column.hide, column.class, sortStandby.key === column.key ? 'sorted' : '']"
+                :aria-sort="
+                  sortStandby.key === column.key
+                    ? sortStandby.reverse
+                      ? 'descending'
+                      : 'ascending'
+                    : 'none'
+                "
               >
-                {{ column.label }}
-                <SortIndicator
-                  v-if="sortStandby.key === column.key"
-                  :reverse="sortStandby.reverse"
-                />
+                <button
+                  type="button"
+                  class="table-sort-button"
+                  @click="sortStandby.order(column.key)"
+                >
+                  {{ column.label }}
+                  <SortIndicator
+                    v-if="sortStandby.key === column.key"
+                    :reverse="sortStandby.reverse"
+                  />
+                </button>
               </th>
             </tr>
           </thead>

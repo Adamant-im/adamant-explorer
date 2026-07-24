@@ -56,6 +56,9 @@ function getTooltipElement() {
   tooltipElement.id = TOOLTIP_ID;
   tooltipElement.className = 'app-tooltip';
   tooltipElement.setAttribute('role', 'tooltip');
+  // Tapping the tooltip dismisses it; on touch devices the auto-hide
+  // timer is not always reliable, so this is the guaranteed way out.
+  tooltipElement.addEventListener('pointerdown', () => hideTooltip());
   document.body.append(tooltipElement);
 
   return tooltipElement;

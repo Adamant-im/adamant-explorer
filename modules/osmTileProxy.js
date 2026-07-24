@@ -24,9 +24,7 @@ const FALLBACK_REFERER = 'https://explorer.adamant.im/';
  * @returns {{z: number, x: number, y: number}|null} Valid coordinates, or `null`
  */
 function parseTileCoordinates(z, x, y) {
-  if (
-    ![z, x, y].every((value) => typeof value === 'string' && /^(0|[1-9][0-9]*)$/.test(value))
-  ) {
+  if (![z, x, y].every((value) => typeof value === 'string' && /^(0|[1-9][0-9]*)$/.test(value))) {
     return null;
   }
 
