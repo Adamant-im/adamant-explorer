@@ -51,7 +51,7 @@ If tradeoffs are required, preserve security, data correctness, and runtime reli
 
 ## Technical Rules
 
-- Node.js 22.13 or newer; CommonJS on the backend, ES modules and Vue single-file components in `src/`
+- Node.js `^22.18.0 || >=24.11.0`; CommonJS on the backend, ES modules and Vue single-file components in `src/`
 - Frontend routes must stay URL-compatible with previous explorer versions; existing deep links may not break
 - Keep `src/lib/` utilities framework-free so `test/unit/` can import them in plain Node; use explicit `.js` extensions in their imports
 - All node interaction must go through `adamant-api` (adamant-api-jsclient) in `api/lib/adamant/requests/`; do not call node endpoints with a raw HTTP client elsewhere

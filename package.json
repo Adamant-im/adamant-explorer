@@ -36,7 +36,7 @@
   "license": "GPL-3.0",
   "main": "app.js",
   "engines": {
-    "node": ">=22.13.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "scripts": {
     "start": "node app.js",

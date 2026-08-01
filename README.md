@@ -24,7 +24,7 @@ Deployed at:
 
 ## Requirements
 
-- Node.js 22.13 or newer
+- Node.js `^22.18.0 || >=24.11.0`
 - Redis (recommended) — enables API response caching and preserves the rolling block-statistics window between Explorer restarts. Explorer remains available without Redis, but caching and persisted statistics are disabled.
 
   ```sh

@@ -6,7 +6,7 @@ const params = {
   id: '6438017970172540087',
   id2: '1877375791981840387',
   generatorPublicKey: 'b80bb6459608dcdeb9a98d1f2b0111b2bf11e53ef2933e6769bb0198e3a97aae',
-  totalAmount: 9800000000000000,
+  totalAmount: '9800000000000000',
   totalFee: 0,
 };
 
@@ -131,6 +131,9 @@ describe('Blocks API', function () {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
         testUtils.expect(res.body).to.have.property('block').to.be.a('object');
         testUtils.expect(res.body.block.delegate).to.be.null;
+        testUtils.expect(res.body.block.generatorPublicKey).to.equal(params.generatorPublicKey);
+        testUtils.expect(String(res.body.block.totalAmount)).to.equal(params.totalAmount);
+        testUtils.expect(res.body.block.totalFee).to.equal(params.totalFee);
         checkBlock(res.body.block);
         done();
       });
