@@ -14,7 +14,7 @@ All repository artifacts—including code, comments, documentation, commits, iss
 
 ## Development setup
 
-Use Node.js 22.13 or newer:
+Use Node.js `^22.18.0 || >=24.11.0`:
 
 ```sh
 git clone https://github.com/Adamant-im/adamant-explorer.git

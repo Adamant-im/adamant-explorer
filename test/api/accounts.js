@@ -1,10 +1,10 @@
 const testUtils = require('../testUtils.js');
 
 const params = {
-  address: 'U765119166770892012',
-  address_delegate: 'U9466395914658764774',
+  address: 'U5338684603617333081',
+  address_delegate: 'U8300472841473565177',
   excessive_offset: '1000000',
-  publicKey: '4016ab8e8b7f60eca2e3c77adfd68c6eba1e83a580c1e6052ffae44056779a3c',
+  publicKey: '9184c87b846dec0dc4010def579fecf5dad592a59b37a013c7e6975597681f58',
 };
 
 describe('Accounts API', function () {

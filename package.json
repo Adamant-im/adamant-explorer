@@ -36,7 +36,7 @@
   "license": "GPL-3.0",
   "main": "app.js",
   "engines": {
-    "node": ">=22.13.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -54,42 +54,43 @@
     "benchmark": "node benchmark"
   },
   "dependencies": {
-    "@tabler/icons-vue": "^3.45.0",
+    "@tabler/icons-vue": "^3.46.0",
     "adamant-api": "^3.1.0",
     "async": "^3.2.6",
-    "axios": "^1.18.1",
+    "axios": "^1.19.0",
     "commander": "^15.0.0",
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "jsonminify": "^0.4.2",
     "moment": "^2.30.1",
     "morgan": "^1.11.0",
-    "redis": "^6.1.0",
+    "redis": "^6.2.0",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/devtools-api": "^8.2.1",
     "benchmark": "^2.1.4",
     "chai": "^6.2.2",
-    "eslint": "^10.6.0",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-mocha": "^11.3.0",
-    "eslint-plugin-vue": "^10.5.0",
-    "globals": "^17.7.0",
+    "eslint-plugin-mocha": "^12.0.1",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.8.0",
     "graphology": "^0.26.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
     "mocha": "^11.7.6",
-    "pinia": "^3.0.4",
-    "prettier": "^3.9.4",
+    "pinia": "^4.0.2",
+    "prettier": "^3.9.6",
     "qr-code-with-logo": "^1.1.0",
-    "sigma": "^3.0.2",
+    "sigma": "^3.0.3",
     "socket.io-client": "^4.8.3",
     "supertest": "^7.2.2",
-    "vite": "^7.3.2",
-    "vue": "^3.5.24",
-    "vue-router": "^4.6.4"
+    "vite": "^8.2.0",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0"
   },
   "overrides": {
     "diff": "^8.0.3",
