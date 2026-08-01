@@ -1,10 +1,10 @@
 const testUtils = require('../testUtils');
 
 const params = {
-  blockId: '13096746075322409574',
-  address: 'U9466395914658764774',
-  tx: '9557655214057042533',
-  username: 'adm_official_pool',
+  blockId: '6438017970172540087',
+  address: 'U8300472841473565177',
+  tx: '9371860765879081127',
+  username: 'caught',
 };
 
 describe('Common API', function () {
@@ -61,7 +61,7 @@ describe('Common API', function () {
     });
 
     it('using partial known delegate should be ok', function (done) {
-      getSearch('adm_official', (err, res) => {
+      getSearch('caug', (err, res) => {
         testUtils.expect(res.body).to.have.property('success').to.be.ok;
         testUtils.expect(res.body.type).to.equal('address');
         testUtils.expect(res.body.id).to.equal(params.address);

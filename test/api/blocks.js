@@ -3,10 +3,10 @@ const testUtils = require('../testUtils');
 /*expecting testnet genesis block for tests*/
 const params = {
   height: 1,
-  id: '13096746075322409574',
-  id2: '3848898435758454900',
-  generatorPublicKey: '2efef768fc41949aaf5124d7a3663ae843fec87c930494ce37a54d83383b634d',
-  totalAmount: 100000000,
+  id: '6438017970172540087',
+  id2: '1877375791981840387',
+  generatorPublicKey: 'b80bb6459608dcdeb9a98d1f2b0111b2bf11e53ef2933e6769bb0198e3a97aae',
+  totalAmount: 9800000000000000,
   totalFee: 0,
 };
 
