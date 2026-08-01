@@ -1,188 +1,256 @@
 'use strict';
 
-var express = require('express'),
-    config  = require('./config'),
-    routes  = require('./api'),
-    path    = require('path'),
-    cache   = require('./cache'),
-    program = require('commander'),
-    async   = require('async'),
-    packageJson = require('./package.json'),
-    split = require('split'),
-    logger = require('./utils/logger');
+const path = require('path');
+const express = require('express');
+const { program } = require('commander');
+const morgan = require('morgan');
+const compression = require('compression');
+const { Server } = require('socket.io');
 
-var app = express(), utils = require('./utils');
+const routes = require('./api/routes');
+const cache = require('./cache');
+const adamantApi = require('./api/lib/adamant/requests/api');
+const statisticsHandler = require('./api/lib/adamant/handlers/statistics');
+const createAdamantApiReadinessMiddleware = require('./api/lib/adamant/middleware/readiness');
+const packageJson = require('./package.json');
+const utils = require('./utils');
+const logger = require('./utils/log');
+const { createHttpLogFormatter } = require('./utils/httpLogging');
+const { isApiPath, isSupportedApiPath } = require('./api/lib/adamant/helpers/http');
+const { createApiRateLimiter } = require('./modules/apiRateLimiter');
+const { guardApiSurface } = require('./modules/apiSurface');
+const { normalizePort } = require('./modules/configValidation');
+const { buildContentSecurityPolicy } = require('./modules/httpSecurity');
+const { createOsmTileProxy, createOsmTileRateLimiter } = require('./modules/osmTileProxy');
+const config = require('./modules/configReader');
+
+const app = express();
 
 program
-    .version(packageJson.version)
-    .option('-c, --config <path>', 'config file path')
-    .option('-p, --port <port>', 'listening port number')
-    .option('-h, --host <ip>', 'listening host name or ip')
-    .option('-rp, --redisPort <port>', 'redis port')
-    .parse(process.argv);
+  .version(packageJson.version)
+  .option('-p, --port <port>', 'listening port number')
+  .option('-h, --host <ip>', 'listening host name or IP address')
+  .parse(process.argv);
 
-if (program.config) {
-    config = require(path.resolve(process.cwd(), program.config));
+const cliOptions = program.opts();
+let listeningPort = config.port;
+
+if (cliOptions.port !== undefined) {
+  try {
+    listeningPort = normalizePort(cliOptions.port);
+  } catch (error) {
+    program.error(error.message);
+  }
 }
-app.set ('host', program.host || config.host);
-app.set ('port', program.port || config.port);
 
-if (program.redisPort) {
-    config.redis.port = program.redisPort;
-}
-var client = require('./redis')(config);
+app.set('host', cliOptions.host ?? config.host);
+app.set('port', listeningPort);
+app.set('trust proxy', config.trustedProxies);
+app.disable('x-powered-by');
 
-app.candles = new utils.candles(config, client);
+const client = require('./redis')(config);
+
 app.exchange = new utils.exchange(config);
-app.knownAddresses = new utils.knownAddresses();
-app.orders = new utils.orders(config, client);
 
-app.set('version', '0.3');
+app.set('version', packageJson.version);
 app.set('strict routing', true);
-app.set('lisk address', 'http://' + config.lisk.host + ':' + config.lisk.port);
-app.set('freegeoip address', 'http://' + config.freegeoip.host + ':' + config.freegeoip.port);
+app.set('case sensitive routing', true);
 app.set('exchange enabled', config.exchangeRates.enabled);
 
-app.use (function (req, res, next) {
-    res.setHeader ('X-Frame-Options', 'DENY');
-    res.setHeader ('X-Content-Type-Options', 'nosniff');
-    res.setHeader ('X-XSS-Protection', '1; mode=block');
-    var ws_src = 'ws://' + req.get('host') + ' wss://' + req.get('host');
-    res.setHeader ('Content-Security-Policy', 'frame-ancestors \'none\'; default-src \'self\'; connect-src \'self\' ' + ws_src + '; img-src \'self\' https://*.tile.openstreetmap.org; style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; font-src \'self\' https://fonts.gstatic.com');
-    return next();
+// Security headers allow self-hosted application resources. Network Monitor
+// map tiles are served from the same origin via /osm-tiles/ (see below).
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '0');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader(
+    'Permissions-Policy',
+    'camera=(), geolocation=(), microphone=(), payment=(), usb=()',
+  );
+
+  res.setHeader('Content-Security-Policy', buildContentSecurityPolicy(req.get('host')));
+
+  return next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Proxy OSM raster tiles so Tor Browser on .onion (no Referer) and other
+// referrer-stripping clients still receive map imagery under OSM tile policy.
+// Registered before morgan intentionally: tile fan-out would drown access logs.
+// Per-IP limiting and an in-process LRU cache reduce abuse and OSM upstream load.
+app.get(
+  '/osm-tiles/:z/:x/:y.png',
+  createOsmTileRateLimiter(),
+  createOsmTileProxy({
+    userAgent: `ADAMANT-Explorer/${packageJson.version} (+${packageJson.homepage})`,
+  }),
+);
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    dotfiles: 'deny',
+  }),
+);
 
+// Share the Redis client with routes through the request object
 app.locals.redis = client;
-app.use(function (req, res, next) {
-    req.redis = client;
-    return next();
+app.use((req, res, next) => {
+  req.redis = client;
+  return next();
 });
 
-var morgan = require('morgan');
-app.use(morgan('combined', {
-    skip: function(req, res) {
-        return parseInt(res.statusCode) < 400;
-    }, stream: split().on('data', function(data) {              logger.error(data);
-    })
-}));
-app.use(morgan('combined', {
-    skip: function(req, res) {
-        return parseInt(res.statusCode) >= 400;
-    }, stream: split().on('data', function(data) {
-        logger.info(data);
-    })
-}));
-var compression = require('compression');
+// Keep routine access logs at debug while surfacing client and server failures.
+// Query strings are omitted because they may contain user-supplied identifiers.
+app.use(morgan(createHttpLogFormatter(logger)));
+
 app.use(compression());
-var methodOverride = require('method-override');
-app.use(methodOverride('X-HTTP-Method-Override'));
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(createApiRateLimiter());
 
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-};
-app.use(allowCrossDomain);
+app.use(guardApiSurface);
 
-app.use(function (req, res, next) {
-    if (req.originalUrl.split('/')[1] !== 'api') {
-        return next();
+// Cache lookup: serve a cached API response when one exists
+app.use(async (req, res, next) => {
+  if (!cache.isApiCacheMethod(req.method) || !isSupportedApiPath(req.path)) {
+    return next();
+  }
+
+  const latestBlock = statisticsHandler.getCachedBlocks()[0];
+  req.cacheKey = cache.getCacheKey(req.originalUrl, req.path, latestBlock);
+
+  if (!req.cacheKey) {
+    return next();
+  }
+
+  try {
+    const json = await req.redis.get(req.cacheKey);
+
+    if (json) {
+      logger.debug(`API cache: Hit for ${req.method} ${req.path}`);
+      return res.json(JSON.parse(json));
     }
 
-    logger.info(req.originalUrl);
+    logger.debug(`API cache: Miss for ${req.method} ${req.path}`);
+  } catch (error) {
+    logger.warn(
+      `API cache: Redis read failed for ${req.method} ${req.path}; continuing without cache: ${error}`,
+    );
+  }
 
-    if (req.originalUrl === undefined) {
-        return next();
-    }
-
-    if (cache.cacheIgnoreList.indexOf(req.originalUrl) >= 0) {
-        return next();
-    } else {
-        req.redis.get(req.originalUrl, function (err, json) {
-            if (err) {
-                logger.info(err);
-                return next();
-            } else if (json) {
-                try {
-                    json = JSON.parse(json);
-                } catch (e) {
-                    return next();
-                }
-
-                return res.json(json);
-            } else {
-                return next();
-            }
-        });
-    }
+  return next();
 });
 
-logger.info('Loading routes...');
+app.use(createAdamantApiReadinessMiddleware(adamantApi));
+
+logger.debug('Explorer startup: Registering API routes');
 
 routes(app);
 
-logger.info('Routes loaded');
+logger.debug('Explorer startup: API routes registered');
 
-app.use(function (req, res, next) {
-    logger.info(req.originalUrl.split('/')[1]);
+// Cache store: routes that support caching call next() with the response in req.json
+app.use((req, res, next) => {
+  if (
+    !cache.isApiCacheMethod(req.method) ||
+    !isSupportedApiPath(req.path) ||
+    req.json === undefined
+  ) {
+    return next();
+  }
 
-    if (req.originalUrl.split('/')[1] !== 'api') {
-        return next();
-    }
+  if (req.cacheKey) {
+    const ttl = cache.cacheTTLOverride[req.path] ?? config.redis.cacheTTL;
 
-    if (req.originalUrl === undefined) {
-        return next();
-    }
+    req.redis
+      .set(req.cacheKey, JSON.stringify(req.json), { expiration: { type: 'EX', value: ttl } })
+      .then(() => {
+        logger.debug(`API cache: Stored ${req.method} ${req.path}; ttl=${ttl}s`);
+      })
+      .catch((error) => {
+        logger.warn(
+          `API cache: Redis write failed for ${req.method} ${req.path}; ttl=${ttl}s: ${error}`,
+        );
+      });
+  }
 
-    if (cache.cacheIgnoreList.indexOf(req.originalUrl) >= 0) {
-        return res.json(req.json);
-    } else {
-        req.redis.set(req.originalUrl, JSON.stringify(req.json), function (err) {
-            if (err) {
-                logger.info(err);
-            } else {
-                var ttl = cache.cacheTTLOverride[req.originalUrl] || config.cacheTTL;
-
-                req.redis.send_command('EXPIRE', [req.originalUrl, ttl], function (err) {
-                    if (err) {
-                        logger.info(err);
-                    }
-                });
-            }
-        });
-
-        return res.json(req.json);
-    }
+  return res.json(req.json);
 });
 
-app.get('*', function (req, res, next) {
-    if (req.url.indexOf('api') !== 1) {
-        return res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    } else {
-        return next();
-    }
+app.use((req, res, next) => {
+  if (!isApiPath(req.path)) {
+    return next();
+  }
+
+  return res.status(404).json({
+    success: false,
+    error: 'API endpoint not found',
+  });
 });
 
-async.parallel([
-    function (cb) { app.exchange.loadRates (); cb (null); },
-], function (err) {
-    var server = app.listen(app.get('port'), app.get('host'), function (err) {
-        if (err) {
-            logger.info(err);
-        } else {
-            logger.info('Lisk Explorer started at ' + app.get('host') + ':' + app.get('port'));
+// Serve the single-page application for any non-API path
+app.use((req, res, next) => {
+  if (!['GET', 'HEAD'].includes(req.method)) {
+    return next();
+  }
 
-            var io = require('socket.io').listen(server);
-            require('./sockets')(app, io);
-        }
-    });
+  return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.use((req, res) => {
+  return res.status(404).json({
+    success: false,
+    error: 'Not found',
+  });
+});
+
+// Keep internal error details in operational logs and return a stable response.
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  logger.error(`HTTP: Unhandled ${req.method} ${req.path}: ${error}`);
+
+  return res.status(503).json({
+    success: false,
+    error: 'Service temporarily unavailable',
+  });
+});
+
+// Initial rates load runs in the background; the periodic update
+// is scheduled by the Exchange constructor
+app.exchange.loadRates();
+
+const server = app.listen(app.get('port'), app.get('host'), () => {
+  logger.info(
+    `Explorer startup: v${app.get('version')} listening on ${app.get('host')}:${app.get('port')}; ` +
+      `nodes=${config.nodes_adm.length}; exchangeRates=${config.exchangeRates.enabled ? 'enabled' : 'disabled'}; ` +
+      `logLevel=${config.log_level}`,
+  );
+
+  const io = new Server(server);
+  require('./sockets')(app, io);
+  statisticsHandler.startBlockStatisticsCache(client).catch((error) => {
+    logger.warn(
+      `Explorer startup: Block statistics cache initialization failed; background recovery remains active: ${error}`,
+    );
+  });
+  statisticsHandler.startPeerStatisticsCache(client).catch((error) => {
+    logger.warn(
+      `Explorer startup: Peer statistics cache initialization failed; background retry remains active: ${error}`,
+    );
+  });
+});
+
+// Bound slow or incomplete HTTP requests even when Explorer is exposed
+// without the recommended reverse proxy. Upgraded Socket.IO connections are
+// not governed by these HTTP request timers.
+server.headersTimeout = 15_000;
+server.requestTimeout = 30_000;
+server.keepAliveTimeout = 5_000;
+
+server.once('error', (error) => {
+  logger.error(
+    `Explorer startup: Failed to listen on ${app.get('host')}:${app.get('port')}: ${error}`,
+  );
+  process.exit(1);
 });

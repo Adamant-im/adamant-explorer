@@ -1,69 +1,116 @@
-'use strict';
-var safeStringify = require('fast-safe-stringify');
-var fs = require('fs');
-var flatstr = require('flatstr');
-var newConsole = require('console').Console;
-var config = require('../config');
-var output = fs.createWriteStream(config.log.file, { flags: 'a' });
-var myConsole = new newConsole(output, output);
+const fs = require('fs');
+const path = require('path');
 
-var levels = {
-  'trace': 0,
-  'debug': 1,
-  'info': 2,
-  'warn': 3,
-  'error': 4,
+/** Verbosity thresholds ordered from quietest to noisiest. */
+const LOG_LEVELS = ['none', 'error', 'warn', 'info', 'log', 'debug'];
+const DEFAULT_LOG_LEVEL = 'log';
+
+const COLORS = {
+  error: '\x1b[31m',
+  warn: '\x1b[33m',
+  info: '\x1b[32m',
+  log: '\x1b[34m',
+  debug: '\x1b[36m',
 };
 
-var logger = {};
+const RESET_COLOR = '\x1b[0m';
 
-logger.doLog = function doLog(level, msg, extra) {
+/**
+ * Build a logger with an explicit threshold and log directory.
+ *
+ * Unknown levels fall back to `log`. The non-enumerable `close()` method is
+ * intended for tests and one-shot scripts that need to flush the file stream.
+ *
+ * @param {Object} [options] Logger options
+ * @param {string} [options.level='log'] Configured verbosity threshold
+ * @param {string} [options.logDirectory='./logs'] Destination directory
+ * @param {{log: Function}} [options.consoleOutput=console] Console sink
+ * @param {() => number} [options.now=Date.now] Millisecond clock
+ * @returns {{error: Function, warn: Function, info: Function, log: Function, debug: Function}}
+ *   Logger methods ordered by increasing verbosity
+ */
+function createLogger({
+  level = DEFAULT_LOG_LEVEL,
+  logDirectory = './logs',
+  consoleOutput = console,
+  now = Date.now,
+} = {}) {
+  const effectiveLevel = LOG_LEVELS.includes(level) ? level : DEFAULT_LOG_LEVEL;
+  const configuredLevel = LOG_LEVELS.indexOf(effectiveLevel);
 
-  if (config.log.enabled) {
-    var timestamp = Date.now();
+  fs.mkdirSync(logDirectory, { recursive: true });
 
-    var stringMsg = typeof msg === 'string' ? msg : JSON.stringify(msg);
-    var parsedMsg = stringMsg.replace(/(\r\n|\n|\r)/gm, ' ');
+  const startedAt = now();
+  const logFile = fs.createWriteStream(
+    path.join(logDirectory, `${formatDate(startedAt).YYYY_MM_DD}.log`),
+    { flags: 'a' },
+  );
 
-    if (extra) {
-      var stringExtra = typeof extra === 'string' ? extra : JSON.stringify(extra);
-      var parsedExtra = stringExtra.replace(/(\r\n|\n|\r)/gm, ' ');
-      myConsole.log(flatstr(safeStringify({ level: level, timestamp: timestamp, message: msg + ' ' + parsedExtra})));
-    } else {
-      myConsole.log(flatstr(safeStringify({ level: level, timestamp: timestamp, message: msg})));
+  logFile.write(
+    `\n\n[Explorer process started] time=${fullTime(startedAt)}; pid=${process.pid}; logLevel=${effectiveLevel}\n`,
+  );
+
+  /** Write one message when its severity passes the configured threshold. */
+  function write(messageLevel, message) {
+    if (LOG_LEVELS.indexOf(messageLevel) > configuredLevel) {
+      return;
     }
+
+    const timestamp = fullTime(now());
+    consoleOutput.log(COLORS[messageLevel], `${messageLevel}|${timestamp}`, RESET_COLOR, message);
+    logFile.write(`\n ${messageLevel}|${timestamp}|${message}`);
   }
 
-};
+  const logger = {
+    error: (message) => write('error', message),
+    warn: (message) => write('warn', message),
+    info: (message) => write('info', message),
+    log: (message) => write('log', message),
+    debug: (message) => write('debug', message),
+  };
 
-logger.trace = function trace(msg, extra) {
-  if (levels[config.log.level] <= 0) {
-    logger.doLog('TRACE', msg, extra);
-  }
-};
+  Object.defineProperty(logger, 'close', {
+    enumerable: false,
+    value: () =>
+      new Promise((resolve, reject) => {
+        logFile.once('error', reject);
+        logFile.end(resolve);
+      }),
+  });
 
-logger.debug = function debug(msg, extra) {
-  if (levels[config.log.level] <= 1) {
-    logger.doLog('DEBUG', msg, extra);
-  }
-};
+  return logger;
+}
 
-logger.info = function info(msg, extra) {
-  if (levels[config.log.level] <= 2) {
-    logger.doLog('INFO', msg, extra);
-  }
-};
+/** Format a timestamp as `YYYY-MM-DD hh:mm:ss`. */
+function fullTime(timestamp) {
+  const formatted = formatDate(timestamp);
+  return `${formatted.YYYY_MM_DD} ${formatted.hh_mm_ss}`;
+}
 
-logger.warn = function warn(msg, extra) {
-  if (levels[config.log.level] <= 3) {
-    logger.doLog('WARN', msg, extra);
-  }
-};
+/**
+ * Build zero-padded local date and time strings from a timestamp.
+ * @param {number} timestamp Unix timestamp in milliseconds
+ * @returns {{YYYY_MM_DD: string, hh_mm_ss: string}} Formatted date parts
+ */
+function formatDate(timestamp) {
+  const dateObject = new Date(timestamp);
 
-logger.error = function error(msg, extra) {
-  if (levels[config.log.level] <= 4) {
-    logger.doLog('ERROR', msg, extra);
-  }
-};
+  const year = dateObject.getFullYear();
+  const month = `0${dateObject.getMonth() + 1}`.slice(-2);
+  const day = `0${dateObject.getDate()}`.slice(-2);
+  const hours = `0${dateObject.getHours()}`.slice(-2);
+  const minutes = `0${dateObject.getMinutes()}`.slice(-2);
+  const seconds = `0${dateObject.getSeconds()}`.slice(-2);
 
-module.exports = logger;
+  return {
+    YYYY_MM_DD: `${year}-${month}-${day}`,
+    hh_mm_ss: `${hours}:${minutes}:${seconds}`,
+  };
+}
+
+module.exports = {
+  DEFAULT_LOG_LEVEL,
+  LOG_LEVELS,
+  createLogger,
+  formatDate,
+};

@@ -1,12 +1,20 @@
 .idea
 dump.rdb
 node_modules
-bower_components
 npm-debug.log
 .DS_Store
 public/*
 public/.gitkeep
 po/*.pot
 Thumbs.db
-sftp-config.json
-blockchain_explorer.db.gz
+logs
+.vscode
+config.jsonc
+config.test.jsonc
+
+.playwright-cli/
+
+# ai
+.ai-ignored/
+.ai-tasks/
+.claude/

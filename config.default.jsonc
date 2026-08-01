@@ -1,0 +1,53 @@
+{
+  /** Host to listen on **/
+  "host": "0.0.0.0",
+
+  /** Port to listen on **/
+  "port": 6040,
+
+  /** Reverse proxies allowed to supply the client IP. Accepted named ranges
+      are "loopback", "linklocal", and "uniquelocal"; exact IPs/CIDRs are
+      preferred. "loopback" supports local nginx; use [] without a proxy **/
+  "trustedProxies": ["loopback"],
+
+  /** ADAMANT node list. Provide several independently operated nodes
+      running ADAMANT Node v0.10.2 or newer **/
+  "nodes_adm": [
+    "http://localhost:36666",
+    "https://bid.adamant.im",
+    "https://endless.adamant.im",
+    "https://node2.blockchain2fa.io",
+    "https://sunshine.adamant.im"
+    /** Legacy plaintext fallback retained for compatibility. Prefer HTTPS:
+        HTTP traffic can be observed or modified in transit **/
+    // "http://184.94.215.92:45555"
+  ],
+
+  /** Network Monitor peer geo-location through GeoJS. This sends peer IP
+      addresses to GeoJS and its infrastructure providers; disable if needed **/
+  "geoLocation": {
+    "enabled": true,
+    "provider": "geojs",
+    "timeout": 5000 /* Request timeout in milliseconds */
+  },
+
+  /** Redis server parameters. Redis caches API responses and the persistent
+      rolling block-statistics window **/
+  "redis": {
+    "username": "",
+    "password": "",
+    "host": "127.0.0.1",
+    "port": 6379,
+    "cacheTTL": 20 /* Time in seconds to keep cached API responses in Redis */
+  },
+
+  /** Logging verbosity threshold: none < error < warn < info < log < debug **/
+  "log_level": "log",
+
+  /** Exchange rates service parameters. ADM rates will be provided by
+      the currencyinfo service, see https://github.com/Adamant-im/currencyinfo **/
+  "exchangeRates": {
+    "enabled": false,
+    "updateInterval": 30000 /* Time in ms between rate updates */
+  }
+}

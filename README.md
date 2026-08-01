@@ -1,192 +1,159 @@
-# ADAMANT Blockchain Explorer
+# ADAMANT Explorer
 
-ADAMANT Messenger is a fully open source Blockchain Messenger. Explorer at https://explorer.adamant.im shows ADAMANT blockchain transactions. You can deploy your own ADAMANT explorer using this repository.
+ADAMANT Explorer is the blockchain explorer for [ADAMANT](https://adamant.im) — a decentralized blockchain messenger. It shows blocks, transactions, accounts, delegates, and the network state of the ADAMANT blockchain.
 
-More info abot ADAMANT at https://adamant.im
+Deployed at:
 
-ADAMANT Explorer version 1.3.0 works in conjunction with the Secu Core API. It uses Redis for caching data and Freegeoip to parse IP geo-location data.
+- [Clear web](https://explorer.adamant.im)
+- [Tor](http://srovpmanmrbmbqe63vp5nycsa3j3g6be3bz46ksmo35u5pw7jjtjamid.onion)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-## Prerequisites
+> Built and maintained by the ADAMANT developer community and **cryptofoundry**.
+> Want custom crypto software, bots, payments or blockchain infrastructure built by engineers with production blockchain experience? [Tell us what to build](https://adamant.business#contact).
+>
 
-These programs and resources are required to install and run ADAMANT Explorer
+## Features
 
-- Nodejs v8.11.3 or higher (<https://nodejs.org/>) — Node.js serves as the underlying engine for code execution.
+- Blocks, transactions, accounts, and delegate pages with search
+- Delegate Monitor: forging status of active and standby delegates
+- Network Monitor: peers with versions, height, and geo location on a map
+- Activity Graph: live visualization of the latest blocks and transactions
+- Top Accounts and reserved wallets
+- Live updates over WebSocket
 
-  ```
-  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-  sudo apt-get install -y nodejs
-  ```
+## Requirements
 
-- Redis (<http://redis.io>) — Redis is used for caching parsed exchange data.
+- Node.js `^22.18.0 || >=24.11.0`
+- Redis (recommended) — enables API response caching and preserves the rolling block-statistics window between Explorer restarts. Explorer remains available without Redis, but caching and persisted statistics are disabled.
 
-  `sudo apt-get install -y redis-server`
-
-- Freegeoip (<https://github.com/fiorix/freegeoip>) — Freegeoip is used by the Network Monitor for IP address geo-location.
-
-  ```
-  wget https://github.com/fiorix/freegeoip/releases/download/v3.1.5/freegeoip-3.1.5-linux-amd64.tar.gz
-  tar -zxf freegeoip-3.1.5-linux-amd64.tar.gz
-  ln -s freegeoip-3.1.5-linux-amd64 freegeoip
-  nohup ./freegeoip/freegeoip > ./freegeoip/freegeoip.log 2>&1 &
+  ```sh
+  sudo apt-get install -y redis-server
   ```
 
-- Grunt.js (<http://gruntjs.com/>) — Grunt is used to run eslint and unit tests.
+- PM2 (recommended) — keeps the explorer process running and rotates logs
 
-  `sudo npm install -g grunt`
-  
-- Bower (<https://bower.io/>) — used for building dependencies.
-
-  `sudo npm install -g bower`
-
-
-- PM2 (https://github.com/Unitech/pm2) — PM2 manages the node process for ADAMANT Explorer and handles log rotation (Highly Recommended)
-
-  `sudo npm install -g pm2`
-  
-- PM2-logrotate (https://github.com/pm2-hive/pm2-logrotate) — Manages PM2 logs
-
-  ```
+  ```sh
+  sudo npm install -g pm2
   pm2 install pm2-logrotate
   pm2 set pm2-logrotate:max_size 100M
   ```
 
-- Git (<https://github.com/git/git>) — Used for cloning and updating ADAMANT Explorer
+## Installation
 
-  `sudo apt-get install -y git`
-
-- Tool chain components — Used for compiling dependencies
-
-  `sudo apt-get install -y python build-essential automake autoconf libtool`
-
-## Installation Steps
-
-Clone the ADAMANT Explorer Repository:
-
-```
-git clone https://github.com/zyuhel/adamant-explorer.git
+```sh
+git clone https://github.com/Adamant-im/adamant-explorer.git
 cd adamant-explorer
 npm install
+npm run build
 ```
 
-## Build Steps
+### Configuration
 
-#### Frontend
- The frontend is using Webpack to create core bundles for ADAMANT Explorer.  
- 
- For having a watcher to generate bundles continuously for all the changes of the code, Run the following command:
+The explorer uses `config.jsonc` when present, and `config.default.jsonc` otherwise:
 
-`npm run start`
- 
- And for generating the minified bundles in production environment run:
- 
-`npm run build`
-
-
-## Configuration
-
-The default `config.js` file contains all of the configuration settings for ADAMANT Explorer. These options can be modified according to comments included in configuration file.
-
-
-## Managing ADAMANT Explorer
-
-To test that ADAMANT Explorer is configured correctly, run the following command:
-
-`node app.js`
-
-Open: <http://localhost:6040>, or if its running on a remote system, switch `localhost` for the external IP Address of the machine.
-
-Once the process is verified as running correctly, `CTRL+C` and start the process with `PM2`. This will fork the process into the background and automatically recover the process if it fails.
-
-`pm2 start pm2-explorer.json`
-
-After the process is started its runtime status and log location can be found by issuing this statement:
-
-`pm2 list`
-
-To stop Explorer after it has been started with `PM2`, issue the following command:
-
-`pm2 stop adamant-explorer`
-
-## Tests
-
-Before running any tests, please ensure ADAMANT Explorer and ADAMANT Node are configured to run on the ADAMANT Testnet.
-
-Replace **config.js** with **config.test** file from the **test** directory:
-
-`cp test/config.test ./config.js`
-
-Replace the **config.json** for the ADAMANT Node the corresponding file under the **test** directory:
-
-`cp test/config_lisk.json  /PATH_TO_ADAMANT_DIR/config.json`
-
-Then restart the ADAMANT Node (example):
-
-`pm2 restart /PATH_TO_ADAMANT_DIR/app.js`
-
-Launch ADAMANT Explorer (runs on port 6040):
-
-`pm2 start pm2-explorer.json`
-
-Run the test suite:
-
-`npm test`
-
-Run individual tests:
-
-```
-npm test -- test/api/accounts.js
-npm test -- test/api/transactions.js
+```sh
+cp config.default.jsonc config.jsonc
+nano config.jsonc
 ```
 
-## End-to-end Tests
+Parameters are documented with comments in the config file. Provide several independently operated ADAMANT nodes in `nodes_adm` — the client checks node health and fails over automatically. Prefer HTTPS nodes because plaintext HTTP does not authenticate the remote endpoint or protect responses from modification in transit.
 
-### Setup for end-to-end tests:
+Set `log_level` to `none`, `error`, `warn`, `info`, `log`, or `debug`; `debug` is the most verbose troubleshooting level.
 
-Do all setup steps from "Test" section of this README
+Network Monitor peer geo-location uses the maintained [GeoJS API](https://www.geojs.io/). It is enabled by default and sends peer IP addresses to GeoJS and its infrastructure providers. Review the [GeoJS privacy policy](https://www.geojs.io/privacy/), and set `geoLocation.enabled` to `false` if this tradeoff is not acceptable. Peers still render when GeoJS is disabled or unavailable.
 
-Make sure you have `wget` installed (it's used in `./e2e-test-setup.sh`). On Linux by default. On MacOS:
+Network Monitor map imagery is fetched by the explorer process from [OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/) and served at `/osm-tiles/{z}/{x}/{y}.png`. Same-origin tiles keep the map working in Tor Browser on onion sites (which omit `Referer`) and avoid exposing browser tile requests directly to OSM.
+
+`trustedProxies` controls which reverse proxies may supply the client IP used by API rate limiting. The default `["loopback"]` supports nginx on the same host and ignores arbitrary forwarding headers received directly from the internet. Use an empty array for direct exposure only, or list the exact proxy IPs/CIDRs for another topology. The accepted `proxy-addr` names expand as follows:
+
+| Name | Trusted networks |
+| --- | --- |
+| `loopback` | `127.0.0.0/8`, `::1/128` |
+| `linklocal` | `169.254.0.0/16`, `fe80::/10` |
+| `uniquelocal` | `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `fc00::/7` |
+
+Prefer exact proxy IPs or CIDRs. A named range trusts every address in that range, so use `linklocal` or `uniquelocal` only when every possible proxy hop in that range is controlled. Every trusted proxy must overwrite forwarding headers.
+
+For a local nginx process, use the real client socket address rather than preserving a client-supplied chain:
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Forwarded-For $remote_addr;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_pass http://127.0.0.1:6040;
 ```
-brew install wget
+
+## Running Explorer
+
+Check that the explorer is configured correctly:
+
+```sh
+npm start
 ```
 
-Setup protractor
+Open <http://localhost:6040>, or replace `localhost` with the external IP address of the machine.
 
-```
-./node_modules/protractor/bin/webdriver-manager update
-```
+Once verified, stop the process with `CTRL+C` and start it with PM2:
 
-### Run end-to-end test suite:
-
-```
-./e2e-test-setup.sh /PATH_TO_LISK_DIR
-npm run e2e-test -s
+```sh
+pm2 start pm2-explorer.json
 ```
 
-### Run one end-to-end test feature file:
+Runtime status and log locations:
 
+```sh
+pm2 list
+pm2 logs adamant-explorer
 ```
-npm run e2e-test -s -- --specs=features/address.feature
+
+Stop the explorer:
+
+```sh
+pm2 stop adamant-explorer
 ```
+
+### Monitoring and integrations
+
+Explorer HTTP routes support its own UI and are not a general-purpose ADAMANT developer API. Browser responses are same-origin and API traffic is rate-limited. Applications and integrations should use [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) instead.
+
+`GET /api/networkHealth` is the supported operational monitoring endpoint. It returns HTTP `200` with `live`, `degraded`, or `critical` status and a coherent height/forging snapshot. It returns HTTP `503` with `status: "unavailable"` immediately while the Node SDK is starting or when no coherent snapshot can be produced.
+
+## Security
+
+The repository includes the current [threat model](./adamant-explorer-threat-model.md) and [security and reliability review](./security_best_practices_report.md). Report suspected vulnerabilities privately to the maintainers before public disclosure when exploitation could put users or infrastructure at risk.
+
+## Development and contributing
+
+Contributions are welcome. Development setup, tests, debugging, code style, and pull request conventions are documented in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Links
+
+- [ADAMANT website](https://adamant.im) — the ADAMANT project and Messenger apps
+- [ADAMANT documentation](https://docs.adamant.im) — protocol and API docs
+- [ADAMANT node](https://github.com/Adamant-im/adamant) — ADM blockchain node software
+- [adamant-api-jsclient](https://github.com/Adamant-im/adamant-api-jsclient) — JavaScript SDK used for node interaction
+- [AIPs](https://aips.adamant.im) — ADAMANT Improvement Proposals
+- [ADAMANT API schema](https://schema.adamant.im) — node API specification
+- [currencyinfo](https://github.com/Adamant-im/currencyinfo) — self-hosted crypto rates service, planned as the ADM rates source
 
 ## License
 
-Copyright © 2016-2017 Lisk Foundation ©2017-2018 ADAMANT Tech Labs
+Copyright © 2017-2026 ADAMANT developer community, ADAMANT Foundation, and ADAMANT Tech Labs
+Copyright © 2016-2017 Lisk Foundation
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the [GNU General Public License](https://github.com/adamant/adamant-explorer/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License](./LICENSE) along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-***
+---
 
 This program also incorporates work previously released with lisk-explorer `1.1.0` (and earlier) versions under the [MIT License](https://opensource.org/licenses/MIT). To comply with the requirements of that license, the following permission notice, applicable to those parts of the code only, is included below:
 
-Copyright © 2018 ADAMANT TECH LABS LP
+Copyright © 2016-2017 Lisk Foundation
 
-Copyright © 2016-2017 Lisk Foundation  
 Copyright © 2015 Crypti
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

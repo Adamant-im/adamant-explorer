@@ -1,63 +1,98 @@
-'use strict';
-var logger = require('./logger');
+const logger = require('./log');
 
-module.exports = function () {
-    function KnownAddresses () {
-        this.addresses = {};
+// Address book of well-known ADAMANT accounts, loaded from known.json
+let addresses = {};
 
-        this.inTx = function (tx) {
-            if (tx.senderUsername) {
-                tx.knownSender = { owner : tx.senderUsername };
-            } else {
-                tx.knownSender = self.inAddress(tx.senderId);
-            }
-            if (tx.senderId === tx.recipientId) {
-                tx.recipientUsername = tx.senderUsername;
-            }
-            if (tx.recipientUsername) {
-                tx.knownRecipient = { owner : tx.recipientUsername };
-            } else {
-                tx.knownRecipient = self.inAddress(tx.recipientId);
-            }
-            return tx;
-        };
+/**
+ * Attach known-address info to a transaction.
+ *
+ * Sets `knownSender` and `knownRecipient` to identity objects when the
+ * counterparty is a delegate or a well-known address, or `null` otherwise.
+ * @param {Object} tx Transaction body
+ * @returns {Object} The same transaction with knowledge fields
+ */
+function inTx(tx) {
+  if (tx.senderUsername) {
+    tx.knownSender = { owner: tx.senderUsername, kind: 'delegate' };
+  } else {
+    tx.knownSender = inAddress(tx.senderId);
+  }
+  if (tx.senderId === tx.recipientId) {
+    tx.recipientUsername = tx.senderUsername;
+  }
+  if (tx.recipientUsername) {
+    tx.knownRecipient = { owner: tx.recipientUsername, kind: 'delegate' };
+  } else {
+    tx.knownRecipient = inAddress(tx.recipientId);
+  }
+  return tx;
+}
 
-        this.inAccount = function (account) {
-            if (account.username) {
-                return { owner : account.username };
-            } else {
-                return self.inAddress(account.address);
-            }
-        };
+/**
+ * Get known-address info for an account.
+ * @param {Object} account Account with `username` and `address` fields
+ * @returns {Object|null} Identity object when known, `null` otherwise
+ */
+function inAccount(account) {
+  if (account.username) {
+    return { owner: account.username, kind: 'delegate' };
+  }
 
-        this.inAddress = function (address) {
-            return self.addresses[address] || null;
-        };
+  return inAddress(account.address);
+}
 
-        this.inDelegate = function (delegate) {
-            return (delegate) ? { owner : delegate.username } : null;
-        };
+/**
+ * Look an address up in the known-address book.
+ * @param {string} address ADAMANT address
+ * @returns {Object|null} A copy of the knowledge entry with its semantic kind
+ */
+function inAddress(address) {
+  const entry = addresses[address];
 
-        this.load = function () {
-            try {
-                logger.info('KnownAddresses:', 'Loading known addresses...');
-                self.addresses = require('../known.json');
-            } catch (err) {
-                logger.error('KnownAddresses:', 'Error loading known.json:', err.message);
-                self.addresses = {};
-            }
+  if (!entry) {
+    return null;
+  }
 
-            var length = Object.keys(self.addresses).length.toString();
-            logger.info('KnownAddresses:', length, 'known addresses loaded');
-            return self.addresses;
-        };
+  return {
+    ...entry,
+    kind: entry.description === 'Exchange' ? 'exchange' : 'known',
+  };
+}
 
-        // Private
+/**
+ * Get known-address info for a delegate.
+ * @param {Object|null} delegate Delegate body
+ * @returns {Object|null} Delegate identity when given, `null` otherwise
+ */
+function inDelegate(delegate) {
+  return delegate ? { owner: delegate.username, kind: 'delegate' } : null;
+}
 
-        var self = this;
+/**
+ * Load the known-address book from known.json.
+ * Failures are not fatal: the explorer works without knowledge data.
+ * @returns {Object} Loaded address book
+ */
+function load() {
+  try {
+    logger.debug('Known addresses: Loading known.json');
+    addresses = require('../known.json');
+  } catch (err) {
+    logger.warn(
+      `Known addresses: Failed to load known.json; continuing without address labels: ${err.message}`,
+    );
+    addresses = {};
+  }
 
-        this.load(); // Load on initialization
-    }
+  logger.info(`Known addresses: Loaded ${Object.keys(addresses).length} address labels`);
+  return addresses;
+}
 
-    return new KnownAddresses();
+load();
+
+module.exports = {
+  inTx,
+  inAccount,
+  inAddress,
+  inDelegate,
 };

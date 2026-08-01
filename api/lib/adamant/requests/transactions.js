@@ -1,0 +1,195 @@
+const api = require('./api');
+const { PUBLIC_OPERATION_TYPES, TRANSFER_TYPES } = require('../transactionTypes');
+
+/**
+ * Transaction types shown in transfer views: token transfers and
+ * chat messages that carry ADM. Combined with `minAmount`, this hides
+ * messaging and service transactions, matching the UI note on the
+ * home page. Service transactions remain visible in the full
+ * transaction views.
+ *
+ * Moving this list to the explorer config is planned as a follow-up
+ * of https://github.com/Adamant-im/adamant-explorer/issues/11.
+ */
+const PUBLIC_OPERATION_FETCH_LIMIT = 100;
+
+/**
+ * Extract the transaction list from a node response or throw its error.
+ * @param {Object} response Normalized SDK response
+ * @returns {Array} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+function unwrapTransactions(response) {
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transactions;
+}
+
+/**
+ * Get a confirmed transaction by its id.
+ * @param {string} id Transaction id
+ * @returns {Promise<Object>} Transaction body
+ * @throws {string} Node error message when the request fails or the transaction is not found
+ */
+async function getConfirmedTransaction(id) {
+  const response = await api.getTransaction(id);
+
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transaction;
+}
+
+/**
+ * Get an unconfirmed transaction by its id.
+ * @param {string} id Transaction id
+ * @returns {Promise<Object>} Transaction body
+ * @throws {string} Node error message when the request fails or the transaction is not found
+ */
+async function getUnconfirmedTransaction(id) {
+  const response = await api.getUnconfirmedTransaction(id);
+
+  if (!response.success) {
+    throw response.errorMessage;
+  }
+
+  return response.transaction;
+}
+
+/**
+ * Get all unconfirmed transactions.
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getUnconfirmedTransactions() {
+  return unwrapTransactions(await api.getUnconfirmedTransactions());
+}
+
+/**
+ * Get the latest 20 transactions of any type.
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getLastTransactions() {
+  return unwrapTransactions(
+    await api.getTransactions({ orderBy: 'timestamp:desc', limit: 20, returnAsset: 1 }),
+  );
+}
+
+/**
+ * Get a candidate window for the latest public operations while excluding
+ * chat messages and internal state records.
+ *
+ * The route name remains `getLastTransfers` for backwards-compatible
+ * clients, but the refreshed home page deliberately includes service
+ * operations such as voting and delegate registration. The wider window lets
+ * the handler deterministically order transactions that share a timestamp
+ * before it selects the latest 20.
+ * @returns {Promise<Array>} Candidate transactions ordered by the node
+ * @throws {string} Node error message when the request fails
+ */
+async function getLastTransfers() {
+  return unwrapTransactions(
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: PUBLIC_OPERATION_FETCH_LIMIT,
+      and: { types: PUBLIC_OPERATION_TYPES },
+      returnAsset: 1,
+    }),
+  );
+}
+
+/**
+ * Get transactions matching an SDK-form query.
+ * @param {Object} query Query with filters grouped under `and`/`or`,
+ *   see `normalizeTransactionParams`
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getTransactions(query) {
+  return unwrapTransactions(await api.getTransactions({ ...query, returnAsset: 1 }));
+}
+
+/**
+ * Get transfer transactions matching an SDK-form query: token transfers
+ * and chat messages that carry ADM.
+ * @param {Object} query Query with filters grouped under `and`/`or`,
+ *   see `normalizeTransactionParams`
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getTransfers(query) {
+  return unwrapTransactions(
+    await api.getTransactions({
+      ...query,
+      and: { ...query.and, types: TRANSFER_TYPES, minAmount: 1 },
+      returnAsset: 1,
+    }),
+  );
+}
+
+/**
+ * Get transactions included in a block.
+ * @param {{blockId: string, offset: number, limit: number}} query Block id and pagination
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getTransactionsByBlock(query) {
+  return unwrapTransactions(
+    await api.getTransactions({
+      blockId: query.blockId,
+      orderBy: 'timestamp:desc',
+      offset: query.offset,
+      limit: query.limit,
+      returnAsset: 1,
+    }),
+  );
+}
+
+/**
+ * Get the latest 5 delegate registration transactions (type 2).
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getRegistrationTransactions() {
+  return unwrapTransactions(
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 2,
+      returnAsset: 1,
+    }),
+  );
+}
+
+/**
+ * Get the latest 5 voting transactions (type 3).
+ * @returns {Promise<Array>} List of transactions
+ * @throws {string} Node error message when the request fails
+ */
+async function getVoteTransactions() {
+  return unwrapTransactions(
+    await api.getTransactions({
+      orderBy: 'timestamp:desc',
+      limit: 5,
+      type: 3,
+      returnAsset: 1,
+    }),
+  );
+}
+
+module.exports = {
+  getConfirmedTransaction,
+  getUnconfirmedTransaction,
+  getUnconfirmedTransactions,
+  getLastTransactions,
+  getLastTransfers,
+  getTransactions,
+  getTransfers,
+  getTransactionsByBlock,
+  getRegistrationTransactions,
+  getVoteTransactions,
+};
